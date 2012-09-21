@@ -31,9 +31,9 @@ public class HelloEvents implements ManagerEventListener
 
     public HelloEvents() throws IOException
     {
-        ManagerConnectionFactory factory = new ManagerConnectionFactory(
-                "172.168.10.19", "manager", "pa55w0rd");
-
+//        ManagerConnectionFactory factory = new ManagerConnectionFactory(
+//                "172.168.10.100", "manager", "pa55w0rd");
+        ManagerConnectionFactory factory = new ManagerConnectionFactory("172.168.10.205", "manager", "pa55w0rd");        
         this.managerConnection = factory.createManagerConnection();
     }
 
@@ -46,22 +46,21 @@ public class HelloEvents implements ManagerEventListener
         // connect to Asterisk and log in
         managerConnection.login();
 
+        if(managerConnection != null)
+        	System.out.print("server is still running...");
+//        while(managerConnection != null){
+//        	
+//        }
         
-        EventsAction ec = new EventsAction("call,agent");
+        EventsAction ec = new EventsAction("call");
         // request channel state
         managerConnection.sendAction(new StatusAction());
-        managerConnection.sendAction(ec);
-//        managerConnection.get
-        
-
-        SipShowPeerAction sip;
-        sip = new  SipShowPeerAction();
-        sip.setPeer("8000");
+//        managerConnection.sendAction(ec);
         
         output = new BufferedWriter(new FileWriter(file));
         
         // wait 10 seconds for events to come in
-        Thread.sleep(120000);
+        Thread.sleep(10000);
         
         output.close();
 
