@@ -16,7 +16,7 @@ public class HelloLive
 
     public HelloLive()
     {
-        asteriskServer = new DefaultAsteriskServer("172.168.10.15", "manager", "pa55w0rd");
+        asteriskServer = new DefaultAsteriskServer("172.168.10.19", "manager", "pa55w0rd");
     }
 
     public void run() throws ManagerCommunicationException

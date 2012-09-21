@@ -19,10 +19,10 @@ public class HelloLiveEverything implements AsteriskServerListener, PropertyChan
 
     public HelloLiveEverything()
     {
-        asteriskServer = new DefaultAsteriskServer("172.168.10.15", "manager", "pa55w0rd");
+        asteriskServer = new DefaultAsteriskServer("172.168.10.100", "manager", "pa55w0rd");
     }
 
-    public void run() throws ManagerCommunicationException
+    public void run() throws ManagerCommunicationException, Exception
     {
         // listen for new events
         asteriskServer.addAsteriskServerListener(this);
@@ -30,13 +30,13 @@ public class HelloLiveEverything implements AsteriskServerListener, PropertyChan
         // add property change listeners to existing objects
         for (AsteriskChannel asteriskChannel : asteriskServer.getChannels())
         {
-            System.out.println(asteriskChannel);
+            System.out.println("asteriskChannel: "+asteriskChannel);
             asteriskChannel.addPropertyChangeListener(this);
         }
 
         for (AsteriskQueue asteriskQueue : asteriskServer.getQueues())
         {
-            System.out.println(asteriskQueue);
+            System.out.println("asteriskQueue: "+asteriskQueue);
             for (AsteriskQueueEntry asteriskChannel : asteriskQueue.getEntries())
             {
                 asteriskChannel.addPropertyChangeListener(this);
@@ -45,12 +45,13 @@ public class HelloLiveEverything implements AsteriskServerListener, PropertyChan
 
         for (MeetMeRoom meetMeRoom : asteriskServer.getMeetMeRooms())
         {
-            System.out.println(meetMeRoom);
+            System.out.println("meetMeRoom: "+meetMeRoom);
             for (MeetMeUser user : meetMeRoom.getUsers())
             {
                 user.addPropertyChangeListener(this);
             }
         }
+        Thread.sleep(20000);
     }
 
     public void onNewAsteriskChannel(AsteriskChannel channel)
