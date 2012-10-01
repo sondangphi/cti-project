@@ -8,7 +8,7 @@ public class AgentObject {
 	Socket socket;
 	String agent;
 	String pass;
-	String extension;
+	String iface;
 	String queue;
 	int penalty;
 	
@@ -16,11 +16,11 @@ public class AgentObject {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public AgentObject(Socket client,String user, String pwd, String exten, String queuename){
+	public AgentObject(Socket client,String user, String pwd, String inface, String queuename){
 		socket = client;
 		agent = user;
 		pass = pwd;
-		extension = exten;
+		iface = inface;
 		queue = queuename;
 	}
 	
@@ -45,12 +45,12 @@ public class AgentObject {
 	public void setPass(String p){
 		pass = p;
 	}
-	public String getExtension(){
-		return extension;
+	public String getInterface(){
+		return iface;
 	}
 	
-	public void setExtension(String e){
-		extension = e;
+	public void setInterface(String inface){
+		iface = inface;
 	}
 
 	public String getQueue(){
