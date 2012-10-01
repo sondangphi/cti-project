@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
+import org.asterisk.main.*;
 
 public class Agent implements Runnable{
 
@@ -22,18 +23,20 @@ public class Agent implements Runnable{
 	static Socket clientSocket;
 	static BufferedReader infromServer;
 	static PrintWriter outtoServer;
-	static BufferedReader inputLine ;
+	static loginForm mainform;
 	int data;
 	
 	public Agent(){
 		
 	}
 
-	public Agent(String address, int port){
+	public Agent(String address, int port, String cmd){
 		try{
 			clientSocket = new Socket(address, port);	
 			mainThread = new Thread(this);
 			mainThread.start();
+			mainform = new loginForm();
+			sendtoServer(cmd);
 		}catch(Exception ex){
 			
 		}
@@ -45,25 +48,32 @@ public class Agent implements Runnable{
 		try{
 			String command = null;
 			CODE code;
+//			mainform.lblStatus.setText("");
 			while(connected && clientSocket.isConnected()){
 				infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 				command = infromServer.readLine();
 				ArrayList<String> cmdList = getList(command);							
-				code = CODE.valueOf(cmdList.get(0));
+				code = CODE.valueOf(cmdList.get(0).toUpperCase());
 				switch(code){
 	            	case LOGINSUCC: //result LOGIN SUCCESS
 	            		System.out.println("LOGIN SUCCESS");
+	            		mainform.lblStatus.setText("LOGIN SUCCESS");
 	            	break;
 	            	case LOGINFAIL: //result LOGIN FAIL
 	            		System.out.println("LOGIN FAIL");
+	            		mainform.lblStatus.setText("LOGIN FAIL");
+	            		connected = false;
+	            		closeConnect();
 		            break;
 	            	case LOGOUTSUCC: //result LOGOUT SUCCESS
 	            		connected = false;
 	            		closeConnect();
+	            		mainform.lblStatus.setText("LOGOUT SUCCESS");
 	            		System.out.println("LOGOUT SUCCESS");
 	            	break;
 	            	case LOGOUTFAIL: //result LOGOUT FAIL
 	            		System.out.println("LOGOUT FAIL");
+	            		mainform.lblStatus.setText("LOGIOUT FAIL");
 		            break;	            	
 	            	case PAUSESUCC: //result PAUSE
 	            	break;
@@ -84,6 +94,8 @@ public class Agent implements Runnable{
 	            	case RESULT: //result ?
 	            	break;
 	            	case RINGING: //EVENT RINGING
+	            		System.out.println("RINGING");
+	            		mainform.lblStatus.setText("RINGING");
 	            	break;
 	            	case AVAIL: //result 	            			
 	            	break;
@@ -91,7 +103,13 @@ public class Agent implements Runnable{
 	            	break;
 	            	case READY: 
 	            	break;
-	            	case UP: //EVENT ANSWER CALL	            			
+	            	case HANGUP: 
+	            		System.out.println("HANGUP");
+	            		mainform.lblStatus.setText("HANGUP");
+		            break;
+	            	case UP: //EVENT ANSWER CALL	     
+	            		System.out.println("ANSWER");
+	            		mainform.lblStatus.setText("ANSWER");
 	            	break;
 		            default: 
 	                break;
@@ -139,6 +157,6 @@ public class Agent implements Runnable{
 		HOLDSUCC, HOLDFAIL,
 		TRANSSUCC, TRANSFAIL,
 		UNPAUSESUCC, UNPAUSEFAIL,
-		DIAL, RINGING, AVAIL, BUSY, READY, RESULT, UP,
+		DIAL, RINGING, AVAIL, BUSY, READY, RESULT, UP,HANGUP
 	}
 }
