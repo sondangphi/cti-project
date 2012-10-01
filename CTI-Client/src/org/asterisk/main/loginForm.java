@@ -7,6 +7,7 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 import org.asterisk.utility.*;
 
@@ -34,8 +35,9 @@ public class loginForm {
 	private JLabel lblPassword;
 	private JLabel lblExtension;
 	private JLabel lblQueue;
-	private JLabel lblStatus;
+	public static JLabel lblStatus;
 	private JButton btnClear;
+	private Agent agentClient ;
 
 	/**
 	 * Launch the application.
@@ -45,7 +47,7 @@ public class loginForm {
 			public void run() {
 				try {
 					loginForm window = new loginForm();
-					window.frmLoginFormAgent.setVisible(true);
+					window.frmLoginFormAgent.setVisible(true);					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -78,8 +80,8 @@ public class loginForm {
 				String pass = passwordField.getText();
 				String exten = textExtension.getText();
 				String queue = textQueue.getText();
-				String command = agent+"@"+pass+"@"+exten+"@"+queue;
-				new Agent("localhost", 22222);
+				String command = "100@"+agent+"@"+pass+"@SIP/"+exten+"@"+queue;
+				agentClient = new Agent("localhost", 22222, command);
 				lblStatus.setText(command);
 			}
 		});
@@ -110,10 +112,23 @@ public class loginForm {
 		btnClear.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				textAgent.setText("");
-				textExtension.setText("");
-				textQueue.setText("");
-				passwordField.setText("");
+//				textAgent.setText("");
+//				textExtension.setText("");
+//				textQueue.setText("");
+//				passwordField.setText("");
+				String agent = textAgent.getText();
+				String pass = passwordField.getText();
+				String exten = textExtension.getText();
+				String queue = textQueue.getText();
+				String command = "102"+"@SIP/"+exten+"@"+queue;
+				try {
+					agentClient.sendtoServer(command);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+//				lblStatus.setText(command);
+				
 			}
 		});
 		btnClear.setFont(new Font("Tahoma", Font.BOLD, 14));
