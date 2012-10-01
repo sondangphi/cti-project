@@ -13,7 +13,7 @@ import java.util.StringTokenizer;
 public class Utility {
 	
 	public String getDatetime(){		
-		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		Calendar cal = Calendar.getInstance();
 		String datetime = dateFormat.format(cal.getTime()).toString();	
 		return datetime;

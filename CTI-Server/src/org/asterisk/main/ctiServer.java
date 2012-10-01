@@ -14,8 +14,12 @@ import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerConnectionFactory;
 import org.asteriskjava.manager.ManagerEventListener;
 import org.asteriskjava.manager.action.StatusAction;
+import org.asteriskjava.manager.event.ConnectEvent;
+import org.asteriskjava.manager.event.DisconnectEvent;
 import org.asteriskjava.manager.event.ManagerEvent;
 import org.asteriskjava.manager.event.NewExtenEvent;
+import org.asteriskjava.manager.event.ReloadEvent;
+import org.asteriskjava.manager.event.ShutdownEvent;
 import org.asteriskjava.manager.event.StatusEvent;
 
 public class ctiServer implements ManagerEventListener{
@@ -53,8 +57,12 @@ public class ctiServer implements ManagerEventListener{
 		uti.writeAsteriskLog("listen event/send action from/to Asterisk");
 		
 		/*check connect to Database*/	
+		uti.writeAsteriskLog("connect to database");
 		database = new ConnectDatabase();
-		database.checkDatabase();		
+		if(database.checkDatabase())
+			uti.writeAsteriskLog("connect to database successfull");
+		else
+			uti.writeAsteriskLog("connect to database fail");
 		
 		/*open socket and waiting for client connect*/
 		server = new ServerSocket(22222);
@@ -62,8 +70,7 @@ public class ctiServer implements ManagerEventListener{
 		uti.writeAgentLog("Start CTIServer");
 		uti.writeAgentLog("Waiting for agent connect...");
 		uti.writeAgentLog("");
-		while(running){
-			
+		while(running){			
 			Socket clientsocket = server.accept();
 			agent = new ConnectAgent(s, clientsocket);
 			uti.writeAgentLog("Acept connect from client"+"\t"+clientsocket.getInetAddress().getHostAddress());							
@@ -71,23 +78,44 @@ public class ctiServer implements ManagerEventListener{
 		}
 	}
 	
-//	public String CheckLogin(ArrayList list){
-//		String result = "";
-//		ArrayList listCMD = list;
-//		return result;
-//	}
-
 	@Override
 	public void onManagerEvent(ManagerEvent event){
 		// TODO Auto-generated method stub		
 		try {
-			System.out.println("event:  "+event);
-			uti.writeAsteriskLog(event.toString());
-			NewExtenEvent n = (NewExtenEvent)event;
-//			event.get
-//			n.get
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+	        /* A ConnectEvent is triggered after successful login to the Asterisk server.*/
+		    if(event instanceof ConnectEvent){
+		    	ConnectEvent conEvent= (ConnectEvent)event;
+		    	System.out.println("***********************\t ConnectEvent\t ***********************");
+		    	System.out.println("getDateReceived \t"+conEvent.getDateReceived());  	
+		    	System.out.println("getSource \t"+conEvent.getSource());
+		    }
+		    
+		    /*A DisconnectEvent is triggered when the connection to the asterisk server is lost.*/
+		    if(event instanceof DisconnectEvent){
+		    	DisconnectEvent disconEvent= (DisconnectEvent)event;
+		    	System.out.println("***********************\t disConnectEvent\t ***********************");
+		    	System.out.println("getDateReceived \t"+disconEvent.getDateReceived());
+		    	System.out.println("getSource \t"+disconEvent.getSource());
+		    }
+		    /* A ReloadEvent is triggerd when the reload console command is executed or the Asterisk server is started.  */
+		    if(event instanceof ReloadEvent){
+		    	ReloadEvent reloadEvent= (ReloadEvent)event;
+		    	System.out.println("***********************\t ReloadEvent\t ***********************");
+		    	System.out.println("getMessage \t"+reloadEvent.getMessage());
+		    	System.out.println("getDateReceived \t"+reloadEvent.getDateReceived());    	
+		    	System.out.println("getSource \t"+reloadEvent.getSource());
+		    }
+		    
+	        /* A ShutdownEvent is triggered when the asterisk server is shut down or restarted.*/
+		    if(event instanceof ShutdownEvent){
+		    	ShutdownEvent shutEvent= (ShutdownEvent)event;
+		    	System.out.println("***********************\t ShutdownEvent\t ***********************");
+		    	System.out.println("getShutdown \t"+shutEvent.getShutdown());		    	
+		    	System.out.println("getDateReceived \t"+shutEvent.getDateReceived());
+		    	System.out.println("getRestart \t"+shutEvent.getRestart().toString());    	
+		    	System.out.println("getSource \t"+shutEvent.getSource()); 
+		    }
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
