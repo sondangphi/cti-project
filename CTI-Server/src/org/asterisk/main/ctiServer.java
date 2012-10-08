@@ -1,15 +1,11 @@
 package org.asterisk.main;
 
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
 
-import org.asterisk.utility.ConnectAgent;
-import org.asterisk.utility.ConnectAsterisk;
-import org.asterisk.utility.ConnectDatabase;
+import org.asterisk.utility.ManagerAgent;
+import org.asterisk.utility.Managerdb;
 import org.asterisk.utility.Utility;
-import org.asteriskjava.fastagi.command.DatabaseDelCommand;
 import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerConnectionFactory;
 import org.asteriskjava.manager.ManagerEventListener;
@@ -17,24 +13,24 @@ import org.asteriskjava.manager.action.StatusAction;
 import org.asteriskjava.manager.event.ConnectEvent;
 import org.asteriskjava.manager.event.DisconnectEvent;
 import org.asteriskjava.manager.event.ManagerEvent;
-import org.asteriskjava.manager.event.NewExtenEvent;
 import org.asteriskjava.manager.event.ReloadEvent;
 import org.asteriskjava.manager.event.ShutdownEvent;
-import org.asteriskjava.manager.event.StatusEvent;
 
 public class ctiServer implements ManagerEventListener{
 
-	static ServerSocket server;
-	static boolean running = true;
-	static ConnectAgent agent;
-	static Utility uti;
-	static Thread thread;
+	private static ServerSocket server;
+	private static boolean running = true;
+	private static ManagerAgent agent;
+	private static Utility uti;
 	public static ManagerConnection manager;
-	static ConnectAsterisk connectAsterisk;
-	private static String host = "172.168.10.205";
-	private static String username = "manager";
-	private static String password = "pa55w0rd";
-	static ConnectDatabase database;
+	private static String host = "172.168.10.206";
+	private static int port1 = 22222;
+	private static int port2 = 33333;
+	private static String userAsterisk = "manager";
+	private static String pwdAsterisk = "123456";
+	private static String userSql = "cti";
+	private static String pwdSql  = "123456";
+	private static Managerdb database;
 		
 	/**
 	 * @param args
@@ -46,34 +42,34 @@ public class ctiServer implements ManagerEventListener{
 		ctiServer s = new ctiServer();
 		
 		/*connect to asterisk server*/
-		uti.writeAsteriskLog("Start connect to Asterisk server");
-		getManager(host, username, password);
+		uti.writeAsteriskLog("Start Connect to Asterisk Server");
+		connectAsterisk(host, userAsterisk, pwdAsterisk);
 		manager.login();
 		System.out.println("connect to asterisk server successfull");
-		uti.writeAsteriskLog("Connect to Asterisk server successfull");
+		uti.writeAsteriskLog("Connect to Asterisk Server Successfull");
 		manager.addEventListener(s);		
 		manager.sendAction(new StatusAction());		
 		System.out.println("listen event from asterisk");
 		uti.writeAsteriskLog("listen event/send action from/to Asterisk");
 		
-		/*check connect to Database*/	
-		uti.writeAsteriskLog("connect to database");
-		database = new ConnectDatabase();
-		if(database.checkDatabase())
-			uti.writeAsteriskLog("connect to database successfull");
+		/*Connect to Database*/	
+		uti.writeAsteriskLog("Connecting to Database...");
+		database = new Managerdb(host,userSql,pwdSql);
+		if(database.connect())
+			uti.writeAsteriskLog("Connect to Database Successfull");
 		else
-			uti.writeAsteriskLog("connect to database fail");
+			uti.writeAsteriskLog("Connect to Database Fail");
+		System.out.println("Connect to Database");
 		
 		/*open socket and waiting for client connect*/
-		server = new ServerSocket(22222);
+		server = new ServerSocket(port1);
 		System.out.println("Waiting for agent connect");		
 		uti.writeAgentLog("Start CTIServer");
 		uti.writeAgentLog("Waiting for agent connect...");
-		uti.writeAgentLog("");
 		while(running){			
 			Socket clientsocket = server.accept();
-			agent = new ConnectAgent(s, clientsocket);
-			uti.writeAgentLog("Acept connect from client"+"\t"+clientsocket.getInetAddress().getHostAddress());							
+			agent = new ManagerAgent(s, clientsocket);
+			uti.writeAgentLog("Connect To Agent From Address"+"\t"+clientsocket.getInetAddress().getHostAddress());							
 			System.out.println("acept connect from agent ");
 		}
 	}
@@ -120,7 +116,7 @@ public class ctiServer implements ManagerEventListener{
 		}
 	}
 	
-	public static void getManager(String host, String username, String password){
+	public static void connectAsterisk(String host, String username, String password){
 		ManagerConnectionFactory factory = new ManagerConnectionFactory(host, username, password);
 		manager = factory.createManagerConnection();
 	}

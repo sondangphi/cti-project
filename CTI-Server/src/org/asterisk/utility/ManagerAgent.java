@@ -1,14 +1,14 @@
 package org.asterisk.utility;
 
-import java.io.BufferedInputStream;
+//import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.DataInputStream;
+//import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.SocketException;
+//import java.net.SocketException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -16,11 +16,11 @@ import java.util.StringTokenizer;
 import org.asterisk.main.ctiServer;
 import org.asterisk.model.AgentObject;
 import org.asterisk.utility.*;
-import org.asteriskjava.live.AsteriskChannel;
-import org.asteriskjava.live.AsteriskQueueEntry;
-import org.asteriskjava.live.AsteriskServerListener;
-import org.asteriskjava.live.MeetMeUser;
-import org.asteriskjava.live.internal.AsteriskAgentImpl;
+//import org.asteriskjava.live.AsteriskChannel;
+//import org.asteriskjava.live.AsteriskQueueEntry;
+//import org.asteriskjava.live.AsteriskServerListener;
+//import org.asteriskjava.live.MeetMeUser;
+//import org.asteriskjava.live.internal.AsteriskAgentImpl;
 import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerEventListener;
 import org.asteriskjava.manager.TimeoutException;
@@ -29,15 +29,15 @@ import org.asteriskjava.manager.action.QueueAddAction;
 import org.asteriskjava.manager.action.QueuePauseAction;
 import org.asteriskjava.manager.action.QueueRemoveAction;
 import org.asteriskjava.manager.action.StatusAction;
-import org.asteriskjava.manager.event.AbstractAgentEvent;
+//import org.asteriskjava.manager.event.AbstractAgentEvent;
 import org.asteriskjava.manager.event.AgentCompleteEvent;
 import org.asteriskjava.manager.event.AgentLoginEvent;
 import org.asteriskjava.manager.event.AgentLogoffEvent;
 import org.asteriskjava.manager.event.AgentRingNoAnswerEvent;
 import org.asteriskjava.manager.event.BridgeEvent;
-import org.asteriskjava.manager.event.ConnectEvent;
+//import org.asteriskjava.manager.event.ConnectEvent;
 import org.asteriskjava.manager.event.DialEvent;
-import org.asteriskjava.manager.event.DisconnectEvent;
+//import org.asteriskjava.manager.event.DisconnectEvent;
 import org.asteriskjava.manager.event.HangupEvent;
 import org.asteriskjava.manager.event.HoldEvent;
 import org.asteriskjava.manager.event.HoldedCallEvent;
@@ -48,17 +48,17 @@ import org.asteriskjava.manager.event.NewChannelEvent;
 import org.asteriskjava.manager.event.NewStateEvent;
 import org.asteriskjava.manager.event.OriginateResponseEvent;
 import org.asteriskjava.manager.event.QueueEntryEvent;
-import org.asteriskjava.manager.event.ReloadEvent;
-import org.asteriskjava.manager.event.ShutdownEvent;
+//import org.asteriskjava.manager.event.ReloadEvent;
+//import org.asteriskjava.manager.event.ShutdownEvent;
 import org.asteriskjava.manager.event.TransferEvent;
-import org.asteriskjava.manager.response.ManagerResponse;
+//import org.asteriskjava.manager.response.ManagerResponse;
 
-public class ConnectAgent implements Runnable,ManagerEventListener {
+public class ManagerAgent implements Runnable,ManagerEventListener {
 
 	
 	private ctiServer server;
 	private Socket clientSocket;
-	private String cmd;
+	private String fromAgent;
 	private Thread thread;
 	private BufferedReader   inputStream;
 	private int data;
@@ -67,21 +67,28 @@ public class ConnectAgent implements Runnable,ManagerEventListener {
 	private String result;
 	private AgentObject agent;
 	private String addressAgent;
-	private ConnectDatabase database;
-	public ConnectAgent(){
+	private Managerdb database;
+	private int penalty = 99;
+	private String loginAct = "";
+	private String logoutAct = "";
+	private String pauseAct = "";
+	private String unpauseAct = "";
+	public ManagerAgent(){
 
 	}
 	
-	public ConnectAgent(ctiServer ctiserver,Socket client) throws IOException{
+	public ManagerAgent(ctiServer ctiserver,Socket client) throws IOException{
 		try{
 			server = ctiserver;
 			clientSocket = client;
 			inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+			thread = new Thread(this);
+			thread.start();
 		}catch(Exception se){
 			uti.writeAgentLog("Cannot connect to agent");
+			closeConnect();
 		}
-		thread = new Thread(this);
-		thread.start();
+
 	}
 	
 	@Override
@@ -92,16 +99,16 @@ public class ConnectAgent implements Runnable,ManagerEventListener {
 			manager = server.manager;
 			manager.addEventListener(this);
 			manager.sendAction(new StatusAction());
-			database  = new ConnectDatabase();	
+			database  = new Managerdb();	
 			addressAgent = clientSocket.getInetAddress().toString();
 			while(thread != null){
-				cmd = inputStream.readLine();
-				uti.writeAgentLog("request from agent \t"+addressAgent+"\t"+cmd);
-				ArrayList<String> cmdList = uti.getList(cmd);
+				fromAgent = inputStream.readLine();
+				uti.writeAgentLog("request from agent \t"+addressAgent+"\t"+fromAgent);
+				ArrayList<String> cmdList = uti.getList(fromAgent);
 				data = Integer.parseInt(cmdList.get(0));				
 				switch(data){
 	            	case 100:  
-            			uti.writeAgentLog("agent login \t"+addressAgent+"\t"+cmd);
+            			uti.writeAgentLog("agent login \t"+addressAgent+"\t"+fromAgent);
             			getAgent(cmdList);		            
             			if(database.checkLogin(agent.getAgent(), agent.getPass())){
             				if(database.checkStatus(agent.getInterface())){
@@ -124,6 +131,7 @@ public class ConnectAgent implements Runnable,ManagerEventListener {
             					
             			}else {
             				System.out.println("wrong user OR pass");
+            				sendToAgent("LOGINFAIL");
             				closeConnect();
             			}
             				
@@ -184,32 +192,24 @@ public class ConnectAgent implements Runnable,ManagerEventListener {
 		            case 112:  
 	       		 		break;	       		 		
 		            default: 
-		            	System.out.println("(invalid) " +cmd);
+		            	System.out.println("(invalid) " +fromAgent);
 	                	break;					
 				}											
 			}
 		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-//			e.printStackTrace();
 			try {closeConnect();} catch (IOException e1) {}
 			System.out.println("socketex");
 		} catch (TimeoutException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -261,7 +261,7 @@ public class ConnectAgent implements Runnable,ManagerEventListener {
 		agent.setPass(cmdList.get(2));
 		agent.setInterface(cmdList.get(3));
 		agent.setQueue(cmdList.get(4));	
-		agent.setPenalty(99);
+		agent.setPenalty(penalty);
 	}
 	
 	public void closeConnect() throws IOException{
@@ -304,7 +304,6 @@ public class ConnectAgent implements Runnable,ManagerEventListener {
 	        if(event instanceof DialEvent){
 	        	DialEvent dial = (DialEvent)event;        	
 	        	System.out.println("***********************\t DialEvent\t ***********************");
-	        	System.out.println("getCallerId \t"+dial.getCallerId());
 	        	System.out.println("getCallerIdName \t"+dial.getCallerIdName());
 	        	System.out.println("getCallerIdNum \t"+dial.getCallerIdNum());
 	        	System.out.println("getChannel \t"+dial.getChannel());
@@ -316,8 +315,6 @@ public class ConnectAgent implements Runnable,ManagerEventListener {
 	        	System.out.println("getFunc \t"+dial.getFunc());
 	        	System.out.println("getPrivilege \t"+dial.getPrivilege());
 	        	System.out.println("getServer \t"+dial.getServer());
-	        	System.out.println("getSrc \t"+dial.getSrc());
-	        	System.out.println("getSrcUniqueId \t"+dial.getSrcUniqueId());
 	        	System.out.println("getSubEvent \t"+dial.getSubEvent());
 	        	System.out.println("getUniqueId \t"+dial.getUniqueId());
 	        }

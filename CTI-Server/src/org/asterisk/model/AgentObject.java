@@ -13,7 +13,7 @@ public class AgentObject {
 	int penalty;
 	
 	public AgentObject() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public AgentObject(Socket client,String user, String pwd, String inface, String queuename){
