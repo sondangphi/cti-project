@@ -10,13 +10,18 @@ import org.asteriskjava.manager.ManagerConnectionFactory;
 import org.asteriskjava.manager.ManagerEventListener;
 import org.asteriskjava.manager.TimeoutException;
 import org.asteriskjava.manager.action.EventsAction;
+import org.asteriskjava.manager.action.OriginateAction;
 import org.asteriskjava.manager.action.QueueAddAction;
 import org.asteriskjava.manager.action.SipShowPeerAction;
 import org.asteriskjava.manager.action.StatusAction;
+import org.asteriskjava.manager.event.AgentCallbackLoginEvent;
+import org.asteriskjava.manager.event.AgentCallbackLogoffEvent;
+import org.asteriskjava.manager.event.AgentCalledEvent;
 import org.asteriskjava.manager.event.AgentCompleteEvent;
 import org.asteriskjava.manager.event.AgentLoginEvent;
 import org.asteriskjava.manager.event.AgentLogoffEvent;
 import org.asteriskjava.manager.event.AgentRingNoAnswerEvent;
+import org.asteriskjava.manager.event.AgentsEvent;
 import org.asteriskjava.manager.event.BridgeEvent;
 import org.asteriskjava.manager.event.ConnectEvent;
 import org.asteriskjava.manager.event.DialEvent;
@@ -32,10 +37,15 @@ import org.asteriskjava.manager.event.NewChannelEvent;
 import org.asteriskjava.manager.event.NewExtenEvent;
 import org.asteriskjava.manager.event.NewStateEvent;
 import org.asteriskjava.manager.event.OriginateResponseEvent;
+import org.asteriskjava.manager.event.QueueMemberAddedEvent;
+import org.asteriskjava.manager.event.QueueMemberEvent;
+import org.asteriskjava.manager.event.QueueMemberStatusEvent;
+import org.asteriskjava.manager.event.QueueStatusCompleteEvent;
 import org.asteriskjava.manager.event.ReloadEvent;
 import org.asteriskjava.manager.event.ShutdownEvent;
 import org.asteriskjava.manager.event.TransferEvent;
 import org.asteriskjava.manager.event.UnlinkEvent;
+import org.asteriskjava.manager.response.ManagerResponse;
 
 /* *
  * Ket noi voi Asterisk Server su dung API
@@ -55,7 +65,7 @@ public class HelloEvents implements ManagerEventListener
     {
 //        ManagerConnectionFactory factory = new ManagerConnectionFactory(
 //                "172.168.10.100", "manager", "pa55w0rd");
-        ManagerConnectionFactory factory = new ManagerConnectionFactory("172.168.10.205", "manager", "pa55w0rd");        
+        ManagerConnectionFactory factory = new ManagerConnectionFactory("172.168.10.208", "manager", "123456");        
         this.managerConnection = factory.createManagerConnection();
     }
 
@@ -67,7 +77,7 @@ public class HelloEvents implements ManagerEventListener
         
         // connect to Asterisk and log in
         managerConnection.login();
-
+        
         if(managerConnection != null)
         	System.out.println("server is still running...");
         
@@ -77,39 +87,91 @@ public class HelloEvents implements ManagerEventListener
         
         output = new BufferedWriter(new FileWriter(file));
         
+//        OriginateAction originateAction;
+//        ManagerResponse originateResponse;
+//        //add Extension vao queue
+//        QueueAddAction qa = new QueueAddAction();
+//        qa.setQueue("8888");
+//        qa.setInterface("SIP/8002");
+//        qa.setPenalty(99);
+//        qa.setMemberName("Agent/8002");
+//        originateResponse = managerConnection.sendAction(qa,10000);
+        
         // wait 10 seconds for events to come in
-        Thread.sleep(360000);
+        Thread.sleep(1000*60*5);
         
         output.close();
 
         // and finally log off and disconnect
         managerConnection.logoff();
+        System.out.println("server is stop!");
     }
 
     public void onManagerEvent(ManagerEvent event)
     {
         // just print received events        
 
+    	/*
+    	 * 
+    	 * 
+    	 * */
+//    	if(event instanceof QueueMemberStatusEvent){
+//    		QueueMemberStatusEvent status = (QueueMemberStatusEvent)event;
+//    		System.out.println("***********************\t QueueMemberStatusEvent\t ***********************");
+//    		System.out.println("getDateReceived: "+status.getDateReceived());
+//    	}
+//    	if(event instanceof QueueStatusCompleteEvent){
+//    		QueueStatusCompleteEvent status = (QueueStatusCompleteEvent)event;
+//    		System.out.println("***********************\t QueueStatusCompleteEvent\t ***********************");
+//    		System.out.println("getDateReceived: "+status.getDateReceived());
+//    	}
+//    	if(event instanceof QueueMemberEvent){
+//    		QueueMemberEvent status = (QueueMemberEvent)event;
+//    		System.out.println("***********************\t QueueMemberEvent\t ***********************");
+//    		System.out.println("getDateReceived: "+status.getDateReceived());
+//    	}
+//    	if(event instanceof AgentsEvent){
+//    		AgentsEvent e = (AgentsEvent)event;
+//    		System.out.println("***********************\t AgentsEvent\t ***********************");
+//    		System.out.println("getDateReceived: "+e.getDateReceived());
+//    	}
+    	if(event instanceof AgentCalledEvent){
+    		AgentCalledEvent e = (AgentCalledEvent)event;
+    		System.out.println("***********************\t AgentCalledEvent\t ***********************");
+    		System.out.println("getDateReceived: "+e.getDateReceived());
+    	}
+//    	if(event instanceof AgentCallbackLogoffEvent){
+//    		AgentCallbackLogoffEvent logoff = (AgentCallbackLogoffEvent)event;
+//    		System.out.println("***********************\t AgentCallbackLogoffEvent\t ***********************");
+//    		System.out.println("getDateReceived: "+logoff.getDateReceived());
+//    	}
+//    	
+//    	if(event instanceof AgentCallbackLoginEvent){
+//    		AgentCallbackLoginEvent callback = (AgentCallbackLoginEvent)event;
+//    		System.out.println("***********************\t AgentCallbackLoginEvent\t ***********************");
+//    		System.out.println("getDateReceived: "+callback.getDateReceived());
+//    	}
+    	
+//    	if(event instanceof QueueMemberAddedEvent){
+//    		QueueMemberAddedEvent callback = (QueueMemberAddedEvent)event;
+//    		System.out.println("***********************\t QueueMemberAddedEvent\t ***********************");
+//    		System.out.println("getDateReceived: "+callback.getDateReceived());
+//    	}    	
+    	
+    	
     	/*A NewChannelEvent is triggered when a new channel is created.*/
         if(event instanceof NewChannelEvent){        	
         	NewChannelEvent channelEvent = (NewChannelEvent)event;
         	System.out.println("***********************\t NewChannelEvent\t ***********************");
-        	System.out.println("getAccountCode \t"+channelEvent.getAccountCode());
-        	System.out.println("getCallerId \t"+channelEvent.getCallerId());
-        	System.out.println("getCallerIdName \t"+channelEvent.getCallerIdName());
-        	System.out.println("getCallerIdNum \t"+channelEvent.getCallerIdNum());
+//        	System.out.println("getAccountCode \t"+channelEvent.getAccountCode());
+//        	System.out.println("getCallerIdName \t"+channelEvent.getCallerIdName());
+//        	System.out.println("getCallerIdNum \t"+channelEvent.getCallerIdNum());
         	System.out.println("getChannel \t"+channelEvent.getChannel());
         	System.out.println("getChannelStateDesc \t"+channelEvent.getChannelStateDesc());
-        	System.out.println("getContext \t"+channelEvent.getContext());
-        	System.out.println("getExten \t"+channelEvent.getExten());
-        	System.out.println("getFile \t"+channelEvent.getFile());
-        	System.out.println("getFunc \t"+channelEvent.getFunc());
-        	System.out.println("getPrivilege \t"+channelEvent.getPrivilege());
-        	System.out.println("getServer \t"+channelEvent.getServer());
-        	System.out.println("getState \t"+channelEvent.getState());
-        	System.out.println("getUniqueId \t"+channelEvent.getUniqueId());
-        	System.out.println("getChannelState \t"+channelEvent.getChannelState());
-        	System.out.println("getSequenceNumber \t"+channelEvent.getSequenceNumber());
+//        	System.out.println("getContext \t"+channelEvent.getContext());
+//        	System.out.println("getExten \t"+channelEvent.getExten());
+//        	System.out.println("getServer \t"+channelEvent.getServer());
+//        	System.out.println("getUniqueId \t"+channelEvent.getUniqueId());
         	System.out.println("getDateReceived \t"+channelEvent.getDateReceived().toString());
         	String channel = channelEvent.getChannel();
         	System.out.println("Channel is:\t"+channel.substring(0, channel.indexOf("-")));
@@ -119,7 +181,7 @@ public class HelloEvents implements ManagerEventListener
         if(event instanceof DialEvent){
         	DialEvent dial = (DialEvent)event;        	
         	System.out.println("***********************\t DialEvent\t ***********************");
-        	System.out.println("getCallerId \t"+dial.getCallerId());
+//        	System.out.println("getCallerId \t"+dial.getCallerId());
         	System.out.println("getCallerIdName \t"+dial.getCallerIdName());
         	System.out.println("getCallerIdNum \t"+dial.getCallerIdNum());
         	System.out.println("getChannel \t"+dial.getChannel());
@@ -127,12 +189,12 @@ public class HelloEvents implements ManagerEventListener
         	System.out.println("getDestUniqueId \t"+dial.getDestUniqueId());
         	System.out.println("getDialStatus \t"+dial.getDialStatus());
         	System.out.println("getDialString \t"+dial.getDialString());
-        	System.out.println("getFile \t"+dial.getFile());
-        	System.out.println("getFunc \t"+dial.getFunc());
-        	System.out.println("getPrivilege \t"+dial.getPrivilege());
-        	System.out.println("getServer \t"+dial.getServer());
-        	System.out.println("getSrc \t"+dial.getSrc());
-        	System.out.println("getSrcUniqueId \t"+dial.getSrcUniqueId());
+//        	System.out.println("getFile \t"+dial.getFile());
+//        	System.out.println("getFunc \t"+dial.getFunc());
+//        	System.out.println("getPrivilege \t"+dial.getPrivilege());
+//        	System.out.println("getServer \t"+dial.getServer());
+//        	System.out.println("getSrc \t"+dial.getSrc());
+//        	System.out.println("getSrcUniqueId \t"+dial.getSrcUniqueId());
         	System.out.println("getSubEvent \t"+dial.getSubEvent());
         	System.out.println("getUniqueId \t"+dial.getUniqueId());
         }
@@ -141,12 +203,12 @@ public class HelloEvents implements ManagerEventListener
         if(event instanceof NewStateEvent){
         	NewStateEvent stateEvent = (NewStateEvent)event;
         	System.out.println("***********************\t NewStateEvent\t ***********************");
-        	System.out.println("getCallerId \t"+stateEvent.getCallerId());
+//        	System.out.println("getCallerId \t"+stateEvent.getCallerId());
         	System.out.println("getCallerIdName \t"+stateEvent.getCallerIdName());
         	System.out.println("getCallerIdNum \t"+stateEvent.getCallerIdNum());
         	System.out.println("getChannel \t"+stateEvent.getChannel());
         	System.out.println("getChannelStateDesc \t"+stateEvent.getChannelStateDesc());
-        	System.out.println("getUniqueId \t"+stateEvent.getUniqueId());
+//        	System.out.println("getUniqueId \t"+stateEvent.getUniqueId());
         }
         
         /*Response to an OriginateAction.*/
@@ -214,103 +276,103 @@ public class HelloEvents implements ManagerEventListener
          * Asterisk versions up to 1.4 report individual events: LinkEvent and UnlinkEvent.
          * For maximum compatibily do not use the Link and Unlink events in your code. 
          * Just use the Bridge event and check for isLink() and isUnlink().*/
-        if(event instanceof BridgeEvent){
-        	BridgeEvent briEvent = (BridgeEvent)event;
-        	String state = null;
-        	if(briEvent.isLink()){        		
-            	System.out.println("***********************\t BridgeEvent Link\t ***********************");
-            	state = briEvent.BRIDGE_STATE_LINK;
-            	System.out.println("state\t"+state);
-            	System.out.println("getBridgeState \t"+briEvent.getBridgeState());
-            	System.out.println("getBridgeType \t"+briEvent.getBridgeType());
-            	System.out.println("getCallerId1 \t"+briEvent.getCallerId1());
-            	System.out.println("getCallerId2 \t"+briEvent.getCallerId2());
-            	System.out.println("getChannel1 \t"+briEvent.getChannel1());
-            	System.out.println("getChannel2 \t"+briEvent.getChannel2());
-            	System.out.println("getUniqueId1 \t"+briEvent.getUniqueId1());
-            	System.out.println("getUniqueId2 \t"+briEvent.getUniqueId2());
-            	System.out.println("getDateReceived \t"+briEvent.getDateReceived().toString());
-        	}else{
-            	System.out.println("***********************\t BridgeEvent UnLink\t ***********************");
-            	state = briEvent.BRIDGE_STATE_UNLINK;
-            	System.out.println("state\t"+state);
-            	System.out.println("getBridgeState \t"+briEvent.getBridgeState());
-            	System.out.println("getBridgeType \t"+briEvent.getBridgeType());
-            	System.out.println("getCallerId1 \t"+briEvent.getCallerId1());
-            	System.out.println("getCallerId2 \t"+briEvent.getCallerId2());
-            	System.out.println("getChannel1 \t"+briEvent.getChannel1());
-            	System.out.println("getChannel2 \t"+briEvent.getChannel2());
-            	System.out.println("getUniqueId1 \t"+briEvent.getUniqueId1());
-            	System.out.println("getUniqueId2 \t"+briEvent.getUniqueId2());
-            	System.out.println("getDateReceived \t"+briEvent.getDateReceived().toString());
-        	}
-
-        }
+//        if(event instanceof BridgeEvent){
+//        	BridgeEvent briEvent = (BridgeEvent)event;
+//        	String state = null;
+//        	if(briEvent.isLink()){        		
+//            	System.out.println("***********************\t BridgeEvent Link\t ***********************");
+//            	state = briEvent.BRIDGE_STATE_LINK;
+//            	System.out.println("state\t"+state);
+//            	System.out.println("getBridgeState \t"+briEvent.getBridgeState());
+//            	System.out.println("getBridgeType \t"+briEvent.getBridgeType());
+//            	System.out.println("getCallerId1 \t"+briEvent.getCallerId1());
+//            	System.out.println("getCallerId2 \t"+briEvent.getCallerId2());
+//            	System.out.println("getChannel1 \t"+briEvent.getChannel1());
+//            	System.out.println("getChannel2 \t"+briEvent.getChannel2());
+//            	System.out.println("getUniqueId1 \t"+briEvent.getUniqueId1());
+//            	System.out.println("getUniqueId2 \t"+briEvent.getUniqueId2());
+//            	System.out.println("getDateReceived \t"+briEvent.getDateReceived().toString());
+//        	}else{
+//            	System.out.println("***********************\t BridgeEvent UnLink\t ***********************");
+//            	state = briEvent.BRIDGE_STATE_UNLINK;
+//            	System.out.println("state\t"+state);
+//            	System.out.println("getBridgeState \t"+briEvent.getBridgeState());
+//            	System.out.println("getBridgeType \t"+briEvent.getBridgeType());
+//            	System.out.println("getCallerId1 \t"+briEvent.getCallerId1());
+//            	System.out.println("getCallerId2 \t"+briEvent.getCallerId2());
+//            	System.out.println("getChannel1 \t"+briEvent.getChannel1());
+//            	System.out.println("getChannel2 \t"+briEvent.getChannel2());
+//            	System.out.println("getUniqueId1 \t"+briEvent.getUniqueId1());
+//            	System.out.println("getUniqueId2 \t"+briEvent.getUniqueId2());
+//            	System.out.println("getDateReceived \t"+briEvent.getDateReceived().toString());
+//        	}
+//
+//        }
         
         
         /*A HoldEvent is triggered when a channel is put on hold (or no longer on hold).*/
-        if(event instanceof HoldEvent){
-        	HoldEvent holdEvent = (HoldEvent)event;
-        	if(holdEvent.isHold()){
-            	System.out.println("***********************\t HoldEvent\t ***********************");
-            	System.out.println("getChannel \t"+holdEvent.getChannel());
-            	System.out.println("getUniqueId \t"+holdEvent.getUniqueId());
-            	System.out.println("getLine \t"+holdEvent.getLine());
-            	System.out.println("getStatus \t"+holdEvent.getStatus().toString());
-        	}else{
-            	System.out.println("***********************\t UNHoldEvent\t ***********************");
-            	System.out.println("getChannel \t"+holdEvent.getChannel());
-            	System.out.println("getUniqueId \t"+holdEvent.getUniqueId());
-            	System.out.println("getLine \t"+holdEvent.getLine());
-            	System.out.println("getStatus \t"+holdEvent.getStatus().toString());
-        	}
-        }
+//        if(event instanceof HoldEvent){
+//        	HoldEvent holdEvent = (HoldEvent)event;
+//        	if(holdEvent.isHold()){
+//            	System.out.println("***********************\t HoldEvent\t ***********************");
+//            	System.out.println("getChannel \t"+holdEvent.getChannel());
+//            	System.out.println("getUniqueId \t"+holdEvent.getUniqueId());
+//            	System.out.println("getLine \t"+holdEvent.getLine());
+//            	System.out.println("getStatus \t"+holdEvent.getStatus().toString());
+//        	}else{
+//            	System.out.println("***********************\t UNHoldEvent\t ***********************");
+//            	System.out.println("getChannel \t"+holdEvent.getChannel());
+//            	System.out.println("getUniqueId \t"+holdEvent.getUniqueId());
+//            	System.out.println("getLine \t"+holdEvent.getLine());
+//            	System.out.println("getStatus \t"+holdEvent.getStatus().toString());
+//        	}
+//        }
         
         
         /*A HoldEvent is triggered when a channel is put on hold (or no longer on hold).*/
-        if(event instanceof MusicOnHoldEvent){
-        	MusicOnHoldEvent musicEvent = (MusicOnHoldEvent)event;
-        	if(musicEvent.isStart()){
-            	System.out.println("***********************\t HoldEvent\t ***********************");
-            	System.out.println("getChannel \t"+musicEvent.getChannel());
-            	System.out.println("getUniqueId \t"+musicEvent.getUniqueId());
-            	System.out.println("getLine \t"+musicEvent.getLine());
-            	System.out.println("getStatus \t"+musicEvent.getDateReceived());
-        	}else if(musicEvent.isStop()){
-            	System.out.println("***********************\t UNHoldEvent\t ***********************");
-            	System.out.println("getChannel \t"+musicEvent.getChannel());
-            	System.out.println("getUniqueId \t"+musicEvent.getUniqueId());
-            	System.out.println("getLine \t"+musicEvent.getLine());
-            	System.out.println("getStatus \t"+musicEvent.getDateReceived());
-        	}
-        }
+//        if(event instanceof MusicOnHoldEvent){
+//        	MusicOnHoldEvent musicEvent = (MusicOnHoldEvent)event;
+//        	if(musicEvent.isStart()){
+//            	System.out.println("***********************\t HoldEvent\t ***********************");
+//            	System.out.println("getChannel \t"+musicEvent.getChannel());
+//            	System.out.println("getUniqueId \t"+musicEvent.getUniqueId());
+//            	System.out.println("getLine \t"+musicEvent.getLine());
+//            	System.out.println("getStatus \t"+musicEvent.getDateReceived());
+//        	}else if(musicEvent.isStop()){
+//            	System.out.println("***********************\t UNHoldEvent\t ***********************");
+//            	System.out.println("getChannel \t"+musicEvent.getChannel());
+//            	System.out.println("getUniqueId \t"+musicEvent.getUniqueId());
+//            	System.out.println("getLine \t"+musicEvent.getLine());
+//            	System.out.println("getStatus \t"+musicEvent.getDateReceived());
+//        	}
+//        }
         
         
         /*A HoldedCallEvent is triggered when a channel is put on hold.*/
-        if(event instanceof HoldedCallEvent){
-        	HoldedCallEvent holdcallEvent = (HoldedCallEvent)event;
-        	System.out.println("***********************\t HoldedCallEvent\t ***********************");
-        	System.out.println("getChannel1 \t"+holdcallEvent.getChannel1());
-        	System.out.println("getChannel2 \t"+holdcallEvent.getChannel2());
-        	System.out.println("getUniqueId1 \t"+holdcallEvent.getUniqueId1());
-        	System.out.println("getUniqueId2 \t"+holdcallEvent.getUniqueId2());
-        	System.out.println("getSequenceNumber \t"+holdcallEvent.getSequenceNumber());
-        }
-        
-        /* A TransferEvent is triggered when a SIP channel is transfered.*/
+//        if(event instanceof HoldedCallEvent){
+//        	HoldedCallEvent holdcallEvent = (HoldedCallEvent)event;
+//        	System.out.println("***********************\t HoldedCallEvent\t ***********************");
+//        	System.out.println("getChannel1 \t"+holdcallEvent.getChannel1());
+//        	System.out.println("getChannel2 \t"+holdcallEvent.getChannel2());
+//        	System.out.println("getUniqueId1 \t"+holdcallEvent.getUniqueId1());
+//        	System.out.println("getUniqueId2 \t"+holdcallEvent.getUniqueId2());
+//        	System.out.println("getSequenceNumber \t"+holdcallEvent.getSequenceNumber());
+//        }
+//        
+//        /* A TransferEvent is triggered when a SIP channel is transfered.*/
         if(event instanceof TransferEvent){
         	TransferEvent transEvent = (TransferEvent)event;
         	System.out.println("***********************\t TransferEvent\t ***********************");
-        	System.out.println(" \t"+transEvent.getChannel());
-        	System.out.println(" \t"+transEvent.getSipCallId());
-        	System.out.println(" \t"+transEvent.getTargetChannel());
-        	System.out.println(" \t"+transEvent.getTargetUniqueId());
-        	System.out.println(" \t"+transEvent.getTransferContext());
-        	System.out.println(" \t"+transEvent.getTransferExten());
-        	System.out.println(" \t"+transEvent.getTransferMethod());
-        	System.out.println(" \t"+transEvent.getTransferType());
-        	System.out.println(" \t"+transEvent.getUniqueId());
-        	System.out.println(" \t"+transEvent.getTransfer2Parking().toString());
+        	System.out.println("getChannel \t"+transEvent.getChannel());
+        	System.out.println("getSipCallId \t"+transEvent.getSipCallId());
+        	System.out.println("getTargetChannel \t"+transEvent.getTargetChannel());
+        	System.out.println("getTargetUniqueId \t"+transEvent.getTargetUniqueId());
+        	System.out.println("getTransferContext \t"+transEvent.getTransferContext());
+        	System.out.println("getTransferExten \t"+transEvent.getTransferExten());
+        	System.out.println("getTransferMethod \t"+transEvent.getTransferMethod());
+        	System.out.println("getTransferType \t"+transEvent.getTransferType());
+        	System.out.println("getUniqueId \t"+transEvent.getUniqueId());
+        	System.out.println("getTransfer2Parking \t"+transEvent.getTransfer2Parking().toString());
         }
         
         /* A HangupEvent is triggered when a channel is hung up.*/
@@ -322,38 +384,11 @@ public class HelloEvents implements ManagerEventListener
         	System.out.println("getCallerIdNum \t"+hangEvent.getCallerIdNum());
         	System.out.println("getCauseTxt \t"+hangEvent.getCauseTxt());
         	System.out.println("getChannel \t"+hangEvent.getChannel());
-        	System.out.println("getUniqueId \t"+hangEvent.getUniqueId());
-        	System.out.println("getCause \t"+hangEvent.getCause());        	
+//        	System.out.println("getUniqueId \t"+hangEvent.getUniqueId());
+//        	System.out.println("getCause \t"+hangEvent.getCause());        	
         }
         
-        /* An AgentsCompleteEvent is triggered after the state of all agents has been 
-         * reported in response to an AgentsAction.*/
-        if(event instanceof AgentCompleteEvent){
-        	AgentCompleteEvent comEvent= (AgentCompleteEvent)event;
-        	System.out.println("***********************\t AgentCompleteEvent\t ***********************");
-        	System.out.println("getChannel \t"+comEvent.getChannel());
-        	System.out.println("getMember \t"+comEvent.getMember());
-        	System.out.println("getMemberName \t"+comEvent.getMemberName());
-        	System.out.println("getQueue \t"+comEvent.getQueue());
-        	System.out.println("getReason \t"+comEvent.getReason());
-        	System.out.println("getUniqueId \t"+comEvent.getUniqueId());
-        	System.out.println("getTalkTime \t"+comEvent.getTalkTime());         	
-        }
-        
-        /* An AgentRingNoAnswerEvent is triggered when a call is routed to 
-         * an agent but the agent does not answer the call.*/
-        if(event instanceof AgentRingNoAnswerEvent){
-        	AgentRingNoAnswerEvent noAnsEvent= (AgentRingNoAnswerEvent)event;
-        	System.out.println("***********************\t AgentRingNoAnswerEvent\t ***********************");
-        	System.out.println(" \t"+noAnsEvent.getChannel());
-        	System.out.println(" \t"+noAnsEvent.getMember());
-        	System.out.println(" \t"+noAnsEvent.getMemberName());
-        	System.out.println(" \t"+noAnsEvent.getQueue());
-        	System.out.println(" \t"+noAnsEvent.getRingtime());
-        	System.out.println(" \t"+noAnsEvent.getUniqueId());
-        	System.out.println(" \t"+noAnsEvent.getSource());         	
-        }
-        
+/*AGENT______________________________________________________________________________________________________________AGENT*/       
         /* An AgentLoginEvent is triggered when an agent is successfully logged in using AgentLogin.*/
         if(event instanceof AgentLoginEvent){
         	AgentLoginEvent loginEvent= (AgentLoginEvent)event;
@@ -364,8 +399,7 @@ public class HelloEvents implements ManagerEventListener
         	System.out.println("getSource \t"+loginEvent.getSource());
         	System.out.println("getUniqueId \t"+loginEvent.getUniqueId());
         	System.out.println("getSource \t"+loginEvent.getSource());         	
-        }
-        
+        }        
         /* An AgentCallbackLogoffEvent is triggered when an agent that previously 
          * logged in using AgentLogin is logged of.*/
         if(event instanceof AgentLogoffEvent){
@@ -379,7 +413,34 @@ public class HelloEvents implements ManagerEventListener
         	System.out.println("getUniqueId \t"+logoffEvent.getUniqueId());
         	System.out.println("getSource \t"+logoffEvent.getSource());         	
         }
-        
+        /* An AgentsCompleteEvent is triggered after the state of all agents has been 
+         * reported in response to an AgentsAction.*/
+        if(event instanceof AgentCompleteEvent){
+        	AgentCompleteEvent comEvent= (AgentCompleteEvent)event;
+        	System.out.println("***********************\t AgentCompleteEvent\t ***********************");
+        	System.out.println("getChannel \t"+comEvent.getChannel());
+        	System.out.println("getMember \t"+comEvent.getMember());
+        	System.out.println("getMemberName \t"+comEvent.getMemberName());
+        	System.out.println("getQueue \t"+comEvent.getQueue());
+        	System.out.println("getReason \t"+comEvent.getReason());
+//        	System.out.println("getUniqueId \t"+comEvent.getUniqueId());
+        	System.out.println("getTalkTime \t"+comEvent.getTalkTime());         	
+        }        
+        /* An AgentRingNoAnswerEvent is triggered when a call is routed to 
+         * an agent but the agent does not answer the call.*/
+        if(event instanceof AgentRingNoAnswerEvent){
+        	AgentRingNoAnswerEvent noAnsEvent= (AgentRingNoAnswerEvent)event;
+        	System.out.println("***********************\t AgentRingNoAnswerEvent\t ***********************");
+        	System.out.println("getChannel \t"+noAnsEvent.getChannel());
+        	System.out.println("getMember \t"+noAnsEvent.getMember());
+        	System.out.println("getMemberName \t"+noAnsEvent.getMemberName());
+        	System.out.println("getQueue \t"+noAnsEvent.getQueue());
+        	System.out.println("getRingtime \t"+noAnsEvent.getRingtime());
+//        	System.out.println("getUniqueId \t"+noAnsEvent.getUniqueId());
+        	System.out.println("getSource \t"+noAnsEvent.getSource());         	
+        }        
+ 
+/*SYSTEM______________________________________________________________________________________________________________SYSTEM*/       
         /* A ShutdownEvent is triggered when the asterisk server is shut down or restarted.*/
 	    if(event instanceof ShutdownEvent){
 	    	ShutdownEvent shutEvent= (ShutdownEvent)event;
@@ -389,8 +450,7 @@ public class HelloEvents implements ManagerEventListener
 	    	System.out.println(" \t"+shutEvent.getDateReceived());
 	    	System.out.println(" \t"+shutEvent.getRestart().toString());    	
 	    	System.out.println(" \t"+shutEvent.getSource()); 
-	    }
-        
+	    }        
 	    /* A ReloadEvent is triggerd when the reload console command is executed or the Asterisk server is started.  */
 	    if(event instanceof ReloadEvent){
 	    	ReloadEvent reloadEvent= (ReloadEvent)event;
