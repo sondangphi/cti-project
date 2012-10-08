@@ -8,7 +8,11 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.net.Socket;
 
+import org.asterisk.model.QueueObject;
 import org.asterisk.utility.*;
 
 import javax.swing.DefaultComboBoxModel;
@@ -23,6 +27,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JMenuBar;
 
 public class loginForm {
 
@@ -30,14 +35,19 @@ public class loginForm {
 	private JTextField textAgent;
 	private JTextField textExtension;
 	private JPasswordField passwordField;
-	private JTextField textQueue;
 	private JLabel lblAgentUser;
 	private JLabel lblPassword;
 	private JLabel lblExtension;
 	private JLabel lblQueue;
 	public static JLabel lblStatus;
 	private JButton btnClear;
+	
 	private Agent agentClient ;
+	private static String host = "localhost";
+	private static int port2 = 33333;
+	private static int port1 = 22222;
+	private static QueueObject qObject;
+	private static Socket client;
 
 	/**
 	 * Launch the application.
@@ -47,7 +57,12 @@ public class loginForm {
 			public void run() {
 				try {
 					loginForm window = new loginForm();
-					window.frmLoginFormAgent.setVisible(true);					
+					window.frmLoginFormAgent.setVisible(true);		
+					client = new Socket(host, port2);
+					InputStream is = client.getInputStream();  			
+					ObjectInputStream ois = new ObjectInputStream(is);  
+					qObject = (QueueObject)ois.readObject();
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -69,7 +84,7 @@ public class loginForm {
 		frmLoginFormAgent = new JFrame();
 		frmLoginFormAgent.setResizable(false);
 		frmLoginFormAgent.setTitle("Login Form Agent");
-		frmLoginFormAgent.setBounds(100, 100, 589, 344);
+		frmLoginFormAgent.setBounds(100, 100, 491, 375);
 		frmLoginFormAgent.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		JButton btnLogin = new JButton("Login");
@@ -79,36 +94,40 @@ public class loginForm {
 				String agent = textAgent.getText();
 				String pass = passwordField.getText();
 				String exten = textExtension.getText();
-				String queue = textQueue.getText();
-				String command = "100@"+agent+"@"+pass+"@SIP/"+exten+"@"+queue;
-				agentClient = new Agent("localhost", 22222, command);
+//				String queue = textQueue.getText();
+				String command = "100@"+agent+"@"+pass+"@SIP/"+exten;
+				agentClient = new Agent(host, port1, command);
 				lblStatus.setText(command);
 			}
 		});
 		btnLogin.setFont(new Font("Tahoma", Font.BOLD, 14));
 		
 		textAgent = new JTextField();
+		textAgent.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		textAgent.setColumns(10);
 		
 		textExtension = new JTextField();
+		textExtension.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		textExtension.setColumns(10);
 		
 		passwordField = new JPasswordField();
-		
-		textQueue = new JTextField();
-		textQueue.setColumns(10);
+		passwordField.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		
 		lblAgentUser = new JLabel("Agent User");
+		lblAgentUser.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		lblPassword = new JLabel("Password\r\n");
+		lblPassword.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		lblExtension = new JLabel("Extension");
+		lblExtension.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		lblQueue = new JLabel("Queue");
+		lblQueue.setFont(new Font("Tahoma", Font.BOLD, 12));
 		
 		lblStatus = new JLabel("status");
 		
-		btnClear = new JButton("Clear");
+		btnClear = new JButton("Logout");
 		btnClear.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -119,8 +138,8 @@ public class loginForm {
 				String agent = textAgent.getText();
 				String pass = passwordField.getText();
 				String exten = textExtension.getText();
-				String queue = textQueue.getText();
-				String command = "102"+"@SIP/"+exten+"@"+queue;
+//				String queue = textQueue.getText();
+				String command = "102"+"@SIP/"+exten+"@";
 				try {
 					agentClient.sendtoServer(command);
 				} catch (IOException e1) {
@@ -135,12 +154,16 @@ public class loginForm {
 		
 		JList list = new JList();
 		
-		JComboBox comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"sip1", "sip2", "sip3"}));
-		
 		JComboBox comboBox_1 = new JComboBox();
+		comboBox_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				//mouse click event on combobox
+			}
+		});
+		comboBox_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		comboBox_1.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
+			public void itemStateChanged(ItemEvent arg0) {//event change item
 				
 			}
 		});
@@ -149,40 +172,34 @@ public class loginForm {
 		groupLayout.setHorizontalGroup(
 			groupLayout.createParallelGroup(Alignment.LEADING)
 				.addGroup(groupLayout.createSequentialGroup()
+					.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 314, GroupLayout.PREFERRED_SIZE)
+					.addGap(40))
+				.addGroup(groupLayout.createSequentialGroup()
 					.addGap(55)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addGroup(groupLayout.createSequentialGroup()
-							.addComponent(lblStatus, GroupLayout.PREFERRED_SIZE, 414, GroupLayout.PREFERRED_SIZE)
-							.addContainerGap())
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING, false)
-								.addComponent(lblQueue, GroupLayout.PREFERRED_SIZE, 54, GroupLayout.PREFERRED_SIZE)
-								.addComponent(lblPassword, GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
-								.addComponent(lblAgentUser, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-								.addComponent(lblExtension, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-							.addGap(18)
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addGroup(groupLayout.createSequentialGroup()
-									.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
-										.addComponent(passwordField, Alignment.LEADING, 133, 133, 133)
-										.addComponent(textAgent, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
-										.addComponent(textExtension, GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
-									.addGap(70)
-									.addComponent(list, GroupLayout.PREFERRED_SIZE, 1, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED))
-								.addGroup(groupLayout.createSequentialGroup()
-									.addComponent(textQueue, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
-									.addGap(79)))
-							.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-								.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
-								.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE))
-							.addGap(68))))
-				.addGroup(groupLayout.createSequentialGroup()
-					.addGap(129)
-					.addComponent(btnLogin, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-					.addGap(31)
-					.addComponent(btnClear, GroupLayout.PREFERRED_SIZE, 96, GroupLayout.PREFERRED_SIZE)
-					.addContainerGap(231, Short.MAX_VALUE))
+								.addComponent(lblPassword, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblAgentUser, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 104, Short.MAX_VALUE)
+								.addComponent(lblExtension, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+								.addComponent(lblQueue, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(btnLogin, GroupLayout.PREFERRED_SIZE, 89, GroupLayout.PREFERRED_SIZE)
+							.addGap(119)))
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(btnClear)
+							.addContainerGap())
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(comboBox_1, 0, 133, Short.MAX_VALUE)
+								.addComponent(passwordField, Alignment.LEADING, 133, 133, Short.MAX_VALUE)
+								.addComponent(textAgent, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 131, GroupLayout.PREFERRED_SIZE)
+								.addComponent(textExtension, GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE))
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(list, GroupLayout.PREFERRED_SIZE, 1, GroupLayout.PREFERRED_SIZE)
+							.addGap(106))))
 		);
 		groupLayout.setVerticalGroup(
 			groupLayout.createParallelGroup(Alignment.TRAILING)
@@ -190,29 +207,29 @@ public class loginForm {
 					.addContainerGap()
 					.addComponent(lblStatus)
 					.addGap(27)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addComponent(textAgent, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblAgentUser))
 					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 						.addComponent(passwordField, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblPassword))
 					.addGap(18)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textExtension, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblExtension)
-						.addComponent(list, GroupLayout.PREFERRED_SIZE, 1, GroupLayout.PREFERRED_SIZE)
-						.addComponent(comboBox, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addPreferredGap(ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-					.addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textQueue, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
-						.addComponent(lblQueue)
-						.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(31)
-					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-						.addComponent(btnLogin, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
-						.addComponent(btnClear, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE))
-					.addGap(26))
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addComponent(list, GroupLayout.PREFERRED_SIZE, 1, GroupLayout.PREFERRED_SIZE)
+							.addGap(12)
+							.addComponent(lblExtension))
+						.addComponent(textExtension, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+						.addComponent(comboBox_1, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
+						.addComponent(lblQueue))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnLogin, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+					.addGap(41)
+					.addComponent(btnClear, GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+					.addContainerGap())
 		);
 		frmLoginFormAgent.getContentPane().setLayout(groupLayout);
 	}
