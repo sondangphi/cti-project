@@ -11,6 +11,7 @@ public class AgentObject {
 	String iface;
 	String queue;
 	int penalty;
+        String role;
 	
 	public AgentObject() {
 		
@@ -66,6 +67,12 @@ public class AgentObject {
 	}
 	public void setPenalty(int pen){
 		penalty = pen;
+	}
+        public String getRole(){
+		return role;
+	}
+	public void setRole(String rl){
+		role = rl;
 	}
 	public void closeSocket(Socket s) throws IOException{
 		socket = s;

@@ -1,0 +1,110 @@
+2012-10-09 16:09:22	Start CTIServer
+2012-10-09 16:09:22	Waiting for agent connect...
+2012-10-09 16:10:27	Start CTIServer
+2012-10-09 16:10:27	Waiting for agent connect...
+2012-10-09 16:53:32	Start CTIServer
+2012-10-09 16:53:32	Waiting for agent connect...
+2012-10-09 16:54:00	Start CTIServer
+2012-10-09 16:54:00	Waiting for agent connect...
+2012-10-09 16:57:13	Start CTIServer
+2012-10-09 16:57:13	Waiting for agent connect...
+2012-10-09 16:59:55	Start CTIServer
+2012-10-09 16:59:55	Waiting for agent connect...
+2012-10-09 17:08:13	Start CTIServer
+2012-10-09 17:08:13	Waiting for agent connect...
+2012-10-09 17:10:34	Start CTIServer
+2012-10-09 17:10:34	Waiting for agent connect...
+2012-10-09 17:15:20	Start CTIServer
+2012-10-09 17:15:20	Waiting for agent connect...
+2012-10-09 17:29:36	Start CTIServer
+2012-10-09 17:29:36	Waiting for agent connect...
+2012-10-10 09:20:24	Start CTIServer
+2012-10-10 09:20:24	Waiting for agent connect...
+2012-10-10 14:18:34	Start CTIServer
+2012-10-10 14:18:34	Waiting for agent connect...
+2012-10-10 14:39:06	Start CTIServer
+2012-10-10 14:39:06	Waiting for agent connect...
+2012-10-10 15:13:29	Start CTIServer
+2012-10-10 15:13:29	Waiting for agent connect...
+2012-10-10 15:13:58	Start CTIServer
+2012-10-10 15:13:58	Waiting for agent connect...
+2012-10-10 15:15:45	Start CTIServer
+2012-10-10 15:15:45	Waiting for agent connect...
+2012-10-10 15:17:12	Connect To Agent From Address	127.0.0.1
+2012-10-10 15:17:12	request from agent 	/127.0.0.1	100@agent1@agent1@8001@8888@1
+2012-10-10 15:17:12	agent login 	/127.0.0.1	100@agent1@agent1@8001@8888@1
+2012-10-10 15:19:43	Start CTIServer
+2012-10-10 15:19:43	Waiting for agent connect...
+2012-10-10 15:20:25	Connect To Agent From Address	127.0.0.1
+2012-10-10 15:20:25	request from agent 	/127.0.0.1	100@agent1@agent1@agent1@8888@1
+2012-10-10 15:20:25	agent login 	/127.0.0.1	100@agent1@agent1@agent1@8888@1
+2012-10-10 15:23:56	Connect To Agent From Address	127.0.0.1
+2012-10-10 15:23:56	request from agent 	/127.0.0.1	100@agent1@agent1@agent1@8888@1
+2012-10-10 15:23:56	agent login 	/127.0.0.1	100@agent1@agent1@agent1@8888@1
+2012-10-10 15:23:59	Connect To Agent From Address	127.0.0.1
+2012-10-10 15:24:00	request from agent 	/127.0.0.1	100@agent1@agent1@agent1@8888@1
+2012-10-10 15:24:00	agent login 	/127.0.0.1	100@agent1@agent1@agent1@8888@1
+2012-10-10 15:45:31	Start CTIServer
+2012-10-10 15:45:31	Waiting for agent connect...
+2012-10-10 15:46:55	Connect To Agent From Address	127.0.0.1
+2012-10-10 15:46:55	request from agent 	/127.0.0.1	100@agent1@agent1@SIP/8002@8888@1
+2012-10-10 15:47:18	agent login 	/127.0.0.1	100@agent1@agent1@SIP/8002@8888@1
+2012-10-10 15:53:28	Connect To Agent From Address	127.0.0.1
+2012-10-10 15:53:29	request from agent 	/127.0.0.1	100@agent1@agent1@SIP/8002@8888@1
+2012-10-10 15:53:35	agent login 	/127.0.0.1	100@agent1@agent1@SIP/8002@8888@1
+2012-10-10 16:28:48	Start CTIServer
+2012-10-10 16:28:48	Waiting for agent connect...
+2012-10-10 16:29:31	Connect To Agent From Address	127.0.0.1
+2012-10-10 16:29:31	request from agent 	/127.0.0.1	100@agent1@agent1@SIP/8001@8888@1
+2012-10-10 16:29:31	agent login 	/127.0.0.1	100@agent1@agent1@SIP/8001@8888@1
+2012-10-10 16:30:13	request from agent 	/127.0.0.1	102
+2012-10-10 16:32:40	Start CTIServer
+2012-10-10 16:32:40	Waiting for agent connect...
+2012-10-10 16:32:57	Connect To Agent From Address	127.0.0.1
+2012-10-10 16:32:57	request from agent 	/127.0.0.1	100@agent2@agent2@SIP/8002@8888@1
+2012-10-10 16:32:57	agent login 	/127.0.0.1	100@agent2@agent2@SIP/8002@8888@1
+2012-10-10 16:33:20	Connect To Agent From Address	127.0.0.1
+2012-10-10 16:33:20	request from agent 	/127.0.0.1	100@agent1@agent1@SIP/8002@8888@1
+2012-10-10 16:33:20	agent login 	/127.0.0.1	100@agent1@agent1@SIP/8002@8888@1
+2012-10-10 16:33:32	Connect To Agent From Address	127.0.0.1
+2012-10-10 16:33:32	request from agent 	/127.0.0.1	100@agent1@agent1@SIP/8002@8888@1
+2012-10-10 16:33:32	agent login 	/127.0.0.1	100@agent1@agent1@SIP/8002@8888@1
+2012-10-10 16:36:21	Start CTIServer
+2012-10-10 16:36:21	Waiting for agent connect...
+2012-10-10 16:37:14	Connect To Agent From Address	127.0.0.1
+2012-10-10 16:37:14	request from agent 	/127.0.0.1	100@agent1@agent1@SIP/8001@8888@1
+2012-10-10 16:37:14	agent login 	/127.0.0.1	100@agent1@agent1@SIP/8001@8888@1
+2012-10-10 16:38:04	request from agent 	/127.0.0.1	102
+2012-10-10 16:42:56	Connect To Agent From Address	127.0.0.1
+2012-10-10 16:43:16	request from agent 	/127.0.0.1	100@agent1@agent1@SIP/8001@8888@1
+2012-10-10 16:43:16	agent login 	/127.0.0.1	100@agent1@agent1@SIP/8001@8888@1
+2012-10-10 16:45:38	Connect To Agent From Address	127.0.0.1
+2012-10-10 16:45:38	request from agent 	/127.0.0.1	100@agent1@agent1@SIP/8001@8888@1
+2012-10-10 16:45:38	agent login 	/127.0.0.1	100@agent1@agent1@SIP/8001@8888@1
+2012-10-10 16:45:53	request from agent 	/127.0.0.1	102
+2012-10-10 16:49:09	Connect To Agent From Address	127.0.0.1
+2012-10-10 16:49:09	request from agent 	/127.0.0.1	100@agent1@agent1@SIP/8002@8881@1
+2012-10-10 16:49:09	agent login 	/127.0.0.1	100@agent1@agent1@SIP/8002@8881@1
+2012-10-10 16:49:38	request from agent 	/127.0.0.1	102
+2012-10-10 16:51:34	Start CTIServer
+2012-10-10 16:51:34	Waiting for agent connect...
+2012-10-10 16:51:58	Connect To Agent From Address	127.0.0.1
+2012-10-10 16:51:58	request from agent 	/127.0.0.1	100@agent1@agent1@SIP/8002@8888@1
+2012-10-10 16:51:58	agent login 	/127.0.0.1	100@agent1@agent1@SIP/8002@8888@1
+2012-10-10 16:52:17	request from agent 	/127.0.0.1	102
+2012-10-10 16:57:09	Connect To Agent From Address	127.0.0.1
+2012-10-10 16:57:09	request from agent 	/127.0.0.1	100@agent1@agent1@SIP/8001@8888@1
+2012-10-10 16:57:09	agent login 	/127.0.0.1	100@agent1@agent1@SIP/8001@8888@1
+2012-10-10 16:57:17	request from agent 	/127.0.0.1	102
+2012-10-10 16:58:42	Connect To Agent From Address	127.0.0.1
+2012-10-10 16:58:42	request from agent 	/127.0.0.1	100@agent1@agent1@SIP/8002@8881@1
+2012-10-10 16:58:42	agent login 	/127.0.0.1	100@agent1@agent1@SIP/8002@8881@1
+2012-10-10 17:03:13	Connect To Agent From Address	127.0.0.1
+2012-10-10 17:03:13	request from agent 	/127.0.0.1	100@agent1@agent1@SIP/8001@8888@1
+2012-10-10 17:03:13	agent login 	/127.0.0.1	100@agent1@agent1@SIP/8001@8888@1
+2012-10-10 17:03:32	request from agent 	/127.0.0.1	102
+2012-10-10 17:04:19	Connect To Agent From Address	127.0.0.1
+2012-10-10 17:04:19	request from agent 	/127.0.0.1	100@agent1@agent1@SIP/8001@8888@1
+2012-10-10 17:04:19	agent login 	/127.0.0.1	100@agent1@agent1@SIP/8001@8888@1
+2012-10-10 17:23:01	Start CTIServer
+2012-10-10 17:23:01	Waiting for agent connect...

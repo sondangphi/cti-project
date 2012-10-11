@@ -78,16 +78,16 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 	}
 	
 	public ManagerAgent(ctiServer ctiserver,Socket client) throws IOException{
-		try{
-			server = ctiserver;
-			clientSocket = client;
-			inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-			thread = new Thread(this);
-			thread.start();
-		}catch(Exception se){
-			uti.writeAgentLog("Cannot connect to agent");
-			closeConnect();
-		}
+            try{
+                server = ctiserver;
+                clientSocket = client;
+                inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                thread = new Thread(this);
+                thread.start();
+            }catch(Exception se){
+                uti.writeAgentLog("Cannot connect to agent");
+                closeConnect();
+            }
 
 	}
 	
@@ -95,70 +95,66 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 	public void run() {
 		// TODO Auto-generated method stub		
 		try {
-			uti = new Utility();
-			manager = server.manager;
-			manager.addEventListener(this);
-			manager.sendAction(new StatusAction());
-			database  = new Managerdb();	
-			addressAgent = clientSocket.getInetAddress().toString();
-			while(thread != null){
-				fromAgent = inputStream.readLine();
-				uti.writeAgentLog("request from agent \t"+addressAgent+"\t"+fromAgent);
-				ArrayList<String> cmdList = uti.getList(fromAgent);
-				data = Integer.parseInt(cmdList.get(0));				
-				switch(data){
-	            	case 100:  
-            			uti.writeAgentLog("agent login \t"+addressAgent+"\t"+fromAgent);
-            			getAgent(cmdList);		            
-            			if(database.checkLogin(agent.getAgent(), agent.getPass())){
-            				if(database.checkStatus(agent.getInterface())){
-        	            		QueueAddAction qAdd = addQueue(agent.getAgent(), agent.getInterface(), agent.getQueue(),agent.getPenalty());
-        	            		result = manager.sendAction(qAdd, 2000).getResponse().toString();
-        	            		if(result.equalsIgnoreCase("success")){
-        	            			database.updateStatus(agent.getAgent(), agent.getInterface(), agent.getQueue());
-        	            			database.writeAction(agent.getAgent(), agent.getInterface(), "login", agent.getQueue());
-        	            			System.out.println("LOGIN success");
-        	            			sendToAgent("LOGINSUCC");
-        	            		}else{
-        	            			sendToAgent("LOGINFAIL");
-        	            			System.out.println("LOGIN fail");
-        	            			closeConnect();
-        	            		}
-            				}else{
-            					System.out.println("Interface Already login");
-            					closeConnect();
-            				}
-            					
-            			}else {
-            				System.out.println("wrong user OR pass");
-            				sendToAgent("LOGINFAIL");
-            				closeConnect();
-            			}
-            				
-	            		break;
+                    uti = new Utility();
+                    manager = server.manager;
+                    manager.addEventListener(this);
+                    manager.sendAction(new StatusAction());
+//                    database  = new Managerdb();
+                    database  = new Managerdb("cti_database");
+                    database.connect();
+                    addressAgent = clientSocket.getInetAddress().toString();
+                    while(thread != null){
+                        fromAgent = inputStream.readLine();
+                        uti.writeAgentLog("request from agent \t"+addressAgent+"\t"+fromAgent);
+                        ArrayList<String> cmdList = uti.getList(fromAgent);
+                        data = Integer.parseInt(cmdList.get(0));				
+                        switch(data){
+                            case 100:  
+                            uti.writeAgentLog("agent login \t"+addressAgent+"\t"+fromAgent);
+                            getAgent(cmdList);		            
+                            if(database.checkLogin(agent.getAgent(), agent.getPass(), agent.getRole())){
+                                if(database.checkStatus(agent.getInterface())){
+                                QueueAddAction qAdd = addQueue(agent.getAgent(), agent.getInterface(), agent.getQueue(),agent.getPenalty());
+                                result = manager.sendAction(qAdd, 2000).getResponse().toString();
+                                    if(result.equalsIgnoreCase("success")){
+                                        database.updateStatus(agent.getAgent(), agent.getInterface(), agent.getQueue());
+//                                        database.loginAction(agent.getAgent(), agent.getInterface(), "login", agent.getQueue());
+                                        System.out.println("LOGIN success");
+                                        sendToAgent("LOGINSUCC");
+                                    }else{
+                                        sendToAgent("LOGINFAIL");
+                                        System.out.println("LOGIN fail");
+                                        closeConnect();
+                                    }
+                                }else{
+                                    System.out.println("Interface Already login");
+                                    closeConnect();
+                                }
+                            }else {
+                                System.out.println("wrong user OR pass");
+                                sendToAgent("LOGINFAIL");
+                                closeConnect();
+                            }
+                            break;
 		            case 102:  
 		            	if(agent != null){
-			            	QueueRemoveAction removeQueue = removeQueue(agent.getInterface(), agent.getQueue());
-			            	result = manager.sendAction(removeQueue).getResponse().toString();
-		            		if(result.equalsIgnoreCase("success")){
-		            			System.out.println("remove queue success");
-		            			database.updateStatus(agent.getAgent(), null, null);		
-		            			database.writeAction(agent.getAgent(), agent.getInterface(), "logout", agent.getQueue());
-		            			sendToAgent("LOGOUTSUCC");
-		            			System.out.println("LOGOUTSUCC");
-		            			Thread.sleep(2000);
-		            			agent = null;
-		            			closeConnect();
-		            		}else{		            			
-		            			sendToAgent("LOGOUTFAIL");
-		            		}
-		            		
+                                    QueueRemoveAction removeQueue = removeQueue(agent.getInterface(), agent.getQueue());
+                                    result = manager.sendAction(removeQueue).getResponse().toString();
+                                    if(result.equalsIgnoreCase("success")){
+                                        System.out.println("remove queue success");
+                                        database.updateStatus(agent.getAgent(), "", "");		
+//		            		database.loginAction(agent.getAgent(), agent.getInterface(), "logout", agent.getQueue());
+                                        sendToAgent("LOGOUTSUCC");
+                                        System.out.println("LOGOUTSUCC");
+                                        Thread.sleep(2000);
+                                        agent = null;
+                                        closeConnect();
+                                    }else{		            			
+                                        sendToAgent("LOGOUTFAIL");
+                                    }		            		
 		            	}
-
-			            	System.out.println("logout result: "+result);
-			            	//return result for agent
-
-	                	break;
+                                System.out.println("logout result: "+result);			            	
+                            break;
 		            case 104:
 		            	QueuePauseAction pauseAction = null;
 		            	if(cmdList.get(3).equalsIgnoreCase("off")){
@@ -202,7 +198,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 			e.printStackTrace();
 		} catch (IOException e) {
 			try {closeConnect();} catch (IOException e1) {}
-			System.out.println("socketex");
+			System.out.println("Close connect from client\t"+e);
 		} catch (TimeoutException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
@@ -215,13 +211,13 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 	}
 	
 	public ArrayList<String> getString(String cmd){
-		ArrayList<String> list =  new ArrayList<String>();
-		StringTokenizer st = new StringTokenizer(cmd,"@");
-        while(st.hasMoreTokens()){
-        	list.add(st.nextToken());
+            ArrayList<String> list =  new ArrayList<String>();
+            StringTokenizer st = new StringTokenizer(cmd,"@");
+            while(st.hasMoreTokens()){
+                list.add(st.nextToken());
+            }
+            return list;
         }
-		return list;
-	}
 	
 	public OriginateAction getAction(String channel,String queue){
 		OriginateAction originate = new OriginateAction();
@@ -230,59 +226,60 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 	}
 	
 	public QueueAddAction addQueue(String agent, String iface, String queue, int penalty){
-		QueueAddAction queueAdd = new QueueAddAction();
-		queueAdd.setMemberName(agent);		
-		queueAdd.setInterface(iface);
-		queueAdd.setQueue(queue);
-		queueAdd.setPenalty(penalty);		
-		return queueAdd;
+            QueueAddAction queueAdd = new QueueAddAction();
+            queueAdd.setMemberName(agent);		
+            queueAdd.setInterface(iface);
+            queueAdd.setQueue(queue);
+            queueAdd.setPenalty(penalty);		
+            return queueAdd;
 	}
 	
 	public QueueRemoveAction removeQueue(String iface, String queue){
-		QueueRemoveAction queueRemove = new QueueRemoveAction();
-		queueRemove.setInterface(iface);
-		queueRemove.setQueue(queue);		
-		return queueRemove;
+            QueueRemoveAction queueRemove = new QueueRemoveAction();
+            queueRemove.setInterface(iface);
+            queueRemove.setQueue(queue);		
+            return queueRemove;
 	}
 	
 	public QueuePauseAction queuePause(String iface, String queue, boolean pause){
-		QueuePauseAction queuePause = new QueuePauseAction();
-        queuePause.setQueue(queue);
-        queuePause.setInterface(iface);
-        queuePause.setPaused(pause);
-		return queuePause;
+            QueuePauseAction queuePause = new QueuePauseAction();
+            queuePause.setQueue(queue);
+            queuePause.setInterface(iface);
+            queuePause.setPaused(pause);
+            return queuePause;
 	}
 	
 	public void getAgent(ArrayList<String> list){
-		ArrayList<String> cmdList = list;
-		agent = new AgentObject();
-		agent.setSocket(clientSocket);
-		agent.setAgent(cmdList.get(1));
-		agent.setPass(cmdList.get(2));
-		agent.setInterface(cmdList.get(3));
-		agent.setQueue(cmdList.get(4));	
-		agent.setPenalty(penalty);
+            ArrayList<String> cmdList = list;
+            agent = new AgentObject();
+            agent.setSocket(clientSocket);
+            agent.setAgent(cmdList.get(1));
+            agent.setPass(cmdList.get(2));
+            agent.setInterface(cmdList.get(3));
+            agent.setQueue(cmdList.get(4));	
+            agent.setPenalty(penalty);
+            agent.setRole(cmdList.get(5));
 	}
 	
 	public void closeConnect() throws IOException{
-		System.out.println("start close session");
-		if(thread!=null){
-			thread.interrupt();
-			thread = null;
-			System.out.println("close thread");
-		}
-		if(!clientSocket.isClosed()){
-			clientSocket.close();
-			inputStream.close();
-			System.out.println("close socket");
-		}
-		System.out.println("finish close session");
+            System.out.println("start close session");
+            if(thread!=null){
+                thread.interrupt();
+                thread = null;
+                System.out.println("close thread");
+            }
+            if(!clientSocket.isClosed()){
+                clientSocket.close();
+                inputStream.close();
+                System.out.println("close socket");
+            }
+            System.out.println("finish close session");
 	}
 	
 	public void sendToAgent(String data) throws IOException{
-		PrintWriter outToAgent = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-		outToAgent.println(data);
-		outToAgent.flush();
+            PrintWriter outToAgent = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+            outToAgent.println(data);
+            outToAgent.flush();
 	}
 
 	@Override
