@@ -1,6 +1,6 @@
 package org.asterisk.model;
 
-public class AsteriskCall {
+public class CallObject {
 	
 	String callerId;
 	String callerName;
@@ -11,6 +11,7 @@ public class AsteriskCall {
 	String uniqueId;
 	String context;
 	String appData;
+        String stateCall;
 	boolean isAvail;
 	
 	

@@ -2,9 +2,12 @@ package org.asterisk.main;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import javax.net.ssl.SSLServerSocket;
 
 import org.asterisk.utility.ManagerAgent;
 import org.asterisk.utility.Managerdb;
+import org.asterisk.utility.QueueInfo;
+import org.asterisk.utility.QueueListen;
 import org.asterisk.utility.Utility;
 import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerConnectionFactory;
@@ -18,12 +21,11 @@ import org.asteriskjava.manager.event.ShutdownEvent;
 
 public class ctiServer implements ManagerEventListener{
 
-	private static ServerSocket server;
-	private static boolean running = true;
+	private static ServerSocket server1;
 	private static ManagerAgent agent;
 	private static Utility uti;
 	public static ManagerConnection manager;
-	private static String host = "172.168.10.206";
+	private static String host = "172.168.10.208";
 	private static int port1 = 22222;
 	private static int port2 = 33333;
 	private static String userAsterisk = "manager";
@@ -31,48 +33,66 @@ public class ctiServer implements ManagerEventListener{
 	private static String userSql = "cti";
 	private static String pwdSql  = "123456";
 	private static Managerdb database;
+        private static QueueListen qlisten;
 		
 	/**
 	 * @param args
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
-		// TODO Auto-generated method stub
-		uti = new Utility();		
-		ctiServer s = new ctiServer();
-		
-		/*connect to asterisk server*/
-		uti.writeAsteriskLog("Start Connect to Asterisk Server");
-		connectAsterisk(host, userAsterisk, pwdAsterisk);
-		manager.login();
-		System.out.println("connect to asterisk server successfull");
-		uti.writeAsteriskLog("Connect to Asterisk Server Successfull");
-		manager.addEventListener(s);		
-		manager.sendAction(new StatusAction());		
-		System.out.println("listen event from asterisk");
-		uti.writeAsteriskLog("listen event/send action from/to Asterisk");
-		
-		/*Connect to Database*/	
-		uti.writeAsteriskLog("Connecting to Database...");
-		database = new Managerdb(host,userSql,pwdSql);
-		if(database.connect())
-			uti.writeAsteriskLog("Connect to Database Successfull");
-		else
-			uti.writeAsteriskLog("Connect to Database Fail");
-		System.out.println("Connect to Database");
-		
-		/*open socket and waiting for client connect*/
-		server = new ServerSocket(port1);
-		System.out.println("Waiting for agent connect");		
-		uti.writeAgentLog("Start CTIServer");
-		uti.writeAgentLog("Waiting for agent connect...");
-		while(running){			
-			Socket clientsocket = server.accept();
-			agent = new ManagerAgent(s, clientsocket);
-			uti.writeAgentLog("Connect To Agent From Address"+"\t"+clientsocket.getInetAddress().getHostAddress());							
-			System.out.println("acept connect from agent ");
-		}
+            // TODO Auto-generated method stub
+            uti = new Utility();		
+            ctiServer s = new ctiServer();
+            /*connect to asterisk server*/
+            uti.writeAsteriskLog("Start Connect to Asterisk Server");
+            connectAsterisk(host, userAsterisk, pwdAsterisk);
+            manager.login();
+            System.out.println("connect to asterisk server successfull");
+            uti.writeAsteriskLog("Connect to Asterisk Server Successfull");
+            manager.addEventListener(s);		
+            manager.sendAction(new StatusAction());		
+            System.out.println("listen event from asterisk");
+            uti.writeAsteriskLog("listen event/send action from/to Asterisk");
+            /*Connect to Database*/	
+            uti.writeAsteriskLog("Connecting to Database...");
+            database = new Managerdb("asterisk");
+            if(database.connect())
+                uti.writeAsteriskLog("Connect to Database Successfull");
+            else
+                uti.writeAsteriskLog("Connect to Database Fail");
+            System.out.println("Connect to Database");
+            /*open socket and waiting for client connect*/
+            server1 = new ServerSocket(port1);
+            System.out.println("Waiting for agent connect");		
+            uti.writeAgentLog("Start CTIServer");
+            uti.writeAgentLog("Waiting for agent connect...");
+            //send list queue for client
+            qlisten = new QueueListen(port2);
+            while(true){			
+                Socket clientsocket = server1.accept();
+                agent = new ManagerAgent(s, clientsocket);
+                uti.writeAgentLog("Connect To Agent From Address"+"\t"+clientsocket.getInetAddress().getHostAddress());							
+                System.out.println("acept connect from agent ");
+            }
 	}
+        
+//        private static void queue_listen()throws Exception{
+//            QueueInfo qInfor = null;
+//            while(true){
+//                System.out.println("start queue_listen");
+//                Socket client = server2.accept();                
+//                qInfor = new QueueInfo(client);
+//                System.out.println("send list queue for client");
+//            }
+//        }
+//        private static void agent_listen()throws Exception{
+//            ManagerAgent agent = null;
+//            while(true){
+//                Socket client = server1.accept();
+//                agent = new ManagerAgent(this, client);
+//                agent = new ManagerAgent();                
+//            }
+//        }
 	
 	@Override
 	public void onManagerEvent(ManagerEvent event){
