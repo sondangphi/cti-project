@@ -12,7 +12,7 @@ public class AgentObject {
 	String queue;
 	int penalty;
         String role;
-	
+	String session;
 	public AgentObject() {
 		
 	}
@@ -74,6 +74,12 @@ public class AgentObject {
 	public void setRole(String rl){
 		role = rl;
 	}
+        public String getSesion(){
+		return session;
+	}
+	public void setSession(String ses){
+		session = ses;
+	}        
 	public void closeSocket(Socket s) throws IOException{
 		socket = s;
 		if(!socket.isClosed())
