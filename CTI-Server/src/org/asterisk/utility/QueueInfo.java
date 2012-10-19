@@ -13,14 +13,19 @@ public class QueueInfo implements Runnable{
 
 	private Socket client;
 	private Thread thread;
-	private boolean running = true;	
         private ArrayList<QueueObject> list;
-        private Managerdb db;
-        private String database = "asterisk";
-	public QueueInfo(Socket clientS) {
+        private Managerdb mdb_agent;
+//        String dbname = "asterisk";
+	public QueueInfo(Socket clientS, Managerdb dbase) {
+            mdb_agent = dbase;
+            client = clientS;
             thread = new Thread(this);
-            thread.start();
-            client = clientS;		
+            thread.start();            		
+	}   
+	public QueueInfo(Socket clientS) {
+            client = clientS;
+            thread = new Thread(this);
+            thread.start();            		
 	}        
         public QueueInfo() {
 	
@@ -28,19 +33,16 @@ public class QueueInfo implements Runnable{
 	@Override
 	public void run() {
             try {			
-                db = new Managerdb(database);
-                db.connect();
-                while(running){
-                    list = db.listQueue();
-                    OutputStream os = null;  
-                    ObjectOutputStream oos = null; 
-                    os = client.getOutputStream();  
-                    oos = new ObjectOutputStream(os);   
-                    oos.writeObject(list);  
-                    oos.flush();
-                    running = false;
-                    closeConnect();
-                }
+//                mdb_agent = new Managerdb(dbname);
+//                mdb_agent.connect();
+                list = mdb_agent.listQueue();
+                OutputStream os = null;  
+                ObjectOutputStream oos = null; 
+                os = client.getOutputStream();  
+                oos = new ObjectOutputStream(os);   
+                oos.writeObject(list);  
+                oos.flush();
+                closeConnect();
             } catch (Exception e) {	
             }
 	}
@@ -50,7 +52,7 @@ public class QueueInfo implements Runnable{
                 client.close();
             if(thread != null)
                 thread.interrupt();
-            db.close();
+//            mdb_agent.close();
         }
 
 }

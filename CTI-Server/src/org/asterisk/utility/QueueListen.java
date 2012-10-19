@@ -7,6 +7,7 @@ package org.asterisk.utility;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.Connection;
 
 /**
  *
@@ -14,15 +15,25 @@ import java.net.Socket;
  */
 public class QueueListen implements Runnable{
     
-    private static ServerSocket server;
+    private static ServerSocket qserver;
     private static int port;
+//    private Connection connection;
+//    private static String dbuser = "qcti";
+//    private static String dbpwd = "123456";
+//    String dbname = "asterisk";
     Thread thread;
+    private Managerdb mdb_queue;
     public QueueListen(int p) throws IOException{
-        port = p;
-        server = new ServerSocket(port);
+        port = p;        
         thread = new Thread(this);
         thread.start();
     }
+    public QueueListen(int p, Managerdb mdb) throws IOException{
+        mdb_queue = mdb;
+        port = p;        
+        thread = new Thread(this);
+        thread.start();
+    }    
     public QueueListen() throws IOException{
         thread = new Thread(this);
         thread.start();
@@ -31,14 +42,16 @@ public class QueueListen implements Runnable{
 
     public void run() {
         try{
+            qserver = new ServerSocket(port);
             QueueInfo qInfor = null;
             while(true){
                 System.out.println("start queue_listen");
-                Socket client = server.accept();                
-                qInfor = new QueueInfo(client);
+                Socket client = qserver.accept();                
+                qInfor = new QueueInfo( client, mdb_queue );
                 System.out.println("send list queue for client");
             }
         }catch(Exception e){
+            System.out.println("QueueListen thread exception\r\n"+e);
         }            
     }
     
