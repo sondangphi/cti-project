@@ -5,7 +5,6 @@
 package org.asterisk.main;
 
 import org.asterisk.utility.Utility;
-import org.asterisk.main.*;
 
 /**
  *
@@ -79,7 +78,8 @@ public class ConfigForm extends javax.swing.JFrame {
         setResizable(false);
 
         jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPanel1MouseClicked(evt);
             }
         });
@@ -90,7 +90,8 @@ public class ConfigForm extends javax.swing.JFrame {
         btn_finish.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_finish.setText("Finish");
         btn_finish.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_finishActionPerformed(evt);
             }
         });
@@ -98,7 +99,8 @@ public class ConfigForm extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("Server Asterisk");
         jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jLabel3MouseClicked(evt);
             }
         });
@@ -108,21 +110,24 @@ public class ConfigForm extends javax.swing.JFrame {
 
         tx_server.setEnabled(false);
         tx_server.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tx_serverMouseClicked(evt);
             }
         });
 
         tx_aport.setEnabled(false);
         tx_aport.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tx_aportMouseClicked(evt);
             }
         });
 
         tx_qport.setEnabled(false);
         tx_qport.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tx_qportMouseClicked(evt);
             }
         });
@@ -281,7 +286,8 @@ public class ConfigForm extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 new ConfigForm().setVisible(true);
             }
         });

@@ -61,7 +61,8 @@ public class MainForm extends javax.swing.JFrame {
         btn_logout.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btn_logout.setText("LOGOUT");
         btn_logout.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_logoutActionPerformed(evt);
             }
         });
@@ -69,7 +70,8 @@ public class MainForm extends javax.swing.JFrame {
         btn_pause.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btn_pause.setText("PAUSE");
         btn_pause.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_pauseActionPerformed(evt);
             }
         });
@@ -78,7 +80,8 @@ public class MainForm extends javax.swing.JFrame {
         btn_hold.setText("HOLD");
         btn_hold.setEnabled(false);
         btn_hold.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_holdActionPerformed(evt);
             }
         });
@@ -91,7 +94,8 @@ public class MainForm extends javax.swing.JFrame {
         btn_hangup.setText("HANGUP");
         btn_hangup.setEnabled(false);
         btn_hangup.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_hangupActionPerformed(evt);
             }
         });
@@ -259,7 +263,7 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         try{
             String cmd  = "102";
-            agentClient.sendtoServer(cmd);
+            Agent.sendtoServer(cmd);
 //            this.dispose();
             
         }catch(Exception e){
@@ -273,12 +277,12 @@ public class MainForm extends javax.swing.JFrame {
             if(btn_pause.isSelected() && btn_pause.isEnabled()){
                 btn_pause.setText("UNPAUSE");
                 cmd  = "104@off";
-                agentClient.sendtoServer(cmd);
+                Agent.sendtoServer(cmd);
                 btn_logout.setEnabled(false);
             }else{
                 btn_pause.setText("PAUSE");    
                 cmd  = "104@on";
-                agentClient.sendtoServer(cmd);  
+                Agent.sendtoServer(cmd);  
                 btn_logout.setEnabled(true);
             }
         }catch(Exception e){
@@ -343,7 +347,8 @@ public class MainForm extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 new MainForm().setVisible(true);
             }
         });

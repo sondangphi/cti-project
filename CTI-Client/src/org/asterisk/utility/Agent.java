@@ -67,7 +67,7 @@ public class Agent implements Runnable{
                         switch(code){
 	            	case LOGINSUCC: //result LOGIN SUCCESS
                             System.out.println("LOGIN SUCCESS");
-                            loginf.lb_status.setText("LOGIN SUCCESS");
+                            LoginForm.lb_status.setText("LOGIN SUCCESS");
 //                            MainForm mForm = new MainForm();
 //                            mForm.setVisible(true);
                             mainForm = new MainForm();
@@ -77,7 +77,7 @@ public class Agent implements Runnable{
 	            	break;
 	            	case LOGINFAIL: //result LOGIN FAIL
                             System.out.println("LOGIN FAIL");
-                            loginf.lb_status.setText("LOGIN FAIL");
+                            LoginForm.lb_status.setText("LOGIN FAIL");
                             connected = false;
                             closeConnect();
                         break;

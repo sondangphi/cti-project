@@ -5,8 +5,6 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JComboBox;
 import org.asterisk.model.QueueObject;
 import org.asterisk.utility.Agent;
 
@@ -93,7 +91,8 @@ public class LoginForm extends javax.swing.JFrame {
         btn_login.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_login.setText("Login");
         btn_login.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_loginActionPerformed(evt);
             }
         });
@@ -121,7 +120,8 @@ public class LoginForm extends javax.swing.JFrame {
         btn_clear.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_clear.setText("Clear");
         btn_clear.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_clearActionPerformed(evt);
             }
         });
@@ -221,7 +221,8 @@ public class LoginForm extends javax.swing.JFrame {
         submn_config.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
         submn_config.setText("Configuration");
         submn_config.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submn_configActionPerformed(evt);
             }
         });
@@ -230,12 +231,14 @@ public class LoginForm extends javax.swing.JFrame {
         submn_quit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.ALT_MASK));
         submn_quit.setText("Exit");
         submn_quit.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+            @Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
                 submn_quitMouseClicked(evt);
             }
         });
         submn_quit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            @Override
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submn_quitActionPerformed(evt);
             }
         });
@@ -317,7 +320,7 @@ public class LoginForm extends javax.swing.JFrame {
                 if(clientSoc != null){
                     System.out.println("connect to server localhost");
                     agentClient = new Agent(clientSoc, this);
-                    agentClient.sendtoServer(cmd);
+                    Agent.sendtoServer(cmd);
                 }
             }                        
         }catch(Exception e){
@@ -331,7 +334,8 @@ public class LoginForm extends javax.swing.JFrame {
      */
     public static  void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 new LoginForm().setVisible(true);
                 listQueue = new ArrayList<QueueObject>();
                 getListQueue();                 
