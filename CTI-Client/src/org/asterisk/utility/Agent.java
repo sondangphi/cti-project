@@ -68,50 +68,56 @@ public class Agent implements Runnable{
 	            	case LOGINSUCC: //result LOGIN SUCCESS
                             System.out.println("LOGIN SUCCESS");
                             loginform.lb_status.setText("LOGIN SUCCESS");
-                            loginform.setVisible(false);
+//                            MainForm mForm = new MainForm();
+//                            mForm.setVisible(true);
                             mainForm = new MainForm();
-                            mainForm.setVisible(true);
+                            mainForm.setVisible(true);                            
+                            loginform.setVisible(false);
+                            loginform.dispose();
 	            	break;
 	            	case LOGINFAIL: //result LOGIN FAIL
                             System.out.println("LOGIN FAIL");
                             loginform.lb_status.setText("LOGIN FAIL");
                             connected = false;
                             closeConnect();
-		            break;
+                        break;
 	            	case LOGOUTSUCC: //result LOGOUT SUCCESS
-                            connected = false;
-                            closeConnect();
+                            loginform = new LoginForm();
+                            loginform.setVisible(true);
                             mainForm.setVisible(false);
-                            LoginForm lgform = new LoginForm();
-//                            lgform.
-                            lgform.setVisible(true);                            
+                            mainForm.dispose();
+                            connected = false;
+                            closeConnect();                           
                             System.out.println("LOGOUT SUCCESS");
 	            	break;
 	            	case LOGOUTFAIL: //result LOGOUT FAIL
-	            		System.out.println("LOGOUT FAIL");
-//	            		mainform.lblStatus.setText("LOGIOUT FAIL");
-		            break;	            	
+                            System.out.println("LOGOUT FAIL");
+                        break;	            	
 	            	case PAUSESUCC: //result PAUSE
 	            	break;
 	            	case PAUSEFAIL: //result PAUSE
-		            break;
+                        break;
 	            	case UNPAUSESUCC: //result UNPAUSE
 	            	break;
 	            	case UNPAUSEFAIL: //result UNPAUSE
-		            break;
+                        break;
 	            	case TRANSSUCC: //result TRANSFER	            			
 	            	break;
 	            	case TRANSFAIL: //result TRANSFER	            			
-		            break;
+                        break;
 	            	case HOLDSUCC: //result HOLD
 	            	break;
 	            	case HOLDFAIL: //result HOLD
-		            break;
+                        break;
 	            	case RESULT: //result ?
 	            	break;
 	            	case RINGING: //EVENT RINGING
 	            		System.out.println("RINGING");
 //	            		mainform.lblStatus.setText("RINGING");
+                                mainForm.btn_answer.setEnabled(true);
+                                mainForm.btn_hangup.setEnabled(true);
+                                mainForm.btn_pause.setEnabled(false);
+                                mainForm.btn_logout.setEnabled(false);
 	            	break;
 	            	case AVAIL: //result 	            			
 	            	break;
@@ -121,11 +127,17 @@ public class Agent implements Runnable{
 	            	break;
 	            	case HANGUP: 
 	            		System.out.println("HANGUP");
+                                mainForm.btn_answer.setEnabled(false);
+                                mainForm.btn_hangup.setEnabled(false);
+                                mainForm.btn_hold.setEnabled(false);
+                                mainForm.btn_pause.setEnabled(true);
+                                mainForm.btn_logout.setEnabled(true);
+                                
 //	            		mainform.lblStatus.setText("HANGUP");
 		            break;
 	            	case UP: //EVENT ANSWER CALL	     
 	            		System.out.println("ANSWER");
-//	            		mainform.lblStatus.setText("ANSWER");
+                                mainForm.btn_hold.setEnabled(true);
 	            	break;
 		            default: 
 	                break;
@@ -140,6 +152,7 @@ public class Agent implements Runnable{
 
         //send request to server - string
 	public static void sendtoServer(String t) throws IOException{
+//            PrintWriter outtoServer;
             outtoServer = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
             outtoServer.println(t);
             outtoServer.flush();
