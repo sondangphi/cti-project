@@ -17,6 +17,10 @@ public class AsteriskUtils {
                 OriginateAction originateAction;
                 ManagerResponse originateResponse;
 
+                //le thanh hai
+                System.out.println("");
+                
+                
                 originateAction = new OriginateAction();
                 originateAction.setChannel("SIP/" + witness);
                 originateAction.setContext("conferences");
