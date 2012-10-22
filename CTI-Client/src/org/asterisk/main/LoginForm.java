@@ -23,8 +23,8 @@ public class LoginForm extends javax.swing.JFrame {
 
     	private Agent agentClient ;
 	private static String host = "localhost";
-	private static int port2 = 33333;
-	private static int port1 = 22222;
+	private static int qport = 33333;
+	private static int aport = 22222;
 	private static ArrayList <QueueObject>  listQueue;
 	private static Socket clientSoc;
         private String role ="1";
@@ -278,7 +278,7 @@ public class LoginForm extends javax.swing.JFrame {
                                                 && !iface.equalsIgnoreCase("") && !queue.equalsIgnoreCase("")){
                 String cmd = "100@"+agentid+"@"+pwd+"@SIP/"+iface+"@"+queue+"@"+role;
                 lb_status.setText(cmd);
-                clientSoc = new Socket(host, port1);
+                clientSoc = new Socket(host, aport);
                 if(clientSoc != null){
                     System.out.println("connect to server localhost");
                     agentClient = new Agent(clientSoc, this);
@@ -335,7 +335,7 @@ public class LoginForm extends javax.swing.JFrame {
     
     private static void getListQueue(){
         try{            
-            clientSoc = new Socket(host, port2);            
+            clientSoc = new Socket(host, qport);            
             if(clientSoc!=null){                    		
                 InputStream is = clientSoc.getInputStream();
                 ObjectInputStream ois = new ObjectInputStream(is);  
