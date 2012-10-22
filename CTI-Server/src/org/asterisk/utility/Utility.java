@@ -1,6 +1,8 @@
 package org.asterisk.utility;
 
 import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
@@ -8,11 +10,14 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Properties;
 import java.util.Random;
 import java.util.StringTokenizer;
 
 public class Utility {
-	
+        Properties prop = new Properties();
+    
+        String filename = "infor.properties"; 
 	public String getDatetime(){		
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Calendar cal = Calendar.getInstance();
@@ -63,6 +68,17 @@ public class Utility {
             for( int i = 0; i < 10; i++ ) 
                 sb.append( temps.charAt( rnd.nextInt(temps.length()) ) );
             return sb.toString();           
+        }
+        
+        public void writeInfor(String fname,String key, String value)throws Exception{
+            prop.setProperty(key, value);
+            prop.store(new FileOutputStream(fname), null);
+        }
+        public String readInfor(String fname, String key)throws Exception{
+            String value = "";
+            prop.load(new FileInputStream(fname));
+            value = prop.getProperty(key);
+            return value;
         }
 
 }
