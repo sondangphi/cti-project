@@ -26,8 +26,8 @@ import org.asteriskjava.manager.event.ShutdownEvent;
 public class AgentListen implements Runnable, ManagerEventListener{
     
     public static ManagerConnection manager;
-    private static String host = "172.168.10.208";
-//    private static String host = "localhost";
+    private static String hostAsterisk = "172.168.10.208";
+//    private static String host = "127.0.0.1";
     private static String userAsterisk = "manager";
     private static String pwdAsterisk = "123456";
     private static int port;
@@ -35,12 +35,9 @@ public class AgentListen implements Runnable, ManagerEventListener{
     private static Utility uti;
     public  static ctiServer cti = null;
     private static ManagerAgent agent = null;
-//    private static String dbname = "cti_database";
+    static String filename = "infor.properties";    
     private static Thread thread;
     private static Managerdb mdb_agent;
-//    private static String dbuser = "acti";
-//    private static String dbpwd = "123456";
-//    private Connection connection;
     
     public AgentListen(){
     }
@@ -59,10 +56,21 @@ public class AgentListen implements Runnable, ManagerEventListener{
     public void run() {
         try{
             uti = new Utility();
+            if(uti.readInfor(filename, pwdAsterisk)==null){
+                System.out.println("write infor asterisk");
+                uti.writeInfor(filename, "pwdAsterisk", pwdAsterisk);
+                uti.writeInfor(filename, "userAsterisk", userAsterisk);
+                uti.writeInfor(filename, "hostAsterisk", hostAsterisk);
+            }
+            pwdAsterisk = uti.readInfor(filename, "pwdAsterisk");
+            userAsterisk = uti.readInfor(filename, "userAsterisk");
+            hostAsterisk = uti.readInfor(filename, "hostAsterisk");
+            
+                
             aserver = new ServerSocket(port);
             /*connect to asterisk server*/
             uti.writeAsteriskLog("Start Connect to Asterisk Server");
-            connectAsterisk(host, userAsterisk, pwdAsterisk);
+            connectAsterisk(hostAsterisk, userAsterisk, pwdAsterisk);
             manager.login();
             uti.writeAsteriskLog("Connect to Asterisk Server Successfull");
             manager.addEventListener(this);		
