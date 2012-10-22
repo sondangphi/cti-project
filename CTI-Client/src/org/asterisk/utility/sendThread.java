@@ -20,6 +20,7 @@ public class sendThread extends Thread{
 	sendThread(Socket client) {
 	    clientSocket = client;
 	}
+	@Override
 	public void run() {
 		
 		try{
