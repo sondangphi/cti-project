@@ -23,7 +23,7 @@ public class Agent implements Runnable{
 	static Socket clientSocket;
 	static BufferedReader infromServer;
 	static PrintWriter outtoServer;
-        private static LoginForm loginform;
+        private static LoginForm loginf;
         private static MainForm mainForm;
 	int data;
 	
@@ -37,7 +37,7 @@ public class Agent implements Runnable{
 	}
             public Agent(Socket soc, LoginForm login){
             clientSocket = soc;
-            loginform = login;
+            loginf = login;
             mainThread = new Thread(this);
             mainThread.start();
 	}
@@ -67,23 +67,23 @@ public class Agent implements Runnable{
                         switch(code){
 	            	case LOGINSUCC: //result LOGIN SUCCESS
                             System.out.println("LOGIN SUCCESS");
-                            loginform.lb_status.setText("LOGIN SUCCESS");
+                            loginf.lb_status.setText("LOGIN SUCCESS");
 //                            MainForm mForm = new MainForm();
 //                            mForm.setVisible(true);
                             mainForm = new MainForm();
                             mainForm.setVisible(true);                            
-                            loginform.setVisible(false);
-                            loginform.dispose();
+                            loginf.setVisible(false);
+                            loginf.dispose();
 	            	break;
 	            	case LOGINFAIL: //result LOGIN FAIL
                             System.out.println("LOGIN FAIL");
-                            loginform.lb_status.setText("LOGIN FAIL");
+                            loginf.lb_status.setText("LOGIN FAIL");
                             connected = false;
                             closeConnect();
                         break;
 	            	case LOGOUTSUCC: //result LOGOUT SUCCESS
-                            loginform = new LoginForm();
-                            loginform.setVisible(true);
+                            loginf = new LoginForm();
+                            loginf.setVisible(true);
                             mainForm.setVisible(false);
                             mainForm.dispose();
                             connected = false;

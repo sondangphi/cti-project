@@ -1,9 +1,6 @@
 package org.asterisk.main;
 
-import java.awt.Font;
 import java.awt.event.WindowEvent;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -12,7 +9,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 import org.asterisk.model.QueueObject;
 import org.asterisk.utility.Agent;
-import org.asterisk.utility.Utility;
 
 /*
  * To change this template, choose Tools | Templates
@@ -26,15 +22,12 @@ import org.asterisk.utility.Utility;
 public class LoginForm extends javax.swing.JFrame {
 
     	private Agent agentClient ;
-//	private static String host = "localhost";
-        private static String host = "172.168.10.208";
-	private static int qport = 33333;
-	private static int aport = 22222;
+	private static String host = "localhost";
+	private static int port2 = 33333;
+	private static int port1 = 22222;
 	private static ArrayList <QueueObject>  listQueue;
 	private static Socket clientSoc;
         private String role ="1";
-        private static Utility uti;
-        static String filename = "infor.properties";
 //        private QueueObject qObject;
     
     
@@ -44,25 +37,6 @@ public class LoginForm extends javax.swing.JFrame {
     ConfigForm configform;
     public LoginForm() {      
         initComponents();
-        uti = new Utility();		
-        File f = new File(filename);
-        try{
-            if(!f.exists())
-                f.createNewFile();            
-            FileInputStream fis = new FileInputStream(f); 
-            if(fis.available() == 0 ){
-                System.out.println("file is empty"); 
-                uti.writeInfor(filename, "host", host);
-                uti.writeInfor(filename, "aport", Integer.toString(aport));
-                uti.writeInfor(filename, "qport", Integer.toString(qport));
-                System.out.println("write file"); 
-            }
-            System.out.println("read file"); 
-            host = uti.readInfor(filename, "host");
-            aport = Integer.parseInt(uti.readInfor(filename, "aport"));
-            qport = Integer.parseInt(uti.readInfor(filename, "qport"));              
-        }catch(Exception e){
-        }               
         listQueue = new ArrayList<QueueObject>();
         getListQueue();        
     }
@@ -88,16 +62,12 @@ public class LoginForm extends javax.swing.JFrame {
         cb_queue = new javax.swing.JComboBox();
         pwd = new javax.swing.JPasswordField();
         btn_clear = new javax.swing.JButton();
-        lb_notify_iface = new javax.swing.JLabel();
-        lb_notify_pwd = new javax.swing.JLabel();
-        lb_notify_agent = new javax.swing.JLabel();
-        lb_notify_queue = new javax.swing.JLabel();
         lb_pic = new javax.swing.JLabel();
         lb_status = new javax.swing.JLabel();
         mn_main = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         submn_config = new javax.swing.JMenuItem();
-        submn_reload = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
         submn_quit = new javax.swing.JMenuItem();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
@@ -117,7 +87,6 @@ public class LoginForm extends javax.swing.JFrame {
         setName("main_frame"); // NOI18N
         setResizable(false);
 
-        btn_login.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_login.setText("Login");
         btn_login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,27 +94,16 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        lb_agent.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lb_agent.setText("AgentID");
 
-        lb_pwd.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lb_pwd.setText("Password");
 
-        lb_iface.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lb_iface.setText("Extension");
 
-        lb_queue.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lb_queue.setText("Queue");
 
-        tx_agent.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-
-        tx_iface.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        tx_iface.setText("8001");
-
-        pwd.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         pwd.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
-        btn_clear.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_clear.setText("Clear");
         btn_clear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -153,56 +111,35 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        lb_notify_iface.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lb_notify_iface.setForeground(new java.awt.Color(255, 0, 0));
-
-        lb_notify_pwd.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lb_notify_pwd.setForeground(new java.awt.Color(255, 0, 0));
-
-        lb_notify_agent.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lb_notify_agent.setForeground(new java.awt.Color(255, 0, 0));
-
-        lb_notify_queue.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lb_notify_queue.setForeground(new java.awt.Color(255, 0, 0));
-
         javax.swing.GroupLayout panel_1Layout = new javax.swing.GroupLayout(panel_1);
         panel_1.setLayout(panel_1Layout);
         panel_1Layout.setHorizontalGroup(
             panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_1Layout.createSequentialGroup()
-                .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGap(24, 24, 24)
+                .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lb_iface, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lb_pwd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lb_agent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lb_queue, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(tx_agent)
+                    .addComponent(tx_iface)
+                    .addComponent(cb_queue, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pwd, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panel_1Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lb_iface, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lb_pwd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lb_agent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lb_queue, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(tx_agent)
-                            .addComponent(tx_iface)
-                            .addComponent(cb_queue, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(pwd, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(panel_1Layout.createSequentialGroup()
-                        .addGap(59, 59, 59)
                         .addComponent(btn_login, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lb_notify_iface, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lb_notify_pwd, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lb_notify_agent, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lb_notify_queue, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
 
         panel_1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {lb_agent, lb_iface, lb_pwd, lb_queue});
 
-        panel_1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btn_clear, btn_login});
-
         panel_1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cb_queue, pwd, tx_agent, tx_iface});
+
+        panel_1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btn_clear, btn_login});
 
         panel_1Layout.setVerticalGroup(
             panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,27 +147,23 @@ public class LoginForm extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lb_agent, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tx_agent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lb_notify_agent, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tx_agent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lb_pwd, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pwd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lb_notify_pwd, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(pwd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(tx_iface, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lb_iface, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lb_notify_iface, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lb_iface, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lb_queue, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_queue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lb_notify_queue, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
+                    .addComponent(cb_queue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
                 .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_login, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_login)
+                    .addComponent(btn_clear))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -238,7 +171,9 @@ public class LoginForm extends javax.swing.JFrame {
 
         panel_1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cb_queue, pwd, tx_agent, tx_iface});
 
-        lb_pic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/ntt2.png"))); // NOI18N
+        panel_1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btn_clear, btn_login});
+
+        lb_pic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/icon_7.png"))); // NOI18N
 
         lb_status.setText("status");
 
@@ -253,14 +188,9 @@ public class LoginForm extends javax.swing.JFrame {
         });
         jMenu1.add(submn_config);
 
-        submn_reload.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK));
-        submn_reload.setText("Reload");
-        submn_reload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                submn_reloadActionPerformed(evt);
-            }
-        });
-        jMenu1.add(submn_reload);
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK));
+        jMenuItem1.setText("Reload");
+        jMenu1.add(jMenuItem1);
 
         submn_quit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.ALT_MASK));
         submn_quit.setText("Exit");
@@ -284,14 +214,14 @@ public class LoginForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(lb_pic)
-                .addGap(70, 70, 70)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(lb_pic, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(panel_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(140, Short.MAX_VALUE)
                 .addComponent(lb_status, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30))
         );
@@ -303,7 +233,7 @@ public class LoginForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(panel_1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lb_pic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
@@ -323,9 +253,8 @@ public class LoginForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         configform = new ConfigForm();
         configform.setVisible(true);
-        this.dispose();
-//        this.set
-//        configform.        
+//        configform.
+        
         
     }//GEN-LAST:event_submn_configActionPerformed
 
@@ -343,41 +272,18 @@ public class LoginForm extends javax.swing.JFrame {
         String pwd     = new String(p);
         String agentid = tx_agent.getText();        
         String iface  = tx_iface.getText();
-        String queue = "";
-        clearText();
-//        this.
-        if(!listQueue.isEmpty())
-            queue = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();                            
-        else
-            lb_notify_queue.setText("(*)");
+        String queue = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
         try{
             if(!agentid.equalsIgnoreCase("") && !pwd.equalsIgnoreCase("") 
                                                 && !iface.equalsIgnoreCase("") && !queue.equalsIgnoreCase("")){
-                if(checkAgent(agentid)){
-                    if(checkIface(iface)){
-                        if(checkPwd(pwd)){
-                            String cmd = "100@"+agentid+"@"+pwd+"@SIP/"+iface+"@"+queue+"@"+role;
-                            lb_status.setText(cmd);
-                            clientSoc = new Socket(host, aport);
-                            if(clientSoc != null){
-                                System.out.println("connect to server localhost");
-                                agentClient = new Agent(clientSoc, this);
-                                agentClient.sendtoServer(cmd);
-                            }                            
-                        }else{
-                            lb_notify_pwd.setText("(*)");
-                        }                        
-                    }else{
-                        lb_notify_iface.setText("(*)");
-                    }                    
-                }else{
-                    lb_notify_agent.setText("(*)");
-                }                
-            }else{
-                lb_notify_agent.setText("(*)");
-                lb_notify_iface.setText("(*)");       
-                lb_notify_pwd.setText("(*)");
-                lb_notify_queue.setText("(*)");                
+                String cmd = "100@"+agentid+"@"+pwd+"@SIP/"+iface+"@"+queue+"@"+role;
+                lb_status.setText(cmd);
+                clientSoc = new Socket(host, port1);
+                if(clientSoc != null){
+                    System.out.println("connect to server localhost");
+                    agentClient = new Agent(clientSoc, this);
+                    agentClient.sendtoServer(cmd);
+                }
             }                        
         }catch(Exception e){
             System.out.println("btn_loginActionPerformed\t"+e);                        
@@ -385,29 +291,6 @@ public class LoginForm extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btn_loginActionPerformed
 
-    private void clearText(){
-        lb_notify_agent.setText("");
-        lb_notify_iface.setText("");       
-        lb_notify_pwd.setText("");
-        lb_notify_queue.setText("");
-    }
-    
-    private void submn_reloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_reloadActionPerformed
-        // TODO add your handling code here:
-        this.setVisible(false);
-        new LoginForm().setVisible(true);
-    }//GEN-LAST:event_submn_reloadActionPerformed
-
-    private boolean checkIface(String temp) {        
-        return temp.matches("([0-9]+)");  
-    }    
-    private boolean checkAgent(String temp) {        
-        return temp.matches("([a-zA-Z0-9_./\\-]+)");
-    }   
-    
-    private boolean checkPwd(String temp) {        
-        return temp.matches("([a-zA-Z0-9_.\\-]+)");
-    }       
     /**
      * @param args the command line arguments
      */
@@ -438,19 +321,21 @@ public class LoginForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new LoginForm().setVisible(true);                 
+                new LoginForm().setVisible(true);
+//                listQueue = new ArrayList<QueueObject>();
+//                getListQueue();                 
             }
         });
                         
     }
     
-//    public void this.WindowEvent.windowClosing(WindowEvent e) {
-//        System.out.println("close window");
-//    }
+    public void windowClosing(WindowEvent e) {
+        System.out.println("close window");
+    }
     
     private static void getListQueue(){
         try{            
-            clientSoc = new Socket(host, qport);            
+            clientSoc = new Socket(host, port2);            
             if(clientSoc!=null){                    		
                 InputStream is = clientSoc.getInputStream();
                 ObjectInputStream ois = new ObjectInputStream(is);  
@@ -468,7 +353,6 @@ public class LoginForm extends javax.swing.JFrame {
             }                        
         }catch(Exception e){
             System.out.println("getListQueue\t"+e);
-            lb_notify_queue.setText("(*)");
         }        
     }
 
@@ -478,12 +362,9 @@ public class LoginForm extends javax.swing.JFrame {
     private static javax.swing.JComboBox cb_queue;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JLabel lb_agent;
     private javax.swing.JLabel lb_iface;
-    private javax.swing.JLabel lb_notify_agent;
-    private javax.swing.JLabel lb_notify_iface;
-    private javax.swing.JLabel lb_notify_pwd;
-    public static javax.swing.JLabel lb_notify_queue;
     private javax.swing.JLabel lb_pic;
     private javax.swing.JLabel lb_pwd;
     private javax.swing.JLabel lb_queue;
@@ -493,7 +374,6 @@ public class LoginForm extends javax.swing.JFrame {
     private javax.swing.JPasswordField pwd;
     private javax.swing.JMenuItem submn_config;
     private javax.swing.JMenuItem submn_quit;
-    private javax.swing.JMenuItem submn_reload;
     private javax.swing.JTextField tx_agent;
     private javax.swing.JTextField tx_iface;
     // End of variables declaration//GEN-END:variables
