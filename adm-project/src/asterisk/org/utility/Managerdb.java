@@ -1,0 +1,178 @@
+package asterisk.org.utility;
+
+//import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+//import org.asterisk.model.QueueObject;
+
+//import org.asterisk.utility.*;
+
+public class Managerdb {
+
+	private static Connection connection = null;
+	private static String user = "cti";
+	private static String pwd = "123456";
+	private static String serverName = "172.168.10.208";
+//        private static String serverName = "localhost";
+	public static String database = "";
+	private static String driverName = "com.mysql.jdbc.Driver";
+        String tablename = "";
+//        private Utility uti = new Utility();	
+	
+	public Managerdb(String db, String username, String pass,Connection con) throws ClassNotFoundException, SQLException{
+            database = db;
+            user = username;
+            pwd  = pass;
+            connection =con;
+            Class.forName(driverName);		
+            connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+db,username,pass); 
+	}
+	public Managerdb(String db, String username, String pass, String tb, String host) throws ClassNotFoundException, SQLException{
+            database = db;
+            user = username;
+            pwd  = pass;
+            serverName = host;
+            tablename = tb;
+            Class.forName(driverName);		
+            connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+database,user,pwd); 
+	}        
+//        public Managerdb(String address, String username, String pass, String db) throws ClassNotFoundException, SQLException{
+//		serverName = address;
+//                database = db;
+//		user = username;
+//		pwd  = pass;
+//	}
+	public Managerdb(){
+		
+	}
+        public Managerdb(String db)throws Exception{        
+            database = db;
+            Class.forName(driverName);		
+            connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+database,user,pwd);            
+	}
+        public Managerdb(String db, Connection con)throws Exception{
+            connection = con;
+            String datab = db;
+            Class.forName(driverName);		
+            connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+db,user,pwd);           
+	}        
+//	public boolean connect(){
+//            try{
+//                Class.forName(driverName);		
+//                connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+database,user,pwd);
+//            }catch(Exception e){
+//                return false;
+//            }
+//            return true;            
+//	}
+        public boolean isConnect()throws SQLException{         
+            if(connection.isClosed())
+                return false;
+            return true;            
+	}
+	
+	public boolean close() {
+            try{
+                connection.close();
+            }catch(Exception e){
+                return false;
+            }
+            return true;		
+	}
+	
+	/*ket noi csdl mysql bang jdbc*/
+	public static ResultSet sqlQuery(String sqlCom) throws ClassNotFoundException, SQLException{		
+            Statement stm = connection.createStatement();		
+            ResultSet rs = stm.executeQuery(sqlCom);
+            return rs;
+            //thi hanh lenh select va tra ve ket qua ResultSet
+	}
+	public static int sqlExecute(String sql)throws ClassNotFoundException, SQLException{
+            int result = 0;
+            Statement stm = connection.createStatement();	
+            result  = stm.executeUpdate(sql);
+            return result;	
+            /* neu thanh cong tra ve so thu tu hang thuc thi
+             * neu that bai tra ve 0
+		 */
+	}	
+	
+	public boolean checkLogin(String agent, String pass, String role) throws ClassNotFoundException, SQLException{
+            String sqlCom = "SELECT * FROM agent_login where agent_id = '"+agent+"'and password = '"+pass+"' and role ='"+role+"'";
+            ResultSet rs = sqlQuery(sqlCom);
+            return rs.next() ? true : false;
+	}
+	
+	public boolean checkStatus(String iface) throws ClassNotFoundException, SQLException{
+            String sqlCom = "SELECT agent_id FROM agent_status where interface = '"+iface+"'";
+            ResultSet rs = sqlQuery(sqlCom);
+            return rs.next() ? false : true;
+	}
+        
+        public boolean getInfor(String phone) throws ClassNotFoundException, SQLException{
+            String sqlCom = "SELECT * FROM cus where phone = '"+phone+"'";
+            ResultSet rs = sqlQuery(sqlCom);
+            return rs.next() ? false : true;
+	}
+	
+	public int updateStatus(String agentid, String iface, String queue) throws ClassNotFoundException, SQLException{
+            String sql = "UPDATE agent_status SET interface ='"+iface+"',queue ='"+queue+"' WHERE agent_id = '"+agentid+"'" ;
+            sqlExecute(sql);
+            return sqlExecute(sql);
+	}
+	
+	public void loginAction(String ses, String agent, String iface, String queue) throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO login_action (session, agent_id, interface, queue) " +
+                            "VALUES ('"+ses+"','"+agent+"','"+iface+"','"+queue+"')";
+            sqlExecute(sql);
+	}
+//        public int logoutAction(String ses,String agentid) throws ClassNotFoundException, SQLException{
+//            String datetime = uti.getDatetime();
+//            String sql = "UPDATE login_action SET datetime_logout ='"+datetime+"'"
+//                        + " WHERE session = '"+ses+"' and agent_id ='"+agentid+"'" ;
+//            sqlExecute(sql);
+//            return sqlExecute(sql);
+//	}
+        
+	public void pauseAction(String ses, String agent) throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO pause_action (session, agent_id) VALUES "
+                    + "('"+ses+"','"+agent+"')";
+            sqlExecute(sql);
+	}
+//        public int unpauseAction(String ses,String agentid) throws ClassNotFoundException, SQLException{
+//            String datetime = uti.getDatetime();
+//            String sql = "UPDATE pause_action SET datetime_unpause ='"+datetime+"'"
+//                        + " WHERE session = '"+ses+"' and agent_id ='"+agentid+"'" ;
+//            sqlExecute(sql);
+//            return sqlExecute(sql);
+//	}        
+        
+        public void writeDialLog(String ses, String agentid, String iface, String queue, String event)throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO dial_event (session, agent_id, interface, queue, event) VALUES "
+                    + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"')";
+            sqlExecute(sql);            
+        }
+        
+//        public ArrayList<QueueObject> listQueue(){
+//            ArrayList<QueueObject> list = new ArrayList<QueueObject>();
+//            try{
+//                String sqlCom = "SELECT extension,descr FROM queues_config";
+//                ResultSet rs = sqlQuery(sqlCom);
+//                while(rs.next()){
+//                    QueueObject q = new QueueObject();
+//                    q.setQueueId(rs.getString("extension"));
+//                    q.setQueueName(rs.getString("descr"));
+//                    list.add(q);
+//                }
+//            }catch(SQLException e){
+//                System.out.println("e\t"+e);
+//            }catch(ClassNotFoundException e){
+//                System.out.println("e2\t"+e);
+//            }             
+//            return list;            
+//        }
+}
