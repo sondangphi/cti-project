@@ -16,7 +16,7 @@ public class ConfigForm extends javax.swing.JFrame {
         static String host = "";
         static String qport = "";
         static String aport = "";
-        LoginForm loginf;
+        LoginForm loginform;
                 
     /**
      * Creates new form ConfigForm
@@ -44,7 +44,7 @@ public class ConfigForm extends javax.swing.JFrame {
             tx_server.setText(host);
             tx_aport.setText(aport);
             tx_qport.setText(qport);
-            loginf = m;
+            loginform = m;
         }catch(Exception e){
         }        
     }    
@@ -217,8 +217,10 @@ public class ConfigForm extends javax.swing.JFrame {
             uti.writeInfor(filename, "aport", aport);
             uti.writeInfor(filename, "qport", qport);
             this.dispose();
-            LoginForm form = new LoginForm();
-            form.setVisible(true);
+            loginform.setEnabled(true);
+            loginform.setVisible(true);
+//            LoginForm form = new LoginForm();
+//            form.setVisible(true);
         }catch(Exception e ){
             
         }

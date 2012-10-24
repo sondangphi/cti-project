@@ -1,12 +1,18 @@
 package org.asterisk.main;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import javax.imageio.IIOException;
 import org.asterisk.model.QueueObject;
 import org.asterisk.utility.Agent;
+import org.asterisk.utility.Utility;
 
 /*
  * To change this template, choose Tools | Templates
@@ -21,11 +27,19 @@ public class LoginForm extends javax.swing.JFrame {
 
     	private Agent agentClient ;
 	private static String host = "localhost";
+//        private static String host = "127.0.0.1";
+//        private static String host = "172.168.10.208";
 	private static int qport = 33333;
 	private static int aport = 22222;
 	private static ArrayList <QueueObject>  listQueue;
 	private static Socket clientSoc;
-        private String role ="1";
+        private static String role ="1";
+        private static String filename = "infor.properties";
+        private static Utility uti;
+        private static String agent = "";
+        private static String pass = "";
+        private static String iface = "";
+        private static String queue = "";
 //        private QueueObject qObject;
     
     
@@ -35,8 +49,39 @@ public class LoginForm extends javax.swing.JFrame {
     ConfigForm configform;
     public LoginForm() {      
         initComponents();
-        listQueue = new ArrayList<QueueObject>();
-        getListQueue();        
+        try{
+            uti = new Utility();		
+            File f = new File(filename);
+            if(!f.exists())
+                f.createNewFile();            
+            FileInputStream fis = new FileInputStream(f);  
+            if(fis.available() == 0 ){
+                System.out.println("file is empty"); 
+                uti.writeInfor(filename, "host", host);
+                uti.writeInfor(filename, "aport", Integer.toString(aport));
+                uti.writeInfor(filename, "qport", Integer.toString(qport));
+                System.out.println("write file"); 
+            }            
+            System.out.println("read file"); 
+            host = uti.readInfor(filename, "host");
+            aport = Integer.parseInt(uti.readInfor(filename, "aport"));
+            qport = Integer.parseInt(uti.readInfor(filename, "qport"));             
+            listQueue = new ArrayList<QueueObject>();
+//            getListQueue();      
+//            queue = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
+            if(queue == null)
+                lb_notify_queue.setText("(*)");
+            else 
+                lb_notify_queue.setText("");
+        }catch(Exception e){
+        }
+//       setDefaultCloseOperation(jFrame1.EXIT_ON_CLOSE);
+//        ActionListener exitListener = new ActionListener() {
+//            public void actionPerformed(ActionEvent e) {
+//                System.out.println("Exiting....");
+////                System.exit(0);
+//            }
+//        };
     }
 
     /**
@@ -69,6 +114,7 @@ public class LoginForm extends javax.swing.JFrame {
         mn_main = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         submn_config = new javax.swing.JMenuItem();
+        submn_reload = new javax.swing.JMenuItem();
         submn_quit = new javax.swing.JMenuItem();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
@@ -91,8 +137,7 @@ public class LoginForm extends javax.swing.JFrame {
         btn_login.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_login.setText("Login");
         btn_login.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_loginActionPerformed(evt);
             }
         });
@@ -120,8 +165,7 @@ public class LoginForm extends javax.swing.JFrame {
         btn_clear.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_clear.setText("Clear");
         btn_clear.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_clearActionPerformed(evt);
             }
         });
@@ -134,7 +178,6 @@ public class LoginForm extends javax.swing.JFrame {
 
         lb_notify_agent.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lb_notify_agent.setForeground(new java.awt.Color(255, 0, 0));
-        lb_notify_agent.setText(",,,");
 
         lb_notify_queue.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lb_notify_queue.setForeground(new java.awt.Color(255, 0, 0));
@@ -221,24 +264,30 @@ public class LoginForm extends javax.swing.JFrame {
         submn_config.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
         submn_config.setText("Configuration");
         submn_config.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submn_configActionPerformed(evt);
             }
         });
         jMenu1.add(submn_config);
 
+        submn_reload.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK));
+        submn_reload.setText("Reload");
+        submn_reload.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submn_reloadActionPerformed(evt);
+            }
+        });
+        jMenu1.add(submn_reload);
+
         submn_quit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.ALT_MASK));
         submn_quit.setText("Exit");
         submn_quit.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-			public void mouseClicked(java.awt.event.MouseEvent evt) {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
                 submn_quitMouseClicked(evt);
             }
         });
         submn_quit.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 submn_quitActionPerformed(evt);
             }
         });
@@ -285,12 +334,14 @@ public class LoginForm extends javax.swing.JFrame {
     private void submn_quitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_quitActionPerformed
         // TODO add your handling code here:
         System.exit(0);
+        
     }//GEN-LAST:event_submn_quitActionPerformed
 
     private void submn_configActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_configActionPerformed
         // TODO add your handling code here:
-        configform = new ConfigForm();
+        configform = new ConfigForm(this);
         configform.setVisible(true);
+        this.setEnabled(false);
 //        configform.
         
         
@@ -307,27 +358,44 @@ public class LoginForm extends javax.swing.JFrame {
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         // TODO add your handling code here:        
         char [] p = pwd.getPassword();
-        String pwd     = new String(p);
-        String agentid = tx_agent.getText();        
-        String iface  = tx_iface.getText();
-        String queue = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
+        pass     = new String(p);
+        agent = tx_agent.getText();        
+        iface  = tx_iface.getText();
+        queue = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
+        lb_notify_queue.setText("");                            
+        lb_notify_iface.setText("");
+        lb_notify_pwd.setText("");
+        lb_notify_agent.setText("");        
         try{
-            if(!agentid.equalsIgnoreCase("") && !pwd.equalsIgnoreCase("") 
-                                                && !iface.equalsIgnoreCase("") && !queue.equalsIgnoreCase("")){
-                String cmd = "100@"+agentid+"@"+pwd+"@SIP/"+iface+"@"+queue+"@"+role;
-                lb_status.setText(cmd);
-                clientSoc = new Socket(host, aport);
-                if(clientSoc != null){
-                    System.out.println("connect to server localhost");
-                    agentClient = new Agent(clientSoc, this);
-                    Agent.sendtoServer(cmd);
-                }
-            }                        
+            //kiem tra thong tin nguoi dung nhap vao
+            if(!agent.equalsIgnoreCase("") && uti.checkAgent(agent)){                
+                if(!pass.equalsIgnoreCase("") && uti.checkPwd(pass)){                    
+                    if(!iface.equalsIgnoreCase("") && uti.checkIface(iface)){                        
+                        if(!queue.equalsIgnoreCase("")){
+                            String cmd = "100@"+agent+"@"+pass+"@SIP/"+iface+"@"+queue+"@"+role;
+                            lb_status.setText(cmd);
+                            clientSoc = new Socket(host, aport);
+                            if(clientSoc != null){
+                                System.out.println("connect to server localhost");
+                                agentClient = new Agent(clientSoc, this);
+                                agentClient.sendtoServer(cmd);
+                            }
+                        }else lb_notify_queue.setText("(*)");                            
+                    }else lb_notify_iface.setText("(*)");
+                }else lb_notify_pwd.setText("(*)");
+            }else lb_notify_agent.setText("(*)");                       
         }catch(Exception e){
-            System.out.println("btn_loginActionPerformed\t"+e);                        
+            System.out.println("btn_loginActionPerformed\t"+e); 
         }
         
     }//GEN-LAST:event_btn_loginActionPerformed
+
+    private void submn_reloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_reloadActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+        LoginForm f = new LoginForm();
+        f.setVisible(true);
+    }//GEN-LAST:event_submn_reloadActionPerformed
 
     /**
      * @param args the command line arguments
@@ -335,10 +403,10 @@ public class LoginForm extends javax.swing.JFrame {
     public static  void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
-			public void run() {
+            public void run() {
                 new LoginForm().setVisible(true);
-                listQueue = new ArrayList<QueueObject>();
-                getListQueue();                 
+//                listQueue = new ArrayList<QueueObject>();
+//                getListQueue();                 
             }
         });
                         
@@ -368,6 +436,7 @@ public class LoginForm extends javax.swing.JFrame {
             }                        
         }catch(Exception e){
             System.out.println("getListQueue\t"+e);
+            lb_notify_queue.setText("(*)");
         }        
     }
 
@@ -392,6 +461,7 @@ public class LoginForm extends javax.swing.JFrame {
     private javax.swing.JPasswordField pwd;
     private javax.swing.JMenuItem submn_config;
     private javax.swing.JMenuItem submn_quit;
+    private javax.swing.JMenuItem submn_reload;
     private javax.swing.JTextField tx_agent;
     private javax.swing.JTextField tx_iface;
     // End of variables declaration//GEN-END:variables
