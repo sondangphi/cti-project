@@ -71,14 +71,26 @@ public class Utility {
         }
         
         public void writeInfor(String fname,String key, String value)throws Exception{
+//            System.out.println("write file"); 
             prop.setProperty(key, value);
             prop.store(new FileOutputStream(fname), null);
         }
         public String readInfor(String fname, String key)throws Exception{
+//            System.out.println("read file"); 
             String value = "";
             prop.load(new FileInputStream(fname));
             value = prop.getProperty(key);
             return value;
+        }
+        
+        public boolean checkAgent(String t){
+            return t.matches("([a-zA-Z0-9_./\\-]+)");
+        }
+        public boolean checkPwd(String t){
+            return t.matches("([a-zA-Z0-9]+)");
+        }
+        public boolean checkIface(String t){
+            return t.matches("([0-9]+)");
         }
 
 }

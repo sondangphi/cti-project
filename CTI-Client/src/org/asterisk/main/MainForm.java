@@ -263,7 +263,12 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         try{
             String cmd  = "102";
-            Agent.sendtoServer(cmd);
+            agentClient.sendtoServer(cmd);
+            System.out.println("finish mainform");
+            agentClient = null;
+//            Thread.sleep(1500);
+//            this.setVisible(false);
+//            this.exit_system();
 //            this.dispose();
             
         }catch(Exception e){

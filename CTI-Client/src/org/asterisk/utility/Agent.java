@@ -35,7 +35,7 @@ public class Agent implements Runnable{
             mainThread = new Thread(this);
             mainThread.start();
 	}
-            public Agent(Socket soc, LoginForm login){
+        public Agent(Socket soc, LoginForm login){
             clientSocket = soc;
             loginf = login;
             mainThread = new Thread(this);
@@ -59,6 +59,7 @@ public class Agent implements Runnable{
 		try{
                     String command = null;
                     CODE code;
+//                    MainForm mainForm = null;
                     while(connected && clientSocket.isConnected()){
                         infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                         command = infromServer.readLine();
@@ -67,13 +68,15 @@ public class Agent implements Runnable{
                         switch(code){
 	            	case LOGINSUCC: //result LOGIN SUCCESS
                             System.out.println("LOGIN SUCCESS");
-                            LoginForm.lb_status.setText("LOGIN SUCCESS");
+//                            loginf.lb_status.setText("LOGIN SUCCESS");
 //                            MainForm mForm = new MainForm();
 //                            mForm.setVisible(true);
-                            mainForm = new MainForm();
+                            mainForm = new MainForm(this);
                             mainForm.setVisible(true);                            
                             loginf.setVisible(false);
+//                            loginf = null;
                             loginf.dispose();
+                            
 	            	break;
 	            	case LOGINFAIL: //result LOGIN FAIL
                             System.out.println("LOGIN FAIL");
@@ -82,12 +85,17 @@ public class Agent implements Runnable{
                             closeConnect();
                         break;
 	            	case LOGOUTSUCC: //result LOGOUT SUCCESS
-                            loginf = new LoginForm();
-                            loginf.setVisible(true);
+                            System.out.println("logout");
+                            LoginForm f = new LoginForm();
+                            f.setVisible(true);
+//                            loginf = new LoginForm();
+//                            loginf.setVisible(true);
                             mainForm.setVisible(false);
                             mainForm.dispose();
-                            connected = false;
-                            closeConnect();                           
+//                            mainForm = null;                            
+                            connected = false;                            
+                            closeConnect();  
+                            this.detroy();
                             System.out.println("LOGOUT SUCCESS");
 	            	break;
 	            	case LOGOUTFAIL: //result LOGOUT FAIL
@@ -113,7 +121,7 @@ public class Agent implements Runnable{
 	            	break;
 	            	case RINGING: //EVENT RINGING
 	            		System.out.println("RINGING");
-//	            		mainform.lblStatus.setText("RINGING");
+//	            		mainform.lblStatus.setText("RINGING");                                
                                 mainForm.btn_answer.setEnabled(true);
                                 mainForm.btn_hangup.setEnabled(true);
                                 mainForm.btn_pause.setEnabled(false);
@@ -180,8 +188,12 @@ public class Agent implements Runnable{
                 infromServer.close();
                 System.out.println("close socket");
             }
-            System.out.println("finish close session");
+            System.out.println("finish close session");            
 	}
+        
+        public void detroy(){
+            
+        }
 	public enum CODE{
 		LOGINSUCC, LOGINFAIL, LOGOUTSUCC, LOGOUTFAIL,		
 		PAUSESUCC, PAUSEFAIL,
