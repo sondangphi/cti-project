@@ -1,6 +1,7 @@
 package asterisk.org.utility;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -15,9 +16,19 @@ import java.util.Random;
 import java.util.StringTokenizer;
 
 public class Utility {
-        Properties prop = new Properties();
-    
+        Properties prop = new Properties();    
         String filename = "infor.properties"; 
+        String logname = "logfile.log";
+
+        public Utility() throws Exception {
+            File f = new File(logname);
+            if(!f.exists())
+                f.createNewFile();
+//            f = new File(logname);
+//            if(!f.exists())
+//                f.createNewFile();
+        }
+        
 	public String getDatetime(){		
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Calendar cal = Calendar.getInstance();
@@ -27,8 +38,9 @@ public class Utility {
 	
 	public void writeLog(String log) throws IOException{
             Writer output;
-            output = new BufferedWriter(new FileWriter("logfile.log",true));
+            output = new BufferedWriter(new FileWriter(logname,true));
             output.append(getDatetime()+"\t"+log);
+            output.append("\r\n");
             output.close();
 	}
 	

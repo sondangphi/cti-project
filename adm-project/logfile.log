@@ -1,0 +1,40 @@
+2012-10-24 12:02:52	Start ADM program
+2012-10-24 12:02:52	Read Configuration
+2012-10-24 12:03:00	Update Configuration
+2012-10-24 12:03:01	Read Configuration
+2012-10-24 12:03:27	Connect to Asterisk Fail - 172.168.10.200
+2012-10-24 12:03:55	Update Configuration
+2012-10-24 12:03:55	Read Configuration
+2012-10-24 12:03:58	Connect to Asterisk Successfull - 172.168.10.208
+2012-10-24 12:06:53	Start ADM program
+2012-10-24 12:06:53	Read Configuration
+2012-10-24 12:07:02	Update Configuration
+2012-10-24 12:07:02	Read Configuration
+2012-10-24 12:07:24	Connect to Asterisk Fail - 172.168.10.200
+2012-10-24 12:08:05	Update Configuration
+2012-10-24 12:08:05	Read Configuration
+2012-10-24 12:08:05	Connect to Asterisk Successfull - 172.168.10.208
+2012-10-24 12:08:08	Disconnect to Asterisk server - stop receive call
+2012-10-24 12:08:11	Update Configuration
+2012-10-24 12:08:11	Read Configuration
+2012-10-24 12:08:11	Connect to Asterisk Successfull - 172.168.10.208
+2012-10-24 12:08:14	Exit ADM program
+2012-10-24 12:08:55	Start ADM program
+2012-10-24 12:08:55	Read Configuration
+2012-10-24 12:09:02	Update Configuration
+2012-10-24 12:09:03	Read Configuration
+2012-10-24 12:09:24	Connect to Asterisk Fail - 172.168.10.202
+2012-10-24 12:10:05	Update Configuration
+2012-10-24 12:10:05	Read Configuration
+2012-10-24 12:10:05	Connect to Asterisk Successfull - 172.168.10.208
+2012-10-24 12:11:31	Start ADM program
+2012-10-24 12:11:31	Read Configuration
+2012-10-24 12:11:33	Update Configuration
+2012-10-24 12:11:33	Read Configuration
+2012-10-24 12:11:33	Connect to Asterisk Successfull - 172.168.10.208
+2012-10-24 12:11:42	Receive a new customer call from 7001
+2012-10-24 12:11:42	Receive a new customer call from 7001
+2012-10-24 12:11:56	Receive a old customer call from 7001
+2012-10-24 12:11:56	Receive a old customer call from 7001
+2012-10-24 12:12:28	Exit ADM program
+2012-10-24 12:12:30	Exit ADM program
