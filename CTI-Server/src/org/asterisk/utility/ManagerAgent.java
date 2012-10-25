@@ -25,7 +25,9 @@ import org.asteriskjava.manager.action.QueueAddAction;
 import org.asteriskjava.manager.action.QueuePauseAction;
 import org.asteriskjava.manager.action.QueueRemoveAction;
 import org.asteriskjava.manager.action.StatusAction;
+import org.asteriskjava.manager.event.AgentCalledEvent;
 import org.asteriskjava.manager.event.AgentCompleteEvent;
+import org.asteriskjava.manager.event.AgentConnectEvent;
 import org.asteriskjava.manager.event.AgentLoginEvent;
 import org.asteriskjava.manager.event.AgentLogoffEvent;
 import org.asteriskjava.manager.event.AgentRingNoAnswerEvent;
@@ -40,6 +42,7 @@ import org.asteriskjava.manager.event.MusicOnHoldEvent;
 import org.asteriskjava.manager.event.NewChannelEvent;
 import org.asteriskjava.manager.event.NewStateEvent;
 import org.asteriskjava.manager.event.OriginateResponseEvent;
+import org.asteriskjava.manager.event.QueueCallerAbandonEvent;
 import org.asteriskjava.manager.event.QueueEntryEvent;
 import org.asteriskjava.manager.event.TransferEvent;
 import org.asteriskjava.manager.response.ManagerResponse;
@@ -150,7 +153,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                                     result = manager.sendAction(removeQueue).getResponse().toString();
                                     if(result.equalsIgnoreCase("success")){
                                         System.out.println("remove queue success");
-                                        mdb_agent.updateStatus(agent.getAgent(), "", "");		
+                                        mdb_agent.updateStatus(agent.getAgent(), "NULL", "NULL");		
 		            		mdb_agent.logoutAction(agent.getSesion(), agent.getAgent());
                                         sendToAgent("LOGOUTSUCC");
                                         System.out.println("LOGOUTSUCC");
@@ -317,137 +320,192 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 	public void onManagerEvent(ManagerEvent event) {
 		// TODO Auto-generated method stub
 		try {
-	    	/*A NewChannelEvent is triggered when a new channel is created.*/
-	        if(event instanceof NewChannelEvent){        	
-                    NewChannelEvent channelEvent = (NewChannelEvent)event;
-                    System.out.println("***********************\t NewChannelEvent\t ***********************");
-//                    String channel = channelEvent.getChannel();
-//                    channel = channel.substring(0, channel.indexOf("-"));	
-//                    System.out.println("exten\t"+agent.getInterface());
-//                    System.out.println("channel\t"+channel);
-//                    System.out.println("channelEvent.getUniqueId()\t"+channelEvent.getUniqueId());
-	        }
-	        /*A dial event is triggered whenever a phone attempts to dial someone.*/
-	        if(event instanceof DialEvent){
-	        	DialEvent dial = (DialEvent)event;        	
-	        	System.out.println("***********************\t DialEvent\t ***********************");
-//	        	System.out.println("getCallerIdName \t"+dial.getCallerIdName());
-//	        	System.out.println("getCallerIdNum \t"+dial.getCallerIdNum());
-//	        	System.out.println("getChannel \t"+dial.getChannel());
-//	        	System.out.println("getDestination \t"+dial.getDestination());
-//	        	System.out.println("getDestUniqueId \t"+dial.getDestUniqueId());
-//	        	System.out.println("getDialStatus \t"+dial.getDialStatus());
-//	        	System.out.println("getDialString \t"+dial.getDialString());
-//	        	System.out.println("getFile \t"+dial.getFile());
-//	        	System.out.println("getFunc \t"+dial.getFunc());
-//	        	System.out.println("getPrivilege \t"+dial.getPrivilege());
-//	        	System.out.println("getServer \t"+dial.getServer());
-//	        	System.out.println("getSubEvent \t"+dial.getSubEvent());
-//	        	System.out.println("getUniqueId \t"+dial.getUniqueId());
-	        }
-	        
+		        
 	        /*A NewStateEvent is triggered when the state of a channel has changed.*/
-	        if(event instanceof NewStateEvent){
-                    NewStateEvent stateEvent = (NewStateEvent)event;
-                    System.out.println("***********************\t NewStateEvent\t ***********************");                    	                     
-                    String channel = stateEvent.getChannel();
-                    channel = channel.substring(0, channel.indexOf("-"));                    
-                    String iface = agent.getInterface();
-                    String state = stateEvent.getChannelStateDesc();
-                    String callerName = stateEvent.getCallerIdName();
-                    String callerNum = stateEvent.getCallerIdNum();
-                    String srcNum = channel.substring(channel.indexOf("/")+1, channel.length());                   
-                    if(iface.equalsIgnoreCase(channel)){     
-                        if(state.equalsIgnoreCase("RINGING")){
-                            callObject = new CallObject();                        
-                            callObject.setsession(uti.getSession());   
-                            callObject.setcallerName(callerName);
-                            callObject.setcallerNumber(callerNum);
-                            callObject.setdesNum(srcNum);                            
-                            mdb_agent.writeDialLog(callObject.getsession(), agent.getAgent(), iface, agent.getQueue(), "3");
-                            sendToAgent(state);
-                            System.out.println("state\t "+state); 
-                        }
-                        if(state.equalsIgnoreCase("UP") && callObject.getcallerNumber()!= null){
-                            mdb_agent.writeDialLog(callObject.getsession(), agent.getAgent(), iface, agent.getQueue(), "4");
-                            sendToAgent(state);
-                            System.out.println("state\t "+state); 
-                        }    
-                        if(state.equalsIgnoreCase("RING")){
+//	        if(event instanceof NewStateEvent){
+//                    NewStateEvent stateEvent = (NewStateEvent)event;
+//                    System.out.println("***********************\t NewStateEvent\t ***********************");                    	                     
+//                    String channel = stateEvent.getChannel();
+//                    channel = channel.substring(0, channel.indexOf("-"));                    
+//                    String iface = agent.getInterface();                                      
+//                    if(iface.equalsIgnoreCase(channel)){     
+//                        String state = stateEvent.getChannelStateDesc();
+//                        String callerName = stateEvent.getCallerIdName();
+//                        String callerNum = stateEvent.getCallerIdNum();
+//                        String srcNum = channel.substring(channel.indexOf("/")+1, channel.length()); 
+//                        if(state.equalsIgnoreCase("RINGING")){
+//                            callObject = new CallObject();                        
+//                            callObject.setsession(uti.getSession());   
+//                            callObject.setcallerName(callerName);
+//                            callObject.setcallerNumber(callerNum);
+//                            callObject.setdesNum(srcNum);                            
+////                            mdb_agent.writeDialLog(callObject.getsession(), agent.getAgent(), iface, agent.getQueue(), "3");
+//                            mdb_agent.enterQueue(callObject.getsession(), agent.getAgent(), iface, agent.getQueue(), "3",callerNum);
 //                            sendToAgent(state);
-                            System.out.println("state\t "+state); 
-                        }       
-                        System.out.println("getsession\t "+callObject.getsession()); 
-                        System.out.println("getCallerIdName: "+stateEvent.getCallerIdName());
-                        System.out.println("getCallerIdNum: "+stateEvent.getCallerIdNum());
-                        System.out.println("chann: "+channel);
-                        System.out.println("exten: "+agent.getInterface());      
-                        System.out.println("getChannelStateDesc: "+stateEvent.getChannelStateDesc());
-                    }	        		
+//                            System.out.println("state\t "+state); 
+//                        }
+//                        if(state.equalsIgnoreCase("UP") && callObject.getcallerNumber()!= null){
+//                            mdb_agent.writeDialLog(callObject.getsession(), agent.getAgent(), iface, agent.getQueue(), "4");
+//                            sendToAgent(state);
+//                            System.out.println("state\t "+state); 
+//                        }    
+//                        if(state.equalsIgnoreCase("RING")){
+////                            sendToAgent(state);
+//                            System.out.println("state\t "+state); 
+//                        }       
+//                        System.out.println("getsession\t "+callObject.getsession()); 
+//                        System.out.println("getCallerIdName: "+stateEvent.getCallerIdName());
+//                        System.out.println("getCallerIdNum: "+stateEvent.getCallerIdNum());
+//                        System.out.println("chann: "+channel);
+//                        System.out.println("exten: "+agent.getInterface());      
+//                        System.out.println("getChannelStateDesc: "+stateEvent.getChannelStateDesc());
+//                    }	        		
+//	        }
+            //enter queue
+            if(event instanceof AgentCalledEvent){
+                AgentCalledEvent callEvent = (AgentCalledEvent)event;
+                System.out.println("***********************\t AgentCalledEvent\t ***********************");
+                String iface = agent.getInterface();
+                String agentCaller = callEvent.getAgentCalled();
+                if(iface.equalsIgnoreCase(agentCaller)){
+                    String callerName = callEvent.getCallerIdName();
+                    String callerNum = callEvent.getCallerIdNum();
+                    callObject = new CallObject();                        
+                    callObject.setsession(uti.getSession());   
+                    callObject.setcallerName(callerName);
+                    callObject.setcallerNumber(callerNum);        
+                    callObject.setdesNum("");//?????
+                    mdb_agent.enterQueue(callObject.getsession(), agent.getAgent(), iface, agent.getQueue(), "3",callerNum);
+                    sendToAgent("RINGING");                                                         
+                }              
+            } 	        
+            //connect queue
+            if(event instanceof AgentConnectEvent){
+                AgentConnectEvent connect= (AgentConnectEvent)event;
+                System.out.println("***********************\t AgentConnectEvent\t ***********************");
+                String iface = agent.getInterface();
+                String agentCaller = connect.getMember();
+                if(iface.equalsIgnoreCase(agentCaller)){
+                    String ringtime = connect.getRingtime().toString();
+//                    mdb_agent.writeDialLog(callObject.getsession(), agent.getAgent(), iface, agent.getQueue(), "4");
+                    mdb_agent.connectQueue(callObject.getsession(), agent.getAgent(), iface, agent.getQueue(), "4", ringtime);
+                    sendToAgent("UP"); 
+                }                               	
+            }      
+	        /* An AgentsCompleteEvent is triggered after the state of all agents has been 
+	         * reported in response to an AgentsAction.*/
+	        if(event instanceof AgentCompleteEvent){
+                    AgentCompleteEvent comEvent= (AgentCompleteEvent)event;
+                    System.out.println("***********************\t AgentCompleteEvent\t ***********************");  
+                    String iface = agent.getInterface();
+                    String channel = comEvent.getMember();                                                        
+                    if(iface.equalsIgnoreCase(channel)){
+                        String reason = comEvent.getReason();
+                        String talkTime = comEvent.getTalkTime().toString();
+                        if(reason.equalsIgnoreCase("agent")){
+                            mdb_agent.completeCall(callObject.getsession(), agent.getAgent(), agent.getInterface(), comEvent.getQueue(), "5",talkTime);
+                            System.out.println("reason \t"+reason);
+                        }else if(reason.equalsIgnoreCase("caller")){
+                            mdb_agent.completeCall(callObject.getsession(), agent.getAgent(), agent.getInterface(), comEvent.getQueue(), "6",talkTime);
+                            System.out.println("reason \t"+reason);
+                        }
+                        callObject = null;                      
+                    }                    
 	        }
 	        
-	        /*Response to an OriginateAction.*/
-//	        if(event instanceof OriginateResponseEvent){
-//	        	OriginateResponseEvent oriEvent = (OriginateResponseEvent)event;
-//	        	System.out.println("***********************\t OriginateResponseEvent\t ***********************");
-//	        	System.out.println("getActionId \t"+oriEvent.getActionId());
-//	        	System.out.println("getCallerIdName \t"+oriEvent.getCallerIdName());
-//	        	System.out.println("getCallerIdNum \t"+oriEvent.getCallerIdNum());
-//	        	System.out.println(" \t"+oriEvent.getChannel());
-//	        	System.out.println(" \t"+oriEvent.getContext());
-//	        	System.out.println(" \t"+oriEvent.getExten());
-//	        	System.out.println(" \t"+oriEvent.getInternalActionId());
-//	        	System.out.println(" \t"+oriEvent.getReason());
-//	        }	             
+	        /* An AgentRingNoAnswerEvent is triggered when a call is routed to 
+	         * an agent but the agent does not answer the call.*/
+	        if(event instanceof AgentRingNoAnswerEvent){
+                    AgentRingNoAnswerEvent noAnsEvent= (AgentRingNoAnswerEvent)event;
+                    System.out.println("***********************\t AgentRingNoAnswerEvent\t ***********************");    
+                    String iface = agent.getInterface();
+                    String channel = noAnsEvent.getMember();                     
+                    if(iface.equalsIgnoreCase(channel)){
+                        String ringTime = String.valueOf(noAnsEvent.getRingtime()/1000);
+                        System.out.println("ringTime\t"+ringTime);
+                        mdb_agent.ringNoans(callObject.getsession(), agent.getAgent(), agent.getInterface(), agent.getQueue(), "21", ringTime);
+                        callObject = null;                                               
+                    }                                                                                    
+	        }       
+                //abandon queue
+                if(event instanceof QueueCallerAbandonEvent){
+                    QueueCallerAbandonEvent abandon= (QueueCallerAbandonEvent)event;
+                    System.out.println("***********************\t QueueCallerAbandonEvent\t ***********************"); 
+                    System.out.println("getHoldTime: "+abandon.getHoldTime().toString());            
+                    System.out.println("getPosition: "+abandon.getPosition().toString());            
+                    System.out.println("getChannel: "+abandon.getChannel());            
+                    System.out.println("getQueue: "+abandon.getQueue());            
+                    System.out.println("getServer: "+abandon.getServer());            
+                    System.out.println("getOriginalPosition: "+abandon.getOriginalPosition().toString());            
+                }                 
+	        /* A HangupEvent is triggered when a channel is hung up.*/
+	        if(event instanceof HangupEvent){
+                    HangupEvent hangEvent = (HangupEvent)event;
+                    System.out.println("***********************\t HangupEvent\t ***********************");
+                    String channel = hangEvent.getChannel();                    
+                    channel = channel.substring(0, channel.indexOf("-"));
+                    String iface = agent.getInterface();
+                    if(iface.equalsIgnoreCase(channel)){  
+                        sendToAgent("HANGUP");
+                        System.out.println("chann: "+channel);
+                        System.out.println("exten: "+agent.getInterface());
+                        if(callObject != null){
+                            System.out.println("write event hangup: "+channel);
+                            mdb_agent.abandon(callObject.getsession(), agent.getAgent(), iface, agent.getQueue(), "7","");
+                            callObject = null;                             
+                        }else
+                            System.out.println("callObject == null "+channel);
+                    }                              	
+	        }                
 	        
 	        /* A BridgeEvent is triggered when a link between two voice channels is established ("Link") or discontinued ("Unlink").
 	         * As of Asterisk 1.6 the Bridge event is reported directly by Asterisk. 
 	         * Asterisk versions up to 1.4 report individual events: LinkEvent and UnlinkEvent.
 	         * For maximum compatibily do not use the Link and Unlink events in your code. 
 	         * Just use the Bridge event and check for isLink() and isUnlink().*/
-	        if(event instanceof BridgeEvent){
-                    BridgeEvent briEvent = (BridgeEvent)event;
-                    String state = null;
-                    String channel = briEvent.getChannel2();
-                    channel = channel.substring(0, channel.indexOf("-"));     
+//	        if(event instanceof BridgeEvent){
+//                    BridgeEvent briEvent = (BridgeEvent)event;
+//                    String state = null;
+//                    String channel = briEvent.getChannel2();
+//                    channel = channel.substring(0, channel.indexOf("-"));     
 //                    if(agent.getInterface().equals(channel)){
 //                        System.out.println("map\t"+channel);
 //                    }
-                    if(briEvent.isLink()){        		
-                        System.out.println("***********************\t BridgeEvent Link\t ***********************");
-                        state = briEvent.BRIDGE_STATE_LINK;
-                        System.out.println("state\t"+state);
-                        System.out.println("getBridgeState \t"+briEvent.getBridgeState());
-                        System.out.println("getBridgeType \t"+briEvent.getBridgeType());
-                        System.out.println("getCallerId1 \t"+briEvent.getCallerId1());
-                        System.out.println("getCallerId2 \t"+briEvent.getCallerId2());
-                        System.out.println("getChannel1 \t"+briEvent.getChannel1());
-                        System.out.println("getChannel2 \t"+briEvent.getChannel2());
+//                    if(briEvent.isLink()){        		
+//                        System.out.println("***********************\t BridgeEvent Link\t ***********************");
+//                        state = briEvent.BRIDGE_STATE_LINK;
+//                        System.out.println("state\t"+state);
+//                        System.out.println("getBridgeState \t"+briEvent.getBridgeState());
+//                        System.out.println("getBridgeType \t"+briEvent.getBridgeType());
+//                        System.out.println("getCallerId1 \t"+briEvent.getCallerId1());
+//                        System.out.println("getCallerId2 \t"+briEvent.getCallerId2());
+//                        System.out.println("getChannel1 \t"+briEvent.getChannel1());
+//                        System.out.println("getChannel2 \t"+briEvent.getChannel2());
 //                        System.out.println("getUniqueId1 \t"+briEvent.getUniqueId1());
 //                        System.out.println("getUniqueId2 \t"+briEvent.getUniqueId2());
 //                        System.out.println("getDateReceived \t"+briEvent.getDateReceived().toString());
                         //begin answer, connect event
 //                        callObject.setdesChannel(agent.getInterface());
 //                        mdb_agent.writeDialLog(callObject.getsession(), agent.getAgent(), agent.getInterface(), agent.getQueue(), "4");                                                   
-                    }else{
-                        System.out.println("***********************\t BridgeEvent UnLink\t ***********************");
-                        state = briEvent.BRIDGE_STATE_UNLINK;
-                        System.out.println("state\t"+state);
-                        System.out.println("getBridgeState \t"+briEvent.getBridgeState());
-                        System.out.println("getBridgeType \t"+briEvent.getBridgeType());
-                        System.out.println("getCallerId1 \t"+briEvent.getCallerId1());
-                        System.out.println("getCallerId2 \t"+briEvent.getCallerId2());
-                        System.out.println("getChannel1 \t"+briEvent.getChannel1());
-                        System.out.println("getChannel2 \t"+briEvent.getChannel2());
+//                    }else{
+//                        System.out.println("***********************\t BridgeEvent UnLink\t ***********************");
+//                        state = briEvent.BRIDGE_STATE_UNLINK;
+//                        System.out.println("state\t"+state);
+//                        System.out.println("getBridgeState \t"+briEvent.getBridgeState());
+//                        System.out.println("getBridgeType \t"+briEvent.getBridgeType());
+//                        System.out.println("getCallerId1 \t"+briEvent.getCallerId1());
+//                        System.out.println("getCallerId2 \t"+briEvent.getCallerId2());
+//                        System.out.println("getChannel1 \t"+briEvent.getChannel1());
+//                        System.out.println("getChannel2 \t"+briEvent.getChannel2());
 //                        System.out.println("getUniqueId1 \t"+briEvent.getUniqueId1());
 //                        System.out.println("getUniqueId2 \t"+briEvent.getUniqueId2());
 //                        System.out.println("getDateReceived \t"+briEvent.getDateReceived().toString());                        
                         //hangup event
 //                        mdb_agent.writeDialLog(callObject.getsession(), agent.getAgent(), agent.getInterface(), agent.getQueue(), "4");                                                   
 //                        callObject = null;
-                    }
+//                    }
 
-	        }
+//	        }
 	        
 	        
 	        /*A HoldEvent is triggered when a channel is put on hold (or no longer on hold).*/
@@ -501,75 +559,13 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 //	        	System.out.println(" \t"+transEvent.getTransferType());
 //	        	System.out.println(" \t"+transEvent.getUniqueId());
 //	        	System.out.println(" \t"+transEvent.getTransfer2Parking().toString());
-//	        }
+//	        }	        	        
 	        
-	        /* A HangupEvent is triggered when a channel is hung up.*/
-	        if(event instanceof HangupEvent){
-                    HangupEvent hangEvent = (HangupEvent)event;
-                    System.out.println("***********************\t HangupEvent\t ***********************");
-                    String channel = hangEvent.getChannel();                    
-                    channel = channel.substring(0, channel.indexOf("-"));	                    
-                    if(agent.getInterface().equalsIgnoreCase(channel)){
-                        sendToAgent("HANGUP"); 
-                        System.out.println("chann: "+channel);
-                        System.out.println("exten: "+agent.getInterface());
-                        if(callObject != null){
-                            System.out.println("write event hangup: "+channel);
-                            mdb_agent.writeDialLog(callObject.getsession(), agent.getAgent(), agent.getInterface(), agent.getQueue(), "7");
-                            callObject = null;
-                        }else
-                            System.out.println("callObject == null "+channel);
-                    }
-                              	
-	        }	        
-	        /* An AgentsCompleteEvent is triggered after the state of all agents has been 
-	         * reported in response to an AgentsAction.*/
-	        if(event instanceof AgentCompleteEvent){
-                    AgentCompleteEvent comEvent= (AgentCompleteEvent)event;
-                    System.out.println("***********************\t AgentCompleteEvent\t ***********************");
-                    String talkTime = comEvent.getTalkTime().toString();
-                    String channel = comEvent.getMember();                                    
-                    String reason = comEvent.getReason();
-                    if(agent.getInterface().equalsIgnoreCase(channel)){
-                        if(reason.equalsIgnoreCase("agent")){
-                            mdb_agent.writeDialLog(callObject.getsession(), agent.getAgent(), agent.getInterface(), comEvent.getQueue(), "5");
-                            System.out.println("reason \t"+reason);
-                        }else if(reason.equalsIgnoreCase("caller")){
-                            mdb_agent.writeDialLog(callObject.getsession(), agent.getAgent(), agent.getInterface(), comEvent.getQueue(), "6");
-                            System.out.println("reason \t"+reason);
-                        }
-                        callObject = null;  
-                        System.out.println("getChannel \t"+comEvent.getChannel());
-                        System.out.println("getMember \t"+comEvent.getMember());
-                        System.out.println("getMemberName \t"+comEvent.getMemberName());
-                        System.out.println("getQueue \t"+comEvent.getQueue());
-                        System.out.println("getUniqueId \t"+comEvent.getUniqueId());                    
-                        System.out.println("getTalkTime \t"+comEvent.getTalkTime());                        
-                    }                    
-	        }
-	        
-	        /* An AgentRingNoAnswerEvent is triggered when a call is routed to 
-	         * an agent but the agent does not answer the call.*/
-	        if(event instanceof AgentRingNoAnswerEvent){
-                    AgentRingNoAnswerEvent noAnsEvent= (AgentRingNoAnswerEvent)event;
-                    System.out.println("***********************\t AgentRingNoAnswerEvent\t ***********************");    
-                    String channel = noAnsEvent.getMember(); 
-                    String ringTime = noAnsEvent.getRingtime().toString();
-                    if(agent.getInterface().equalsIgnoreCase(channel)){
-                        mdb_agent.writeDialLog(callObject.getsession(), agent.getAgent(), agent.getInterface(), agent.getQueue(), "21");
-                        callObject = null;
-                        
-                        System.out.println("ringnoanswer \t"+noAnsEvent.getMember()); 
-                        System.out.println("getChannel \t"+noAnsEvent.getChannel());
-                        System.out.println("getMember \t"+noAnsEvent.getMember());
-                        System.out.println("getMemberName \t"+noAnsEvent.getMemberName());
-                        System.out.println("getQueue \t"+noAnsEvent.getQueue());
-                        System.out.println("getRingtime \t"+noAnsEvent.getRingtime());
-    //                    System.out.println("getUniqueId \t"+noAnsEvent.getUniqueId());
-    //                    System.out.println("getSource \t"+noAnsEvent.getSource());                         
-                    }                                                                                    
-	        }
-	        
+//	        if(event instanceof QueueCallerAbandonEvent){
+//                    QueueCallerAbandonEvent abandon= (QueueCallerAbandonEvent)event;
+//                    System.out.println("***********************\t AgentRingNoAnswerEvent\t ***********************");                                                                                           
+//	        }                
+                
 	        /* An AgentLoginEvent is triggered when an agent is successfully logged in using AgentLogin.*/
 //	        if(event instanceof AgentLoginEvent){
 //	        	AgentLoginEvent loginEvent= (AgentLoginEvent)event;
@@ -597,9 +593,9 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 //	        }	        	       
 	                       
 		    /* A JoinEvent is triggered when a channel joines a queue.*/
-	        if(event instanceof JoinEvent){
-                    JoinEvent joinEvent= (JoinEvent)event;
-                    System.out.println("***********************\t JoinEvent\t ***********************");
+//	        if(event instanceof JoinEvent){
+//                    JoinEvent joinEvent= (JoinEvent)event;
+//                    System.out.println("***********************\t JoinEvent\t ***********************");
 //                    System.out.println("getChannel \t"+joinEvent.getChannel());
 //                    System.out.println("getCallerIdName \t"+joinEvent.getCallerIdName());
 //                    System.out.println("getQueue \t"+joinEvent.getQueue());
@@ -610,7 +606,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 //                    System.out.println(" \t"+joinEvent.getDateReceived());
  
 //                    mdb_agent.writeDialLog(callObject.getsession(), agent.getAgent(), agent.getInterface(), agent.getQueue(), "3");                                                
-	        }
+//	        }
 	        
 //	        if(event instanceof QueueEntryEvent){
 //                    QueueEntryEvent qentryEvent= (QueueEntryEvent)event;
