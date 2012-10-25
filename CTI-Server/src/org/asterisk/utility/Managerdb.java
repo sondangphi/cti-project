@@ -106,7 +106,7 @@ public class Managerdb {
 	}
 	
 	public boolean checkStatus(String iface) throws ClassNotFoundException, SQLException{
-            String sqlCom = "SELECT agent_id FROM agent_status where interface = '"+iface+"'";
+            String sqlCom = "SELECT * FROM agent_status where interface = '"+iface+"'";
             ResultSet rs = sqlQuery(sqlCom);
             return rs.next() ? false : true;
 	}
@@ -149,6 +149,32 @@ public class Managerdb {
             sqlExecute(sql);            
         }
         
+        public void enterQueue(String ses, String agentid, String iface, String queue, String event, String caller)throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO dial_event (session, agent_id, interface, queue, event, note1) VALUES "
+                    + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+caller+"')";
+            sqlExecute(sql);            
+        }      
+        public void connectQueue(String ses, String agentid, String iface, String queue, String event, String ringtime)throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO dial_event (session, agent_id, interface, queue, event, note1) VALUES "
+                    + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+ringtime+"')";
+            sqlExecute(sql);            
+        }         
+        public void ringNoans(String ses, String agentid, String iface, String queue, String event, String ringtime)throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO dial_event (session, agent_id, interface, queue, event, note1) VALUES "
+                    + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+ringtime+"')";
+            sqlExecute(sql);            
+        }        
+        //chua bik dau lenh sql
+        public void abandon(String ses, String agentid, String iface, String queue, String event, String ringtime)throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO dial_event (session, agent_id, interface, queue, event, note1) VALUES "
+                    + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+ringtime+"')";
+            sqlExecute(sql);            
+        } 
+        public void completeCall(String ses, String agentid, String iface, String queue, String event, String talktime)throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO dial_event (session, agent_id, interface, queue, event, note1) VALUES "
+                    + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+talktime+"')";
+            sqlExecute(sql);            
+        }        
         public ArrayList<QueueObject> listQueue(){
             ArrayList<QueueObject> list = new ArrayList<QueueObject>();
             try{

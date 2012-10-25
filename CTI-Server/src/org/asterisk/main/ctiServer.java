@@ -1,37 +1,18 @@
 package org.asterisk.main;
 
-//import java.net.ServerSocket;
-//import java.net.Socket;
-//import javax.net.ssl.SSLServerSocket;
 import java.io.File;
 import java.io.FileInputStream;
 import org.asterisk.utility.AgentListen;
-
-//import org.asterisk.utility.ManagerAgent;
 import org.asterisk.utility.Managerdb;
-//import org.asterisk.utility.QueueInfo;
 import org.asterisk.utility.QueueListen;
 import org.asterisk.utility.Utility;
-//import org.asteriskjava.manager.ManagerConnection;
-//import org.asteriskjava.manager.ManagerConnectionFactory;
-//import org.asteriskjava.manager.ManagerEventListener;
-//import org.asteriskjava.manager.action.StatusAction;
-//import org.asteriskjava.manager.event.ConnectEvent;
-//import org.asteriskjava.manager.event.DisconnectEvent;
-//import org.asteriskjava.manager.event.ManagerEvent;
-//import org.asteriskjava.manager.event.ReloadEvent;
-//import org.asteriskjava.manager.event.ShutdownEvent;
 
 public class ctiServer{
 //public class ctiServer implements ManagerEventListener{    
 	private static Utility uti;	
 	private static int aport = 22222;
 	private static int qport = 33333;
-        private static String hostdb = "172.168.10.208";
-//        private static String host = "127.0.0.1";
-//        private static String hostAsterisk = "172.168.10.208";
-//        private static String userAsterisk = "manager";
-//        private static String pwdAsterisk = "123456";        
+        private static String hostdb = "172.168.10.208";      
         private static String dbname = "cti_database";
 	private static String userSql = "cti";
 	private static String pwdSql  = "123456";
@@ -80,11 +61,4 @@ public class ctiServer{
                 System.out.println("Interrup Connection.");                
             }
 	}
-        
-	
-//	@Override
-//	public void onManagerEvent(ManagerEvent event){
-//	}
-		
-
 }
