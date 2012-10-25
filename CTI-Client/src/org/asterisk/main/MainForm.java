@@ -4,6 +4,8 @@
  */
 package org.asterisk.main;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import org.asterisk.utility.Agent;
 
 /**
@@ -20,10 +22,14 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm() {
         initComponents();
+        Image image = Toolkit.getDefaultToolkit().getImage("src/org/asterisk/image/people.png");
+        this.setIconImage(image);  
     }
     public MainForm(Agent agent) {
         agentClient = agent;
         initComponents();
+        Image image = Toolkit.getDefaultToolkit().getImage("src/org/asterisk/image/people.png");
+        this.setIconImage(image);
     }
 
     /**
