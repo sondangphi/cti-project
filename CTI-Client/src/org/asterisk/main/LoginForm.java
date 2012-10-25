@@ -1,5 +1,7 @@
 package org.asterisk.main;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
@@ -10,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import javax.imageio.IIOException;
+import javax.swing.ImageIcon;
 import org.asterisk.model.QueueObject;
 import org.asterisk.utility.Agent;
 import org.asterisk.utility.Utility;
@@ -40,6 +43,7 @@ public class LoginForm extends javax.swing.JFrame {
         private static String pass = "";
         private static String iface = "";
         private static String queue = "";
+        static int i =0;
 //        private QueueObject qObject;
     
     
@@ -47,8 +51,9 @@ public class LoginForm extends javax.swing.JFrame {
      * Creates new form LoginForm
      */
     ConfigForm configform;
-    public LoginForm() {      
+    public LoginForm() {
         initComponents();
+        Image image = Toolkit.getDefaultToolkit().getImage("src/org/asterisk/image/stock_lock.png");
         try{
             uti = new Utility();		
             File f = new File(filename);
@@ -67,14 +72,18 @@ public class LoginForm extends javax.swing.JFrame {
             aport = Integer.parseInt(uti.readInfor(filename, "aport"));
             qport = Integer.parseInt(uti.readInfor(filename, "qport"));             
             listQueue = new ArrayList<QueueObject>();
-//            getListQueue();      
-//            queue = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
+            getListQueue();      
+            queue = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
             if(queue == null)
                 lb_notify_queue.setText("(*)");
             else 
                 lb_notify_queue.setText("");
         }catch(Exception e){
         }
+        this.setIconImage(image);            
+//        this.getContentPane().add(new back)
+//        this.windowClosing(new WindowEvent(this, WIDTH));
+//        set
 //       setDefaultCloseOperation(jFrame1.EXIT_ON_CLOSE);
 //        ActionListener exitListener = new ActionListener() {
 //            public void actionPerformed(ActionEvent e) {
@@ -129,10 +138,20 @@ public class LoginForm extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Login form for agent");
+        setTitle("Login for Agent ");
         setForeground(new java.awt.Color(121, 163, 240));
         setName("main_frame"); // NOI18N
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                formWindowClosed(evt);
+            }
+        });
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         btn_login.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_login.setText("Login");
@@ -155,9 +174,19 @@ public class LoginForm extends javax.swing.JFrame {
         lb_queue.setText("Queue");
 
         tx_agent.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tx_agent.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tx_agentKeyPressed(evt);
+            }
+        });
 
         tx_iface.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tx_iface.setText("8001");
+        tx_iface.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tx_ifaceKeyPressed(evt);
+            }
+        });
 
         pwd.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         pwd.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -187,9 +216,9 @@ public class LoginForm extends javax.swing.JFrame {
         panel_1Layout.setHorizontalGroup(
             panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_1Layout.createSequentialGroup()
-                .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGap(24, 24, 24)
+                .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panel_1Layout.createSequentialGroup()
-                        .addGap(24, 24, 24)
                         .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lb_iface, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lb_pwd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -202,10 +231,9 @@ public class LoginForm extends javax.swing.JFrame {
                             .addComponent(cb_queue, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(pwd, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(panel_1Layout.createSequentialGroup()
-                        .addGap(59, 59, 59)
-                        .addComponent(btn_login, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btn_login)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lb_notify_iface, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -216,8 +244,6 @@ public class LoginForm extends javax.swing.JFrame {
         );
 
         panel_1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {lb_agent, lb_iface, lb_pwd, lb_queue});
-
-        panel_1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btn_clear, btn_login});
 
         panel_1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cb_queue, pwd, tx_agent, tx_iface});
 
@@ -255,9 +281,12 @@ public class LoginForm extends javax.swing.JFrame {
 
         panel_1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cb_queue, pwd, tx_agent, tx_iface});
 
-        lb_pic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/ntt2.png"))); // NOI18N
-
-        lb_status.setText("status");
+        lb_pic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/stock_lock.png"))); // NOI18N
+        lb_pic.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lb_picMouseClicked(evt);
+            }
+        });
 
         jMenu1.setText("File");
 
@@ -301,26 +330,28 @@ public class LoginForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(lb_pic)
-                .addGap(70, 70, 70)
-                .addComponent(panel_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lb_status, javax.swing.GroupLayout.PREFERRED_SIZE, 426, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lb_status, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lb_pic)
+                        .addGap(18, 18, 18)
+                        .addComponent(panel_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(lb_status, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panel_1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lb_pic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                    .addComponent(lb_pic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panel_1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -396,6 +427,43 @@ public class LoginForm extends javax.swing.JFrame {
         LoginForm f = new LoginForm();
         f.setVisible(true);
     }//GEN-LAST:event_submn_reloadActionPerformed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        // TODO add your handling code here:
+        if(evt.getKeyCode() == 10)
+            System.out.println("Enter form by keyboard");
+            System.out.println("keycode\\t"+evt.getKeyCode());
+                
+    }//GEN-LAST:event_formKeyPressed
+
+    private void tx_agentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_agentKeyPressed
+        // TODO add your handling code here:
+         System.out.println("tx_agent\t"+evt.getKeyCode());
+    }//GEN-LAST:event_tx_agentKeyPressed
+
+    private void tx_ifaceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_ifaceKeyPressed
+        // TODO add your handling code here:
+         System.out.println("tx_iface\t"+evt.getKeyCode());
+    }//GEN-LAST:event_tx_ifaceKeyPressed
+
+    private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
+        // TODO add your handling code here:
+         System.out.println("formWindowClosed\t"+evt.toString());
+
+    }//GEN-LAST:event_formWindowClosed
+
+    private void lb_picMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lb_picMouseClicked
+        // TODO add your handling code here:
+//        if(i==1){
+//            lb_pic.setIcon(new ImageIcon(getClass().getResource("/org/asterisk/image/unlock_icon.jpg")));
+//            i=0;
+//        }else if(i==0){
+//            lb_pic.setIcon(new ImageIcon(getClass().getResource("/org/asterisk/image/lock_icon.jpg")));
+//            i=1;
+//        }
+            
+            
+    }//GEN-LAST:event_lb_picMouseClicked
 
     /**
      * @param args the command line arguments
