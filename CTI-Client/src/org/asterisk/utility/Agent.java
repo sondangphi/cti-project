@@ -80,9 +80,9 @@ public class Agent implements Runnable{
 	            	break;
 	            	case LOGINFAIL: //result LOGIN FAIL
                             System.out.println("LOGIN FAIL");
-                            LoginForm.lb_status.setText("LOGIN FAIL");
+                            loginf.lb_status.setText("Login Fail! Please check information again.");
                             connected = false;
-                            closeConnect();
+                            closeConnect();                            
                         break;
 	            	case LOGOUTSUCC: //result LOGOUT SUCCESS
                             System.out.println("logout");

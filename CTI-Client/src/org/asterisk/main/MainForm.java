@@ -61,8 +61,7 @@ public class MainForm extends javax.swing.JFrame {
         btn_logout.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btn_logout.setText("LOGOUT");
         btn_logout.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_logoutActionPerformed(evt);
             }
         });
@@ -70,8 +69,7 @@ public class MainForm extends javax.swing.JFrame {
         btn_pause.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btn_pause.setText("PAUSE");
         btn_pause.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_pauseActionPerformed(evt);
             }
         });
@@ -80,8 +78,7 @@ public class MainForm extends javax.swing.JFrame {
         btn_hold.setText("HOLD");
         btn_hold.setEnabled(false);
         btn_hold.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_holdActionPerformed(evt);
             }
         });
@@ -94,8 +91,7 @@ public class MainForm extends javax.swing.JFrame {
         btn_hangup.setText("HANGUP");
         btn_hangup.setEnabled(false);
         btn_hangup.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-			public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_hangupActionPerformed(evt);
             }
         });
@@ -213,9 +209,10 @@ public class MainForm extends javax.swing.JFrame {
         Panel2.setLayout(Panel2Layout);
         Panel2Layout.setHorizontalGroup(
             Panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, Panel2Layout.createSequentialGroup()
-                .addGap(0, 429, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(Panel2Layout.createSequentialGroup()
+                .addGap(136, 136, 136)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(293, Short.MAX_VALUE))
         );
         Panel2Layout.setVerticalGroup(
             Panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
