@@ -19,32 +19,8 @@ import org.asterisk.utility.*;
 import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerEventListener;
 import org.asteriskjava.manager.TimeoutException;
-import org.asteriskjava.manager.action.HangupAction;
-import org.asteriskjava.manager.action.OriginateAction;
-import org.asteriskjava.manager.action.QueueAddAction;
-import org.asteriskjava.manager.action.QueuePauseAction;
-import org.asteriskjava.manager.action.QueueRemoveAction;
-import org.asteriskjava.manager.action.StatusAction;
-import org.asteriskjava.manager.event.AgentCalledEvent;
-import org.asteriskjava.manager.event.AgentCompleteEvent;
-import org.asteriskjava.manager.event.AgentConnectEvent;
-import org.asteriskjava.manager.event.AgentLoginEvent;
-import org.asteriskjava.manager.event.AgentLogoffEvent;
-import org.asteriskjava.manager.event.AgentRingNoAnswerEvent;
-import org.asteriskjava.manager.event.BridgeEvent;
-import org.asteriskjava.manager.event.DialEvent;
-import org.asteriskjava.manager.event.HangupEvent;
-import org.asteriskjava.manager.event.HoldEvent;
-import org.asteriskjava.manager.event.HoldedCallEvent;
-import org.asteriskjava.manager.event.JoinEvent;
-import org.asteriskjava.manager.event.ManagerEvent;
-import org.asteriskjava.manager.event.MusicOnHoldEvent;
-import org.asteriskjava.manager.event.NewChannelEvent;
-import org.asteriskjava.manager.event.NewStateEvent;
-import org.asteriskjava.manager.event.OriginateResponseEvent;
-import org.asteriskjava.manager.event.QueueCallerAbandonEvent;
-import org.asteriskjava.manager.event.QueueEntryEvent;
-import org.asteriskjava.manager.event.TransferEvent;
+import org.asteriskjava.manager.action.*;
+import org.asteriskjava.manager.event.*;
 import org.asteriskjava.manager.response.ManagerResponse;
 
 public class ManagerAgent implements Runnable,ManagerEventListener {
@@ -55,7 +31,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 	private Socket clientSocket;
 	private String fromAgent;
 	private Thread thread;
-	private BufferedReader   inputStream;
+//	private BufferedReader   inputStream;
 	private int flag;
 	private Utility uti;
 	private ManagerConnection manager;
@@ -80,7 +56,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                 alisten = alis;
                 clientSocket = client;
                 mdb_agent = db;
-                inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+//                inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 thread = new Thread(this);
                 thread.start();
             }catch(Exception se){
@@ -92,7 +68,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
             try{
                 ctiS = ctiserver;
                 clientSocket = client;                
-                inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+//                inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                 thread = new Thread(this);
                 thread.start();
             }catch(Exception se){
@@ -113,6 +89,8 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 //                    mdb_agent = new Managerdb("cti_database");
 //                    mdb_agent.connect();
                     addressAgent = clientSocket.getInetAddress().toString();
+                    BufferedReader   inputStream;
+                    inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                     while(thread != null && clientSocket.isConnected()){
                         fromAgent = inputStream.readLine();
                         uti.writeAgentLog("request from agent \t"+addressAgent+"\t"+fromAgent);
@@ -157,9 +135,9 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 		            		mdb_agent.logoutAction(agent.getSesion(), agent.getAgent());
                                         sendToAgent("LOGOUTSUCC");
                                         System.out.println("LOGOUTSUCC");
-                                        Thread.sleep(2000);
+//                                        Thread.sleep(2000);
                                         agent = null;
-                                        closeConnect();                                        
+                                        closeConnect();                                             
                                     }else{		            			
                                         sendToAgent("LOGOUTFAIL");
                                     }		            		
@@ -238,9 +216,9 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                 catch (SQLException e) {
 			e.printStackTrace();
 		} 
-                catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//                catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	public ArrayList<String> getString(String cmd){
@@ -304,7 +282,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
             }
             if(!clientSocket.isClosed()){
                 clientSocket.close();
-                inputStream.close();
+//                inputStream.close();
                 System.out.println("close socket");
             }
             System.out.println("finish close session");
