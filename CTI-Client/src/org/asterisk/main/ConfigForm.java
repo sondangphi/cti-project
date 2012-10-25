@@ -4,6 +4,8 @@
  */
 package org.asterisk.main;
 
+import java.awt.Image;
+import java.awt.Toolkit;
 import org.asterisk.utility.Utility;
 
 /**
@@ -25,12 +27,14 @@ public class ConfigForm extends javax.swing.JFrame {
     public ConfigForm() {
         initComponents();
         try{
+            Image image = Toolkit.getDefaultToolkit().getImage("src/org/asterisk/image/system_config_services.png");
             host = uti.readInfor(filename, "host");
             aport = uti.readInfor(filename, "aport");
             qport = uti.readInfor(filename, "qport");
             tx_server.setText(host);
             tx_aport.setText(aport);
             tx_qport.setText(qport);
+            this.setIconImage(image); 
         }catch(Exception e){
         }        
     }
@@ -38,6 +42,7 @@ public class ConfigForm extends javax.swing.JFrame {
     public ConfigForm(LoginForm m) {
         initComponents();
         try{
+            Image image = Toolkit.getDefaultToolkit().getImage("src/org/asterisk/image/system_config_services.png");
             host = uti.readInfor(filename, "host");
             aport = uti.readInfor(filename, "aport");
             qport = uti.readInfor(filename, "qport");
@@ -45,6 +50,7 @@ public class ConfigForm extends javax.swing.JFrame {
             tx_aport.setText(aport);
             tx_qport.setText(qport);
             loginform = m;
+            this.setIconImage(image); 
         }catch(Exception e){
         }        
     }    
