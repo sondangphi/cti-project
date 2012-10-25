@@ -11,6 +11,8 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.IIOException;
 import javax.swing.ImageIcon;
 import org.asterisk.model.QueueObject;
@@ -81,16 +83,6 @@ public class LoginForm extends javax.swing.JFrame {
         }catch(Exception e){
         }
         this.setIconImage(image);            
-//        this.getContentPane().add(new back)
-//        this.windowClosing(new WindowEvent(this, WIDTH));
-//        set
-//       setDefaultCloseOperation(jFrame1.EXIT_ON_CLOSE);
-//        ActionListener exitListener = new ActionListener() {
-//            public void actionPerformed(ActionEvent e) {
-//                System.out.println("Exiting....");
-////                System.exit(0);
-//            }
-//        };
     }
 
     /**
@@ -359,7 +351,6 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void submn_quitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submn_quitMouseClicked
         // TODO add your handling code here:
-//        System.exit(0);
     }//GEN-LAST:event_submn_quitMouseClicked
 
     private void submn_quitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_quitActionPerformed
@@ -372,10 +363,7 @@ public class LoginForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         configform = new ConfigForm(this);
         configform.setVisible(true);
-        this.setEnabled(false);
-//        configform.
-        
-        
+        this.setEnabled(false);                
     }//GEN-LAST:event_submn_configActionPerformed
 
     private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
@@ -430,9 +418,9 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         // TODO add your handling code here:
-        if(evt.getKeyCode() == 10)
-            System.out.println("Enter form by keyboard");
-            System.out.println("keycode\\t"+evt.getKeyCode());
+//        if(evt.getKeyCode() == 10)
+//            System.out.println("Enter form by keyboard");
+//            System.out.println("keycode\\t"+evt.getKeyCode());
                 
     }//GEN-LAST:event_formKeyPressed
 
@@ -449,7 +437,12 @@ public class LoginForm extends javax.swing.JFrame {
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:
          System.out.println("formWindowClosed\t"+evt.toString());
-
+        try {
+             Thread.sleep(5000);
+             System.out.println("finish close form\t");
+        } catch (InterruptedException ex) {
+            Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_formWindowClosed
 
     private void lb_picMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lb_picMouseClicked
@@ -472,9 +465,7 @@ public class LoginForm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new LoginForm().setVisible(true);
-//                listQueue = new ArrayList<QueueObject>();
-//                getListQueue();                 
+                new LoginForm().setVisible(true);                
             }
         });
                         
