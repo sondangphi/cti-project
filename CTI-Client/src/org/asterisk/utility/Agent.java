@@ -21,10 +21,10 @@ public class Agent implements Runnable{
 	static boolean connected = true;
 	static Thread mainThread;
 	static Socket clientSocket;
-	static BufferedReader infromServer;
-	static PrintWriter outtoServer;
+//	static BufferedReader infromServer;
+//	static PrintWriter outtoServer;
         private static LoginForm loginf;
-        private static MainForm mainForm;
+//        private static MainForm mainForm;
 	int data;
 	
 	public Agent(){
@@ -59,8 +59,9 @@ public class Agent implements Runnable{
 		try{
                     String command = null;
                     CODE code;
-//                    MainForm mainForm = null;
+                    MainForm mainForm = null;
                     while(connected && clientSocket.isConnected()){
+                        BufferedReader infromServer;
                         infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                         command = infromServer.readLine();
                         ArrayList<String> cmdList = getList(command);							
@@ -74,15 +75,16 @@ public class Agent implements Runnable{
                             mainForm = new MainForm(this);
                             mainForm.setVisible(true);                            
                             loginf.setVisible(false);
-//                            loginf = null;
                             loginf.dispose();
-                            
+                            loginf = null;
 	            	break;
 	            	case LOGINFAIL: //result LOGIN FAIL
                             System.out.println("LOGIN FAIL");
                             loginf.lb_status.setText("Login Fail! Please check information again.");
                             connected = false;
-                            closeConnect();                            
+                            closeConnect();                   
+                            this.detroy();
+//                            this.
                         break;
 	            	case LOGOUTSUCC: //result LOGOUT SUCCESS
                             System.out.println("logout");
@@ -160,7 +162,7 @@ public class Agent implements Runnable{
 
         //send request to server - string
 	public static void sendtoServer(String t) throws IOException{
-//            PrintWriter outtoServer;
+            PrintWriter outtoServer;
             outtoServer = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
             outtoServer.println(t);
             outtoServer.flush();
@@ -184,8 +186,8 @@ public class Agent implements Runnable{
             }
             if(!clientSocket.isClosed()){
                 clientSocket.close();
-                outtoServer.close();
-                infromServer.close();
+//                outtoServer.close();
+//                infromServer.close();
                 System.out.println("close socket");
             }
             System.out.println("finish close session");            
