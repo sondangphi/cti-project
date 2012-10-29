@@ -59,7 +59,8 @@ public class MainForm extends javax.swing.JFrame {
         Panel3 = new javax.swing.JPanel();
         main_menu = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        sbmn_logout = new javax.swing.JMenuItem();
+        sbmn_mana = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -241,10 +242,14 @@ public class MainForm extends javax.swing.JFrame {
         main_tab.addTab("Other", Panel3);
 
         jMenu1.setText("File");
-        main_menu.add(jMenu1);
 
-        jMenu2.setText("Edit");
-        main_menu.add(jMenu2);
+        sbmn_logout.setText("Log out");
+        jMenu1.add(sbmn_logout);
+
+        sbmn_mana.setText("Manager Account");
+        jMenu1.add(sbmn_mana);
+
+        main_menu.add(jMenu1);
 
         setJMenuBar(main_menu);
 
@@ -267,13 +272,8 @@ public class MainForm extends javax.swing.JFrame {
         try{
             String cmd  = "102";
             agentClient.sendtoServer(cmd);
-            System.out.println("finish mainform");
-            agentClient = null;
-//            Thread.sleep(1500);
-//            this.setVisible(false);
-//            this.exit_system();
-//            this.dispose();
-            
+            System.out.println("close mainform");
+            agentClient = null;            
         }catch(Exception e){
         }
     }//GEN-LAST:event_btn_logoutActionPerformed
@@ -285,12 +285,12 @@ public class MainForm extends javax.swing.JFrame {
             if(btn_pause.isSelected() && btn_pause.isEnabled()){
                 btn_pause.setText("UNPAUSE");
                 cmd  = "104@off";
-                Agent.sendtoServer(cmd);
+                agentClient.sendtoServer(cmd);
                 btn_logout.setEnabled(false);
             }else{
                 btn_pause.setText("PAUSE");    
                 cmd  = "104@on";
-                Agent.sendtoServer(cmd);  
+                agentClient.sendtoServer(cmd);  
                 btn_logout.setEnabled(true);
             }
         }catch(Exception e){
@@ -373,7 +373,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JScrollPane jScrollPane1;
@@ -381,5 +380,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel lb_agentname;
     private javax.swing.JMenuBar main_menu;
     private javax.swing.JTabbedPane main_tab;
+    private javax.swing.JMenuItem sbmn_logout;
+    private javax.swing.JMenuItem sbmn_mana;
     // End of variables declaration//GEN-END:variables
 }
