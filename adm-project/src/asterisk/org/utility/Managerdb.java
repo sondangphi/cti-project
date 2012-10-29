@@ -13,7 +13,6 @@ public class Managerdb {
 	private static String user = "cti";
 	private static String pwd = "123456";
 	private static String serverName = "172.168.10.208";
-//        private static String serverName = "localhost";
 	public static String database = "asterisk";
 	private static String driverName = "com.mysql.jdbc.Driver";
         String tablename = "";
@@ -37,9 +36,8 @@ public class Managerdb {
 	public boolean close() {
             try{
                 connection.close();
-            }catch(Exception e){
-                return false;
-            }
+                connection = null;
+            }catch(Exception e){return false;}
             return true;		
 	}
 	
@@ -48,7 +46,6 @@ public class Managerdb {
             Statement stm = connection.createStatement();		
             ResultSet rs = stm.executeQuery(sqlCom);
             return rs;
-            //thi hanh lenh select va tra ve ket qua ResultSet
 	}
 	public static int sqlExecute(String sql)throws ClassNotFoundException, SQLException{
             int result = 0;
