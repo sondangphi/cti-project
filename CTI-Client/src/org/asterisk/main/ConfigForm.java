@@ -215,7 +215,7 @@ public class ConfigForm extends javax.swing.JFrame {
     private void btn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_finishActionPerformed
         // TODO add your handling code here:
         try{
-            this.setVisible(false);               
+//            this.setVisible(false);               
             host = tx_server.getText();
             aport = tx_aport.getText();
             qport = tx_qport.getText();
@@ -225,8 +225,6 @@ public class ConfigForm extends javax.swing.JFrame {
             this.dispose();
             loginform.setEnabled(true);
             loginform.setVisible(true);
-//            LoginForm form = new LoginForm();
-//            form.setVisible(true);
         }catch(Exception e ){
             
         }

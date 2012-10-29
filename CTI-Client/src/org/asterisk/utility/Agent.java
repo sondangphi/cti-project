@@ -9,8 +9,11 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.asterisk.main.*;
+import org.asterisk.model.AgentObject;
 
 public class Agent implements Runnable{
 
@@ -21,10 +24,8 @@ public class Agent implements Runnable{
 	static boolean connected = true;
 	static Thread mainThread;
 	static Socket clientSocket;
-//	static BufferedReader infromServer;
-//	static PrintWriter outtoServer;
+        static AgentObject agentObject;
         private static LoginForm loginf;
-//        private static MainForm mainForm;
 	int data;
 	
 	public Agent(){
@@ -35,11 +36,13 @@ public class Agent implements Runnable{
             mainThread = new Thread(this);
             mainThread.start();
 	}
-        public Agent(Socket soc, LoginForm login){
+        public Agent(Socket soc, LoginForm login)throws Exception{
             clientSocket = soc;
             loginf = login;
+            agentObject = loginf.agentObject;
             mainThread = new Thread(this);
             mainThread.start();
+            sendtoServer(loginf.cmd);                
 	}
 
 	public Agent(String address, int port, String cmd){
@@ -47,9 +50,8 @@ public class Agent implements Runnable{
                 clientSocket = new Socket(address, port);	
                 mainThread = new Thread(this);
                 mainThread.start();
-                sendtoServer(cmd);
+                sendtoServer(cmd);                
             }catch(Exception ex){
-
             }
 	}	
 
@@ -69,9 +71,6 @@ public class Agent implements Runnable{
                         switch(code){
 	            	case LOGINSUCC: //result LOGIN SUCCESS
                             System.out.println("LOGIN SUCCESS");
-//                            loginf.lb_status.setText("LOGIN SUCCESS");
-//                            MainForm mForm = new MainForm();
-//                            mForm.setVisible(true);
                             mainForm = new MainForm(this);
                             mainForm.setVisible(true);                            
                             loginf.setVisible(false);
@@ -83,21 +82,26 @@ public class Agent implements Runnable{
                             loginf.lb_status.setText("Login Fail! Please check information again.");
                             connected = false;
                             closeConnect();                   
-                            this.detroy();
-//                            this.
+                            try {
+                                this.finalize();
+                            } catch (Throwable ex) {
+                                Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         break;
 	            	case LOGOUTSUCC: //result LOGOUT SUCCESS
                             System.out.println("logout");
                             LoginForm f = new LoginForm();
                             f.setVisible(true);
-//                            loginf = new LoginForm();
-//                            loginf.setVisible(true);
                             mainForm.setVisible(false);
                             mainForm.dispose();
 //                            mainForm = null;                            
                             connected = false;                            
                             closeConnect();  
-                            this.detroy();
+                            try {
+                                this.finalize();
+                            } catch (Throwable ex) {
+                                Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                             System.out.println("LOGOUT SUCCESS");
 	            	break;
 	            	case LOGOUTFAIL: //result LOGOUT FAIL
@@ -136,20 +140,18 @@ public class Agent implements Runnable{
 	            	case READY: 
 	            	break;
 	            	case HANGUP: 
-	            		System.out.println("HANGUP");
-                                mainForm.btn_answer.setEnabled(false);
-                                mainForm.btn_hangup.setEnabled(false);
-                                mainForm.btn_hold.setEnabled(false);
-                                mainForm.btn_pause.setEnabled(true);
-                                mainForm.btn_logout.setEnabled(true);
-                                
-//	            		mainform.lblStatus.setText("HANGUP");
-		            break;
+                            System.out.println("HANGUP");
+                            mainForm.btn_answer.setEnabled(false);
+                            mainForm.btn_hangup.setEnabled(false);
+                            mainForm.btn_hold.setEnabled(false);
+                            mainForm.btn_pause.setEnabled(true);
+                            mainForm.btn_logout.setEnabled(true);
+                        break;
 	            	case UP: //EVENT ANSWER CALL	     
-	            		System.out.println("ANSWER");
-                                mainForm.btn_hold.setEnabled(true);
+                            System.out.println("ANSWER");
+                            mainForm.btn_hold.setEnabled(true);
 	            	break;
-		            default: 
+                        default: 
 	                break;
 				}
 			}
@@ -186,22 +188,23 @@ public class Agent implements Runnable{
             }
             if(!clientSocket.isClosed()){
                 clientSocket.close();
-//                outtoServer.close();
-//                infromServer.close();
+//                clientSocket.shutdownInput();
+//                clientSocket.shutdownOutput();
+                clientSocket = null;
                 System.out.println("close socket");
             }
             System.out.println("finish close session");            
 	}
         
-        public void detroy(){
-            
-        }
+//        public void detroy(){
+//            
+//        }
 	public enum CODE{
-		LOGINSUCC, LOGINFAIL, LOGOUTSUCC, LOGOUTFAIL,		
-		PAUSESUCC, PAUSEFAIL,
-		HOLDSUCC, HOLDFAIL,
-		TRANSSUCC, TRANSFAIL,
-		UNPAUSESUCC, UNPAUSEFAIL,
-		DIAL, RINGING, AVAIL, BUSY, READY, RESULT, UP,HANGUP
+            LOGINSUCC, LOGINFAIL, LOGOUTSUCC, LOGOUTFAIL,		
+            PAUSESUCC, PAUSEFAIL,
+            HOLDSUCC, HOLDFAIL,
+            TRANSSUCC, TRANSFAIL,
+            UNPAUSESUCC, UNPAUSEFAIL,
+            DIAL, RINGING, AVAIL, BUSY, READY, RESULT, UP,HANGUP
 	}
 }

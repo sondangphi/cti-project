@@ -15,6 +15,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.IIOException;
 import javax.swing.ImageIcon;
+import org.asterisk.model.AgentObject;
 import org.asterisk.model.QueueObject;
 import org.asterisk.utility.Agent;
 import org.asterisk.utility.Utility;
@@ -29,11 +30,11 @@ import org.asterisk.utility.Utility;
  * @author leehoa
  */
 public class LoginForm extends javax.swing.JFrame {
-
-    	private Agent agentClient ;
+    	
 	private static String host = "localhost";
 //        private static String host = "127.0.0.1";
 //        private static String host = "172.168.10.208";
+        public AgentObject agentObject = null;
 	private static int qport = 33333;
 	private static int aport = 22222;
 	private static ArrayList <QueueObject>  listQueue;
@@ -41,10 +42,11 @@ public class LoginForm extends javax.swing.JFrame {
         private static String role ="1";
         private static String filename = "infor.properties";
         private static Utility uti;
-        private static String agent = "";
+        private static String agentId = "";
         private static String pass = "";
         private static String iface = "";
         private static String queue = "";
+        public static String cmd = null;
         static int i =0;
 //        private QueueObject qObject;
     
@@ -57,6 +59,7 @@ public class LoginForm extends javax.swing.JFrame {
         initComponents();
         Image image = Toolkit.getDefaultToolkit().getImage("src/org/asterisk/image/stock_lock.png");
         try{
+            agentObject = new AgentObject();
             uti = new Utility();		
             File f = new File(filename);
             if(!f.exists())
@@ -364,6 +367,7 @@ public class LoginForm extends javax.swing.JFrame {
         configform = new ConfigForm(this);
         configform.setVisible(true);
         this.setEnabled(false);                
+//        this.////////
     }//GEN-LAST:event_submn_configActionPerformed
 
     private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
@@ -377,27 +381,33 @@ public class LoginForm extends javax.swing.JFrame {
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         // TODO add your handling code here:        
         char [] p = pwd.getPassword();
+        Agent agentClient ;
         pass     = new String(p);
-        agent = tx_agent.getText();        
+        agentId = tx_agent.getText();        
         iface  = tx_iface.getText();
         queue = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
+        agentObject.setAgent(agentId);
+        agentObject.setPass(pass);
+        agentObject.setInterface(iface);
+        agentObject.setQueue(queue);
+        agentObject.setRole(role);
         lb_notify_queue.setText("");                            
         lb_notify_iface.setText("");
         lb_notify_pwd.setText("");
         lb_notify_agent.setText("");        
         try{
             //kiem tra thong tin nguoi dung nhap vao
-            if(!agent.equalsIgnoreCase("") && uti.checkAgent(agent)){                
+            if(!agentId.equalsIgnoreCase("") && uti.checkAgent(agentId)){                
                 if(!pass.equalsIgnoreCase("") && uti.checkPwd(pass)){                    
                     if(!iface.equalsIgnoreCase("") && uti.checkIface(iface)){                        
                         if(!queue.equalsIgnoreCase("")){
-                            String cmd = "100@"+agent+"@"+pass+"@SIP/"+iface+"@"+queue+"@"+role;
+                            cmd = "100@"+agentId+"@"+pass+"@SIP/"+iface+"@"+queue+"@"+role;
                             lb_status.setText(cmd);
                             clientSoc = new Socket(host, aport);
                             if(clientSoc != null){
-                                System.out.println("connect to server localhost");
+                                System.out.println("connect to server "+clientSoc.getInetAddress().toString());
                                 agentClient = new Agent(clientSoc, this);
-                                agentClient.sendtoServer(cmd);
+//                                agentClient.sendtoServer(cmd);
                             }
                         }else lb_notify_queue.setText("(*)");                            
                     }else lb_notify_iface.setText("(*)");
@@ -426,23 +436,25 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void tx_agentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_agentKeyPressed
         // TODO add your handling code here:
-         System.out.println("tx_agent\t"+evt.getKeyCode());
+         if(evt.getKeyCode() == 10){
+             System.out.println("tx_iface\t"+evt.getKeyCode());
+             btn_loginActionPerformed(null);
+         }
     }//GEN-LAST:event_tx_agentKeyPressed
 
     private void tx_ifaceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_ifaceKeyPressed
         // TODO add your handling code here:
-         System.out.println("tx_iface\t"+evt.getKeyCode());
+         
+         if(evt.getKeyCode() == 10){
+             System.out.println("tx_iface\t"+evt.getKeyCode());
+             btn_loginActionPerformed(null);
+         }
     }//GEN-LAST:event_tx_ifaceKeyPressed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
         // TODO add your handling code here:
          System.out.println("formWindowClosed\t"+evt.toString());
-        try {
-             Thread.sleep(5000);
-             System.out.println("finish close form\t");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
+         System.out.println("finish close form\t");
     }//GEN-LAST:event_formWindowClosed
 
     private void lb_picMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lb_picMouseClicked
