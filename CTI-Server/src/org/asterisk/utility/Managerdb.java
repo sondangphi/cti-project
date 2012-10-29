@@ -175,6 +175,13 @@ public class Managerdb {
                     + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+talktime+"')";
             sqlExecute(sql);            
         }        
+        public boolean changePwd(String oldPwd, String newPwd, String agent) throws ClassNotFoundException, SQLException{            
+            String sqlcom = "UPDATE agent_login SET password ='"+newPwd+"' WHERE agent_id ='"+agent+"'";                        
+            return sqlExecute(sqlcom)>0 ? true : false;            
+        }
+                
+        
+        
         public ArrayList<QueueObject> listQueue(){
             ArrayList<QueueObject> list = new ArrayList<QueueObject>();
             try{
@@ -187,9 +194,9 @@ public class Managerdb {
                     list.add(q);
                 }
             }catch(SQLException e){
-                System.out.println("e\t"+e);
+                System.out.println("SQLException\t"+e);
             }catch(ClassNotFoundException e){
-                System.out.println("e2\t"+e);
+                System.out.println("ClassNotFoundException\t"+e);
             }             
             return list;            
         }
