@@ -80,13 +80,13 @@ public class AgentListen implements Runnable, ManagerEventListener{
             if( manager != null ){
                 uti.writeAsteriskLog("Connect to Asterisk Server Successfull");
                 System.out.println("Connect to Asterisk Server Successfull");
-                while(true){			
+                while(true){
                     System.out.println("start agent_listen");
                     Socket clientsocket = aserver.accept();
                     agent = new ManagerAgent(this, clientsocket, mdb_agent);
                     uti.writeAgentLog("Connect To Agent From Address"+"\t"+clientsocket.getInetAddress().getHostAddress());							
                     System.out.println("acept connect from agent ");
-                }                
+                }
             }else{
                 uti.writeAsteriskLog("Connect to Asterisk Server Fail");
                 System.out.println("Connect to Asterisk Server Fail");
