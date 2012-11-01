@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
-import org.asterisk.main.ctiServer;
+import org.asterisk.main.CTIServer;
 import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerConnectionFactory;
 import org.asteriskjava.manager.ManagerEventListener;
@@ -32,7 +32,7 @@ public class AgentListen implements Runnable, ManagerEventListener{
     private static int port;
     private static ServerSocket aserver;
     private static Utility uti;
-    public  static ctiServer cti = null;
+    public  static CTIServer cti = null;
     private static ManagerAgent agent = null;
     private static String filename = "infor.properties";    
     private static Thread thread;

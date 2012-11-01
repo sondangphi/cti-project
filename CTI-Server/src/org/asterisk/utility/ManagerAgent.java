@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
-import org.asterisk.main.ctiServer;
+import org.asterisk.main.CTIServer;
 import org.asterisk.model.AgentObject;
 import org.asterisk.model.CallObject;
 import org.asterisk.utility.*;
@@ -26,7 +26,7 @@ import org.asteriskjava.manager.response.ManagerResponse;
 public class ManagerAgent implements Runnable,ManagerEventListener {
 
 	
-	private ctiServer ctiS;
+	private CTIServer ctiS;
         private AgentListen alisten;
 	private Socket clientSocket;
 	private String fromAgent;
@@ -62,7 +62,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                 closeConnect();
             }
 	}
-	public ManagerAgent(ctiServer ctiserver,Socket client) throws IOException{
+	public ManagerAgent(CTIServer ctiserver,Socket client) throws IOException{
             try{
                 ctiS = ctiserver;
                 clientSocket = client;                
