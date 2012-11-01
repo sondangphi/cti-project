@@ -17,12 +17,9 @@ public class QueueListen implements Runnable{
     
     private static ServerSocket qserver;
     private static int port;
-//    private Connection connection;
-//    private static String dbuser = "qcti";
-//    private static String dbpwd = "123456";
-//    String dbname = "asterisk";
-    Thread thread;
+    private Thread thread;
     private Managerdb mdb_queue;
+    
     public QueueListen(int p) throws IOException{
         port = p;        
         thread = new Thread(this);

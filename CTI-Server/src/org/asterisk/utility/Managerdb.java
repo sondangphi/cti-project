@@ -1,6 +1,7 @@
 package org.asterisk.utility;
 
 //import java.io.IOException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.DriverManager;
@@ -30,13 +31,18 @@ public class Managerdb {
             Class.forName(driverName);		
             connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+db,username,pass); 
 	}
-	public Managerdb(String db, String username, String pass,String host) throws ClassNotFoundException, SQLException{
-            database = db;
-            user = username;
-            pwd  = pass;
-            serverName = host;
-            Class.forName(driverName);		
-            connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+database,user,pwd); 
+	public Managerdb(String db, String username, String pass,String host) throws IOException {
+            try{
+                database = db;
+                user = username;
+                pwd  = pass;
+                serverName = host;
+                Class.forName(driverName);		
+                connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+database,user,pwd); 
+            }catch(Exception e){
+                uti.writeAsteriskLog("Can't connect to Database - Exit program");
+            }
+
 	}        
 //        public Managerdb(String address, String username, String pass, String db) throws ClassNotFoundException, SQLException{
 //		serverName = address;

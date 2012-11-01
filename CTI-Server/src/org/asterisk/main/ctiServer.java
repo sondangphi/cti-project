@@ -8,7 +8,6 @@ import org.asterisk.utility.QueueListen;
 import org.asterisk.utility.Utility;
 
 public class ctiServer{
-//public class ctiServer implements ManagerEventListener{    
 	private static Utility uti;	
 	private static int aport = 22222;
 	private static int qport = 33333;
@@ -31,32 +30,29 @@ public class ctiServer{
             if(!f.exists())
                 f.createNewFile();            
             FileInputStream fis = new FileInputStream(f);    
-            if(fis.available() == 0 ){
-                System.out.println("file is empty"); 
+            if(fis.available() == 0 ){                
                 uti.writeInfor(filename, "dbname", dbname);
                 uti.writeInfor(filename, "hostdb", hostdb);
                 uti.writeInfor(filename, "userSql", userSql);
                 uti.writeInfor(filename, "pwdSql", pwdSql);
                 uti.writeInfor(filename, "aport", Integer.toString(aport));
                 uti.writeInfor(filename, "qport", Integer.toString(qport));
-                System.out.println("write file"); 
             }
-            System.out.println("read file"); 
+            System.out.println("Read configuration file!"); 
             dbname = uti.readInfor(filename, "dbname");
             hostdb = uti.readInfor(filename, "hostdb");
             userSql = uti.readInfor(filename, "userSql");
             pwdSql = uti.readInfor(filename, "pwdSql");
             aport = Integer.parseInt(uti.readInfor(filename, "aport"));
-            qport = Integer.parseInt(uti.readInfor(filename, "qport"));                
-                       
+            qport = Integer.parseInt(uti.readInfor(filename, "qport"));                                       
             mdb_agent = new Managerdb(dbname,userSql,pwdSql,hostdb);
             if(mdb_agent.isConnect()){
-                uti.writeAsteriskLog("Connect to Database Successfull");
-                System.out.println("Connect to Database Successfull");
+                uti.writeAsteriskLog("- SYSTE  - Connect to Database Successful");
+                System.out.println("Connect to Database Successful");
                 alisten = new AgentListen( aport, mdb_agent );
                 qlisten = new QueueListen( qport, mdb_agent );                
             } else {
-                uti.writeAsteriskLog("Connect to Database Fail");
+                uti.writeAsteriskLog("- SYSTE  - Connect to Database Fail");
                 System.out.println("Connect to Database Fail");
                 System.out.println("Interrup Connection.");                
             }

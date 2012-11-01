@@ -15,7 +15,6 @@ public class QueueInfo implements Runnable{
 	private Thread thread;
         private ArrayList<QueueObject> list;
         private Managerdb mdb_agent;
-//        String dbname = "asterisk";
 	public QueueInfo(Socket clientS, Managerdb dbase) {
             mdb_agent = dbase;
             client = clientS;
@@ -33,8 +32,6 @@ public class QueueInfo implements Runnable{
 	@Override
 	public void run() {
             try {			
-//                mdb_agent = new Managerdb(dbname);
-//                mdb_agent.connect();
                 list = mdb_agent.listQueue();
                 OutputStream os = null;  
                 ObjectOutputStream oos = null; 
@@ -52,7 +49,6 @@ public class QueueInfo implements Runnable{
                 client.close();
             if(thread != null)
                 thread.interrupt();
-//            mdb_agent.close();
         }
 
 }
