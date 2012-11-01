@@ -57,7 +57,7 @@ public class LoginForm extends javax.swing.JFrame {
     ConfigForm configform;
     public LoginForm() {
         initComponents();
-        Image image = Toolkit.getDefaultToolkit().getImage("src/org/asterisk/image/stock_lock.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("images/stock_lock.png");
         try{
             agentObject = new AgentObject();
             uti = new Utility();		
@@ -276,7 +276,7 @@ public class LoginForm extends javax.swing.JFrame {
 
         panel_1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cb_queue, pwd, tx_agent, tx_iface});
 
-        lb_pic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/stock_lock.png"))); // NOI18N
+        lb_pic.setIcon(new javax.swing.ImageIcon("D:\\leethanhhai\\NetBeansProjects\\CTI-Client\\images\\stock_lock.png")); // NOI18N
         lb_pic.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lb_picMouseClicked(evt);

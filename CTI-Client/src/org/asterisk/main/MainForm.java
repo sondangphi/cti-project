@@ -22,13 +22,13 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm() {
         initComponents();
-        Image image = Toolkit.getDefaultToolkit().getImage("src/org/asterisk/image/people.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("images/people.png");
         this.setIconImage(image);  
     }
     public MainForm(Agent agent) {
         agentClient = agent;
         initComponents();
-        Image image = Toolkit.getDefaultToolkit().getImage("src/org/asterisk/image/people.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("images/people.png");
         this.setIconImage(image);
     }
 
