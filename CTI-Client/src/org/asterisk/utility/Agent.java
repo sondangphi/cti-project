@@ -126,12 +126,11 @@ public class Agent implements Runnable{
 	            	case RESULT: //result ?
 	            	break;
 	            	case RINGING: //EVENT RINGING
-	            		System.out.println("RINGING");
-//	            		mainform.lblStatus.setText("RINGING");                                
-                                mainForm.btn_answer.setEnabled(true);
-                                mainForm.btn_hangup.setEnabled(true);
-                                mainForm.btn_pause.setEnabled(false);
-                                mainForm.btn_logout.setEnabled(false);
+                            System.out.println("RINGING");
+                            mainForm.btn_answer.setEnabled(true);
+                            mainForm.btn_hangup.setEnabled(true);
+                            mainForm.btn_pause.setEnabled(false);
+                            mainForm.btn_logout.setEnabled(false);
 	            	break;
 	            	case AVAIL: //result 	            			
 	            	break;

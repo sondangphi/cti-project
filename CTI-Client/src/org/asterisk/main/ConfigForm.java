@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -13,12 +13,12 @@ import org.asterisk.utility.Utility;
  * @author leehoa
  */
 public class ConfigForm extends javax.swing.JFrame {
-        private static Utility uti = new Utility();
-        static String filename = "infor.properties";
-        static String host = "";
-        static String qport = "";
-        static String aport = "";
-        LoginForm loginform;
+    private static Utility uti = new Utility();
+    static String filename = "infor.properties";
+    static String host = "";
+    static String qport = "";
+    static String aport = "";
+    LoginForm loginform;
                 
     /**
      * Creates new form ConfigForm
