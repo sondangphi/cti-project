@@ -4,8 +4,14 @@
  */
 package org.asterisk.main;
 
+import java.awt.AWTException;
 import java.awt.Image;
+import java.awt.SystemTray;
 import java.awt.Toolkit;
+import java.awt.TrayIcon;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import javax.swing.JOptionPane;
 import org.asterisk.utility.Agent;
 
 /**
@@ -16,7 +22,8 @@ public class MainForm extends javax.swing.JFrame {
 
     private static LoginForm loginform;
     private Agent agentClient;
-    
+    private TrayIcon trayIcon;
+    private SystemTray stray;    
     /**
      * Creates new form MainForm
      */
@@ -30,6 +37,34 @@ public class MainForm extends javax.swing.JFrame {
         initComponents();
         Image image = Toolkit.getDefaultToolkit().getImage("images/people.png");
         this.setIconImage(image);
+        if (SystemTray.isSupported()) {
+            MouseListener mouseListener = new MouseListener() {
+                public void mouseClicked(MouseEvent e) {
+                    System.out.println("Tray Icon – Mouse clicked!");
+                    setVisible(true);
+                    stray.remove(trayIcon);
+                }
+                public void mouseEntered(MouseEvent e) {
+//                System.out.println("Tray Icon – Mouse entered!");
+                }
+                public void mouseExited(MouseEvent e) {
+//                System.out.println("Tray Icon – Mouse exited!");
+                }
+                public void mousePressed(MouseEvent e) {
+//                System.out.println("Tray Icon – Mouse pressed!");
+                }
+                public void mouseReleased(MouseEvent e) {
+//                System.out.println("Tray Icon – Mouse released!");
+                }
+            };                                    
+            System.out.println("system tray supported");
+            stray = SystemTray.getSystemTray();                        
+            trayIcon = new TrayIcon(image, "CTI Client");
+            trayIcon.setImageAutoSize(true);
+            trayIcon.addMouseListener(mouseListener);            
+        } else {
+            System.out.println("system tray not supported");
+        }        
     }
 
     /**
@@ -61,9 +96,15 @@ public class MainForm extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         sbmn_logout = new javax.swing.JMenuItem();
         sbmn_mana = new javax.swing.JMenuItem();
+        sbmn_exit = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         btn_logout.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btn_logout.setText("LOGOUT");
@@ -174,7 +215,7 @@ public class MainForm extends javax.swing.JFrame {
                     .addGroup(Panel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 195, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(Panel1Layout.createSequentialGroup()
                         .addComponent(lb_agentname, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -219,7 +260,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(Panel2Layout.createSequentialGroup()
                 .addGap(136, 136, 136)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 565, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(293, Short.MAX_VALUE))
+                .addContainerGap(282, Short.MAX_VALUE))
         );
         Panel2Layout.setVerticalGroup(
             Panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -232,7 +273,7 @@ public class MainForm extends javax.swing.JFrame {
         Panel3.setLayout(Panel3Layout);
         Panel3Layout.setHorizontalGroup(
             Panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 994, Short.MAX_VALUE)
+            .addGap(0, 983, Short.MAX_VALUE)
         );
         Panel3Layout.setVerticalGroup(
             Panel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -249,6 +290,14 @@ public class MainForm extends javax.swing.JFrame {
         sbmn_mana.setText("Manager Account");
         jMenu1.add(sbmn_mana);
 
+        sbmn_exit.setText("Exit");
+        sbmn_exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sbmn_exitActionPerformed(evt);
+            }
+        });
+        jMenu1.add(sbmn_exit);
+
         main_menu.add(jMenu1);
 
         setJMenuBar(main_menu);
@@ -257,7 +306,9 @@ public class MainForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(main_tab)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(main_tab, javax.swing.GroupLayout.PREFERRED_SIZE, 988, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 26, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,9 +374,40 @@ public class MainForm extends javax.swing.JFrame {
         if(!btn_logout.isEnabled())
             btn_logout.setEnabled(true);        
     }//GEN-LAST:event_btn_hangupActionPerformed
-    public void exit_system(){
-        System.exit(0);
-    }
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:     
+        try{
+            setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );
+            stray.add(trayIcon); 
+            setVisible(false);
+        }catch(Exception e){
+        }
+        
+    }//GEN-LAST:event_formWindowClosing
+
+    private void sbmn_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sbmn_exitActionPerformed
+        // TODO add your handling code here:
+        try{
+            String cmd  = "112";
+            agentClient.sendtoServer(cmd);
+//            Thread.sleep(1500);
+            agentClient.closeConnect();
+            System.out.println("Exit CTI CLIENT"); 
+            System.exit(0);
+        }catch(Exception e){
+        }        
+    }//GEN-LAST:event_sbmn_exitActionPerformed
+//    public void exit_system(){
+//        System.exit(0);
+//        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );
+//        int kq=JOptionPane.showConfirmDialog(null, "Do you want to exit Admin control ?","Congfig",JOptionPane.YES_NO_OPTION);
+//        if(kq==0){
+////            System.exit(0);
+//            System.out.println("exit system");
+//        }        
+//    }
+   
     /**
      * @param args the command line arguments
      */
@@ -380,6 +462,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel lb_agentname;
     private javax.swing.JMenuBar main_menu;
     private javax.swing.JTabbedPane main_tab;
+    private javax.swing.JMenuItem sbmn_exit;
     private javax.swing.JMenuItem sbmn_logout;
     private javax.swing.JMenuItem sbmn_mana;
     // End of variables declaration//GEN-END:variables

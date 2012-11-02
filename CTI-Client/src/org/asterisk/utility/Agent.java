@@ -62,6 +62,8 @@ public class Agent implements Runnable{
                     String command = null;
                     CODE code;
                     MainForm mainForm = null;
+                    System.out.println("clientSocket.getSoTimeout \t"+clientSocket.getSoTimeout());
+//                    clientSocket.set
                     while(connected && clientSocket.isConnected()){
                         BufferedReader infromServer;
                         infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
