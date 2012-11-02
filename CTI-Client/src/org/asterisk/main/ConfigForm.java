@@ -35,6 +35,7 @@ public class ConfigForm extends javax.swing.JFrame {
             tx_aport.setText(aport);
             tx_qport.setText(qport);
             this.setIconImage(image); 
+            this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );
         }catch(Exception e){
         }        
     }
@@ -51,6 +52,7 @@ public class ConfigForm extends javax.swing.JFrame {
             tx_qport.setText(qport);
             loginform = m;
             this.setIconImage(image); 
+            this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );
         }catch(Exception e){
         }        
     }    
