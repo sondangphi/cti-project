@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -77,6 +79,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub		
+//             System.out.println("clientSocket.getSoTimeout \t"+clientSocket.getSoTimeout());
 		try {
                     uti = new Utility();
                     manager = alisten.manager;
@@ -85,6 +88,8 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     addressAgent = clientSocket.getInetAddress().toString();
                     BufferedReader   inputStream;
                     inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+//                    clientSocket.setSoTimeout(20000);                    
+                   
                     while(thread != null && clientSocket.isConnected()){
                         fromAgent = inputStream.readLine();
 //                        uti.writeAgentLog("Agent send request\t"+addressAgent);
@@ -187,6 +192,19 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 		            case 110:  
                             break;
 		            case 112:  
+		            	if(agent != null){
+                                    removeQueue = removeQueue(agent.getInterface(), agent.getQueue());
+                                    result = manager.sendAction(removeQueue).getResponse().toString();
+                                    if(result.equalsIgnoreCase("success")){
+                                        System.out.println("remove queue success");
+                                        mdb_agent.updateStatus(agent.getAgent(), "NULL", "NULL");		
+		            		mdb_agent.logoutAction(agent.getSesion(), agent.getAgent());
+                                        System.out.println("LOGOUTSUCC(exit system)");            
+                                        uti.writeAgentLog("Agent logout successful(exit system)\t"+addressAgent+"\t"+agent.getAgent());
+                                        agent = null;
+                                        closeConnect();                                                  
+                                    }	            		
+		            	}                              
                             break;	       		 		
 		            default: 
 		            	System.out.println("(invalid) " +fromAgent);
@@ -197,7 +215,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 			e.printStackTrace();
 		} catch (IllegalStateException e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+		} catch (SocketException e) {
 			try {                            
                             removeQueue = removeQueue(agent.getInterface(), agent.getQueue());
                             result = manager.sendAction(removeQueue).getResponse().toString();
@@ -219,6 +237,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                 catch (SQLException e) {
 			e.printStackTrace();
 		} 
+                catch(IOException e){}
 //                catch (InterruptedException e) {
 //			e.printStackTrace();
 //		}

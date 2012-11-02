@@ -29,7 +29,8 @@ public class Managerdb {
             pwd  = pass;
             connection =con;
             Class.forName(driverName);		
-            connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+db,username,pass); 
+            connection = DriverManager.getConnection("jdbc:mysql://"+serverName+"?autoReconnect=true:3306/"+db,username,pass); 
+//            connection.setAutoCommit(true);            
 	}
 	public Managerdb(String db, String username, String pass,String host) throws IOException {
             try{

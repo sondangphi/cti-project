@@ -76,7 +76,8 @@ public class AgentListen implements Runnable, ManagerEventListener{
                 System.out.println("Connect to Asterisk Server Successful");
                 while(true){
                     System.out.println("start agent_listen");
-                    Socket clientsocket = aserver.accept();
+                    Socket clientsocket = aserver.accept();                    
+//                    aserver.
                     agent = new ManagerAgent(this, clientsocket, mdb_agent);
                     uti.writeAgentLog("- AGENT - Accept connect from address"+"\t"+clientsocket.getInetAddress().getHostAddress());							
                     System.out.println("acept connect from agent ");
