@@ -43,19 +43,4 @@ public class ConnectDatabase {
 		return result;//neu thanh cong tra ve so thu tu hang thuc thi
 										//neu that bai tra ve 0
 	}	
-//        
-//        public static void main(String[] args) throws Exception {
-//            String sql = "select agent_id,datetime_login,timediff(datetime_logout,datetime_login) from login_action group by datetime_login,agent_id order by id";
-//            ResultSet rs = null;
-//            rs = executeQuery(sql);
-//            while(rs.next()){
-//                String date = rs.getDate("datetime_login").toString();
-//                if(date.equals("2012-11-02")){
-//                    System.out.print(""+rs.getString("agent_id"));
-//                    System.out.print("\t"+rs.getString("datetime_login"));
-//                    System.out.println("\t"+rs.getString("timediff(datetime_logout,datetime_login)"));
-//                }
-//                System.out.println("\t"+rs.getTimestamp("datetime_login"));
-//            }            
-//        }
 }
