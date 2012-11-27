@@ -1,3 +1,5 @@
+package org.asterisk.model;
+
 
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -5,17 +7,17 @@ import java.sql.SQLException;
 import java.util.Vector;
 import javax.swing.table.AbstractTableModel;
 
-public class tableModel extends  AbstractTableModel {
+public class tbModel extends  AbstractTableModel {
     private  Vector colName;
     private  Vector rowValue;
     
-    public tableModel(){
+    public tbModel(){
     }
     
-    public tableModel(Vector col){
+    public tbModel(Vector col){
         colName = col;
     }    
-    public tableModel(Vector col, Vector row){
+    public tbModel(Vector col, Vector row){
         colName = col;
         rowValue = row;
     }    

@@ -32,8 +32,6 @@ import org.asterisk.utility.Utility;
 public class LoginForm extends javax.swing.JFrame {
     	
 	private static String host = "localhost";
-//        private static String host = "127.0.0.1";
-//        private static String host = "172.168.10.208";
         public AgentObject agentObject = null;
 	private static int qport = 33333;
 	private static int aport = 22222;
@@ -48,9 +46,6 @@ public class LoginForm extends javax.swing.JFrame {
         private static String queue = "";
         public static String cmd = null;
         static int i =0;
-//        private QueueObject qObject;
-    
-    
     /**
      * Creates new form LoginForm
      */
@@ -358,8 +353,7 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void submn_quitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_quitActionPerformed
         // TODO add your handling code here:
-        System.exit(0);
-        
+        System.exit(0);        
     }//GEN-LAST:event_submn_quitActionPerformed
 
     private void submn_configActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_configActionPerformed
@@ -367,7 +361,6 @@ public class LoginForm extends javax.swing.JFrame {
         configform = new ConfigForm(this);
         configform.setVisible(true);
         this.setEnabled(false);                
-//        this.////////
     }//GEN-LAST:event_submn_configActionPerformed
 
     private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
@@ -412,7 +405,8 @@ public class LoginForm extends javax.swing.JFrame {
                         }else lb_notify_queue.setText("(*)");                            
                     }else lb_notify_iface.setText("(*)");
                 }else lb_notify_pwd.setText("(*)");
-            }else lb_notify_agent.setText("(*)");                       
+            }else lb_notify_agent.setText("(*)");       
+            
         }catch(Exception e){
             System.out.println("btn_loginActionPerformed\t"+e); 
         }
@@ -458,16 +452,7 @@ public class LoginForm extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosed
 
     private void lb_picMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lb_picMouseClicked
-        // TODO add your handling code here:
-//        if(i==1){
-//            lb_pic.setIcon(new ImageIcon(getClass().getResource("/org/asterisk/image/unlock_icon.jpg")));
-//            i=0;
-//        }else if(i==0){
-//            lb_pic.setIcon(new ImageIcon(getClass().getResource("/org/asterisk/image/lock_icon.jpg")));
-//            i=1;
-//        }
-            
-            
+        // TODO add your handling code here:     
     }//GEN-LAST:event_lb_picMouseClicked
 
     /**
@@ -483,9 +468,9 @@ public class LoginForm extends javax.swing.JFrame {
                         
     }
     
-    public void windowClosing(WindowEvent e) {
-        System.out.println("close window");
-    }
+//    public void windowClosing(WindowEvent e) {
+//        System.out.println("close window");
+//    }
     
     private static void getListQueue(){
         try{            
