@@ -129,6 +129,7 @@ public class LoginForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Login for Agent ");
+        setFont(new java.awt.Font(".Vn3DH", 1, 10)); // NOI18N
         setForeground(new java.awt.Color(121, 163, 240));
         setName("main_frame"); // NOI18N
         setResizable(false);
@@ -143,7 +144,7 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        btn_login.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_login.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btn_login.setText("Login");
         btn_login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -151,26 +152,26 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        lb_agent.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lb_agent.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_agent.setText("AgentID");
 
-        lb_pwd.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lb_pwd.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_pwd.setText("Password");
 
-        lb_iface.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lb_iface.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_iface.setText("Extension");
 
-        lb_queue.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        lb_queue.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_queue.setText("Queue");
 
-        tx_agent.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tx_agent.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tx_agent.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tx_agentKeyPressed(evt);
             }
         });
 
-        tx_iface.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        tx_iface.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tx_iface.setText("8001");
         tx_iface.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -178,10 +179,10 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        pwd.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        pwd.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         pwd.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
-        btn_clear.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_clear.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btn_clear.setText("Clear");
         btn_clear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -260,7 +261,7 @@ public class LoginForm extends javax.swing.JFrame {
                     .addComponent(lb_queue, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cb_queue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lb_notify_queue, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(24, 24, 24)
+                .addGap(18, 18, 18)
                 .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_login, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -279,8 +280,10 @@ public class LoginForm extends javax.swing.JFrame {
         });
 
         jMenu1.setText("File");
+        jMenu1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
 
         submn_config.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
+        submn_config.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         submn_config.setText("Configuration");
         submn_config.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -290,6 +293,7 @@ public class LoginForm extends javax.swing.JFrame {
         jMenu1.add(submn_config);
 
         submn_reload.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK));
+        submn_reload.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         submn_reload.setText("Reload");
         submn_reload.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -299,6 +303,7 @@ public class LoginForm extends javax.swing.JFrame {
         jMenu1.add(submn_reload);
 
         submn_quit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.ALT_MASK));
+        submn_quit.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         submn_quit.setText("Exit");
         submn_quit.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -320,27 +325,22 @@ public class LoginForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lb_status, javax.swing.GroupLayout.PREFERRED_SIZE, 402, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lb_pic)
-                        .addGap(18, 18, 18)
-                        .addComponent(panel_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 7, Short.MAX_VALUE)
+                .addComponent(lb_pic)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 14, Short.MAX_VALUE)
+                .addComponent(panel_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addComponent(lb_status, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lb_status, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(lb_status, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lb_pic, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panel_1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panel_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lb_pic, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -367,14 +367,13 @@ public class LoginForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         tx_agent.setText("");
         tx_iface.setText("");
-        pwd.setText("");        
-        
+        pwd.setText("");                
     }//GEN-LAST:event_btn_clearActionPerformed
 
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         // TODO add your handling code here:        
         char [] p = pwd.getPassword();
-        Agent agentClient ;
+        Agent agentClient = null;
         pass     = new String(p);
         agentId = tx_agent.getText();        
         iface  = tx_iface.getText();
@@ -400,7 +399,6 @@ public class LoginForm extends javax.swing.JFrame {
                             if(clientSoc != null){
                                 System.out.println("connect to server "+clientSoc.getInetAddress().toString());
                                 agentClient = new Agent(clientSoc, this);
-//                                agentClient.sendtoServer(cmd);
                             }
                         }else lb_notify_queue.setText("(*)");                            
                     }else lb_notify_iface.setText("(*)");
@@ -422,10 +420,6 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         // TODO add your handling code here:
-//        if(evt.getKeyCode() == 10)
-//            System.out.println("Enter form by keyboard");
-//            System.out.println("keycode\\t"+evt.getKeyCode());
-                
     }//GEN-LAST:event_formKeyPressed
 
     private void tx_agentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_agentKeyPressed
@@ -437,8 +431,7 @@ public class LoginForm extends javax.swing.JFrame {
     }//GEN-LAST:event_tx_agentKeyPressed
 
     private void tx_ifaceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_ifaceKeyPressed
-        // TODO add your handling code here:
-         
+        // TODO add your handling code here:         
          if(evt.getKeyCode() == 10){
              System.out.println("tx_iface\t"+evt.getKeyCode());
              btn_loginActionPerformed(null);
@@ -467,10 +460,6 @@ public class LoginForm extends javax.swing.JFrame {
         });
                         
     }
-    
-//    public void windowClosing(WindowEvent e) {
-//        System.out.println("close window");
-//    }
     
     private static void getListQueue(){
         try{            
