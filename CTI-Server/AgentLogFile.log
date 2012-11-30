@@ -31,3 +31,13 @@
 2012-11-02 09:03:52	- AGENT - Accept connect from address	127.0.0.1
 2012-11-02 09:03:52	Agent login successful 	/127.0.0.1	a
 2012-11-02 09:04:34	Agent logout successful	/127.0.0.1	a
+2012-11-14 15:06:04	- AGENT - Accept connect from address	127.0.0.1
+2012-11-14 15:06:04	Agent login successful 	/127.0.0.1	a
+2012-11-14 15:06:16	- AGENT - Accept connect from address	127.0.0.1
+2012-11-14 15:06:16	Agent login successful 	/127.0.0.1	b
+2012-11-28 16:03:45	- AGENT - Accept connect from address	127.0.0.1
+2012-11-28 16:03:59	Agent login successful 	/127.0.0.1	a
+2012-11-28 16:05:25	Agent logout successful	/127.0.0.1	a
+2012-11-28 16:05:39	- AGENT - Accept connect from address	127.0.0.1
+2012-11-28 16:05:54	Agent login successful 	/127.0.0.1	b
+2012-11-28 16:06:17	Interrup connection by client	/127.0.0.1	b
