@@ -91,8 +91,7 @@ public class Agent implements Runnable{
                     break;
                     case LOGOUTSUCC: //result LOGOUT SUCCESS
                         System.out.println("logout");
-                        LoginForm f = new LoginForm();
-                        f.setVisible(true);
+                        new LoginForm().setVisible(true);
                         mainForm.setVisible(false);
                         mainForm.dispose();                        
                         connected = false;                            
@@ -161,7 +160,6 @@ public class Agent implements Runnable{
 
             }
 	}
-
         //send request to server - string
 	public static void sendtoServer(String t) throws IOException{
             PrintWriter outtoServer;
@@ -172,12 +170,10 @@ public class Agent implements Runnable{
 	public static ArrayList<String> getList(String cmd){
             ArrayList<String> list =  new ArrayList<String>();
             StringTokenizer st = new StringTokenizer(cmd,"@");
-            while(st.hasMoreTokens()){
-        	list.add(st.nextToken());
-            }
+            while(st.hasMoreTokens())
+        	list.add(st.nextToken());            
             return list;
-	}
-	
+	}	
         //close Socket & Thread for client
 	public static void closeConnect()throws Exception{
             System.out.println("start close session");
