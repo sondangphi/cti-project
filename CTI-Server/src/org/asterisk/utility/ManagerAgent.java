@@ -52,7 +52,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 
 	}
 	
-	public ManagerAgent(AgentListen alis,Socket client, Managerdb db) throws IOException{
+	public ManagerAgent(AgentListen alis, Socket client, Managerdb db) throws IOException{
             try{
                 alisten = alis;
                 clientSocket = client;
@@ -78,169 +78,161 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 	
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub		
-//             System.out.println("clientSocket.getSoTimeout \t"+clientSocket.getSoTimeout());
-		try {
-                    uti = new Utility();
-                    manager = alisten.manager;
-                    manager.addEventListener(this);
-                    manager.sendAction(new StatusAction());
-                    addressAgent = clientSocket.getInetAddress().toString();
-                    BufferedReader   inputStream;
-                    inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-//                    clientSocket.setSoTimeout(20000);                    
-                   
-                    while(thread != null && clientSocket.isConnected()){
-                        fromAgent = inputStream.readLine();
-//                        uti.writeAgentLog("Agent send request\t"+addressAgent);
-                        ArrayList<String> cmdList = uti.getList(fromAgent);
-                        flag = Integer.parseInt(cmdList.get(0));				
-                        switch(flag){
-                            case 100:                              
-                            getAgent(cmdList);	
-//                            mdb_agent.database = "cti_database";
-                            if(mdb_agent.checkLogin(agent.getAgent(), agent.getPass(), agent.getRole())){
-                                if(mdb_agent.checkStatus(agent.getInterface())){
-                                QueueAddAction qAdd = addQueue(agent.getAgent(), agent.getInterface(), agent.getQueue(),agent.getPenalty());
-                                result = manager.sendAction(qAdd, 2000).getResponse().toString();
-                                    if(result.equalsIgnoreCase("success")){
-                                        mdb_agent.updateStatus(agent.getAgent(), agent.getInterface(), agent.getQueue());
-                                        mdb_agent.loginAction(agent.getSesion(),agent.getAgent(), agent.getInterface(), agent.getQueue());
-                                        System.out.println("LOGIN success");
-                                        sendToAgent("LOGINSUCC");
-                                        uti.writeAgentLog("Agent login successful \t"+addressAgent+"\t"+agent.getAgent());
-                                    }else{
-                                        sendToAgent("LOGINFAIL");
-                                        System.out.println("LOGIN fail");                                       
-                                        closeConnect();
-                                        uti.writeAgentLog("Agent login fail\t"+addressAgent+"\t"+agent.getAgent());
-                                    }
+            // TODO Auto-generated method stub		
+            try {
+                uti = new Utility();
+                manager = alisten.manager;
+                manager.addEventListener(this);
+                manager.sendAction(new StatusAction());
+                addressAgent = clientSocket.getInetAddress().toString();
+                BufferedReader   inputStream;
+                inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));                            
+                while(thread != null && clientSocket.isConnected()){
+                    fromAgent = inputStream.readLine();
+                    ArrayList<String> cmdList = uti.getList(fromAgent);
+                    flag = Integer.parseInt(cmdList.get(0));				
+                    switch(flag){
+                        case 100:                              
+                        getAgent(cmdList);	
+                        if(mdb_agent.checkLogin(agent.getAgent(), agent.getPass(), agent.getRole())){
+                            if(mdb_agent.checkStatus(agent.getInterface())){
+                            QueueAddAction qAdd = addQueue(agent.getAgent(), agent.getInterface(), agent.getQueue(),agent.getPenalty());
+                            result = manager.sendAction(qAdd, 2000).getResponse().toString();
+                                if(result.equalsIgnoreCase("success")){
+                                    mdb_agent.updateStatus(agent.getAgent(), agent.getInterface(), agent.getQueue());
+                                    mdb_agent.loginAction(agent.getSesion(),agent.getAgent(), agent.getInterface(), agent.getQueue());
+                                    System.out.println("LOGIN success");
+                                    sendToAgent("LOGINSUCC");
+                                    uti.writeAgentLog("Agent login successful \t"+addressAgent+"\t"+agent.getAgent());
                                 }else{
-                                    System.out.println("Interface Already login");
-                                    uti.writeAgentLog("Agent login fail (already login)\t"+addressAgent+"\t"+agent.getAgent());
+                                    sendToAgent("LOGINFAIL");
+                                    System.out.println("LOGIN fail");                                       
                                     closeConnect();
+                                    uti.writeAgentLog("Agent login fail\t"+addressAgent+"\t"+agent.getAgent());
                                 }
-                            }else {
-                                System.out.println("wrong user OR pass");
-                                sendToAgent("LOGINFAIL");
+                            }else{
+                                System.out.println("Interface Already login");
+                                uti.writeAgentLog("Agent login fail (already login)\t"+addressAgent+"\t"+agent.getAgent());
                                 closeConnect();
-                                uti.writeAgentLog("Agent login fail(wrong user OR pass)\t"+addressAgent+"\t"+agent.getAgent());
                             }
-                            break;
-		            case 102:  
-		            	if(agent != null){
-                                    removeQueue = removeQueue(agent.getInterface(), agent.getQueue());
-                                    result = manager.sendAction(removeQueue).getResponse().toString();
-                                    if(result.equalsIgnoreCase("success")){
-                                        System.out.println("remove queue success");
-                                        mdb_agent.updateStatus(agent.getAgent(), "NULL", "NULL");		
-		            		mdb_agent.logoutAction(agent.getSesion(), agent.getAgent());
-                                        sendToAgent("LOGOUTSUCC");
-                                        System.out.println("LOGOUTSUCC");            
-                                        uti.writeAgentLog("Agent logout successful\t"+addressAgent+"\t"+agent.getAgent());
-                                        agent = null;
-                                        closeConnect();          
-                                        
-                                    }else{		            			
-                                        sendToAgent("LOGOUTFAIL");
-                                    }		            		
-		            	}
-                                System.out.println("logout result: "+result);			            	
-                            break;
-		            case 104:
-		            	QueuePauseAction pauseAction = null;
-		            	if(cmdList.get(1).equalsIgnoreCase("off")){
-                                    pauseAction = queuePause(agent.getInterface(), agent.getQueue(), true);		
-                                    result = manager.sendAction(pauseAction).getResponse().toString();
-                                    if(result.equalsIgnoreCase("success")){
-                                        System.out.println("Pause queue success");
-                                        pauseSession = uti.getSession();
-                                        mdb_agent.pauseAction(pauseSession, agent.getAgent());
-                                        sendToAgent("PAUSESUCC");
-                                        uti.writeAgentLog("Agent pause\t"+addressAgent+"\t"+agent.getAgent());
-                                    }else{
-                                        System.out.println("Pause queue fail");                                        
-                                        sendToAgent("PAUSEFAIL");
-                                        uti.writeAgentLog("Agent pause fail\t"+addressAgent+"\t"+agent.getAgent());
-                                    }		            			
-		            	}else if(cmdList.get(1).equalsIgnoreCase("on")){
-                                    pauseAction = queuePause(agent.getInterface(), agent.getQueue(), false);
-                                    result = manager.sendAction(pauseAction).getResponse().toString();
-                                    if(result.equalsIgnoreCase("success")){
-                                        System.out.println("unPause queue success");	
-                                        mdb_agent.unpauseAction(pauseSession, agent.getAgent());
-                                        sendToAgent("UNPAUSESUCC");
-                                        uti.writeAgentLog("Agent unpause\t"+addressAgent+"\t"+agent.getAgent());
-                                    }else{
-                                        System.out.println("unPause queue fail");
-                                        sendToAgent("UNPAUSEFAIL");
-                                        uti.writeAgentLog("Agent unpause fail\t"+addressAgent+"\t"+agent.getAgent());
-                                    }		            			
-		            	}
-                            break;
-		            case 106:  		
-                                //hangup the call from agent request
-                                ManagerResponse managerRes;
-                                HangupAction hangAct = new HangupAction();
-                                hangAct.setChannel(agent.getInterface());
-                                managerRes =  manager.sendAction(hangAct, 1000);
-                                System.out.println("managerRes\t"+managerRes.getResponse());
-                                
-                            break;
-		            case 108:  
-                            break;
-		            case 110:  
-                            break;
-		            case 112:  
-		            	if(agent != null){
-                                    removeQueue = removeQueue(agent.getInterface(), agent.getQueue());
-                                    result = manager.sendAction(removeQueue).getResponse().toString();
-                                    if(result.equalsIgnoreCase("success")){
-                                        System.out.println("remove queue success");
-                                        mdb_agent.updateStatus(agent.getAgent(), "NULL", "NULL");		
-		            		mdb_agent.logoutAction(agent.getSesion(), agent.getAgent());
-                                        System.out.println("LOGOUTSUCC(exit system)");            
-                                        uti.writeAgentLog("Agent logout successful(exit system)\t"+addressAgent+"\t"+agent.getAgent());
-                                        agent = null;
-                                        closeConnect();                                                  
-                                    }	            		
-		            	}                              
-                            break;	       		 		
-		            default: 
-		            	System.out.println("(invalid) " +fromAgent);
-                            break;					
-                        }											
-                    }
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		} catch (SocketException e) {
-			try {                            
-                            removeQueue = removeQueue(agent.getInterface(), agent.getQueue());
-                            result = manager.sendAction(removeQueue).getResponse().toString();
-                            mdb_agent.updateStatus(agent.getAgent(), "NULL", "NULL");		
-                            mdb_agent.logoutAction(agent.getSesion(), agent.getAgent());   
-                            uti.writeAgentLog("Interrup connection by client\t"+addressAgent+"\t"+agent.getAgent());
-                            agent = null;
-                            closeConnect();                            
-                        } catch (Exception e1) {}
-                        //logout for agent exit                                               
-			System.out.println("Interrup connection by client\t"+e);
-		} 
-                catch (TimeoutException e) {
-			e.printStackTrace();
-		} 
-                catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} 
-                catch (SQLException e) {
-			e.printStackTrace();
-		} 
-                catch(IOException e){}
-//                catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
+                        }else {
+                            System.out.println("wrong user OR pass");
+                            sendToAgent("LOGINFAIL");
+                            closeConnect();
+                            uti.writeAgentLog("Agent login fail(wrong user OR pass)\t"+addressAgent+"\t"+agent.getAgent());
+                        }
+                        break;
+                        case 102:  
+                            if(agent != null){
+                                removeQueue = removeQueue(agent.getInterface(), agent.getQueue());
+                                result = manager.sendAction(removeQueue).getResponse().toString();
+                                if(result.equalsIgnoreCase("success")){
+                                    System.out.println("remove queue success");
+                                    mdb_agent.updateStatus(agent.getAgent(), "NULL", "NULL");		
+                                    mdb_agent.logoutAction(agent.getSesion(), agent.getAgent());
+                                    sendToAgent("LOGOUTSUCC");
+                                    System.out.println("LOGOUTSUCC");            
+                                    uti.writeAgentLog("Agent logout successful\t"+addressAgent+"\t"+agent.getAgent());
+                                    agent = null;
+                                    closeConnect();          
+
+                                }else{		            			
+                                    sendToAgent("LOGOUTFAIL");
+                                }		            		
+                            }
+                            System.out.println("logout result: "+result);			            	
+                        break;
+                        case 104:
+                            QueuePauseAction pauseAction = null;
+                            if(cmdList.get(1).equalsIgnoreCase("off")){
+                                pauseAction = queuePause(agent.getInterface(), agent.getQueue(), true);		
+                                result = manager.sendAction(pauseAction).getResponse().toString();
+                                if(result.equalsIgnoreCase("success")){
+                                    System.out.println("Pause queue success");
+                                    pauseSession = uti.getSession();
+                                    mdb_agent.pauseAction(pauseSession, agent.getAgent());
+                                    sendToAgent("PAUSESUCC");
+                                    uti.writeAgentLog("Agent pause\t"+addressAgent+"\t"+agent.getAgent());
+                                }else{
+                                    System.out.println("Pause queue fail");                                        
+                                    sendToAgent("PAUSEFAIL");
+                                    uti.writeAgentLog("Agent pause fail\t"+addressAgent+"\t"+agent.getAgent());
+                                }		            			
+                            }else if(cmdList.get(1).equalsIgnoreCase("on")){
+                                pauseAction = queuePause(agent.getInterface(), agent.getQueue(), false);
+                                result = manager.sendAction(pauseAction).getResponse().toString();
+                                if(result.equalsIgnoreCase("success")){
+                                    System.out.println("unPause queue success");	
+                                    mdb_agent.unpauseAction(pauseSession, agent.getAgent());
+                                    sendToAgent("UNPAUSESUCC");
+                                    uti.writeAgentLog("Agent unpause\t"+addressAgent+"\t"+agent.getAgent());
+                                }else{
+                                    System.out.println("unPause queue fail");
+                                    sendToAgent("UNPAUSEFAIL");
+                                    uti.writeAgentLog("Agent unpause fail\t"+addressAgent+"\t"+agent.getAgent());
+                                }		            			
+                            }
+                        break;
+                        case 106:  		
+                            //hangup the call from agent request
+                            ManagerResponse managerRes;
+                            HangupAction hangAct = new HangupAction();
+                            hangAct.setChannel(agent.getInterface());
+                            managerRes =  manager.sendAction(hangAct, 1000);
+                            System.out.println("managerRes\t"+managerRes.getResponse());
+
+                        break;
+                        case 108:  
+                        break;
+                        case 110:  
+                        break;
+                        case 112:  
+                            if(agent != null){
+                                removeQueue = removeQueue(agent.getInterface(), agent.getQueue());
+                                result = manager.sendAction(removeQueue).getResponse().toString();
+                                if(result.equalsIgnoreCase("success")){
+                                    System.out.println("remove queue success");
+                                    mdb_agent.updateStatus(agent.getAgent(), "NULL", "NULL");		
+                                    mdb_agent.logoutAction(agent.getSesion(), agent.getAgent());
+                                    System.out.println("LOGOUTSUCC(exit system)");            
+                                    uti.writeAgentLog("Agent logout successful(exit system)\t"+addressAgent+"\t"+agent.getAgent());
+                                    agent = null;
+                                    closeConnect();                                                  
+                                }	            		
+                            }                              
+                        break;	       		 		
+                        default: 
+                            System.out.println("(invalid) " +fromAgent);
+                        break;					
+                    }											
+                }
+            } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+            } catch (IllegalStateException e) {
+                    e.printStackTrace();
+            } catch (SocketException e) {
+                    try {                            
+                        removeQueue = removeQueue(agent.getInterface(), agent.getQueue());
+                        result = manager.sendAction(removeQueue).getResponse().toString();
+                        mdb_agent.updateStatus(agent.getAgent(), "NULL", "NULL");		
+                        mdb_agent.logoutAction(agent.getSesion(), agent.getAgent());   
+                        uti.writeAgentLog("Interrup connection by client\t"+addressAgent+"\t"+agent.getAgent());
+                        agent = null;
+                        closeConnect();                            
+                    } catch (Exception e1) {}
+                    //logout for agent exit                                               
+                    System.out.println("Interrup connection by client\t"+e);
+            } 
+            catch (TimeoutException e) {
+                    e.printStackTrace();
+            } 
+            catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+            } 
+            catch (SQLException e) {
+                    e.printStackTrace();
+            } 
+            catch(IOException e){}
 	}
 	
 	public ArrayList<String> getString(String cmd){
@@ -253,8 +245,8 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
         }
 	
 	public OriginateAction getAction(String channel,String queue){
-		OriginateAction originate = new OriginateAction();		
-		return originate;
+            OriginateAction originate = new OriginateAction();		
+            return originate;
 	}
 	
 	public QueueAddAction addQueue(String agent, String iface, String queue, int penalty){

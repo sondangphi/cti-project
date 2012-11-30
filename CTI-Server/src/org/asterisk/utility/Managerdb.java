@@ -40,6 +40,7 @@ public class Managerdb {
                 serverName = host;
                 Class.forName(driverName);		
                 connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+database,user,pwd); 
+                connection.setAutoCommit(true);            
             }catch(Exception e){
                 uti.writeAsteriskLog("Can't connect to Database - Exit program");
             }
