@@ -128,7 +128,7 @@ public class LoginForm extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Login for Agent ");
+        setTitle("Desktop Agent Login");
         setFont(new java.awt.Font(".Vn3DH", 1, 10)); // NOI18N
         setForeground(new java.awt.Color(121, 163, 240));
         setName("main_frame"); // NOI18N
@@ -144,6 +144,8 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
+        panel_1.setBorder(javax.swing.BorderFactory.createTitledBorder("Desktop Agent "));
+
         btn_login.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btn_login.setText("Login");
         btn_login.addActionListener(new java.awt.event.ActionListener() {
@@ -152,15 +154,19 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
+        lb_agent.setBackground(new java.awt.Color(204, 255, 204));
         lb_agent.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_agent.setText("AgentID");
 
+        lb_pwd.setBackground(new java.awt.Color(204, 255, 204));
         lb_pwd.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_pwd.setText("Password");
 
+        lb_iface.setBackground(new java.awt.Color(204, 255, 204));
         lb_iface.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_iface.setText("Extension");
 
+        lb_queue.setBackground(new java.awt.Color(204, 255, 204));
         lb_queue.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_queue.setText("Queue");
 
@@ -272,12 +278,15 @@ public class LoginForm extends javax.swing.JFrame {
 
         panel_1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cb_queue, pwd, tx_agent, tx_iface});
 
+        lb_pic.setBackground(new java.awt.Color(255, 0, 0));
         lb_pic.setIcon(new javax.swing.ImageIcon("D:\\leethanhhai\\NetBeansProjects\\CTI-Client\\images\\stock_lock.png")); // NOI18N
         lb_pic.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lb_picMouseClicked(evt);
             }
         });
+
+        lb_status.setForeground(new java.awt.Color(255, 0, 0));
 
         jMenu1.setText("File");
         jMenu1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
