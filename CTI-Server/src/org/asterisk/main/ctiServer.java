@@ -11,10 +11,14 @@ public class ctiServer{
 	private static Utility uti;	
 	private static int aport = 22222;
 	private static int qport = 33333;
-        private static String hostdb = "172.168.10.208";      
+//        private static String hostdb = "172.168.10.208";      
+        private static String hostdb = "10.0.8.149";      
         private static String dbname = "cti_database";
-	private static String userSql = "cti";
-	private static String pwdSql  = "123456";
+	private static String userSql = "callcenter";
+	private static String pwdSql  = "callcenter";
+        private static String hostAsterisk = "10.0.8.149";
+        private static String userAsterisk = "manager";
+        private static String pwdAsterisk = "123456";
 	private static Managerdb mdb_agent;
         private static QueueListen qlisten;  
         private static AgentListen alisten; 
@@ -37,6 +41,10 @@ public class ctiServer{
                 uti.writeInfor(filename, "pwdSql", pwdSql);
                 uti.writeInfor(filename, "aport", Integer.toString(aport));
                 uti.writeInfor(filename, "qport", Integer.toString(qport));
+                ////////////////////////////////////////////////////////////
+                uti.writeInfor(filename, "pwdAsterisk", pwdAsterisk);
+                uti.writeInfor(filename, "userAsterisk", userAsterisk);
+                uti.writeInfor(filename, "hostAsterisk", hostAsterisk);
             }
             System.out.println("Read configuration file!"); 
             dbname = uti.readInfor(filename, "dbname");

@@ -15,66 +15,34 @@ import org.asterisk.model.QueueObject;
 public class Managerdb {
 
 	private static Connection connection = null;
-	private static String user = "cti";
-	private static String pwd = "123456";
-	private static String serverName = "172.168.10.208";
+	private static String user = "";
+	private static String pwd = "";
+	private static String serverName = "";
 //        private static String serverName = "localhost";
 	public static String database = "";
 	private static String driverName = "com.mysql.jdbc.Driver";
         private Utility uti = new Utility();	
 	
-	public Managerdb(String db, String username, String pass,Connection con) throws ClassNotFoundException, SQLException{
-            database = db;
-            user = username;
-            pwd  = pass;
-            connection =con;
-            Class.forName(driverName);		
-            connection = DriverManager.getConnection("jdbc:mysql://"+serverName+"?autoReconnect=true:3306/"+db,username,pass); 
-//            connection.setAutoCommit(true);            
-	}
 	public Managerdb(String db, String username, String pass,String host) throws IOException {
             try{
+                System.out.println("start managerdb");
                 database = db;
                 user = username;
                 pwd  = pass;
                 serverName = host;
                 Class.forName(driverName);		
                 connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+database,user,pwd); 
-                connection.setAutoCommit(true);            
+                connection.setAutoCommit(true); 
+                System.out.println("end managerdb");
             }catch(Exception e){
                 uti.writeAsteriskLog("Can't connect to Database - Exit program");
+                System.out.println("exception managerdb\r\n"+e);
             }
 
 	}        
-//        public Managerdb(String address, String username, String pass, String db) throws ClassNotFoundException, SQLException{
-//		serverName = address;
-//                database = db;
-//		user = username;
-//		pwd  = pass;
-//	}
 	public Managerdb(){
 		
 	}
-        public Managerdb(String db)throws Exception{        
-            database = db;
-            Class.forName(driverName);		
-            connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+database,user,pwd);            
-	}
-        public Managerdb(String db, Connection con)throws Exception{
-            connection = con;
-            String datab = db;
-            Class.forName(driverName);		
-            connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+db,user,pwd);           
-	}        
-//	public boolean connect(){
-//            try{
-//                Class.forName(driverName);		
-//                connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+database,user,pwd);
-//            }catch(Exception e){
-//                return false;
-//            }
-//            return true;            
-//	}
         public boolean isConnect()throws SQLException{         
             if(connection.isClosed())
                 return false;
