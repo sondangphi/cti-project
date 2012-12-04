@@ -26,7 +26,7 @@ import org.asteriskjava.manager.event.ShutdownEvent;
 public class AgentListen implements Runnable, ManagerEventListener{
     
     public static ManagerConnection manager;
-    private static String hostAsterisk = "172.168.10.208";
+    private static String hostAsterisk = "10.0.8.149";
     private static String userAsterisk = "manager";
     private static String pwdAsterisk = "123456";
     private static int port;
@@ -55,12 +55,12 @@ public class AgentListen implements Runnable, ManagerEventListener{
     public void run() {
         try{
             uti = new Utility();
-            if(uti.readInfor(filename, pwdAsterisk) == null){
-                System.out.println("write infor asterisk");
-                uti.writeInfor(filename, "pwdAsterisk", pwdAsterisk);
-                uti.writeInfor(filename, "userAsterisk", userAsterisk);
-                uti.writeInfor(filename, "hostAsterisk", hostAsterisk);
-            }
+//            if(uti.readInfor(filename, pwdAsterisk) == null){
+//                System.out.println("write infor asterisk");
+//                uti.writeInfor(filename, "pwdAsterisk", pwdAsterisk);
+//                uti.writeInfor(filename, "userAsterisk", userAsterisk);
+//                uti.writeInfor(filename, "hostAsterisk", hostAsterisk);
+//            }
             pwdAsterisk = uti.readInfor(filename, "pwdAsterisk");
             userAsterisk = uti.readInfor(filename, "userAsterisk");
             hostAsterisk = uti.readInfor(filename, "hostAsterisk");                            
@@ -77,7 +77,6 @@ public class AgentListen implements Runnable, ManagerEventListener{
                 while(true){
                     System.out.println("start agent_listen");
                     Socket clientsocket = aserver.accept();                    
-//                    aserver.
                     agent = new ManagerAgent(this, clientsocket, mdb_agent);
                     uti.writeAgentLog("- AGENT - Accept connect from address"+"\t"+clientsocket.getInetAddress().getHostAddress());							
                     System.out.println("acept connect from agent ");
@@ -121,8 +120,7 @@ public class AgentListen implements Runnable, ManagerEventListener{
             /* A ShutdownEvent is triggered when the asterisk server is shut down or restarted.*/
             if(event instanceof ShutdownEvent) {
                 uti.writeAsteriskLog("- SYSTE  - Shutdown Asterisk Server");
-            }
-                        
+            }                        
         } catch (Exception e) {
                 e.printStackTrace();
         }
