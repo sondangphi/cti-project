@@ -48,6 +48,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 	private String unpauseAct = "";
         private String pauseSession = "";
         private CallObject callObject;
+        private static BufferedReader   inputStream = null ;
 	public ManagerAgent(){
 
 	}
@@ -84,58 +85,57 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                 manager = alisten.manager;
                 manager.addEventListener(this);
                 manager.sendAction(new StatusAction());
-                addressAgent = clientSocket.getInetAddress().toString();
-                BufferedReader   inputStream;
-                inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));                            
+                addressAgent = clientSocket.getInetAddress().toString();                                                            
                 while(thread != null && clientSocket.isConnected()){
+                    inputStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                     fromAgent = inputStream.readLine();
                     ArrayList<String> cmdList = uti.getList(fromAgent);
                     flag = Integer.parseInt(cmdList.get(0));				
                     switch(flag){
                         case 100:                              
                         getAgent(cmdList);	
-                        if(mdb_agent.checkLogin(agent.getAgent(), agent.getPass(), agent.getRole())){
+                        if(mdb_agent.checkLogin(agent.getAgentId(), agent.getPass(), agent.getRole())){
                             if(mdb_agent.checkStatus(agent.getInterface())){
-                            QueueAddAction qAdd = addQueue(agent.getAgent(), agent.getInterface(), agent.getQueue(),agent.getPenalty());
+                            QueueAddAction qAdd = addQueue(agent.getAgentId(), agent.getInterface(), agent.getQueueId(),agent.getPenalty());
                             result = manager.sendAction(qAdd, 2000).getResponse().toString();
                                 if(result.equalsIgnoreCase("success")){
-                                    mdb_agent.updateStatus(agent.getAgent(), agent.getInterface(), agent.getQueue());
-                                    mdb_agent.loginAction(agent.getSesion(),agent.getAgent(), agent.getInterface(), agent.getQueue());
+                                    mdb_agent.updateStatus(agent.getAgentId(), agent.getInterface(), agent.getQueueId());
+                                    mdb_agent.loginAction(agent.getSesion(),agent.getAgentId(), agent.getInterface(), agent.getQueueId());
                                     System.out.println("LOGIN success");
-                                    sendToAgent("LOGINSUCC");
-                                    uti.writeAgentLog("Agent login successful \t"+addressAgent+"\t"+agent.getAgent());
+                                    String agentName = mdb_agent.getAgentName(agent.getAgentId());
+                                    sendToAgent("LOGINSUCC@"+agentName);
+                                    uti.writeAgentLog("Agent login successful \t"+addressAgent+"\t"+agent.getAgentId());
                                 }else{
                                     sendToAgent("LOGINFAIL");
                                     System.out.println("LOGIN fail");                                       
                                     closeConnect();
-                                    uti.writeAgentLog("Agent login fail\t"+addressAgent+"\t"+agent.getAgent());
+                                    uti.writeAgentLog("Agent login fail\t"+addressAgent+"\t"+agent.getAgentId());
                                 }
                             }else{
                                 System.out.println("Interface Already login");
-                                uti.writeAgentLog("Agent login fail (already login)\t"+addressAgent+"\t"+agent.getAgent());
+                                uti.writeAgentLog("Agent login fail (already login)\t"+addressAgent+"\t"+agent.getAgentId());
                                 closeConnect();
                             }
                         }else {
                             System.out.println("wrong user OR pass");
                             sendToAgent("LOGINFAIL");
                             closeConnect();
-                            uti.writeAgentLog("Agent login fail(wrong user OR pass)\t"+addressAgent+"\t"+agent.getAgent());
+                            uti.writeAgentLog("Agent login fail(wrong user OR pass)\t"+addressAgent+"\t"+agent.getAgentId());
                         }
                         break;
                         case 102:  
                             if(agent != null){
-                                removeQueue = removeQueue(agent.getInterface(), agent.getQueue());
+                                removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
                                 result = manager.sendAction(removeQueue).getResponse().toString();
                                 if(result.equalsIgnoreCase("success")){
                                     System.out.println("remove queue success");
-                                    mdb_agent.updateStatus(agent.getAgent(), "NULL", "NULL");		
-                                    mdb_agent.logoutAction(agent.getSesion(), agent.getAgent());
+                                    mdb_agent.updateStatus(agent.getAgentId(), "NULL", "NULL");		
+                                    mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());
                                     sendToAgent("LOGOUTSUCC");
                                     System.out.println("LOGOUTSUCC");            
-                                    uti.writeAgentLog("Agent logout successful\t"+addressAgent+"\t"+agent.getAgent());
+                                    uti.writeAgentLog("Agent logout successful\t"+addressAgent+"\t"+agent.getAgentId());
                                     agent = null;
                                     closeConnect();          
-
                                 }else{		            			
                                     sendToAgent("LOGOUTFAIL");
                                 }		            		
@@ -145,31 +145,31 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                         case 104:
                             QueuePauseAction pauseAction = null;
                             if(cmdList.get(1).equalsIgnoreCase("off")){
-                                pauseAction = queuePause(agent.getInterface(), agent.getQueue(), true);		
+                                pauseAction = queuePause(agent.getInterface(), agent.getQueueId(), true);		
                                 result = manager.sendAction(pauseAction).getResponse().toString();
                                 if(result.equalsIgnoreCase("success")){
                                     System.out.println("Pause queue success");
                                     pauseSession = uti.getSession();
-                                    mdb_agent.pauseAction(pauseSession, agent.getAgent());
+                                    mdb_agent.pauseAction(pauseSession, agent.getAgentId());
                                     sendToAgent("PAUSESUCC");
-                                    uti.writeAgentLog("Agent pause\t"+addressAgent+"\t"+agent.getAgent());
+                                    uti.writeAgentLog("Agent pause\t"+addressAgent+"\t"+agent.getAgentId());
                                 }else{
                                     System.out.println("Pause queue fail");                                        
                                     sendToAgent("PAUSEFAIL");
-                                    uti.writeAgentLog("Agent pause fail\t"+addressAgent+"\t"+agent.getAgent());
+                                    uti.writeAgentLog("Agent pause fail\t"+addressAgent+"\t"+agent.getAgentId());
                                 }		            			
                             }else if(cmdList.get(1).equalsIgnoreCase("on")){
-                                pauseAction = queuePause(agent.getInterface(), agent.getQueue(), false);
+                                pauseAction = queuePause(agent.getInterface(), agent.getQueueId(), false);
                                 result = manager.sendAction(pauseAction).getResponse().toString();
                                 if(result.equalsIgnoreCase("success")){
                                     System.out.println("unPause queue success");	
-                                    mdb_agent.unpauseAction(pauseSession, agent.getAgent());
+                                    mdb_agent.unpauseAction(pauseSession, agent.getAgentId());
                                     sendToAgent("UNPAUSESUCC");
-                                    uti.writeAgentLog("Agent unpause\t"+addressAgent+"\t"+agent.getAgent());
+                                    uti.writeAgentLog("Agent unpause\t"+addressAgent+"\t"+agent.getAgentId());
                                 }else{
                                     System.out.println("unPause queue fail");
                                     sendToAgent("UNPAUSEFAIL");
-                                    uti.writeAgentLog("Agent unpause fail\t"+addressAgent+"\t"+agent.getAgent());
+                                    uti.writeAgentLog("Agent unpause fail\t"+addressAgent+"\t"+agent.getAgentId());
                                 }		            			
                             }
                         break;
@@ -188,14 +188,14 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                         break;
                         case 112:  
                             if(agent != null){
-                                removeQueue = removeQueue(agent.getInterface(), agent.getQueue());
+                                removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
                                 result = manager.sendAction(removeQueue).getResponse().toString();
                                 if(result.equalsIgnoreCase("success")){
                                     System.out.println("remove queue success");
-                                    mdb_agent.updateStatus(agent.getAgent(), "NULL", "NULL");		
-                                    mdb_agent.logoutAction(agent.getSesion(), agent.getAgent());
+                                    mdb_agent.updateStatus(agent.getAgentId(), "NULL", "NULL");		
+                                    mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());
                                     System.out.println("LOGOUTSUCC(exit system)");            
-                                    uti.writeAgentLog("Agent logout successful(exit system)\t"+addressAgent+"\t"+agent.getAgent());
+                                    uti.writeAgentLog("Agent logout successful(exit system)\t"+addressAgent+"\t"+agent.getAgentId());
                                     agent = null;
                                     closeConnect();                                                  
                                 }	            		
@@ -212,11 +212,11 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     e.printStackTrace();
             } catch (SocketException e) {
                     try {                            
-                        removeQueue = removeQueue(agent.getInterface(), agent.getQueue());
+                        removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
                         result = manager.sendAction(removeQueue).getResponse().toString();
-                        mdb_agent.updateStatus(agent.getAgent(), "NULL", "NULL");		
-                        mdb_agent.logoutAction(agent.getSesion(), agent.getAgent());   
-                        uti.writeAgentLog("Interrup connection by client\t"+addressAgent+"\t"+agent.getAgent());
+                        mdb_agent.updateStatus(agent.getAgentId(), "NULL", "NULL");		
+                        mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());   
+                        uti.writeAgentLog("Interrup connection by client\t"+addressAgent+"\t"+agent.getAgentId());
                         agent = null;
                         closeConnect();                            
                     } catch (Exception e1) {}
@@ -277,10 +277,10 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
             ArrayList<String> cmdList = list;
             agent = new AgentObject();
             agent.setSocket(clientSocket);
-            agent.setAgent(cmdList.get(1));
+            agent.setAgentId(cmdList.get(1));
             agent.setPass(cmdList.get(2));
             agent.setInterface(cmdList.get(3));
-            agent.setQueue(cmdList.get(4));	
+            agent.setQueueId(cmdList.get(4));	
             agent.setPenalty(penalty);
             agent.setRole(cmdList.get(5));
             agent.setSession(uti.getSession());
@@ -294,10 +294,12 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                 System.out.println("close thread");
             }
             if(!clientSocket.isClosed()){
-                clientSocket.close();
-                clientSocket = null;
+                clientSocket.shutdownInput();
+                clientSocket.shutdownOutput();
+                clientSocket.close();                
                 System.out.println("close socket");
             }
+            inputStream = null;
             System.out.println("finish close session");
 	}
 	
@@ -368,8 +370,8 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     callObject.setcallerName(callerName);
                     callObject.setcallerNumber(callerNum);        
                     callObject.setdesNum("");//?????
-                    mdb_agent.enterQueue(callObject.getsession(), agent.getAgent(), iface, agent.getQueue(), "3",callerNum);
-                    uti.writeAgentLog("Receive call: \t" + agent.getAgent() + "\t" + iface + "\t" + callerNum);
+                    mdb_agent.enterQueue(callObject.getsession(), agent.getAgentId(), iface, agent.getQueueId(), "3",callerNum);
+                    uti.writeAgentLog("Receive call: \t" + agent.getAgentId() + "\t" + iface + "\t" + callerNum);
                     sendToAgent("RINGING");                                                         
                 }              
             } 	        
@@ -382,8 +384,8 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                 if(iface.equalsIgnoreCase(agentCaller)){
                     String ringtime = connect.getRingtime().toString();
 //                    mdb_agent.writeDialLog(callObject.getsession(), agent.getAgent(), iface, agent.getQueue(), "4");
-                    mdb_agent.connectQueue(callObject.getsession(), agent.getAgent(), iface, agent.getQueue(), "4", ringtime);
-                    uti.writeAgentLog("Connect call: \t" + agent.getAgent() + "\t" + iface + "\t" + callObject.getcallerNumber());
+                    mdb_agent.connectQueue(callObject.getsession(), agent.getAgentId(), iface, agent.getQueueId(), "4", ringtime);
+                    uti.writeAgentLog("Connect call: \t" + agent.getAgentId() + "\t" + iface + "\t" + callObject.getcallerNumber());
                     sendToAgent("UP"); 
                 }                               	
             }      
@@ -398,12 +400,12 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                         String reason = comEvent.getReason();
                         String talkTime = comEvent.getTalkTime().toString();
                         if(reason.equalsIgnoreCase("agent")){
-                            mdb_agent.completeCall(callObject.getsession(), agent.getAgent(), agent.getInterface(), comEvent.getQueue(), "5",talkTime);
-                            uti.writeAgentLog("Agent complete call: \t" + agent.getAgent() + "\t" + iface + "\t" + callObject.getcallerNumber());
+                            mdb_agent.completeCall(callObject.getsession(), agent.getAgentId(), agent.getInterface(), comEvent.getQueue(), "5",talkTime);
+                            uti.writeAgentLog("Agent complete call: \t" + agent.getAgentId() + "\t" + iface + "\t" + callObject.getcallerNumber());
                             System.out.println("reason \t"+reason);
                         }else if(reason.equalsIgnoreCase("caller")){
-                            mdb_agent.completeCall(callObject.getsession(), agent.getAgent(), agent.getInterface(), comEvent.getQueue(), "6",talkTime);
-                            uti.writeAgentLog("Caller complete call: \t" + agent.getAgent() + "\t" + iface + "\t" + callObject.getcallerNumber());
+                            mdb_agent.completeCall(callObject.getsession(), agent.getAgentId(), agent.getInterface(), comEvent.getQueue(), "6",talkTime);
+                            uti.writeAgentLog("Caller complete call: \t" + agent.getAgentId() + "\t" + iface + "\t" + callObject.getcallerNumber());
                             System.out.println("reason \t"+reason);
                         }
                         callObject = null;                      
@@ -420,8 +422,8 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     if(iface.equalsIgnoreCase(channel)){
                         String ringTime = String.valueOf(noAnsEvent.getRingtime()/1000);
                         System.out.println("ringTime\t"+ringTime);
-                        mdb_agent.ringNoans(callObject.getsession(), agent.getAgent(), agent.getInterface(), agent.getQueue(), "21", ringTime);
-                        uti.writeAgentLog("Agent Ring no Answer: \t" + agent.getAgent() + "\t" + iface + "\t" + callObject.getcallerNumber());
+                        mdb_agent.ringNoans(callObject.getsession(), agent.getAgentId(), agent.getInterface(), agent.getQueueId(), "21", ringTime);
+                        uti.writeAgentLog("Agent Ring no Answer: \t" + agent.getAgentId() + "\t" + iface + "\t" + callObject.getcallerNumber());
                         callObject = null;                                               
                     }                                                                                    
 	        }       
@@ -449,8 +451,8 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                         System.out.println("exten: "+agent.getInterface());
                         if(callObject != null){
                             System.out.println("write event hangup: "+channel);
-                            mdb_agent.abandon(callObject.getsession(), agent.getAgent(), iface, agent.getQueue(), "7","");
-                            uti.writeAgentLog("Abandon call: \t" + agent.getAgent() + "\t" + iface + "\t" + callObject.getcallerNumber());
+                            mdb_agent.abandon(callObject.getsession(), agent.getAgentId(), iface, agent.getQueueId(), "7","");
+                            uti.writeAgentLog("Abandon call: \t" + agent.getAgentId() + "\t" + iface + "\t" + callObject.getcallerNumber());
                             callObject = null;                             
                         }else
                             System.out.println("callObject == null "+channel);
