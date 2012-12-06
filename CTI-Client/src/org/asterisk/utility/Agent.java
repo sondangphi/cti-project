@@ -26,6 +26,7 @@ public class Agent implements Runnable{
 	static Socket clientSocket;
         static AgentObject agentObject;
         private static LoginForm loginf;        
+        private static BufferedReader infromServer = null;
 	int data;
 	
 	public Agent(){
@@ -62,9 +63,10 @@ public class Agent implements Runnable{
                 String command = null;
                 CODE code;
                 MainForm mainForm = null;
-                System.out.println("clientSocket.getSoTimeout \t"+clientSocket.getSoTimeout());
-                while(connected && clientSocket.isConnected()){
-                    BufferedReader infromServer;
+//                System.out.println("clientSocket.getSoTimeout \t"+clientSocket.getSoTimeout());
+//                while(connected && clientSocket.isConnected()){
+                while(clientSocket.isConnected()){
+//                    BufferedReader infromServer;
                     infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                     command = infromServer.readLine();
                     ArrayList<String> cmdList = getList(command);							
@@ -72,10 +74,11 @@ public class Agent implements Runnable{
                     switch(code){
                     case LOGINSUCC: //result LOGIN SUCCESS
                         System.out.println("LOGIN SUCCESS");
+                        agentObject.setAgentName(cmdList.get(1));
                         mainForm = new MainForm(this,agentObject);
                         mainForm.setVisible(true);                            
                         loginf.setVisible(false);
-                        loginf.dispose();
+//                        loginf.dispose();
                         loginf = null;
                     break;
                     case LOGINFAIL: //result LOGIN FAIL
@@ -183,10 +186,12 @@ public class Agent implements Runnable{
                 System.out.println("close thread");
             }
             if(!clientSocket.isClosed()){
-                clientSocket.close();
-                clientSocket = null;
+                clientSocket.shutdownInput();
+                clientSocket.shutdownOutput();
+                clientSocket.close();                
                 System.out.println("close socket");
             }
+            infromServer = null;            
             System.out.println("finish close session");            
 	}        
 	public enum CODE{
