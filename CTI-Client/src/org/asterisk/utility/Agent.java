@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
@@ -14,6 +15,7 @@ import java.util.logging.Logger;
 
 import org.asterisk.main.*;
 import org.asterisk.model.AgentObject;
+import org.asteriskjava.manager.TimeoutException;
 
 public class Agent implements Runnable{
 
@@ -21,12 +23,13 @@ public class Agent implements Runnable{
 	 * @param args
 	 */
 	static boolean running = true;
-	static boolean connected = true;
+//	static boolean connected = true;
 	static Thread mainThread;
 	static Socket clientSocket;
         static AgentObject agentObject;
-        private static LoginForm loginf;        
+        private static LoginForm loginform;        
         private static BufferedReader infromServer = null;
+        MainForm2 mainForm2 = null;
 	int data;
 	
 	public Agent(){
@@ -39,11 +42,11 @@ public class Agent implements Runnable{
 	}
         public Agent(Socket soc, LoginForm login)throws Exception{
             clientSocket = soc;
-            loginf = login;
-            agentObject = loginf.agentObject;
+            loginform = login;
+            agentObject = loginform.agentObject;
             mainThread = new Thread(this);
             mainThread.start();
-            sendtoServer(loginf.cmd);                
+            sendtoServer(loginform.cmd);                
 	}
 
 	public Agent(String address, int port, String cmd){
@@ -62,11 +65,9 @@ public class Agent implements Runnable{
             try{
                 String command = null;
                 CODE code;
-                MainForm mainForm = null;
-//                System.out.println("clientSocket.getSoTimeout \t"+clientSocket.getSoTimeout());
-//                while(connected && clientSocket.isConnected()){
+//                MainForm mainForm = null;
+//                MainForm2 mainForm2 = null;
                 while(clientSocket.isConnected()){
-//                    BufferedReader infromServer;
                     infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                     command = infromServer.readLine();
                     ArrayList<String> cmdList = getList(command);							
@@ -75,18 +76,18 @@ public class Agent implements Runnable{
                     case LOGINSUCC: //result LOGIN SUCCESS
                         System.out.println("LOGIN SUCCESS");
                         agentObject.setAgentName(cmdList.get(1));
-                        mainForm = new MainForm(this,agentObject);
-                        mainForm.setVisible(true);                            
-                        loginf.setVisible(false);
-//                        loginf.dispose();
-                        loginf = null;
+                        mainForm2 = new MainForm2(this, agentObject);
+                        mainForm2.setVisible(true);
+                        loginform.setVisible(false);
+                        loginform.dispose();
+                        loginform = null;
                     break;
                     case LOGINFAIL: //result LOGIN FAIL
                         System.out.println("LOGIN FAIL");
-                        loginf.lb_status.setText("Login Fail! Please check information again.");
-                        connected = false;
-                        closeConnect();                   
+                        loginform.lb_status.setText("Login Fail! Please check information again.");
+//                        connected = false;                                           
                         try {
+                            closeConnect();
                             this.finalize();
                         } catch (Throwable ex) {
                             Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
@@ -95,11 +96,10 @@ public class Agent implements Runnable{
                     case LOGOUTSUCC: //result LOGOUT SUCCESS
                         System.out.println("logout");
                         new LoginForm().setVisible(true);
-                        mainForm.setVisible(false);
-                        mainForm.dispose();                        
-                        connected = false;                            
-                        closeConnect();  
+                        mainForm2.setVisible(false);
+                        mainForm2.dispose();                                        
                         try {
+                            closeConnect();  
                             this.finalize();
                         } catch (Throwable ex) {
                             Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
@@ -129,10 +129,9 @@ public class Agent implements Runnable{
                     break;
                     case RINGING: //EVENT RINGING
                         System.out.println("RINGING");
-                        mainForm.btn_answer.setEnabled(true);
-                        mainForm.btn_hangup.setEnabled(true);
-                        mainForm.btn_pause.setEnabled(false);
-                        mainForm.btn_logout.setEnabled(false);
+                        String callerNum = cmdList.get(1);
+                        mainForm2.lb_callerid.setText(callerNum);
+                        mainForm2.lb_status.setText("Ringing...");
                     break;
                     case AVAIL: //result 	            			
                     break;
@@ -142,26 +141,41 @@ public class Agent implements Runnable{
                     break;
                     case HANGUP: 
                         System.out.println("HANGUP");
-                        mainForm.btn_answer.setEnabled(false);
-                        mainForm.btn_hangup.setEnabled(false);
-                        mainForm.btn_hold.setEnabled(false);
-                        mainForm.btn_pause.setEnabled(true);
-                        mainForm.btn_logout.setEnabled(true);
+                        mainForm2.lb_status.setText("Ready");
+                        mainForm2.lb_callerid.setText("");
                     break;
                     case UP: //EVENT ANSWER CALL	     
                         System.out.println("ANSWER");
-                        mainForm.btn_hold.setEnabled(true);
+                        mainForm2.lb_status.setText("Connected");
                     break;
                     default: 
                     break;
                             }
                     }
-            } catch (IOException e){
-
-            } catch (Exception e) {
-                System.out.println("class Agent\t"+e);
-
+            }  
+            catch(SocketException e){
+                System.out.println("Socket exception client: "+e);
+                System.out.println("logout");
+//                new LoginForm().setVisible(true);   
+//                mainForm2.setVisible(false);
+//                mainForm2.dispose();                                                     
+//                try {
+//                    closeConnect();  
+//                    this.finalize();
+//                } catch (Throwable ex) {
+//                    Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                System.out.println("Interupt connection by Server");                
             }
+            catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+            } catch (IllegalStateException e) {
+                    e.printStackTrace();
+            }             
+            catch (IOException e){
+
+            }            
+
 	}
         //send request to server - string
 	public static void sendtoServer(String t) throws IOException{

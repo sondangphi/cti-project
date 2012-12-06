@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Vector;
 import javax.swing.JOptionPane;
 import org.asterisk.model.AgentObject;
-import org.asterisk.model.tbModel;
+import org.asterisk.model.TableModel;
 import org.asterisk.utility.Agent;
 import org.asterisk.utility.ConnectDatabase;
 import org.asterisk.utility.Utility;
@@ -739,7 +739,7 @@ public class MainForm extends javax.swing.JFrame {
             } 
             for (int i = 0; i <count; i++) 
                 col.addElement(colname[i].toString());            
-            tb_report.setModel(new tbModel(col, row));            
+            tb_report.setModel(new TableModel(col, row));            
         }catch(Exception e){
             System.out.append("view report\t"+e);
         }

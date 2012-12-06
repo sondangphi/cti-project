@@ -21,7 +21,7 @@ public class Utility {
         Properties prop = new Properties();
     
         String filename = "infor.properties"; 
-	public String getDatetime(){		
+	public String getDatetimeNow(){		
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Calendar cal = Calendar.getInstance();
             String datetime = dateFormat.format(cal.getTime()).toString();	
@@ -36,28 +36,28 @@ public class Utility {
 	public void writeLog(String log) throws IOException{
             Writer output;
             output = new BufferedWriter(new FileWriter("logfile.log",true));
-            output.append(getDatetime()+"\t"+log);
+            output.append(getDatetimeNow()+"\t"+log);
             output.close();
 	}
 	
 	public void writeLog(String log,String file) throws IOException{
             Writer output;
             output = new BufferedWriter(new FileWriter(file,true));
-            output.append(getDatetime()+"\t"+log+"\r\n");
+            output.append(getDatetimeNow()+"\t"+log+"\r\n");
             output.close();
 	}
 	
 	public void writeAsteriskLog(String log) throws IOException{
             Writer output;
             output = new BufferedWriter(new FileWriter("AsteriskLogFile.log",true));
-            output.append(getDatetime() + "\t" +log+ "\r\n");
+            output.append(getDatetimeNow() + "\t" +log+ "\r\n");
             output.close();
 	}
 	
 	public void writeAgentLog(String log) throws IOException{
             Writer output;
             output = new BufferedWriter(new FileWriter("AgentLogFile.log",true));
-            output.append(getDatetime() + "\t" + log + "\r\n");
+            output.append(getDatetimeNow() + "\t" + log + "\r\n");
             output.close();
 	}
 	

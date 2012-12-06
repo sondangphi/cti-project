@@ -27,12 +27,14 @@ public class MainForm2 extends javax.swing.JFrame {
     private SystemTray stray;    
     static AgentObject agentObject;
     private Utility uti;
+    private String dialNumber = "";
 
     /**
      * Creates new form MainForm2
      */
     public MainForm2() {
         initComponents();
+        txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);
     }
     
     public MainForm2(Agent agent, AgentObject aOb) {
@@ -71,9 +73,29 @@ public class MainForm2 extends javax.swing.JFrame {
         } else {
             System.out.println("system tray not supported");
         }        
-
+        lb_agentid.setText(agentObject.getAgentId());
+        lb_agentname.setText(agentObject.getAgentName());
+        lb_extension.setText(agentObject.getInterface());
+        lb_queue.setText(agentObject.getQueueId()+" - "+agentObject.getQueueName());
+        lb_logintime.setText(uti.getDatetimeNow());         
+        lb_version.setHorizontalAlignment(javax.swing.JLabel.RIGHT);
+        lb_version.setVerticalAlignment(javax.swing.JLabel.CENTER);
+        txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);        
     }    
 
+    public void updateNumber(){
+        txt_phonenum.setText(dialNumber);
+    }
+    
+    public void deleteNumber(){
+        dialNumber  = txt_phonenum.getText();
+        if(dialNumber != ""){
+            dialNumber = dialNumber.substring(0, dialNumber.length()-1);        
+            txt_phonenum.setText(dialNumber);            
+        }
+
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -103,66 +125,70 @@ public class MainForm2 extends javax.swing.JFrame {
         lb_queue = new javax.swing.JLabel();
         panel_dial = new javax.swing.JPanel();
         panel_number = new javax.swing.JPanel();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
-        jButton14 = new javax.swing.JButton();
-        jButton15 = new javax.swing.JButton();
-        jButton16 = new javax.swing.JButton();
-        jButton17 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jButton5 = new javax.swing.JButton();
+        btn_1 = new javax.swing.JButton();
+        btn_2 = new javax.swing.JButton();
+        btn_3 = new javax.swing.JButton();
+        btn_4 = new javax.swing.JButton();
+        btn_5 = new javax.swing.JButton();
+        btn_6 = new javax.swing.JButton();
+        btn_7 = new javax.swing.JButton();
+        btn_8 = new javax.swing.JButton();
+        btn_9 = new javax.swing.JButton();
+        btn_0 = new javax.swing.JButton();
+        btn_11 = new javax.swing.JButton();
+        btn_12 = new javax.swing.JButton();
+        txt_phonenum = new javax.swing.JTextField();
+        btn_dial = new javax.swing.JButton();
+        btn_back = new javax.swing.JButton();
+        btn_clear = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        btn_logout = new javax.swing.JButton();
         btn_pause = new javax.swing.JToggleButton();
+        jButton2 = new javax.swing.JButton();
+        jButton18 = new javax.swing.JButton();
+        lb_version = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        MenuItem_logout = new javax.swing.JMenuItem();
+        MenuItem_setting = new javax.swing.JMenuItem();
+        MenuItem_exit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
-        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Agent Status", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        jPanel5.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Agent Status", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         jLabel13.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel13.setText("Line Status");
-        jLabel13.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("Call Duration");
-        jLabel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel12.setText("Login Time");
-        jLabel12.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel1.setText("Caller Number");
-        jLabel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lb_callerid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_callerid.setText("0123456789");
-        lb_callerid.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lb_status.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lb_status.setForeground(new java.awt.Color(0, 204, 0));
         lb_status.setText("Ready");
-        lb_status.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lb_logintime.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_logintime.setText("08:00:00");
-        lb_logintime.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lb_callduration.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_callduration.setText("00:00:00");
-        lb_callduration.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -170,23 +196,23 @@ public class MainForm2 extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lb_callduration, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lb_logintime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lb_callerid, javax.swing.GroupLayout.DEFAULT_SIZE, 228, Short.MAX_VALUE)
-                    .addComponent(lb_status, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(lb_logintime, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lb_callduration, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lb_status, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lb_callerid, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
                 .addGap(0, 10, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(12, 12, 12)
+                .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lb_status, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -202,45 +228,38 @@ public class MainForm2 extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lb_callerid, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(76, Short.MAX_VALUE))
+                .addGap(0, 12, Short.MAX_VALUE))
         );
 
-        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Agent Information", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Agent Information", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("AgentID");
-        jLabel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jLabel3.setPreferredSize(new java.awt.Dimension(74, 19));
 
+        lb_agentid.setBackground(new java.awt.Color(255, 255, 204));
         lb_agentid.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_agentid.setText("8001");
-        lb_agentid.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel5.setText("Extension");
-        jLabel5.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         jLabel5.setMaximumSize(new java.awt.Dimension(75, 20));
         jLabel5.setPreferredSize(new java.awt.Dimension(74, 19));
 
         lb_extension.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_extension.setText("6789");
-        lb_extension.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel6.setText("Agent Name");
-        jLabel6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lb_agentname.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_agentname.setText("Nguyen Van A");
-        lb_agentname.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         jLabel7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel7.setText("Queue");
-        jLabel7.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         lb_queue.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_queue.setText("8888 - Ban Hang");
-        lb_queue.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -254,12 +273,12 @@ public class MainForm2 extends javax.swing.JFrame {
                     .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lb_agentid, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lb_extension, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lb_agentname, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lb_queue, javax.swing.GroupLayout.DEFAULT_SIZE, 230, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(lb_agentid, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lb_extension, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lb_agentname, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lb_queue, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel6Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel3, jLabel5, jLabel6, jLabel7});
@@ -273,8 +292,8 @@ public class MainForm2 extends javax.swing.JFrame {
                     .addComponent(lb_agentid, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lb_extension, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lb_extension, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lb_agentname, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -286,31 +305,106 @@ public class MainForm2 extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        panel_dial.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Agent Dial Out", javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+        panel_dial.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Agent Dial Out", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
-        jButton6.setText("1");
+        btn_1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_1.setText("1");
+        btn_1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_1ActionPerformed(evt);
+            }
+        });
 
-        jButton7.setText("2");
+        btn_2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_2.setText("2");
+        btn_2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_2ActionPerformed(evt);
+            }
+        });
 
-        jButton8.setText("3");
+        btn_3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_3.setText("3");
+        btn_3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_3ActionPerformed(evt);
+            }
+        });
 
-        jButton10.setText("4");
+        btn_4.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_4.setText("4");
+        btn_4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_4ActionPerformed(evt);
+            }
+        });
 
-        jButton11.setText("5");
+        btn_5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_5.setText("5");
+        btn_5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_5ActionPerformed(evt);
+            }
+        });
 
-        jButton9.setText("6");
+        btn_6.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_6.setText("6");
+        btn_6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_6ActionPerformed(evt);
+            }
+        });
 
-        jButton12.setText("7");
+        btn_7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_7.setText("7");
+        btn_7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_7ActionPerformed(evt);
+            }
+        });
 
-        jButton13.setText("8");
+        btn_8.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_8.setText("8");
+        btn_8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_8ActionPerformed(evt);
+            }
+        });
 
-        jButton14.setText("9");
+        btn_9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_9.setText("9");
+        btn_9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_9ActionPerformed(evt);
+            }
+        });
 
-        jButton15.setText("0");
+        btn_0.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_0.setText("0");
+        btn_0.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_0ActionPerformed(evt);
+            }
+        });
 
-        jButton16.setText("*");
+        btn_11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_11.setText("*");
+        btn_11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_11ActionPerformed(evt);
+            }
+        });
 
-        jButton17.setText("#");
+        btn_12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_12.setText("#");
+        btn_12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_12ActionPerformed(evt);
+            }
+        });
+
+        txt_phonenum.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txt_phonenum.setText("0123456789000");
 
         javax.swing.GroupLayout panel_numberLayout = new javax.swing.GroupLayout(panel_number);
         panel_number.setLayout(panel_numberLayout);
@@ -318,95 +412,116 @@ public class MainForm2 extends javax.swing.JFrame {
             panel_numberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_numberLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panel_numberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(panel_numberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panel_numberLayout.createSequentialGroup()
-                        .addComponent(jButton6)
+                        .addComponent(btn_1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton7)
+                        .addComponent(btn_2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton8))
+                        .addComponent(btn_3))
                     .addGroup(panel_numberLayout.createSequentialGroup()
-                        .addComponent(jButton10)
+                        .addComponent(btn_4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton11)
+                        .addComponent(btn_5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton9))
+                        .addComponent(btn_6))
                     .addGroup(panel_numberLayout.createSequentialGroup()
                         .addGroup(panel_numberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(panel_numberLayout.createSequentialGroup()
-                                .addComponent(jButton16)
+                                .addComponent(btn_11)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton15))
+                                .addComponent(btn_0))
                             .addGroup(panel_numberLayout.createSequentialGroup()
-                                .addComponent(jButton12)
+                                .addComponent(btn_7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton13)))
+                                .addComponent(btn_8)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panel_numberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton14)
-                            .addComponent(jButton17))))
-                .addContainerGap(16, Short.MAX_VALUE))
+                            .addComponent(btn_9)
+                            .addComponent(btn_12)))
+                    .addComponent(txt_phonenum))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        panel_numberLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jButton10, jButton11, jButton12, jButton13, jButton14, jButton15, jButton16, jButton17, jButton6, jButton7, jButton8, jButton9});
+        panel_numberLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btn_0, btn_1, btn_11, btn_12, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9});
 
         panel_numberLayout.setVerticalGroup(
             panel_numberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel_numberLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_numberLayout.createSequentialGroup()
+                .addComponent(txt_phonenum, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel_numberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_3, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_numberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_4, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_6, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_numberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btn_7, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_8, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_9, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_numberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton17, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(14, Short.MAX_VALUE))
+                    .addComponent(btn_0, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_11, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_12, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        panel_numberLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jButton10, jButton11, jButton12, jButton13, jButton14, jButton15, jButton16, jButton17, jButton6, jButton7, jButton8, jButton9});
+        panel_numberLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btn_0, btn_1, btn_11, btn_12, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9});
 
-        jTextField1.setText("00000000000");
+        btn_dial.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btn_dial.setText("Dial");
+        btn_dial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_dialActionPerformed(evt);
+            }
+        });
 
-        jButton5.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jButton5.setText("Dial");
+        btn_back.setText("<--");
+        btn_back.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_backActionPerformed(evt);
+            }
+        });
+
+        btn_clear.setText("Clear");
+        btn_clear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_clearActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panel_dialLayout = new javax.swing.GroupLayout(panel_dial);
         panel_dial.setLayout(panel_dialLayout);
         panel_dialLayout.setHorizontalGroup(
             panel_dialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_dialLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(panel_number, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel_dialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_dial, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
         panel_dialLayout.setVerticalGroup(
             panel_dialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_dialLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panel_dialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panel_number, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(panel_dialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panel_dialLayout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_dial, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(btn_clear, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addComponent(panel_number, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("xyz"));
@@ -415,21 +530,22 @@ public class MainForm2 extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 348, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 226, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jButton1.setIcon(new javax.swing.ImageIcon("D:\\leethanhhai\\NetBeansProjects\\CTI-Client\\images\\application-go-icon.png")); // NOI18N
-        jButton1.setText("Logout");
-
-        jButton3.setText("Hold");
-
-        jButton4.setText("Setting");
+        btn_logout.setIcon(new javax.swing.ImageIcon("D:\\leethanhhai\\NetBeansProjects\\CTI-Client\\images\\application-go-icon.png")); // NOI18N
+        btn_logout.setText("Logout");
+        btn_logout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_logoutActionPerformed(evt);
+            }
+        });
 
         btn_pause.setText("Pause");
         btn_pause.addActionListener(new java.awt.event.ActionListener() {
@@ -438,32 +554,62 @@ public class MainForm2 extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setText("Hold");
+
+        jButton18.setText("Transfer");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-                .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addComponent(btn_logout)
+                .addGap(57, 57, 57)
+                .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(49, 49, 49)
+                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(51, 51, 51)
+                .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(btn_logout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btn_pause, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
+        jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btn_logout, btn_pause, jButton18, jButton2});
+
+        lb_version.setFont(new java.awt.Font("Tahoma", 2, 9)); // NOI18N
+        lb_version.setText("Build 0.0.1");
+        lb_version.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
         jMenu1.setText("File");
+
+        MenuItem_logout.setText("Logout");
+        MenuItem_logout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuItem_logoutActionPerformed(evt);
+            }
+        });
+        jMenu1.add(MenuItem_logout);
+
+        MenuItem_setting.setText("Settings");
+        jMenu1.add(MenuItem_setting);
+
+        MenuItem_exit.setText("Exit");
+        MenuItem_exit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuItem_exitActionPerformed(evt);
+            }
+        });
+        jMenu1.add(MenuItem_exit);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
@@ -479,14 +625,18 @@ public class MainForm2 extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lb_version, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panel_dial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(panel_dial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -494,36 +644,198 @@ public class MainForm2 extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panel_dial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27))
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(panel_dial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lb_version)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_pauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pauseActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:        
         try{
             String cmd = "";
             if(btn_pause.isSelected() && btn_pause.isEnabled()){
                 btn_pause.setText("UNPAUSE");
-                panel_dial.setEnabled(false);
-                panel_number.setEnabled(false);
+                cmd  = "104@off";
+                agentClient.sendtoServer(cmd);
+                btn_logout.setEnabled(false);
+//                panel_dial.setEnabled(false);
+//                panel_number.setEnabled(false);
             }else{
-                btn_pause.setText("PAUSE");
-                panel_dial.setEnabled(true);
-                panel_number.setEnabled(true);
+                btn_pause.setText("PAUSE");    
+                cmd  = "104@on";
+                agentClient.sendtoServer(cmd);  
+                btn_logout.setEnabled(true);
+//                panel_dial.setEnabled(true);
+//                panel_number.setEnabled(true);
             }
         }catch(Exception e){
             
-        }
+        }         
+        
     }//GEN-LAST:event_btn_pauseActionPerformed
+
+    private void btn_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_logoutActionPerformed
+        // TODO add your handling code here:
+        try{
+            String cmd  = "102";
+            agentClient.sendtoServer(cmd);
+            System.out.println("Logout program");
+            agentClient = null;            
+        }catch(Exception e){
+        }
+    }//GEN-LAST:event_btn_logoutActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        try{
+            setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );
+            stray.add(trayIcon); 
+            setVisible(false);
+            System.out.println("Close Main Form");  
+        }catch(Exception e){
+        }      
+    }//GEN-LAST:event_formWindowClosing
+
+    private void MenuItem_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_exitActionPerformed
+        // TODO add your handling code here:
+        try{
+            String cmd  = "112";
+            agentClient.sendtoServer(cmd);
+            agentClient.closeConnect();
+            System.out.println("Exit CTI CLIENT"); 
+            System.exit(0);
+        }catch(Exception e){
+        }        
+    }//GEN-LAST:event_MenuItem_exitActionPerformed
+
+    private void MenuItem_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_logoutActionPerformed
+        // TODO add your handling code here:
+        try{
+            String cmd  = "102";
+            agentClient.sendtoServer(cmd);
+            System.out.println("Logout program");
+            agentClient = null;            
+        }catch(Exception e){
+        }        
+    }//GEN-LAST:event_MenuItem_logoutActionPerformed
+
+    private void btn_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_1ActionPerformed
+        // TODO add your handling code here:
+        dialNumber = txt_phonenum.getText();
+        dialNumber += btn_1.getText();
+        updateNumber();
+    }//GEN-LAST:event_btn_1ActionPerformed
+
+    private void btn_2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_2ActionPerformed
+        // TODO add your handling code here:
+        dialNumber = txt_phonenum.getText();
+        dialNumber += btn_2.getText();
+        updateNumber();        
+    }//GEN-LAST:event_btn_2ActionPerformed
+
+    private void btn_3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_3ActionPerformed
+        // TODO add your handling code here:
+        dialNumber = txt_phonenum.getText();
+        dialNumber += btn_3.getText();
+        updateNumber();        
+    }//GEN-LAST:event_btn_3ActionPerformed
+
+    private void btn_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_4ActionPerformed
+        // TODO add your handling code here:
+        dialNumber = txt_phonenum.getText();
+        dialNumber += btn_4.getText();
+        updateNumber();        
+    }//GEN-LAST:event_btn_4ActionPerformed
+
+    private void btn_5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_5ActionPerformed
+        // TODO add your handling code here:
+        dialNumber = txt_phonenum.getText();
+        dialNumber += btn_5.getText();
+        updateNumber();        
+    }//GEN-LAST:event_btn_5ActionPerformed
+
+    private void btn_6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_6ActionPerformed
+        // TODO add your handling code here:
+        dialNumber = txt_phonenum.getText();
+        dialNumber += btn_6.getText();
+        updateNumber();        
+    }//GEN-LAST:event_btn_6ActionPerformed
+
+    private void btn_7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_7ActionPerformed
+        // TODO add your handling code here:
+        dialNumber = txt_phonenum.getText();
+        dialNumber += btn_7.getText();
+        updateNumber();        
+    }//GEN-LAST:event_btn_7ActionPerformed
+
+    private void btn_8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_8ActionPerformed
+        // TODO add your handling code here:
+        dialNumber = txt_phonenum.getText();
+        dialNumber += btn_8.getText();
+        updateNumber();        
+    }//GEN-LAST:event_btn_8ActionPerformed
+
+    private void btn_9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_9ActionPerformed
+        // TODO add your handling code here:
+        dialNumber = txt_phonenum.getText();
+        dialNumber += btn_9.getText();
+        updateNumber();        
+    }//GEN-LAST:event_btn_9ActionPerformed
+
+    private void btn_0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_0ActionPerformed
+        // TODO add your handling code here:
+        dialNumber = txt_phonenum.getText();
+        dialNumber += btn_0.getText();
+        updateNumber();        
+    }//GEN-LAST:event_btn_0ActionPerformed
+
+    private void btn_11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_11ActionPerformed
+        // TODO add your handling code here:
+        dialNumber = txt_phonenum.getText();
+        dialNumber += btn_11.getText();
+        updateNumber();        
+    }//GEN-LAST:event_btn_11ActionPerformed
+
+    private void btn_12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_12ActionPerformed
+        // TODO add your handling code here:
+        dialNumber = txt_phonenum.getText();
+        dialNumber += btn_12.getText();
+        updateNumber();        
+    }//GEN-LAST:event_btn_12ActionPerformed
+
+    private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
+        // TODO add your handling code here:
+        deleteNumber();
+    }//GEN-LAST:event_btn_backActionPerformed
+
+    private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
+        // TODO add your handling code here:
+        dialNumber = "";
+        txt_phonenum.setText(dialNumber);
+    }//GEN-LAST:event_btn_clearActionPerformed
+
+    private void btn_dialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dialActionPerformed
+        // TODO add your handling code here:
+        try{
+            if(dialNumber != ""){
+                String cmd  = "108@"+dialNumber;
+                agentClient.sendtoServer(cmd);
+                System.out.println("Dial number: "+dialNumber);
+            }else
+                System.out.println("No Dial number: "+dialNumber);
+        }catch(Exception e){
+        }        
+    }//GEN-LAST:event_btn_dialActionPerformed
 
     /**
      * @param args the command line arguments
@@ -560,23 +872,28 @@ public class MainForm2 extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem MenuItem_exit;
+    private javax.swing.JMenuItem MenuItem_logout;
+    private javax.swing.JMenuItem MenuItem_setting;
+    private javax.swing.JButton btn_0;
+    private javax.swing.JButton btn_1;
+    private javax.swing.JButton btn_11;
+    private javax.swing.JButton btn_12;
+    private javax.swing.JButton btn_2;
+    private javax.swing.JButton btn_3;
+    private javax.swing.JButton btn_4;
+    private javax.swing.JButton btn_5;
+    private javax.swing.JButton btn_6;
+    private javax.swing.JButton btn_7;
+    private javax.swing.JButton btn_8;
+    private javax.swing.JButton btn_9;
+    private javax.swing.JButton btn_back;
+    private javax.swing.JButton btn_clear;
+    private javax.swing.JButton btn_dial;
+    private javax.swing.JButton btn_logout;
     private javax.swing.JToggleButton btn_pause;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton16;
-    private javax.swing.JButton jButton17;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
+    private javax.swing.JButton jButton18;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
@@ -592,16 +909,17 @@ public class MainForm2 extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lb_agentid;
     private javax.swing.JLabel lb_agentname;
-    public static javax.swing.JLabel lb_callduration;
-    public static javax.swing.JLabel lb_callerid;
+    public javax.swing.JLabel lb_callduration;
+    public javax.swing.JLabel lb_callerid;
     private javax.swing.JLabel lb_extension;
-    public static javax.swing.JLabel lb_logintime;
+    public javax.swing.JLabel lb_logintime;
     private javax.swing.JLabel lb_queue;
-    public static javax.swing.JLabel lb_status;
+    public javax.swing.JLabel lb_status;
+    private javax.swing.JLabel lb_version;
     private javax.swing.JPanel panel_dial;
     private javax.swing.JPanel panel_number;
+    private javax.swing.JTextField txt_phonenum;
     // End of variables declaration//GEN-END:variables
 }
