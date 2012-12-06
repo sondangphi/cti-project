@@ -80,9 +80,10 @@ public class MainForm extends javax.swing.JFrame {
             trayIcon = new TrayIcon(image, "CTI Client");
             trayIcon.setImageAutoSize(true);
             trayIcon.addMouseListener(mouseListener);     
-            lb_agentid.setText( agentObject.getAgent());
+            lb_agentid.setText( agentObject.getAgentId());
             lb_agentext.setText(agentObject.getInterface());
-            lb_agentque.setText(agentObject.getQueue());
+            lb_agentque.setText(agentObject.getQueueId()+" - "+agentObject.getQueueName());
+            lb_agentname.setText(agentObject.getAgentName());
             lb_agentstatus.setText("Available");
 //            tx_startday.setText(uti.getDateNow());
 //            tx_endday.setText(uti.getDateNow());
@@ -133,6 +134,7 @@ public class MainForm extends javax.swing.JFrame {
         lb_agentid = new javax.swing.JLabel();
         lb_agentext = new javax.swing.JLabel();
         lb_agentque = new javax.swing.JLabel();
+        lb_agentname = new javax.swing.JLabel();
         Panel2 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -280,27 +282,35 @@ public class MainForm extends javax.swing.JFrame {
         lb_agentque.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lb_agentque.setText("Agent ID :");
 
+        lb_agentname.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        lb_agentname.setText("agent name");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lb_agentstatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(lb_3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lb_2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
-                            .addComponent(lb_1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lb_agentque, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lb_agentstatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(lb_agentid, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(lb_agentext, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(16, 16, 16))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(lb_3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(lb_2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)
+                                    .addComponent(lb_1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lb_agentque, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPanel2Layout.createSequentialGroup()
+                                        .addComponent(lb_agentid, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(0, 0, Short.MAX_VALUE))
+                                    .addComponent(lb_agentext, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addGap(16, 16, 16))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lb_agentname, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -317,9 +327,11 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lb_agentque, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lb_3, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addComponent(lb_agentname, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lb_agentstatus, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addGap(31, 31, 31))
         );
 
         javax.swing.GroupLayout Panel1Layout = new javax.swing.GroupLayout(Panel1);
@@ -341,7 +353,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(Panel1Layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(64, 64, 64)
+                        .addGap(18, 18, 18)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 216, Short.MAX_VALUE))
@@ -663,7 +675,7 @@ public class MainForm extends javax.swing.JFrame {
             Vector col = new Vector(count);
             Vector row = new  Vector();
             String sql = "SELECT CAST( datetime_login AS DATE ),SEC_TO_TIME(SUM(TIME_TO_SEC(timediff(datetime_logout,datetime_login)))) "
-                    + "FROM login_action  where  agent_id = '"+agentObject.getAgent()+"' and datetime_login <=  '"+end+" 23:00:00' "
+                    + "FROM login_action  where  agent_id = '"+agentObject.getAgentId()+"' and datetime_login <=  '"+end+" 23:00:00' "
                     + "AND datetime_login >=  '"+start+" 00:00:00' group by CAST(datetime_login AS DATE);";            
             rs = con.executeQuery(sql);
             while(rs.next()){
@@ -676,7 +688,7 @@ public class MainForm extends javax.swing.JFrame {
              for(int i=0;i<data.size();i++){
                 //work time
                 sql  = "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(timediff(datetime_unpause,datetime_pause)))) "
-                        + "FROM pause_action  where  agent_id = '"+agentObject.getAgent()+"' and datetime_pause LIKE '%"+data.get(i)[0]+"%'"
+                        + "FROM pause_action  where  agent_id = '"+agentObject.getAgentId()+"' and datetime_pause LIKE '%"+data.get(i)[0]+"%'"
                         + "group by CAST(datetime_pause AS DATE);";
                 rs = con.executeQuery(sql);
                 if(rs.next())
@@ -688,7 +700,7 @@ public class MainForm extends javax.swing.JFrame {
                 if(rs.next())
                     data.get(i)[3] = String.valueOf(rs.getString(1));
                 //call receive
-                sql = "SELECT COUNT(*) FROM dial_event WHERE agent_id = '"+agentObject.getAgent()+"' "
+                sql = "SELECT COUNT(*) FROM dial_event WHERE agent_id = '"+agentObject.getAgentId()+"' "
                         + "AND event='4' AND datetime LIKE  '%"+data.get(i)[0]+"%'";  
                 rs = con.executeQuery(sql);
                 if(rs.next())
@@ -696,7 +708,7 @@ public class MainForm extends javax.swing.JFrame {
                 else
                     data.get(i)[5] = "";      
                 //talk time
-                sql = "SELECT SEC_TO_TIME(SUM(note1))FROM dial_event WHERE agent_id = '"+agentObject.getAgent()+"'"
+                sql = "SELECT SEC_TO_TIME(SUM(note1))FROM dial_event WHERE agent_id = '"+agentObject.getAgentId()+"'"
                         + " AND datetime LIKE '%"+data.get(i)[0]+"%' "
                         + "AND (event ='6' OR event ='5')";
                 rs = con.executeQuery(sql);
@@ -801,6 +813,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel lb_3;
     private static javax.swing.JLabel lb_agentext;
     private static javax.swing.JLabel lb_agentid;
+    private javax.swing.JLabel lb_agentname;
     private static javax.swing.JLabel lb_agentque;
     private static javax.swing.JLabel lb_agentstatus;
     private javax.swing.JMenuBar main_menu;

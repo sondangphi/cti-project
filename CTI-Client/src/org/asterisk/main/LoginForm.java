@@ -35,16 +35,16 @@ public class LoginForm extends javax.swing.JFrame {
         public AgentObject agentObject = null;
 	private static int qport = 33333;
 	private static int aport = 22222;
-	private static ArrayList <QueueObject>  listQueue;
-	private static Socket clientSoc;
+	private static ArrayList <QueueObject>  listQueue;	
         private static String role ="1";
         private static String filename = "infor.properties";
         private static Utility uti;
         private static String agentId = "";
         private static String pass = "";
         private static String iface = "";
-        private static String queue = "";
+        private static String queueId = "";
         public static String cmd = null;
+        public static String queueName = "";
         static int i =0;
     /**
      * Creates new form LoginForm
@@ -73,8 +73,8 @@ public class LoginForm extends javax.swing.JFrame {
             qport = Integer.parseInt(uti.readInfor(filename, "qport"));             
             listQueue = new ArrayList<QueueObject>();
             getListQueue();      
-            queue = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
-            if(queue == null)
+            queueId = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
+            if(queueId == null)
                 lb_notify_queue.setText("(*)");
             else 
                 lb_notify_queue.setText("");
@@ -279,7 +279,7 @@ public class LoginForm extends javax.swing.JFrame {
         panel_1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cb_queue, pwd, tx_agent, tx_iface});
 
         lb_pic.setBackground(new java.awt.Color(255, 0, 0));
-        lb_pic.setIcon(new javax.swing.ImageIcon("D:\\leethanhhai\\NetBeansProjects\\CTI-Client\\images\\stock_lock.png")); // NOI18N
+        lb_pic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/stock_lock.png"))); // NOI18N
         lb_pic.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lb_picMouseClicked(evt);
@@ -335,9 +335,9 @@ public class LoginForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(43, Short.MAX_VALUE)
+                .addGap(22, 22, 22)
                 .addComponent(lb_pic, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
                 .addComponent(panel_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21))
             .addComponent(lb_status, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -345,13 +345,11 @@ public class LoginForm extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(lb_status, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lb_status, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panel_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(29, 29, 29)
-                        .addComponent(lb_pic, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(lb_pic, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -388,12 +386,14 @@ public class LoginForm extends javax.swing.JFrame {
         pass     = new String(p);
         agentId = tx_agent.getText();        
         iface  = tx_iface.getText();
-        queue = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
-        agentObject.setAgent(agentId);
+        queueId = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
+        queueName = listQueue.get(cb_queue.getSelectedIndex()).getQueueName();
+        agentObject.setAgentId(agentId);
         agentObject.setPass(pass);
-        agentObject.setInterface(iface);
-        agentObject.setQueue(queue);
+        agentObject.setInterface(iface);        
         agentObject.setRole(role);
+        agentObject.setQueueId(queueId);
+        agentObject.setQueueName(queueName);
         lb_notify_queue.setText("");                            
         lb_notify_iface.setText("");
         lb_notify_pwd.setText("");
@@ -403,13 +403,13 @@ public class LoginForm extends javax.swing.JFrame {
             if(!agentId.equalsIgnoreCase("") && uti.checkAgent(agentId)){                
                 if(!pass.equalsIgnoreCase("") && uti.checkPwd(pass)){                    
                     if(!iface.equalsIgnoreCase("") && uti.checkIface(iface)){                        
-                        if(!queue.equalsIgnoreCase("")){
-                            cmd = "100@"+agentId+"@"+pass+"@SIP/"+iface+"@"+queue+"@"+role;
+                        if(!queueId.equalsIgnoreCase("")){
+                            cmd = "100@"+agentId+"@"+pass+"@SIP/"+iface+"@"+queueId+"@"+role;
                             lb_status.setText(cmd);
-                            clientSoc = new Socket(host, aport);
-                            if(clientSoc != null){
-                                System.out.println("connect to server "+clientSoc.getInetAddress().toString());
-                                agentClient = new Agent(clientSoc, this);
+                            Socket clientSocket = new Socket(host, aport);
+                            if(clientSocket != null){
+                                System.out.println("connect to server "+clientSocket.getInetAddress().toString());
+                                agentClient = new Agent(clientSocket, this);
                             }
                         }else lb_notify_queue.setText("(*)");                            
                     }else lb_notify_iface.setText("(*)");
@@ -474,17 +474,16 @@ public class LoginForm extends javax.swing.JFrame {
     
     private static void getListQueue(){
         try{            
-            clientSoc = new Socket(host, qport);            
-            if(clientSoc!=null){                    		
-                InputStream is = clientSoc.getInputStream();
+            Socket soc = new Socket(host, qport);            
+            if(soc != null){                    		
+                InputStream is = soc.getInputStream();
                 ObjectInputStream ois = new ObjectInputStream(is);  
                 listQueue = (ArrayList<QueueObject>)ois.readObject(); 
                 ois.close();
                 is.close();
-                clientSoc.close();
-                clientSoc = null;  
-                for(QueueObject q:listQueue){
-                    if(q!=null){
+                soc.close();
+                for(QueueObject q : listQueue){
+                    if(q != null){
                         String temp = q.getQueueId()+" - "+q.getQueueName();
                         cb_queue.addItem(temp.toUpperCase());
                     }                                    
