@@ -90,6 +90,15 @@ public class Managerdb {
             return name;
         }
 	
+//        public String getAgentSession(String session)throws ClassNotFoundException, SQLException{            
+//            String name = "";
+//            String sqlCom = "SELECT agentName FROM agent_login where session = '"+session+"'";
+//            ResultSet rs = sqlQuery(sqlCom);
+//            if(rs.next())
+//                name = rs.getString("agentName");
+//            return name;
+//        }        
+        
 	public boolean checkStatus(String iface) throws ClassNotFoundException, SQLException{
             String sqlCom = "SELECT * FROM agent_status where interface = '"+iface+"'";
             ResultSet rs = sqlQuery(sqlCom);
