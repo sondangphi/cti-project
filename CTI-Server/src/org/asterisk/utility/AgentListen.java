@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.Connection;
-import org.asterisk.main.ctiServer;
+import org.asterisk.main.Server;
 import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerConnectionFactory;
 import org.asteriskjava.manager.ManagerEventListener;
@@ -32,7 +32,7 @@ public class AgentListen implements Runnable, ManagerEventListener{
     private static int port;
     private static ServerSocket aserver;
     private static Utility uti;
-    public  static ctiServer cti = null;
+    public  static Server cti = null;
     private static ManagerAgent agent = null;
     private static String filename = "infor.properties";    
     private static Thread thread;
@@ -40,11 +40,11 @@ public class AgentListen implements Runnable, ManagerEventListener{
     
     public AgentListen(){
     }
-    public AgentListen(int p) throws IOException{
-        port = p;        
-        thread = new Thread(this);
-        thread.start();
-    }        
+//    public AgentListen(int p) throws IOException{
+//        port = p;        
+//        thread = new Thread(this);
+//        thread.start();
+//    }        
     public AgentListen(int p, Managerdb mdb) throws IOException{
         mdb_agent = mdb;
         port = p;        
@@ -55,12 +55,6 @@ public class AgentListen implements Runnable, ManagerEventListener{
     public void run() {
         try{
             uti = new Utility();
-//            if(uti.readInfor(filename, pwdAsterisk) == null){
-//                System.out.println("write infor asterisk");
-//                uti.writeInfor(filename, "pwdAsterisk", pwdAsterisk);
-//                uti.writeInfor(filename, "userAsterisk", userAsterisk);
-//                uti.writeInfor(filename, "hostAsterisk", hostAsterisk);
-//            }
             pwdAsterisk = uti.readInfor(filename, "Asterisk_pwd");
             userAsterisk = uti.readInfor(filename, "Asterisk_user");
             hostAsterisk = uti.readInfor(filename, "Asterisk_server");                            
@@ -69,8 +63,7 @@ public class AgentListen implements Runnable, ManagerEventListener{
             connectAsterisk(hostAsterisk, userAsterisk, pwdAsterisk);
             manager.login();            
             manager.addEventListener(this);		
-            manager.sendAction(new StatusAction());		
-            System.out.println("listen event from asterisk");                      
+            manager.sendAction(new StatusAction());		                                 
             if( manager != null ){
                 uti.writeAsteriskLog("- SYSTE  - Connect to Asterisk Server Successful");
                 System.out.println("Connect to Asterisk Server Successful");
@@ -78,7 +71,8 @@ public class AgentListen implements Runnable, ManagerEventListener{
                     System.out.println("start agent_listen");
                     Socket clientsocket = aserver.accept();                    
                     agent = new ManagerAgent(this, clientsocket, mdb_agent);
-                    uti.writeAgentLog("- AGENT - Accept connect from address"+"\t"+clientsocket.getInetAddress().getHostAddress());							
+                    String add = clientsocket.getInetAddress().getHostAddress().toString();
+                    uti.writeAgentLog("- AGENT - Accept connect from address"+"\t"+add);							
                     System.out.println("acept connect from agent ");
                 }
             }else{
