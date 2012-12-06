@@ -1,44 +1,64 @@
 package org.asterisk.model;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.Socket;
 
-public class AgentObject {
+public class AgentObject implements Serializable{
 	
 	Socket socket;
-	String agent;
+	String agentId;
+        String agentName;
+        String queueId;
+        String queueName;
 	String pass;
-	String iface;
-	String queue;
+	String iface;	
 	int penalty;
         String role;
-	String session;
+        String session;
+        
+	
 	public AgentObject() {
 		
 	}
 	
 	public AgentObject(Socket client,String user, String pwd, String inface, String queuename){
 		socket = client;
-		agent = user;
+		agentId = user;
 		pass = pwd;
 		iface = inface;
-		queue = queuename;
+		queueId = queuename;
 	}
-	
+	public AgentObject(Socket client,String user, String pwd, String inface, String queuename, int pen){
+		socket = client;
+		agentId = user;
+		pass = pwd;
+		iface = inface;
+		queueId = queuename;
+                penalty = pen;
+	}
 	public Socket getSocket(){
-		return socket;
+            return socket;
 	}
 	
 	public void setSocket(Socket s){
 		socket = s;
 	}
-	public String getAgent(){
-		return agent;
+	public String getAgentId(){
+		return agentId;
 	}
 	
-	public void setAgent(String a){
-		agent = a;
+	public void setAgentId(String a){
+		agentId = a;
 	}
+	public String getAgentName(){
+		return agentName;
+	}
+	
+	public void setAgentName(String name){
+		agentName = name;
+	}        
+        
 	public String getPass(){
 		return pass;
 	}
@@ -54,20 +74,29 @@ public class AgentObject {
 		iface = inface;
 	}
 
-	public String getQueue(){
-		return queue;
+	public String getQueueId(){
+		return queueId;
 	}
 	
-	public void setQueue(String q){
-		queue  = q;
+	public void setQueueId(String q){
+		queueId  = q;
 	}
 	
+	public String getQueueName(){
+		return queueName;
+	}
+	
+	public void setQueueName(String name){
+		queueName  = name;
+	}        
+        
 	public int getPenalty(){
 		return penalty;
 	}
 	public void setPenalty(int pen){
 		penalty = pen;
 	}
+        
         public String getRole(){
 		return role;
 	}

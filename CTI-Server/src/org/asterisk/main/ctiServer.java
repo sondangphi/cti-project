@@ -35,24 +35,24 @@ public class ctiServer{
                 f.createNewFile();            
             FileInputStream fis = new FileInputStream(f);    
             if(fis.available() == 0 ){                
-                uti.writeInfor(filename, "dbname", dbname);
-                uti.writeInfor(filename, "hostdb", hostdb);
-                uti.writeInfor(filename, "userSql", userSql);
-                uti.writeInfor(filename, "pwdSql", pwdSql);
-                uti.writeInfor(filename, "aport", Integer.toString(aport));
-                uti.writeInfor(filename, "qport", Integer.toString(qport));
+                uti.writeInfor(filename, "MySql_database", dbname);
+                uti.writeInfor(filename, "MySql_server", hostdb);
+                uti.writeInfor(filename, "MySql_user", userSql);
+                uti.writeInfor(filename, "MySql_pwd", pwdSql);
+                uti.writeInfor(filename, "Port_agent", Integer.toString(aport));
+                uti.writeInfor(filename, "Port_queue", Integer.toString(qport));
                 ////////////////////////////////////////////////////////////
-                uti.writeInfor(filename, "pwdAsterisk", pwdAsterisk);
-                uti.writeInfor(filename, "userAsterisk", userAsterisk);
-                uti.writeInfor(filename, "hostAsterisk", hostAsterisk);
+                uti.writeInfor(filename, "Asterisk_pwd", pwdAsterisk);
+                uti.writeInfor(filename, "Asterisk_user", userAsterisk);
+                uti.writeInfor(filename, "Asterisk_server", hostAsterisk);
             }
             System.out.println("Read configuration file!"); 
-            dbname = uti.readInfor(filename, "dbname");
-            hostdb = uti.readInfor(filename, "hostdb");
-            userSql = uti.readInfor(filename, "userSql");
-            pwdSql = uti.readInfor(filename, "pwdSql");
-            aport = Integer.parseInt(uti.readInfor(filename, "aport"));
-            qport = Integer.parseInt(uti.readInfor(filename, "qport"));                                       
+            dbname = uti.readInfor(filename, "MySql_database");
+            hostdb = uti.readInfor(filename, "MySql_server");
+            userSql = uti.readInfor(filename, "MySql_user");
+            pwdSql = uti.readInfor(filename, "MySql_pwd");
+            aport = Integer.parseInt(uti.readInfor(filename, "Port_agent"));
+            qport = Integer.parseInt(uti.readInfor(filename, "Port_queue"));                                       
             mdb_agent = new Managerdb(dbname,userSql,pwdSql,hostdb);
             if(mdb_agent.isConnect()){
                 uti.writeAsteriskLog("- SYSTE  - Connect to Database Successful");

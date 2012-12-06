@@ -61,9 +61,9 @@ public class AgentListen implements Runnable, ManagerEventListener{
 //                uti.writeInfor(filename, "userAsterisk", userAsterisk);
 //                uti.writeInfor(filename, "hostAsterisk", hostAsterisk);
 //            }
-            pwdAsterisk = uti.readInfor(filename, "pwdAsterisk");
-            userAsterisk = uti.readInfor(filename, "userAsterisk");
-            hostAsterisk = uti.readInfor(filename, "hostAsterisk");                            
+            pwdAsterisk = uti.readInfor(filename, "Asterisk_pwd");
+            userAsterisk = uti.readInfor(filename, "Asterisk_user");
+            hostAsterisk = uti.readInfor(filename, "Asterisk_server");                            
             aserver = new ServerSocket(port);
             /*connect to asterisk server*/
             connectAsterisk(hostAsterisk, userAsterisk, pwdAsterisk);
