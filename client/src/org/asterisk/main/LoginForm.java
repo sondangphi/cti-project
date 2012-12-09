@@ -52,7 +52,7 @@ public class LoginForm extends javax.swing.JFrame {
     ConfigForm configform;
     public LoginForm() {
         initComponents();
-        Image image = Toolkit.getDefaultToolkit().getImage("images/stock_lock.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("src/org/asterisk/images/stock_lock.png");
         try{
             agentObject = new AgentObject();
             uti = new Utility();		
