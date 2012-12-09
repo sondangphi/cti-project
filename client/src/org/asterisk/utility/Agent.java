@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
@@ -23,7 +24,6 @@ public class Agent implements Runnable{
 	 * @param args
 	 */
 	static boolean running = true;
-//	static boolean connected = true;
 	static Thread mainThread;
 	static Socket clientSocket;
         static AgentObject agentObject;
@@ -31,6 +31,14 @@ public class Agent implements Runnable{
         private static BufferedReader infromServer = null;
         MainForm2 mainForm2 = null;
 	int data;
+        
+        private static String filename = "infor.properties";                         		
+        private static String Mysql_server = "127.0.0.1";      
+        private static String Mysql_dbname = "cti_database";
+	private static String Mysql_user = "callcenter";
+	private static String Mysql_pwd  = "callcenter";   
+        private static ConnectDatabase con;
+        private static Utility uti;
 	
 	public Agent(){
 		
@@ -65,6 +73,7 @@ public class Agent implements Runnable{
             try{
                 String command = null;
                 CODE code;
+                uti = new Utility();
 //                MainForm mainForm = null;
 //                MainForm2 mainForm2 = null;
                 while(clientSocket.isConnected()){
@@ -128,15 +137,35 @@ public class Agent implements Runnable{
                     case RESULT: //result ?
                     break;
                     case RINGING: //EVENT RINGING
-                        System.out.println("RINGING");
-                        String callerNum = cmdList.get(1);
-                        mainForm2.lb_callerid.setText(callerNum);
-                        mainForm2.lb_status.setText("Ringing...");
-                        mainForm2.btn_logout.setEnabled(false);
-                        mainForm2.btn_pause.setEnabled(false);
-                        mainForm2.btn_dial.setEnabled(false);
-                        mainForm2.MenuItem_logout.setEnabled(false);
-                        mainForm2.MenuItem_exit.setEnabled(false);
+                        try{
+                            System.out.println("RINGING");
+                            String callerNum = cmdList.get(1);
+                            Mysql_dbname = uti.readInfor(filename, "MySql_database");
+                            Mysql_server = uti.readInfor(filename, "MySql_server");
+                            Mysql_user = uti.readInfor(filename, "MySql_user");
+                            Mysql_pwd = uti.readInfor(filename, "MySql_pwd");  
+                            //open connect to database
+                            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+                            if(con.isConnect()){
+                                String sql = "SELECT * FROM customer WHERE phone ='"+callerNum+"'";
+                                ResultSet rs = con.executeQuery(sql);
+                                if(rs.next()){
+                                    //get information of already custom and fill in data
+                                }else{
+                                    //new customer information, insert into database
+                                }
+                            }
+                            //close connect
+                            con.closeConnect();
+                            mainForm2.lb_callerid.setText(callerNum);
+                            mainForm2.lb_status.setText("Ringing...");
+                            mainForm2.btn_logout.setEnabled(false);
+                            mainForm2.btn_pause.setEnabled(false);
+                            mainForm2.btn_dial.setEnabled(false);
+                            mainForm2.MenuItem_logout.setEnabled(false);
+                            mainForm2.MenuItem_exit.setEnabled(false);                            
+                        }catch(Exception e){
+                        }
                     break;
                     case DIALOUT: //result 	
                         System.out.println("DIALOUT");                        
