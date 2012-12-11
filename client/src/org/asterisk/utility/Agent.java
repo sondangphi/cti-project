@@ -9,13 +9,17 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.asterisk.main.*;
 import org.asterisk.model.AgentObject;
+import org.asterisk.model.CustomerObject;
+import org.asterisk.model.TableModel;
 import org.asteriskjava.manager.TimeoutException;
 
 public class Agent implements Runnable{
@@ -33,12 +37,14 @@ public class Agent implements Runnable{
 	int data;
         
         private static String filename = "infor.properties";                         		
-        private static String Mysql_server = "127.0.0.1";      
+        private static String Mysql_server = "172.168.10.208";      
         private static String Mysql_dbname = "cti_database";
-	private static String Mysql_user = "callcenter";
-	private static String Mysql_pwd  = "callcenter";   
+	private static String Mysql_user = "cti";
+	private static String Mysql_pwd  = "123456";   
         private static ConnectDatabase con;
         private static Utility uti;
+        
+        public CustomerObject customer;
 	
 	public Agent(){
 		
@@ -74,8 +80,10 @@ public class Agent implements Runnable{
                 String command = null;
                 CODE code;
                 uti = new Utility();
-//                MainForm mainForm = null;
-//                MainForm2 mainForm2 = null;
+                Mysql_dbname = uti.readInfor(filename, "MySql_database");
+                Mysql_server = uti.readInfor(filename, "MySql_server");
+                Mysql_user = uti.readInfor(filename, "MySql_user");
+                Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
                 while(clientSocket.isConnected()){
                     infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
                     command = infromServer.readLine();
@@ -140,30 +148,69 @@ public class Agent implements Runnable{
                         try{
                             System.out.println("RINGING");
                             String callerNum = cmdList.get(1);
-                            Mysql_dbname = uti.readInfor(filename, "MySql_database");
-                            Mysql_server = uti.readInfor(filename, "MySql_server");
-                            Mysql_user = uti.readInfor(filename, "MySql_user");
-                            Mysql_pwd = uti.readInfor(filename, "MySql_pwd");  
-                            //open connect to database
-                            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-                            if(con.isConnect()){
-                                String sql = "SELECT * FROM customer WHERE phone ='"+callerNum+"'";
-                                ResultSet rs = con.executeQuery(sql);
-                                if(rs.next()){
-                                    //get information of already custom and fill in data
-                                }else{
-                                    //new customer information, insert into database
-                                }
-                            }
-                            //close connect
-                            con.closeConnect();
                             mainForm2.lb_callerid.setText(callerNum);
                             mainForm2.lb_status.setText("Ringing...");
                             mainForm2.btn_logout.setEnabled(false);
                             mainForm2.btn_pause.setEnabled(false);
                             mainForm2.btn_dial.setEnabled(false);
                             mainForm2.MenuItem_logout.setEnabled(false);
-                            mainForm2.MenuItem_exit.setEnabled(false);                            
+                            mainForm2.MenuItem_exit.setEnabled(false);        
+                            mainForm2.btn_feedback.setEnabled(true);
+                            //open connect to database
+                            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+                            if(con.isConnect()){
+                                String sql = "SELECT * FROM customer WHERE mobilephone ='"+callerNum+"'";
+                                ResultSet rs = con.executeQuery(sql);
+                                if(rs.next()){
+                                    //get information of already custom and fill in data   
+                                    System.out.println("callerNum: "+callerNum);
+                                    customer = new CustomerObject(callerNum);
+                                    customer.setName(rs.getString("fullname"));                                    
+                                    customer.setAddress(rs.getString("address"));
+                                    customer.setEmail(rs.getString("email"));
+                                    customer.setGender(rs.getString("gender"));
+                                    customer.setPhone1(rs.getString("homephone1"));
+                                    String gender = customer.getGender();
+                                    System.out.println("already information"); 
+                                    mainForm2.txt_add.setText(customer.getAddress());
+                                    mainForm2.txt_name.setText(customer.getName());
+                                    mainForm2.txt_email.setText(customer.getEmail());
+                                    mainForm2.txt_mobile.setText(customer.getMobile());
+                                    mainForm2.txt_phone1.setText(customer.getPhone1());
+                                    if(gender.equalsIgnoreCase("1"))
+                                        mainForm2.cb_gioitinh.setSelectedIndex(0);
+                                    else
+                                        mainForm2.cb_gioitinh.setSelectedIndex(1);
+                                    mainForm2.btn_new.setEnabled(false);
+                                    sql = "SELECT * FROM feedback WHERE mobile ='"+callerNum+"'";
+                                    rs = con.executeQuery(sql);
+                                    if(rs != null){
+                                        addTable(rs);
+                                    }                                                                                    
+                                }else{
+                                    //new customer information, insert into database
+                                    System.out.println("callerNum: "+callerNum);
+                                    System.out.println("not ready information");  
+                                    mainForm2.txt_mobile.setText(callerNum);
+                                    mainForm2.btn_new.setEnabled(true);
+                                    mainForm2.txt_add.setText("");
+                                    mainForm2.txt_email.setText("");
+                                    mainForm2.txt_name.setText("");
+                                    mainForm2.txt_email.setText("");                                    
+                                    mainForm2.txt_phone1.setText("");  
+//                                    mainForm2.table_report.removeAll();
+//                                    mainForm2.table_report.setModel(null);
+                                    String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
+                                    int count = colname.length;
+                                    Vector col = new Vector(count);
+                                    Vector row = new  Vector();
+                                    for (int i = 0; i <count; i++) 
+                                        col.addElement(colname[i].toString());
+                                    mainForm2.table_report.setModel(new TableModel(col, row));
+                                }
+                            }
+                            //close connect
+                            con.closeConnect();                                                       
                         }catch(Exception e){
                         }
                     break;
@@ -215,9 +262,53 @@ public class Agent implements Runnable{
             }             
             catch (IOException e){
 
-            }            
+            }       
+            catch (SQLException e){
+
+            } 
+            catch (Exception e){
+
+            }
 
 	}
+        
+        public void addTable(ResultSet rs)throws Exception{
+            String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
+            int count = colname.length;
+            Vector col = new Vector(count);
+            Vector row = new  Vector();
+            String [] temp = null;
+            ArrayList<String[]> data = new ArrayList<String[]>();
+            int t = 1;
+            while(rs.next()){
+                int j = 0;                                                                                    
+                temp  = new String[count];
+                temp[ j++ ] = String.valueOf(t++);
+                temp[ j++ ] = String.valueOf(rs.getObject("datetime"));//rs.getString("datetime");
+                temp[ j++ ] = String.valueOf(rs.getObject("name"));//rs.getString("name");
+                temp[ j++ ] = String.valueOf(rs.getObject("mobile"));//rs.getString("mobile");
+                temp[ j++ ] = String.valueOf(rs.getObject("agentid"));//rs.getString("agentid");
+                temp[ j++ ] = String.valueOf(rs.getObject("type"));//rs.getString("type");
+                temp[ j++ ] = String.valueOf(rs.getObject("content"));//rs.getString("content");
+                temp[ j++ ] = String.valueOf(rs.getObject("results"));//rs.getString("result");
+                data.add(temp);
+            }
+            for(int i = 0;i<data.size();i++){                
+                Vector dataRow = new Vector(count);
+                temp = new String[count];
+                for(int j=0;j<count;j++){
+                    temp = data.get(i);
+                    if(temp[j] != null)
+                        dataRow.addElement(temp[j]);
+                    else
+                        dataRow.addElement("");
+                }
+                row.addElement(dataRow);
+            }
+            for (int i = 0; i <count; i++) 
+                col.addElement(colname[i].toString());
+            mainForm2.table_report.setModel(new TableModel(col, row));                         
+        }
         //send request to server - string
 	public static void sendtoServer(String t) throws IOException{
             PrintWriter outtoServer;

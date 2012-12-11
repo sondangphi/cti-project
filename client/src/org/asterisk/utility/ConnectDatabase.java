@@ -60,18 +60,18 @@ public class ConnectDatabase {
 	}        
         
 	/*ket noi csdl mysql bang jdbc*/
-	public static ResultSet executeQuery(String sqlCom) throws ClassNotFoundException, SQLException{
+	public  ResultSet executeQuery(String sqlCom) throws ClassNotFoundException, SQLException{
 		
 		Class.forName(driverName);
-		connection = DriverManager.getConnection("jdbc:mysql://"+serverName+database,user,pwd);			
+//		connection = DriverManager.getConnection("jdbc:mysql://"+serverName+database,user,pwd);			
 		Statement stm = connection.createStatement();		
 		ResultSet rs = stm.executeQuery(sqlCom);//thi hanh lenh select va tra ve ket qua
 		return rs;
 	}
-	public static int executeUpdate(String sql)throws ClassNotFoundException, SQLException{
+	public  int executeUpdate(String sql)throws ClassNotFoundException, SQLException{
 		
 		Class.forName(driverName);
-		connection = DriverManager.getConnection("jdbc:mysql://"+serverName+database,user,pwd);
+//		connection = DriverManager.getConnection("jdbc:mysql://"+serverName+database,user,pwd);
 		int result = 0;
 		Statement stm = connection.createStatement();	
 		result  = stm.executeUpdate(sql);
