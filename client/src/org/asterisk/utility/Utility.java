@@ -78,6 +78,15 @@ public class Utility {
             return sb.toString();           
         }
         
+        public String getFeedbackId(){
+            String temps = "QWERTYUIOPASDFGHJKLZXCVBNMabcdefghijklmnopqrstuvwxyz1234567890";
+            Random rnd = new Random();
+            StringBuilder sb = new StringBuilder( 7 );
+            for( int i = 0; i < 7; i++ ) 
+                sb.append( temps.charAt( rnd.nextInt(temps.length()) ) );
+            return sb.toString();           
+        }
+        
         public void writeInfor(String fname,String key, String value)throws Exception{
 //            System.out.println("write file"); 
             prop.setProperty(key, value);

@@ -37,7 +37,7 @@ public class LoginForm extends javax.swing.JFrame {
 	private static int aport = 22222;
 	private static ArrayList <QueueObject>  listQueue;	
         private static String role ="1";
-        private static String filename = "infor.properties";
+        
         private static Utility uti;
         private static String agentId = "";
         private static String pass = "";
@@ -46,6 +46,12 @@ public class LoginForm extends javax.swing.JFrame {
         public static String cmd = null;
         public static String queueName = "";
         static int i =0;
+        
+        private static String filename = "infor.properties";
+        private static String Mysql_server = "172.168.10.208";      
+        private static String Mysql_dbname = "cti_database";
+	private static String Mysql_user = "cti";
+	private static String Mysql_pwd  = "123456";        
     /**
      * Creates new form LoginForm
      */
@@ -65,12 +71,21 @@ public class LoginForm extends javax.swing.JFrame {
                 uti.writeInfor(filename, "host", host);
                 uti.writeInfor(filename, "aport", Integer.toString(aport));
                 uti.writeInfor(filename, "qport", Integer.toString(qport));
+                
+                uti.writeInfor(filename, "MySql_database", Mysql_dbname);
+                uti.writeInfor(filename, "MySql_server", Mysql_server);
+                uti.writeInfor(filename, "MySql_user", Mysql_user);
+                uti.writeInfor(filename, "MySql_pwd", Mysql_pwd);
                 System.out.println("write file"); 
             }            
             System.out.println("read file"); 
             host = uti.readInfor(filename, "host");
             aport = Integer.parseInt(uti.readInfor(filename, "aport"));
-            qport = Integer.parseInt(uti.readInfor(filename, "qport"));             
+            qport = Integer.parseInt(uti.readInfor(filename, "qport"));  
+            Mysql_dbname = uti.readInfor(filename, "MySql_database");
+            Mysql_server = uti.readInfor(filename, "MySql_server");
+            Mysql_user = uti.readInfor(filename, "MySql_user");
+            Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
             listQueue = new ArrayList<QueueObject>();
             getListQueue();      
             queueId = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
@@ -290,6 +305,11 @@ public class LoginForm extends javax.swing.JFrame {
 
         jMenu1.setText("File");
         jMenu1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jMenu1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu1ActionPerformed(evt);
+            }
+        });
 
         submn_config.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
         submn_config.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
@@ -458,6 +478,10 @@ public class LoginForm extends javax.swing.JFrame {
     private void lb_picMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lb_picMouseClicked
         // TODO add your handling code here:     
     }//GEN-LAST:event_lb_picMouseClicked
+
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu1ActionPerformed
 
     /**
      * @param args the command line arguments
