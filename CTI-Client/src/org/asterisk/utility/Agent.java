@@ -132,8 +132,15 @@ public class Agent implements Runnable{
                         String callerNum = cmdList.get(1);
                         mainForm2.lb_callerid.setText(callerNum);
                         mainForm2.lb_status.setText("Ringing...");
+                        mainForm2.btn_logout.setEnabled(false);
+                        mainForm2.btn_pause.setEnabled(false);
+                        mainForm2.btn_dial.setEnabled(false);
+                        mainForm2.MenuItem_logout.setEnabled(false);
+                        mainForm2.MenuItem_exit.setEnabled(false);
                     break;
-                    case AVAIL: //result 	            			
+                    case DIALOUT: //result 	
+                        System.out.println("DIALOUT");                        
+                        mainForm2.lb_status.setText("Dial Out...");
                     break;
                     case BUSY: 
                     break;
@@ -143,6 +150,11 @@ public class Agent implements Runnable{
                         System.out.println("HANGUP");
                         mainForm2.lb_status.setText("Ready");
                         mainForm2.lb_callerid.setText("");
+                        mainForm2.btn_logout.setEnabled(true);
+                        mainForm2.btn_pause.setEnabled(true);
+                        mainForm2.MenuItem_logout.setEnabled(true);
+                        mainForm2.MenuItem_exit.setEnabled(true);
+                        mainForm2.btn_dial.setEnabled(true);
                     break;
                     case UP: //EVENT ANSWER CALL	     
                         System.out.println("ANSWER");
@@ -214,6 +226,6 @@ public class Agent implements Runnable{
             HOLDSUCC, HOLDFAIL,
             TRANSSUCC, TRANSFAIL,
             UNPAUSESUCC, UNPAUSEFAIL,
-            DIAL, RINGING, AVAIL, BUSY, READY, RESULT, UP,HANGUP
+            DIALOUT, RINGING, AVAIL, BUSY, READY, RESULT, UP,HANGUP
 	}
 }
