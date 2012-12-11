@@ -44,7 +44,7 @@ import javax.swing.table.TableModel;
  *
  * @author leehoa
  */
-public class MainForm extends javax.swing.JFrame  implements ListSelectionListener{
+public class MainForm extends javax.swing.JFrame  {
 
     TrayIcon trayIcon;
     SystemTray stray;
@@ -83,26 +83,6 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
             };                                    
             System.out.println("system tray supported");
             stray = SystemTray.getSystemTray();                        
-//            ActionListener exitListener = new ActionListener() {
-//                public void actionPerformed(ActionEvent e) {
-//                    System.out.println("Exiting....");
-//                    System.exit(0);
-//                }
-//            };
-//            PopupMenu popup = new PopupMenu();
-//            MenuItem defaultItem = new MenuItem("Exit");
-//            defaultItem.addActionListener(exitListener);
-//            popup.add(defaultItem);
-//            defaultItem = new MenuItem("Configuration");
-//            defaultItem.addActionListener(new ActionListener() {
-//                public void actionPerformed(ActionEvent e) {
-//                    stray.remove(trayIcon);
-//                    setVisible(true);
-//                    System.out.println("Tray icon removed");                        
-//                }
-//            });
-//            popup.add(defaultItem);
-//            trayIcon = new TrayIcon(image, "config", popup);
             trayIcon = new TrayIcon(image, "config");
             trayIcon.setImageAutoSize(true);
             trayIcon.addMouseListener(mouseListener);
@@ -117,22 +97,10 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
         tx_datetime.setText(time);                
         ////////////////////////////////////////////////////////////////////////
         
-                String items[] = {"Java", "JSP", "PHP", "C", "C++"};
-                String[] columnNames = {"First Name","Last Name"};
-                
-//                Object[][] data = {
-//                            {"Kathy", "Smith","Snowboarding", new Integer(5), new Boolean(false)},
-//                            {"John", "Doe","Rowing", new Integer(3), new Boolean(true)},
-//                            {"Sue", "Black","Knitting", new Integer(2), new Boolean(false)},
-//                            {"Jane", "White","Speed reading", new Integer(20), new Boolean(true)},
-//                            {"Joe", "Brown","Pool", new Integer(10), new Boolean(false)}
-//                            };
-                ArrayList<String[]> data = new ArrayList<String[]>();      
-                String []temp1 = {"123","abc"}; 
-//                jTable1.setModel(new CustomTableModel(columnNames,data));                
-//                jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-                
-                
+            String items[] = {"Java", "JSP", "PHP", "C", "C++"};
+            String[] columnNames = {"First Name","Last Name"};
+            ArrayList<String[]> data = new ArrayList<String[]>();      
+            String []temp1 = {"123","abc"};                                 
             int count = columnNames.length;          
             Vector col = new Vector(count);
             for (int i = 0; i <count; i++) 
@@ -142,44 +110,160 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
             dataRow.addElement("123");
             dataRow.addElement("abc");
             row.addElement(dataRow);
-            jTable1.setModel(new tbModel(col, row)); 
+//            jTable2.setModel(new tbModel(col, row)); 
 
                 
             date1.setSize(20, 40);
-            JScrollPane scrollPane = new JScrollPane(jTable1);
-            jTable1.setFillsViewportHeight(true); 
+//            JScrollPane scrollPane = new JScrollPane(jTable2);
             jTable2.setCellSelectionEnabled(true);
-//            jTable2.set
-
-//        ListSelectionModel cellSelectionModel = jTable2.getSelectionModel();
-//        cellSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);            
-//        cellSelectionModel.addListSelectionListener(new ListSelectionListener() {
-//            public void valueChanged(ListSelectionEvent e) {
-//                int rowcell = jTable2.getSelectedRow();
-//                int colcell = jTable2.getSelectedColumn();
-//                System.out.println("value: " + jTable2.getValueAt(rowcell, colcell));
-//            }
-//        });    
-        
+            
         jTable2.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
                 int rowcell = jTable2.getSelectedRow();
                 int colcell = jTable2.getSelectedColumn();
 //                System.out.println("value is: " + jTable2.getValueAt(rowcell, colcell)+" ["+rowcell+"]["+colcell+"]");
+                String date = String.valueOf(jTable2.getValueAt(rowcell, 0));
                 String name = jTable2.getColumnName(colcell);              
-                if(name.equalsIgnoreCase("First Name"))
+                if(name.equalsIgnoreCase("Login Time"))
+                    viewLogin(date);
+                if(name.equalsIgnoreCase("Pause Time"))
+                    viewPause(date);
+                if(name.equalsIgnoreCase("Talk Time"))
                     System.out.println("col name is: "+name);
-                if(colcell==0){
-                    System.out.println("value is: " + jTable2.getValueAt(rowcell, colcell)+" ["+rowcell+"]["+colcell+"]");
-                }
+                if(name.equalsIgnoreCase("Call Receive"))
+                    viewDial(date);
             }
-        });
-
-                        
-                        
-                
+        });                            
+        this.add(jScrollBar1);
     }
 
+    public void viewLogin(String date){
+        try{
+            String sql ="SELECT * FROM login_action WHERE agent_id='a' AND CAST(datetime_login AS DATE) = '"+date+"'";
+            String colname[] = {"Interface","Queue", "Datetime Login","Datetime Logout"};
+            ResultSet rs = null;            
+            ConnectDatabase con = new  ConnectDatabase();
+            int count = colname.length;
+            Vector col = new Vector(count);
+            Vector row = new  Vector();    
+            ArrayList<String[]> data = new ArrayList<String[]>();
+            rs = con.executeQuery(sql);
+            while(rs.next()){
+                String [] temp  = new String[colname.length];
+                int j= 0;
+                temp[j++] = String.valueOf(rs.getString("Interface"));
+                temp[j++] = String.valueOf(rs.getString("queue"));
+                temp[j++] = String.valueOf(rs.getString("datetime_login"));
+                temp[j++] = String.valueOf(rs.getString("datetime_logout"));
+                data.add(temp);
+            }                                                
+            //add data into table
+            for(int i = 0;i<data.size();i++){                
+                Vector dataRow = new Vector(count);
+                String []temp = new String[colname.length];
+                for(int j=0;j<data.get(i).length;j++){
+                    temp = data.get(i);
+                    if(temp[j]!=null)
+                        dataRow.addElement(temp[j]);
+                    else
+                        dataRow.addElement("");
+                }
+                row.addElement(dataRow);
+            }
+            for (int i = 0; i <colname.length; i++) 
+                col.addElement(colname[i].toString());
+            jTable3.setModel(new tbModel(col, row));            
+        }catch(Exception e){
+        }
+    }
+    
+    public void viewPause(String date){
+        try{
+            String sql ="SELECT * FROM pause_action WHERE agent_id='a' AND CAST(datetime_pause AS DATE) = '"+date+"'";
+            String colname[] = {"Datetime Pause","Datetime Unpause"};
+            ResultSet rs = null;            
+            ConnectDatabase con = new  ConnectDatabase();
+            int count = colname.length;
+            Vector col = new Vector(count);
+            Vector row = new  Vector();    
+            ArrayList<String[]> data = new ArrayList<String[]>();
+            rs = con.executeQuery(sql);
+            while(rs.next()){
+                String [] temp  = new String[colname.length];
+                int j= 0;
+                temp[j++] = rs.getString("datetime_pause");
+                temp[j++] = rs.getString("datetime_unpause");
+                data.add(temp);
+            }                                                
+            //add data into table
+            for(int i = 0;i<data.size();i++){                
+                Vector dataRow = new Vector(count);
+                String []temp = new String[colname.length];
+                for(int j=0;j<data.get(i).length;j++){
+                    temp = data.get(i);
+                    if(temp[j]!=null)
+                        dataRow.addElement(temp[j]);
+                    else
+                        dataRow.addElement("");
+                }
+                row.addElement(dataRow);
+            }
+            for (int i = 0; i <colname.length; i++) 
+                col.addElement(colname[i].toString());
+            jTable4.setModel(new tbModel(col, row));            
+        }catch(Exception e){
+        }
+    }    
+    public void viewDial(String date){
+        try{
+            String sql ="SELECT * FROM dial_event WHERE agent_id='a' AND CAST(datetime AS DATE) = '"+date+"' AND event = '4'";
+            String colname[] = {"Interface","Queue", "Datetime","Caller Number","Talk Time"};
+//            String colname[] = {"Interface","Queue", "Datetime","Caller Number"};
+            ResultSet rs = null;            
+            ConnectDatabase con = new  ConnectDatabase();
+            int count = colname.length;
+            Vector col = new Vector(count);
+            Vector row = new  Vector();    
+            ArrayList<String[]> data = new ArrayList<String[]>();
+            rs = con.executeQuery(sql);
+            while(rs.next()){
+                String [] temp  = new String[colname.length];
+                String session = rs.getString("session");
+                sql ="SELECT * FROM dial_event WHERE session ='"+session+"' AND event ='3'";                                          
+                ResultSet rs2 = null;
+                rs2 = con.executeQuery(sql);
+                int j= 0;
+                temp[j++] = rs.getString("Interface");
+                temp[j++] = rs.getString("Queue");
+                temp[j++] = rs.getString("Datetime");
+                if(rs2.next())
+                    temp[j++] = rs2.getString("note1");
+                sql = "SELECT SEC_TO_TIME(note1) FROM dial_event WHERE session ='"+session+"' AND (event ='6' OR event ='5')";
+                rs2 = con.executeQuery(sql);
+                if(rs2.next())
+                    temp[j++] = String.valueOf(rs2.getObject(1));                
+                data.add(temp);
+            }                                                
+            //add data into table
+            for(int i = 0;i<data.size();i++){                
+                Vector dataRow = new Vector(count);
+                String []temp = new String[colname.length];
+                for(int j=0;j<data.get(i).length;j++){
+                    temp = data.get(i);
+                    if(temp[j]!=null)
+                        dataRow.addElement(temp[j]);
+                    else
+                        dataRow.addElement("");
+                }
+                row.addElement(dataRow);
+            }
+            for (int i = 0; i <colname.length; i++) 
+                col.addElement(colname[i].toString());
+            jTable4.setModel(new tbModel(col, row));            
+        }catch(Exception e){
+        }
+    }    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -190,25 +274,28 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
     private void initComponents() {
 
         jFrame1 = new javax.swing.JFrame();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jScrollBar1 = new javax.swing.JScrollBar();
+        jPanel1 = new javax.swing.JPanel();
         tx_agent = new javax.swing.JLabel();
         tx_datetime = new javax.swing.JLabel();
         tx_test = new javax.swing.JLabel();
-        bt_view = new javax.swing.JButton();
-        jLabel5 = new javax.swing.JLabel();
         date1 = new com.toedter.calendar.JDateChooser();
+        jLabel5 = new javax.swing.JLabel();
         date2 = new com.toedter.calendar.JDateChooser();
-        jButton1 = new javax.swing.JButton();
         lb_1 = new javax.swing.JTextField();
         lb_2 = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        bt_view = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
-        jScrollBar1 = new javax.swing.JScrollBar();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable3 = new javax.swing.JTable();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTable4 = new javax.swing.JTable();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
@@ -236,22 +323,13 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
             }
         });
 
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane2.setViewportView(jTable2);
 
         tx_agent.setText("AgentId: a");
 
         tx_datetime.setText("datetimenow");
 
         tx_test.setText("Start Date");
-
-        bt_view.setText("View");
-        bt_view.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bt_viewActionPerformed(evt);
-            }
-        });
-
-        jLabel5.setText("End Date");
 
         date1.setDateFormatString("yyyy-M-dd");
         date1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -265,17 +343,12 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
             }
         });
 
+        jLabel5.setText("End Date");
+
         date2.setDateFormatString("d MMM, yyyy");
         date2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 date2MouseClicked(evt);
-            }
-        });
-
-        jButton1.setText("jButton1");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
             }
         });
 
@@ -288,26 +361,80 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
             }
         });
 
-        jScrollPane2.setViewportView(jTable2);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(tx_agent, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(34, 34, 34)
+                .addComponent(tx_datetime)
+                .addGap(18, 18, 18)
+                .addComponent(tx_test, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(date1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel5)
+                .addGap(31, 31, 31)
+                .addComponent(date2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(lb_1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lb_2, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
 
-        jButton2.setText("jButton2");
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel5, tx_test});
+
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(tx_agent, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(tx_datetime)
+                                .addComponent(tx_test))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel5)
+                                .addComponent(date1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(date2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lb_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lb_2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {date1, date2, jLabel5, tx_agent, tx_datetime, tx_test});
+
+        bt_view.setText("View");
+        bt_view.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bt_viewActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("jButton1");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("view report");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
             }
         });
 
-        jButton3.setText("jButton3");
+        jButton3.setText("loaddata");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton3ActionPerformed(evt);
-            }
-        });
-
-        jButton4.setText("jButton4");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
             }
         });
 
@@ -317,6 +444,62 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
                 jButton5ActionPerformed(evt);
             }
         });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bt_view)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton3)
+                .addGap(77, 77, 77)
+                .addComponent(jButton5)
+                .addContainerGap(349, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bt_view)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(jButton5))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTable3.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane3.setViewportView(jTable3);
+
+        jTable4.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane4.setViewportView(jTable4);
 
         jMenu1.setText("File");
 
@@ -346,77 +529,36 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(tx_agent, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(tx_datetime)
-                        .addGap(29, 29, 29)
-                        .addComponent(tx_test, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(14, 14, 14)
-                        .addComponent(date1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel5)
-                        .addGap(33, 33, 33)
-                        .addComponent(date2, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lb_2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(lb_1, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButton2))
-                    .addComponent(bt_view))
-                .addGap(28, 28, 28)
+                        .addGap(10, 10, 10)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 595, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 586, Short.MAX_VALUE)
+                            .addComponent(jScrollPane4))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                 .addComponent(jScrollBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel5, tx_test});
-
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(tx_agent, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(tx_datetime)
-                            .addComponent(tx_test)
-                            .addComponent(bt_view)
-                            .addComponent(lb_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(date1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(date2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(1, 1, 1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5))
-                    .addComponent(lb_2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(42, 42, 42)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(188, Short.MAX_VALUE))
-            .addComponent(jScrollBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(19, Short.MAX_VALUE))
         );
-
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {date1, date2, jLabel5, tx_agent, tx_datetime, tx_test});
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -470,15 +612,10 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
                 }
                 row.addElement(dataRow);
             }
-            jTable1.setModel(new tbModel(col, row));
-//            jTable1.setModel(new rsTableModel(rs));
-            
-            
+            jTable3.setModel(new tbModel(col, row));                        
         }catch(Exception e){
             System.out.println(e);
-        }
-        
-        
+        }                
     }//GEN-LAST:event_bt_viewActionPerformed
 
     private void date1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_date1KeyPressed
@@ -550,8 +687,7 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
                 System.out.println("\t"+colname[i].toString());
             }                        
             row.addElement(dataRow);
-            jTable1.setModel(new tbModel(col, row) );   
-//            jTable1.
+            jTable2.setModel(new tbModel(col, row) );   
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -569,7 +705,7 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
             Vector col = new Vector(count);
             Vector row = new  Vector();
             String sql = "SELECT CAST( datetime_login AS DATE ),SEC_TO_TIME(SUM(TIME_TO_SEC(timediff(datetime_logout,datetime_login)))) "
-                    + "FROM login_action  where  agent_id ='a' and datetime_login <=  '2012-11-08 23:00:00' "
+                    + "FROM login_action  where  agent_id ='a' and datetime_login <=  '2012-11-21 23:00:00' "
                     + "AND datetime_login >=  '2012-11-01 00:00:00' group by CAST(datetime_login AS DATE);";
             ArrayList<String[]> data = new ArrayList<String[]>();
             rs = con.executeQuery(sql);
@@ -653,17 +789,6 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
         }
         jTable2.setModel(new tbModel(col, row));        
     }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-        int row = jTable2.getSelectedRow();
-        int col = jTable2.getSelectedColumn();
-        System.out.println(row+"\t"+col);
-        jTable2.getModel().getValueAt(row, col);
-        String t = String.valueOf("value is: "+jTable2.getValueAt(row, col));
-//        String t2 = String.valueOf(tbModel.getValueAt(row, col));
-        System.out.println(t);
-    }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
@@ -755,7 +880,6 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel5;
@@ -763,11 +887,15 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollBar jScrollBar1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private static javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private static javax.swing.JTable jTable2;
+    private javax.swing.JTable jTable3;
+    private javax.swing.JTable jTable4;
     private javax.swing.JTextField lb_1;
     private javax.swing.JTextField lb_2;
     private javax.swing.JLabel tx_agent;
@@ -775,38 +903,4 @@ public class MainForm extends javax.swing.JFrame  implements ListSelectionListen
     private javax.swing.JLabel tx_test;
     // End of variables declaration//GEN-END:variables
 
-    @Override
-    public void valueChanged(ListSelectionEvent e) {
-//        if(e.getValueIsAdjusting()) // mouse button not released yet
-//            return;
-        int row = jTable2.getSelectedRow();
-//        if(row < 0)              // true when clearSelection
-//        return;
-        int col = jTable2.getSelectedColumn();   
-//        if(col < 0)              // true when clearSelection
-//        return;
-        String t = String.valueOf(jTable2.getValueAt(row, col));
-        System.out.println(t);
-        jTable2.clearSelection();
-//        jTable2.rowAtPoint(null);
-    }
 }
-//class SelectionListener implements ListSelectionListener {
-//    @Override
-//    public void valueChanged(ListSelectionEvent e) {
-//        try{
-//            if(e.getValueIsAdjusting()) // mouse button not released yet
-//                return;
-//            int row = table.getSelectedRow();
-//            if(row < 0)              // true when clearSelection
-//            return;
-//            int col = table.getSelectedColumn();   
-//            if(col < 0)              // true when clearSelection
-//            return;
-//
-//            table.clearSelection();            
-//        }catch(Exception e){
-//        }
-//        
-//    }
-//}
