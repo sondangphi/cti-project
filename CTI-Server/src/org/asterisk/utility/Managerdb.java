@@ -174,6 +174,9 @@ public class Managerdb {
             return sqlExecute(sqlcom)>0 ? true : false;            
         }
                 
+        public void writedialout(){
+            
+        }
         
         
         public ArrayList<QueueObject> listQueue(){

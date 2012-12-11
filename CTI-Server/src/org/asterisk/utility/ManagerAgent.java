@@ -49,6 +49,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
         private String pauseSession = "";
         private CallObject callObject;
         private static BufferedReader   inputStream = null ;
+        private String numberOut = "";
 	public ManagerAgent(){
 
 	}
@@ -184,23 +185,24 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 
                         break;
                         case 108: //dial out
-                            OriginateAction originateAction;
-                            ManagerResponse originateResponse;
-                            String number = agent.getInterface();
-                            System.out.println("number: "+number);
-                            String numberOut = cmdList.get(1).toString(); 
-                            originateAction = new OriginateAction();
-                            originateAction.setChannel(number);// so extension can su dung de goi di
-                            originateAction.setContext("from-internal");
-                            originateAction.setAsync(true);
-                            originateAction.setExten(numberOut);
-                            System.out.println("numberOut: "+numberOut);
-                            originateAction.setPriority(new Integer(1));
-                            originateAction.setTimeout(new Long(30000));
-                            originateAction.setCallerId(agent.getAgentName());
-                            originateResponse = manager.sendAction(originateAction, 60000);
-                            System.out.println("status dial.out\t"+originateResponse.toString()); 
-                            uti.writeAgentLog("- AGENT - Agent Dial Out\t"+agent.getAgentId()+"\t"+numberOut);
+                            numberOut = cmdList.get(1).toString();
+                            String iface = agent.getInterface();
+                            OriginateAction originateAction = null;
+                            originateAction = dialOut(iface, numberOut);                                                      
+                            System.out.println("number: "+iface);                            
+                            System.out.println("numberOut: "+numberOut);                            
+                            result = manager.sendAction(originateAction, 30000).getResponse().toString();  
+                            if(result.equalsIgnoreCase("success")){
+                                System.out.println("Dial out success");	
+                                uti.writeAgentLog("- AGENT - Agent DialOut Success\t"+agent.getAgentId()+"\t"+numberOut);
+                                sendToAgent("DIALOUT");
+                                System.out.println("Dial time: "+uti.getDatetime());
+                                //wrire database
+                            }else{
+                                System.out.println("Dial out fail");	                          
+                                uti.writeAgentLog("- AGENT - Agent DialOut Fail\t"+agent.getAgentId()+"\t"+numberOut);
+                                //wrire database
+                            }                                                        
                         break;
                         case 110:  
                         break;
@@ -213,7 +215,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                                     mdb_agent.updateStatus(agent.getAgentId(), "NULL", "NULL");		
                                     mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());
                                     System.out.println("LOGOUTSUCC(exit system)");            
-                                    uti.writeAgentLog("Agent logout successful(exit system)\t"+addressAgent+"\t"+agent.getAgentId());
+                                    uti.writeAgentLog("- AGENT - Agent logout successful - exit system\t"+addressAgent+"\t"+agent.getAgentId());
                                     agent = null;
                                     closeConnect();                                                  
                                 }	            		
@@ -234,7 +236,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                         result = manager.sendAction(removeQueue).getResponse().toString();
                         mdb_agent.updateStatus(agent.getAgentId(), "NULL", "NULL");		
                         mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());   
-                        uti.writeAgentLog("Interrup connection by client\t"+addressAgent+"\t"+agent.getAgentId());
+                        uti.writeAgentLog("- AGENT - Interrup connection by client\t"+addressAgent+"\t"+agent.getAgentId());
                         agent = null;
                         closeConnect();                            
                     } catch (Exception e1) {}
@@ -290,6 +292,18 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
             queuePause.setPaused(pause);
             return queuePause;
 	}
+        
+        public OriginateAction dialOut(String iface, String phoneNumber){
+            OriginateAction originateAction = new OriginateAction();
+            originateAction.setChannel(iface);// so extension can su dung de goi di "SIP/number"
+            originateAction.setContext("from-internal");
+            originateAction.setAsync(true);
+            originateAction.setExten(phoneNumber);// so dien thoai can goi "number"        
+            originateAction.setPriority(new Integer(1));
+            originateAction.setTimeout(new Long(30000));
+            originateAction.setCallerId(agent.getAgentName());
+            return originateAction;
+        }
 	
 	public void getAgent(ArrayList<String> list){
             ArrayList<String> cmdList = list;
@@ -424,8 +438,13 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                 System.out.println("***********************\t HangupEvent\t ***********************");
                 String channel = hangEvent.getChannel();                    
                 channel = channel.substring(0, channel.indexOf("-"));
-                String iface = agent.getInterface();
-                System.out.println("iface(HangupEvent):"+iface);
+                String iface = agent.getInterface();                                       
+                if(numberOut.equalsIgnoreCase(hangEvent.getCallerIdNum())){    
+                    System.out.println("getCallerIdNum: "+hangEvent.getCallerIdNum());
+                    System.out.println("numberOut: "+numberOut);
+                    numberOut = "";
+                    System.out.println("hangup dial out: "+uti.getDatetime());
+                }
                 if(iface.equalsIgnoreCase(channel)){  
                     sendToAgent("HANGUP");
                     System.out.println("chann: "+channel);
@@ -438,7 +457,27 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     }else
                         System.out.println("callObject == null "+channel);
                 }                              	
-            }                
+            }             
+            
+            if(event instanceof BridgeEvent){
+                BridgeEvent briEvent = (BridgeEvent)event;
+                String state = null;
+                if(briEvent.isLink()){        		
+                    System.out.println("***********************\t BridgeEvent Link\t ***********************");
+                    state = briEvent.BRIDGE_STATE_LINK;
+                    if(numberOut.equalsIgnoreCase(briEvent.getCallerId2())){                            
+                        System.out.println("numberOut \t"+briEvent.getCallerId2());  
+                        //connect dial out succesfull and write database
+                    }
+                }else{
+                    System.out.println("***********************\t BridgeEvent UnLink\t ***********************");
+                    state = briEvent.BRIDGE_STATE_UNLINK;
+                    if(numberOut.equalsIgnoreCase(briEvent.getCallerId2())){
+                        System.out.println("numberOut \t"+briEvent.getCallerId2());
+                        //finish dial out and write database
+                    }
+                }
+            }            
 	        
             } catch (IOException e) {
                     // TODO Auto-generated catch block

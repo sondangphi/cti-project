@@ -64,8 +64,8 @@ public class Utility {
         public String getSession(){
             String temps = "QWERTYUIOPASDFGHJKLZXCVBNMabcdefghijklmnopqrstuvwxyz1234567890";
             Random rnd = new Random();
-            StringBuilder sb = new StringBuilder( 10 );
-            for( int i = 0; i < 10; i++ ) 
+            StringBuilder sb = new StringBuilder( 15 );
+            for( int i = 0; i < 15; i++ ) 
                 sb.append( temps.charAt( rnd.nextInt(temps.length()) ) );
             return sb.toString();           
         }
