@@ -170,6 +170,7 @@ public class Agent implements Runnable{
                                     customer.setEmail(rs.getString("email"));
                                     customer.setGender(rs.getString("gender"));
                                     customer.setPhone1(rs.getString("homephone1"));
+                                    customer.setId(rs.getString("id"));
                                     String gender = customer.getGender();
                                     System.out.println("already information"); 
                                     mainForm2.txt_add.setText(customer.getAddress());
@@ -253,7 +254,7 @@ public class Agent implements Runnable{
 //                } catch (Throwable ex) {
 //                    Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
 //                }
-//                System.out.println("Interupt connection by Server");                
+                System.out.println("Interupt connection by Server");                
             }
             catch (IllegalArgumentException e) {
                     e.printStackTrace();

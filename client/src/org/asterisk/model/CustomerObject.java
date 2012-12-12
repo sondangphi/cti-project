@@ -10,7 +10,7 @@ package org.asterisk.model;
  */
 public class CustomerObject {
     
-    String name,mobile,address,gender,email,phone1;
+    String name,mobile,address,gender,email,phone1,id;
     
     public CustomerObject(String m){
         mobile = m;
@@ -61,4 +61,10 @@ public class CustomerObject {
         return phone1;
     }   
     
+    public void setId(String i){
+        id = i;
+    }
+    public String getId(){
+        return id;
+    }    
 }
