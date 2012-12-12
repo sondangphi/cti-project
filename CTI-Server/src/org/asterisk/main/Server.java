@@ -17,7 +17,7 @@ public class Server{
 	private static int Port_queue = 33333;
 //        private static String hostdb = "172.168.10.208";      
         private static String Mysql_server = "127.0.0.1";      
-        private static String Mysql_dbname = "cti_database";
+        private static String Mysql_dbname = "ast_callcenter";
 	private static String Mysql_user = "callcenter";
 	private static String Mysql_pwd  = "callcenter";
         private static String Asterisk_server = "127.0.0.1";
@@ -34,6 +34,7 @@ public class Server{
 	 */
 	public static void main(String[] args) throws Exception {
             // TODO Auto-generated method stub
+            manager = null;
             uti = new Utility();	
             //create configuration file if not exist
             File f = new File(filename);
@@ -80,13 +81,14 @@ public class Server{
 	}
         
         public static void checkSessionLogout()throws Exception{
+            Thread.sleep(10000);
             uti.writeAsteriskLog("- SYSTE  - Check DateTime Agent unLogout");
             String date = uti.getDate();            
             String sql = "SELECT * FROM login_action WHERE CAST(datetime_login AS DATE) >=  '"+date+"'";
             ResultSet rs = mdb_agent.sqlQuery(sql);
             while(rs.next()){
                 String datelogout = String.valueOf(rs.getObject("datetime_logout"));               
-                if(datelogout.equalsIgnoreCase("null")){
+                if(datelogout.equalsIgnoreCase("null")){                    
                     String agentid = String.valueOf(rs.getObject("agent_id"));     
                     String iface = String.valueOf(rs.getObject("interface")); 
                     String queue = String.valueOf(rs.getObject("queue")); 
@@ -109,6 +111,7 @@ public class Server{
             queueRemove.setInterface(iface);
             queueRemove.setQueue(queue);
             manager = alisten.manager;
+            manager.sendAction(queueRemove);
             String result = manager.sendAction(queueRemove).getResponse().toString();
             return result;
 	}

@@ -99,7 +99,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                         if(mdb_agent.checkLogin(agent.getAgentId(), agent.getPass(), agent.getRole())){
                             if(mdb_agent.checkStatus(agent.getInterface())){
                             QueueAddAction qAdd = addQueue(agent.getAgentId(), agent.getInterface(), agent.getQueueId(),agent.getPenalty());
-                            result = manager.sendAction(qAdd, 2000).getResponse().toString();
+                            result = manager.sendAction(qAdd, 60000).getResponse().toString();
                                 if(result.equalsIgnoreCase("success")){
                                     mdb_agent.updateStatus(agent.getAgentId(), agent.getInterface(), agent.getQueueId());
                                     mdb_agent.loginAction(agent.getSesion(),agent.getAgentId(), agent.getInterface(), agent.getQueueId());
