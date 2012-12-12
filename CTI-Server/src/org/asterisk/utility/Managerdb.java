@@ -178,6 +178,47 @@ public class Managerdb {
             
         }
         
+        public void checkSessionLogout()throws Exception{
+            uti.writeAsteriskLog("- SYSTE  - Check DateTime Agent unLogout");
+            String date = uti.getDate();            
+            String sql = "SELECT * FROM login_action WHERE CAST(datetime_login AS DATE) >=  '"+date+"'";
+            ResultSet rs = sqlQuery(sql);
+            String datenow = uti.getDatetime();
+            while(rs.next()){
+                String datelogout = String.valueOf(rs.getObject("datetime_logout"));               
+                if(datelogout.equalsIgnoreCase("null")){
+                    String agentid = String.valueOf(rs.getObject("agent_id"));               
+                    String session = rs.getString("session");                    
+                    sql = "UPDATE login_action SET datetime_logout ='"+datenow+"'"
+                        + " WHERE session = '"+session+"'" ;
+                    int rs2 = sqlExecute(sql);
+                    if(rs2 != 0)
+                        uti.writeAsteriskLog("- SYSTE  - Update datetime agent unlogout\t"+agentid+"\t"+session);
+                        System.out.println("update success\t"+session);
+                }
+            }
+        }
+        
+        public void checkSessionPause()throws Exception{
+            uti.writeAsteriskLog("- SYSTE  - Check DateTime Agent Pause");
+            String date = uti.getDate();            
+            String sql = "SELECT * FROM pause_action WHERE CAST(datetime_pause AS DATE) >=  '"+date+"'";
+            ResultSet rs = sqlQuery(sql);
+            String datenow = uti.getDatetime();
+            while(rs.next()){
+                String datepause = String.valueOf(rs.getObject("datetime_unpause"));               
+                if(datepause.equalsIgnoreCase("null")){
+                    String agentid = String.valueOf(rs.getObject("agent_id"));               
+                    String session = rs.getString("session");                    
+                    sql = "UPDATE pause_action SET datetime_unpause ='"+datenow+"'"
+                        + " WHERE session = '"+session+"'" ;
+                    int rs2 = sqlExecute(sql);
+                    if(rs2 != 0)
+                        uti.writeAsteriskLog("- SYSTE  - Update Datetime Agent Pause\t"+agentid+"\t"+session);
+                        System.out.println("update success\t"+session);
+                }
+            }
+        }        
         
         public ArrayList<QueueObject> listQueue(){
             ArrayList<QueueObject> list = new ArrayList<QueueObject>();
