@@ -58,7 +58,11 @@ public class Server{
             mdb_agent = new Managerdb(Mysql_dbname,Mysql_user,Mysql_pwd,Mysql_server);
             if(mdb_agent.isConnect()){
                 uti.writeAsteriskLog("- SYSTE  - Connect to Database Successful");
-                System.out.println("Connect to Database Successful");
+                System.out.println("Connect to Database Successful");                
+                //check agent Pause
+                mdb_agent.checkSessionPause();
+                //check agent unLogout
+                mdb_agent.checkSessionLogout();                
                 //start thread AgentListen
                 alisten = new AgentListen( Port_agent, mdb_agent );
                 //start thread QueueListen
@@ -69,4 +73,5 @@ public class Server{
                 System.out.println("Interrup Connection.");                
             }
 	}
+        
 }

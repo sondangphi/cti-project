@@ -24,7 +24,12 @@ public class Utility {
             String datetime = dateFormat.format(cal.getTime()).toString();	
             return datetime;
 	}
-	
+	public String getDate(){		
+            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            Calendar cal = Calendar.getInstance();
+            String datetime = dateFormat.format(cal.getTime()).toString();	
+            return datetime;
+	}	
 	public void writeLog(String log) throws IOException{
             Writer output;
             output = new BufferedWriter(new FileWriter("logfile.log",true));
