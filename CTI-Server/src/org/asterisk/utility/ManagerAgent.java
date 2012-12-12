@@ -135,7 +135,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                                     mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());
                                     sendToAgent("LOGOUTSUCC");
                                     System.out.println("LOGOUTSUCC");            
-                                    uti.writeAgentLog("- AGENT - Agent logout successful\t"+addressAgent+"\t"+agent.getAgentId());
+                                    uti.writeAgentLog("- AGENT - Agent logout\t"+addressAgent+"\t"+agent.getAgentId());
                                     agent = null;
                                     closeConnect();          
                                 }else{		            			
