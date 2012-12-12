@@ -93,11 +93,11 @@ public class Server{
                     String session = rs.getString("session");    
                     mdb_agent.updateStatus(agentid, "NULL", "NULL");
                     mdb_agent.logoutAction(session, agentid);
-                    uti.writeAsteriskLog("- SYSTE  - Update datetime agent unlogout\t"+agentid+"\t"+session);
+                    uti.writeAsteriskLog("- SYSTE  - Update datetime agent unlogout(updatetime)\t"+agentid+"\t"+session);
                     System.out.println("update success logout\t"+session);
                     String result = removeQueue(iface, queue);
                     if(result.equalsIgnoreCase("success")){
-                        uti.writeAsteriskLog("- SYSTE  - Update datetime agent unlogout\t"+agentid+"\t"+session);
+                        uti.writeAsteriskLog("- SYSTE  - Update datetime agent unlogout(remove queue)\t"+agentid+"\t"+session);
                         System.out.println("Remove queue success\t"+queue);
                     }
                 }
