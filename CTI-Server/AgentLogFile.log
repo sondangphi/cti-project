@@ -163,3 +163,20 @@
 2012-12-07 17:39:56	- AGENT - Accept connect from address	127.0.0.1
 2012-12-07 17:39:56	- AGENT - Agent login successful 	127.0.0.1	a
 2012-12-07 17:42:01	- AGENT - Agent logout successful	127.0.0.1	a
+2012-12-12 11:52:07	- AGENT - Accept connect from address	127.0.0.1
+2012-12-12 11:52:07	- AGENT - Agent login fail	127.0.0.1	a
+2012-12-12 12:39:46	- AGENT - Accept connect from address	127.0.0.1
+2012-12-12 12:39:46	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-12 13:17:08	- AGENT - Accept connect from address	127.0.0.1
+2012-12-12 13:17:08	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-12 13:17:12	- AGENT - Agent logout	127.0.0.1	a
+2012-12-12 13:17:27	- AGENT - Accept connect from address	127.0.0.1
+2012-12-12 13:17:27	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-12 13:24:27	- AGENT - Accept connect from address	127.0.0.1
+2012-12-12 13:24:27	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-12 13:24:40	- AGENT - Interrup connection by client	127.0.0.1	a
+2012-12-12 13:24:56	- AGENT - Accept connect from address	127.0.0.1
+2012-12-12 13:24:56	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-12 13:27:00	- AGENT - Accept connect from address	127.0.0.1
+2012-12-12 13:27:00	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-12 13:27:02	- AGENT - Agent logout	127.0.0.1	a

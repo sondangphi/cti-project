@@ -2,10 +2,14 @@ package org.asterisk.main;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.ResultSet;
 import org.asterisk.utility.AgentListen;
 import org.asterisk.utility.Managerdb;
 import org.asterisk.utility.QueueListen;
 import org.asterisk.utility.Utility;
+import org.asteriskjava.manager.ManagerConnection;
+import org.asteriskjava.manager.action.QueueRemoveAction;
 
 public class Server{
 	private static Utility uti;	
@@ -22,6 +26,7 @@ public class Server{
 	private static Managerdb mdb_agent;
         private static QueueListen qlisten;  
         private static AgentListen alisten; 
+        private static ManagerConnection manager;
         static String filename = "infor.properties";                         		
 	/**
 	 * @param args
@@ -61,17 +66,51 @@ public class Server{
                 System.out.println("Connect to Database Successful");                
                 //check agent Pause
                 mdb_agent.checkSessionPause();
-                //check agent unLogout
-                mdb_agent.checkSessionLogout();                
                 //start thread AgentListen
                 alisten = new AgentListen( Port_agent, mdb_agent );
-                //start thread QueueListen
-                qlisten = new QueueListen( Port_queue, mdb_agent );                
+                //start thread QueueListen                
+                qlisten = new QueueListen( Port_queue, mdb_agent );
+                //check agent unLogout
+                checkSessionLogout();
             } else {
                 uti.writeAsteriskLog("- SYSTE  - Connect to Database Fail");
                 System.out.println("Connect to Database Fail");
                 System.out.println("Interrup Connection.");                
             }
+	}
+        
+        public static void checkSessionLogout()throws Exception{
+            uti.writeAsteriskLog("- SYSTE  - Check DateTime Agent unLogout");
+            String date = uti.getDate();            
+            String sql = "SELECT * FROM login_action WHERE CAST(datetime_login AS DATE) >=  '"+date+"'";
+            ResultSet rs = mdb_agent.sqlQuery(sql);
+            while(rs.next()){
+                String datelogout = String.valueOf(rs.getObject("datetime_logout"));               
+                if(datelogout.equalsIgnoreCase("null")){
+                    String agentid = String.valueOf(rs.getObject("agent_id"));     
+                    String iface = String.valueOf(rs.getObject("interface")); 
+                    String queue = String.valueOf(rs.getObject("queue")); 
+                    String session = rs.getString("session");    
+                    mdb_agent.updateStatus(agentid, "NULL", "NULL");
+                    mdb_agent.logoutAction(session, agentid);
+                    uti.writeAsteriskLog("- SYSTE  - Update datetime agent unlogout\t"+agentid+"\t"+session);
+                    System.out.println("update success logout\t"+session);
+                    String result = removeQueue(iface, queue);
+                    if(result.equalsIgnoreCase("success")){
+                        uti.writeAsteriskLog("- SYSTE  - Update datetime agent unlogout\t"+agentid+"\t"+session);
+                        System.out.println("Remove queue success\t"+queue);
+                    }
+                }
+            }
+        }      
+        
+        public static String removeQueue(String iface, String queue) throws Exception{
+            QueueRemoveAction queueRemove = new QueueRemoveAction();
+            queueRemove.setInterface(iface);
+            queueRemove.setQueue(queue);
+            manager = alisten.manager;
+            String result = manager.sendAction(queueRemove).getResponse().toString();
+            return result;
 	}
         
 }

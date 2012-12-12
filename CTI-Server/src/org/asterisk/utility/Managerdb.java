@@ -187,14 +187,23 @@ public class Managerdb {
             while(rs.next()){
                 String datelogout = String.valueOf(rs.getObject("datetime_logout"));               
                 if(datelogout.equalsIgnoreCase("null")){
-                    String agentid = String.valueOf(rs.getObject("agent_id"));               
-                    String session = rs.getString("session");                    
-                    sql = "UPDATE login_action SET datetime_logout ='"+datenow+"'"
-                        + " WHERE session = '"+session+"'" ;
-                    int rs2 = sqlExecute(sql);
-                    if(rs2 != 0)
-                        uti.writeAsteriskLog("- SYSTE  - Update datetime agent unlogout\t"+agentid+"\t"+session);
-                        System.out.println("update success\t"+session);
+                    String agentid = String.valueOf(rs.getObject("agent_id"));     
+                    String iface = String.valueOf(rs.getObject("interface")); 
+                    String queue = String.valueOf(rs.getObject("queue")); 
+                    String session = rs.getString("session");    
+                    updateStatus(agentid, "NULL", "NULL");
+                    logoutAction(session, agentid);
+                    uti.writeAsteriskLog("- SYSTE  - Update datetime agent unlogout\t"+agentid+"\t"+session);
+                    System.out.println("update success logout\t"+session);
+                    
+//                    sql = "UPDATE login_action SET datetime_logout ='"+datenow+"'"
+//                        + " WHERE session = '"+session+"'" ;                    
+//                    int rs2 = sqlExecute(sql);
+//                    if(rs2 != 0)
+//                        uti.writeAsteriskLog("- SYSTE  - Update datetime agent unlogout\t"+agentid+"\t"+session);
+//                        System.out.println("update success\t"+session);
+//                    String sql2 = "UPDATE agent_status SET interface =null,queue=null WHERE agent_id = '"+agentid+"'" ;
+//                    rs2 = sqlExecute(sql2);
                 }
             }
         }
@@ -209,13 +218,10 @@ public class Managerdb {
                 String datepause = String.valueOf(rs.getObject("datetime_unpause"));               
                 if(datepause.equalsIgnoreCase("null")){
                     String agentid = String.valueOf(rs.getObject("agent_id"));               
-                    String session = rs.getString("session");                    
-                    sql = "UPDATE pause_action SET datetime_unpause ='"+datenow+"'"
-                        + " WHERE session = '"+session+"'" ;
-                    int rs2 = sqlExecute(sql);
-                    if(rs2 != 0)
-                        uti.writeAsteriskLog("- SYSTE  - Update Datetime Agent Pause\t"+agentid+"\t"+session);
-                        System.out.println("update success\t"+session);
+                    String session = rs.getString("session");  
+                    unpauseAction(session, agentid);
+                    uti.writeAsteriskLog("- SYSTE  - Update Datetime Agent Pause\t"+agentid+"\t"+session);
+                    System.out.println("update success pause\t"+session);
                 }
             }
         }        
