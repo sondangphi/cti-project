@@ -16,12 +16,14 @@ import java.util.StringTokenizer;
 
 public class Utility {
         Properties prop = new Properties();
+        TimerClock clock = null;
     
         String filename = "infor.properties"; 
 	public String getDatetime(){		
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Calendar cal = Calendar.getInstance();
-            String datetime = dateFormat.format(cal.getTime()).toString();	
+            String datetime = dateFormat.format(cal.getTime()).toString();
+//            clock.secs;
             return datetime;
 	}
 	public String getDate(){		
