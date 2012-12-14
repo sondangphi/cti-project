@@ -35,7 +35,7 @@ public class Managerdb {
                 connection.setAutoCommit(true); 
                 System.out.println("end managerdb");
             }catch(Exception e){
-                uti.writeAsteriskLog("Can't connect to Database - Exit program");
+                uti.writeAsteriskLog("- MYSQL - Can't connect to Database - Exit program");
                 System.out.println("exception managerdb\r\n"+e);
             }
 
