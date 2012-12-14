@@ -45,6 +45,10 @@ public class Agent implements Runnable{
         private static Utility uti;
         
         public CustomerObject customer;
+        
+        private boolean close = true;
+        private TimerClock clock = null;
+        private TimerClock worktime = null;
 	
 	public Agent(){
 		
@@ -98,6 +102,8 @@ public class Agent implements Runnable{
                         loginform.setVisible(false);
                         loginform.dispose();
                         loginform = null;
+                        worktime = new TimerClock(mainForm2, false);
+                        worktime.start();
                     break;
                     case LOGINFAIL: //result LOGIN FAIL
                         System.out.println("LOGIN FAIL");
@@ -110,12 +116,11 @@ public class Agent implements Runnable{
                             Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     break;
-                    case LOGOUTSUCC: //result LOGOUT SUCCESS
-                        System.out.println("logout");
-                        new LoginForm().setVisible(true);
-                        mainForm2.setVisible(false);
-                        mainForm2.dispose();                                        
+                    case LOGOUTSUCC: //result LOGOUT SUCCESS              
                         try {
+                            mainForm2.setVisible(false);
+                            mainForm2.dispose(); 
+                            close = false;
                             closeConnect();  
                             this.finalize();
                         } catch (Throwable ex) {
@@ -127,10 +132,12 @@ public class Agent implements Runnable{
                         System.out.println("LOGOUT FAIL");
                     break;	            	
                     case PAUSESUCC: //result PAUSE
+                        worktime.pause();
                     break;
                     case PAUSEFAIL: //result PAUSE
                     break;
-                    case UNPAUSESUCC: //result UNPAUSE
+                    case UNPAUSESUCC: //result UNPAUSESUCC
+                        worktime.resume();
                     break;
                     case UNPAUSEFAIL: //result UNPAUSE
                     break;
@@ -148,14 +155,14 @@ public class Agent implements Runnable{
                         try{
                             System.out.println("RINGING");
                             String callerNum = cmdList.get(1);
-                            mainForm2.lb_callerid.setText(callerNum);
                             mainForm2.lb_status.setText("Ringing...");
-                            mainForm2.btn_logout.setEnabled(false);
+//                            mainForm2.btn_logout.setEnabled(false);
                             mainForm2.btn_pause.setEnabled(false);
-                            mainForm2.btn_dial.setEnabled(false);
-                            mainForm2.MenuItem_logout.setEnabled(false);
-                            mainForm2.MenuItem_exit.setEnabled(false);        
+//                            mainForm2.btn_dial.setEnabled(false);
+//                            mainForm2.MenuItem_logout.setEnabled(false);
+//                            mainForm2.MenuItem_exit.setEnabled(false);        
                             mainForm2.btn_feedback.setEnabled(true);
+                            mainForm2.setAllEnable(false);
                             //open connect to database
                             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
                             if(con.isConnect()){
@@ -179,10 +186,12 @@ public class Agent implements Runnable{
                                     mainForm2.txt_mobile.setText(customer.getMobile());
                                     mainForm2.txt_phone1.setText(customer.getPhone1());
                                     if(gender.equalsIgnoreCase("1"))
-                                        mainForm2.cb_gioitinh.setSelectedIndex(0);
+                                        mainForm2.cb_gender.setSelectedIndex(0);
                                     else
-                                        mainForm2.cb_gioitinh.setSelectedIndex(1);
+                                        mainForm2.cb_gender.setSelectedIndex(1);
                                     mainForm2.btn_new.setEnabled(false);
+                                    mainForm2.btn_update.setEnabled(true);
+                                    mainForm2.btn_feedback.setEnabled(true);
                                     sql = "SELECT * FROM feedback WHERE mobile ='"+callerNum+"'";
                                     rs = con.executeQuery(sql);
                                     if(rs != null){
@@ -194,13 +203,13 @@ public class Agent implements Runnable{
                                     System.out.println("not ready information");  
                                     mainForm2.txt_mobile.setText(callerNum);
                                     mainForm2.btn_new.setEnabled(true);
+                                    mainForm2.btn_update.setEnabled(false);
+                                    mainForm2.btn_feedback.setEnabled(true);
                                     mainForm2.txt_add.setText("");
                                     mainForm2.txt_email.setText("");
                                     mainForm2.txt_name.setText("");
                                     mainForm2.txt_email.setText("");                                    
                                     mainForm2.txt_phone1.setText("");  
-//                                    mainForm2.table_report.removeAll();
-//                                    mainForm2.table_report.setModel(null);
                                     String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
                                     int count = colname.length;
                                     Vector col = new Vector(count);
@@ -226,16 +235,15 @@ public class Agent implements Runnable{
                     case HANGUP: 
                         System.out.println("HANGUP");
                         mainForm2.lb_status.setText("Ready");
-                        mainForm2.lb_callerid.setText("");
-                        mainForm2.btn_logout.setEnabled(true);
                         mainForm2.btn_pause.setEnabled(true);
-                        mainForm2.MenuItem_logout.setEnabled(true);
-                        mainForm2.MenuItem_exit.setEnabled(true);
-                        mainForm2.btn_dial.setEnabled(true);
+                        mainForm2.setAllEnable(true);
+                        clock.stop();
                     break;
                     case UP: //EVENT ANSWER CALL	     
                         System.out.println("ANSWER");
-                        mainForm2.lb_status.setText("Connected");
+                        mainForm2.lb_status.setText("Busy");
+                        clock = new TimerClock(mainForm2, true);
+                        clock.start();
                     break;
                     default: 
                     break;
@@ -244,17 +252,12 @@ public class Agent implements Runnable{
             }  
             catch(SocketException e){
                 System.out.println("Socket exception client: "+e);
-                System.out.println("logout");
-//                new LoginForm().setVisible(true);   
-//                mainForm2.setVisible(false);
-//                mainForm2.dispose();                                                     
-//                try {
-//                    closeConnect();  
-//                    this.finalize();
-//                } catch (Throwable ex) {
-//                    Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-                System.out.println("Interupt connection by Server");                
+                System.out.println("logout & new login form");
+                if(close){
+                    mainForm2.setVisible(false);
+                    mainForm2.dispose();
+                }                    
+                new LoginForm().setVisible(true);                                                                    
             }
             catch (IllegalArgumentException e) {
                     e.printStackTrace();
@@ -339,7 +342,7 @@ public class Agent implements Runnable{
                 System.out.println("close socket");
             }
             infromServer = null;            
-            System.out.println("finish close session");            
+            System.out.println("finish close session");   
 	}        
 	public enum CODE{
             LOGINSUCC, LOGINFAIL, LOGOUTSUCC, LOGOUTFAIL,		

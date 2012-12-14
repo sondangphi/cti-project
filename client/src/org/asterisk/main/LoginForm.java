@@ -58,7 +58,7 @@ public class LoginForm extends javax.swing.JFrame {
     ConfigForm configform;
     public LoginForm() {
         initComponents();
-        Image image = Toolkit.getDefaultToolkit().getImage("src/org/asterisk/images/stock_lock.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("stock_lock.png");
         try{
             agentObject = new AgentObject();
             uti = new Utility();		
@@ -89,8 +89,10 @@ public class LoginForm extends javax.swing.JFrame {
             listQueue = new ArrayList<QueueObject>();
             getListQueue();      
             queueId = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
-            if(queueId == null)
+            if(queueId == null){
                 lb_notify_queue.setText("(*)");
+                lb_status.setText("Check information or your network!");
+            }                
             else 
                 lb_notify_queue.setText("");
         }catch(Exception e){

@@ -24,7 +24,7 @@ public class ConnectDatabase {
 	
 	public ConnectDatabase() throws ClassNotFoundException, SQLException{
 		Class.forName(driverName);
-		connection = DriverManager.getConnection("jdbc:mysql://"+serverName+database,user,pwd);
+		connection = DriverManager.getConnection("jdbc:mysql://"+serverName+database+"?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true",user,pwd);
 	}
 	
 	public ConnectDatabase(String db, String username, String pass,String host) throws IOException {
@@ -35,7 +35,7 @@ public class ConnectDatabase {
                 pwd  = pass;
                 serverName = host;
                 Class.forName(driverName);		
-                connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+database,user,pwd); 
+                connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+database+"?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true",user,pwd); 
                 connection.setAutoCommit(true); 
                 System.out.println("end managerdb");
             }catch(Exception e){
