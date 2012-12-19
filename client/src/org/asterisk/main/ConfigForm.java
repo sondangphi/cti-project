@@ -36,6 +36,7 @@ public class ConfigForm extends javax.swing.JFrame {
             tx_qport.setText(qport);
             this.setIconImage(image); 
             this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );
+            initComponents();
         }catch(Exception e){
         }        
     }

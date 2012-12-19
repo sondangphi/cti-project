@@ -15,12 +15,12 @@ import org.asterisk.model.QueueObject;
 
 public class ConnectDatabase {
 
-	private static Connection connection = null;
-	private static String user = "cti";
-	private static String pwd = "123456";
-	private static String database = "cti_database";
-	private static String driverName = "com.mysql.jdbc.Driver";
-	private static String serverName = "172.168.10.208:3306/";
+	private  Connection connection = null;
+	private  String user = "cti";
+	private  String pwd = "123456";
+	private  String database = "cti_database";
+	private  String driverName = "com.mysql.jdbc.Driver";
+	private  String serverName = "172.168.10.208:3306/";
 	
 	public ConnectDatabase() throws ClassNotFoundException, SQLException{
 		Class.forName(driverName);

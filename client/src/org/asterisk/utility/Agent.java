@@ -1,15 +1,20 @@
 package org.asterisk.utility;
 
 
+import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.Vector;
@@ -27,91 +32,92 @@ public class Agent implements Runnable{
 	/**
 	 * @param args
 	 */
-	static boolean running = true;
-	static Thread mainThread;
-	static Socket clientSocket;
-        static AgentObject agentObject;
-        private static LoginForm loginform;        
-        private static BufferedReader infromServer = null;
-        MainForm2 mainForm2 = null;
-	int data;
+	private boolean running = true;
+	private Thread mainThread;
+	private Socket clientSocket;
+        private AgentObject agentObject;
+        private LoginForm loginform;        
+        private MainForm2 mainForm2;
         
-        private static String filename = "infor.properties";                         		
-        private static String Mysql_server = "172.168.10.208";      
-        private static String Mysql_dbname = "cti_database";
-	private static String Mysql_user = "cti";
-	private static String Mysql_pwd  = "123456";   
-        private static ConnectDatabase con;
-        private static Utility uti;
+        private String filename = "infor.properties";                         		
+        private String Mysql_server = "172.168.10.208";      
+        private String Mysql_dbname = "ast_callcenter";
+	private String Mysql_user = "callcenter";
+	private String Mysql_pwd  = "callcenter";   
+        private ConnectDatabase con;
+        private Utility uti;
         
         public CustomerObject customer;
         
         private boolean close = true;
-        private TimerClock clock = null;
-        private TimerClock worktime = null;
-	
+        private TimerClock clock;
+        private TimerClock worktime;
+        
+        private BufferedReader infromServer;
+        private PrintWriter outtoServer;        
+        private String com;  
+        
+//        private int secs = 0;
+//        private int mins = 0;
+//        private int hrs = 0;
+//        private int tempsec = 0;
+//        private int tempmin = 0;
+//        private int temphr = 0;    
+//        private String time = "";  
+//        private DecimalFormat dFormat = new DecimalFormat("00");
+        
 	public Agent(){
 		
 	}
-        public Agent(Socket soc){
-            clientSocket = soc;
-            mainThread = new Thread(this);
-            mainThread.start();
-	}
-        public Agent(Socket soc, LoginForm login)throws Exception{
-            clientSocket = soc;
-            loginform = login;
-            agentObject = loginform.agentObject;
-            mainThread = new Thread(this);
-            mainThread.start();
-            sendtoServer(loginform.cmd);                
-	}
-
-	public Agent(String address, int port, String cmd){
+        //new thread for client
+        public Agent(Socket s, LoginForm login, AgentObject agentO, String command)throws Exception{
             try{
-                clientSocket = new Socket(address, port);	
+                clientSocket = s;
+                loginform = login;
+                agentObject = agentO;
+                com = command;
                 mainThread = new Thread(this);
-                mainThread.start();
-                sendtoServer(cmd);                
-            }catch(Exception ex){
-            }
-	}	
-
+                mainThread.start();                
+            }catch(Exception e){
+                System.out.println("Exception agent thread: "+e);
+            }                
+	}      	
 	@Override
 	public void run() {
             // TODO Auto-generated method stub
             try{
-                String command = null;
+                String command = "";
                 CODE code;
                 uti = new Utility();
                 Mysql_dbname = uti.readInfor(filename, "MySql_database");
                 Mysql_server = uti.readInfor(filename, "MySql_server");
                 Mysql_user = uti.readInfor(filename, "MySql_user");
                 Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
-                while(clientSocket.isConnected()){
-                    infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                outtoServer = new PrintWriter(clientSocket.getOutputStream());
+                infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));              
+                sendtoServer(com);
+                while(running){                    
                     command = infromServer.readLine();
+                    System.out.println("***listen from server***");
+                    System.out.println("***receive from server: "+command);
                     ArrayList<String> cmdList = getList(command);							
                     code = CODE.valueOf(cmdList.get(0).toUpperCase());
                     switch(code){
                     case LOGINSUCC: //result LOGIN SUCCESS
                         System.out.println("LOGIN SUCCESS");
                         agentObject.setAgentName(cmdList.get(1));
+                        agentObject.setSession(cmdList.get(2));
                         mainForm2 = new MainForm2(this, agentObject);
                         mainForm2.setVisible(true);
                         loginform.setVisible(false);
-                        loginform.dispose();
-                        loginform = null;
                         worktime = new TimerClock(mainForm2, false);
                         worktime.start();
                     break;
-                    case LOGINFAIL: //result LOGIN FAIL
-                        System.out.println("LOGIN FAIL");
-                        loginform.lb_status.setText("Login Fail! Please check information again.");
-//                        connected = false;                                           
+                    case LOGINFAIL: //result LOGIN FAIL                                                     
                         try {
+                            System.out.println("LOGIN FAIL");
+                            loginform.lb_status.setText(cmdList.get(1));
                             closeConnect();
-                            this.finalize();
                         } catch (Throwable ex) {
                             Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -121,25 +127,31 @@ public class Agent implements Runnable{
                             mainForm2.setVisible(false);
                             mainForm2.dispose(); 
                             close = false;
+                            loginform.setVisible(true);
+                            loginform.lb_status.setText("");
                             closeConnect();  
-                            this.finalize();
-                        } catch (Throwable ex) {
-                            Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
+                            System.out.println("LOGOUT SUCCESS");
+                        } catch (Exception ex) {
+                            System.out.println("LOGOUTSUCC " +ex);
                         }
-                        System.out.println("LOGOUT SUCCESS");
+                        
                     break;
                     case LOGOUTFAIL: //result LOGOUT FAIL
                         System.out.println("LOGOUT FAIL");
                     break;	            	
                     case PAUSESUCC: //result PAUSE
                         worktime.pause();
+                        System.out.println("PAUSESUCC");
                     break;
                     case PAUSEFAIL: //result PAUSE
+                        System.out.println("PAUSEFAIL");
                     break;
                     case UNPAUSESUCC: //result UNPAUSESUCC
                         worktime.resume();
+                        System.out.println("UNPAUSESUCC");
                     break;
                     case UNPAUSEFAIL: //result UNPAUSE
+                        System.out.println("UNPAUSEFAIL");
                     break;
                     case TRANSSUCC: //result TRANSFER	            			
                     break;
@@ -153,14 +165,11 @@ public class Agent implements Runnable{
                     break;
                     case RINGING: //EVENT RINGING
                         try{
-                            System.out.println("RINGING");
+//                            printinfor();
                             String callerNum = cmdList.get(1);
                             mainForm2.lb_status.setText("Ringing...");
-//                            mainForm2.btn_logout.setEnabled(false);
-                            mainForm2.btn_pause.setEnabled(false);
-//                            mainForm2.btn_dial.setEnabled(false);
-//                            mainForm2.MenuItem_logout.setEnabled(false);
-//                            mainForm2.MenuItem_exit.setEnabled(false);        
+                            mainForm2.lb_callduration.setText("00:00:00");
+                            mainForm2.btn_pause.setEnabled(false);       
                             mainForm2.btn_feedback.setEnabled(true);
                             mainForm2.setAllEnable(false);
                             //open connect to database
@@ -222,22 +231,26 @@ public class Agent implements Runnable{
                             //close connect
                             con.closeConnect();                                                       
                         }catch(Exception e){
+                            con.closeConnect();  
                         }
                     break;
                     case DIALOUT: //result 	
                         System.out.println("DIALOUT");                        
-                        mainForm2.lb_status.setText("Dial Out...");
+                        mainForm2.lb_status.setText("Dial out...");
                     break;
                     case BUSY: 
                     break;
                     case READY: 
                     break;
                     case HANGUP: 
-                        System.out.println("HANGUP");
+//                        System.out.println("HANGUP");
                         mainForm2.lb_status.setText("Ready");
                         mainForm2.btn_pause.setEnabled(true);
                         mainForm2.setAllEnable(true);
-                        clock.stop();
+                        if(clock != null){
+                            clock.stop();
+                            clock = null;
+                        }                            
                     break;
                     case UP: //EVENT ANSWER CALL	     
                         System.out.println("ANSWER");
@@ -247,17 +260,17 @@ public class Agent implements Runnable{
                     break;
                     default: 
                     break;
-                            }
                     }
+                }
             }  
             catch(SocketException e){
-                System.out.println("Socket exception client: "+e);
-                System.out.println("logout & new login form");
                 if(close){
+                    System.out.println("Socket exception client: "+e);
+                    System.out.println("logout & new login form");
                     mainForm2.setVisible(false);
-                    mainForm2.dispose();
-                }                    
-                new LoginForm().setVisible(true);                                                                    
+                    loginform.setVisible(true);
+                    loginform.lb_status.setText("");
+                }                                                                                                        
             }
             catch (IllegalArgumentException e) {
                     e.printStackTrace();
@@ -276,8 +289,10 @@ public class Agent implements Runnable{
 
 	}
         
+        //xem lai doan nay, bi outofmemmory
         public void addTable(ResultSet rs)throws Exception{
             String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
+            mainForm2.table_report = null;
             int count = colname.length;
             Vector col = new Vector(count);
             Vector row = new  Vector();
@@ -313,13 +328,51 @@ public class Agent implements Runnable{
                 col.addElement(colname[i].toString());
             mainForm2.table_report.setModel(new TableModel(col, row));                         
         }
+        void printinfor(){
+            System.out.println("getAgentId "+agentObject.getAgentId());
+            System.out.println("getAgentName "+agentObject.getAgentName());
+            System.out.println("getInterface "+agentObject.getInterface());
+            System.out.println("getPass "+agentObject.getPass());
+            System.out.println("getQueueId "+agentObject.getQueueId());
+            System.out.println("getQueueName "+agentObject.getQueueName());
+            System.out.println("getRole "+agentObject.getRole());
+            System.out.println("getSesion "+agentObject.getSesion());
+            System.out.println("getPenalty "+agentObject.getPenalty());            
+        }        
+        
         //send request to server - string
-	public static void sendtoServer(String t) throws IOException{
-            PrintWriter outtoServer;
-            outtoServer = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-            outtoServer.println(t);
-            outtoServer.flush();
+	public void sendtoServer(String t) throws IOException{
+            try{
+                if(clientSocket != null && outtoServer != null && infromServer != null){   
+                    outtoServer.println(t);
+                    outtoServer.flush();
+                    System.out.println("send to server: "+t);
+                }else{
+                    System.out.println("socket is close: "+t);
+                }
+            }catch(Exception e){
+                System.out.println("Exception(sendtoServer): "+e);
+            }            
+	}        
+        //close Socket & Thread for client
+	public void closeConnect()throws Exception{
+            try{
+                System.out.println("start close session");
+                if(clientSocket != null && infromServer != null && outtoServer!= null){
+                    running = false;
+                    infromServer.close();
+                    outtoServer.close();
+                    clientSocket.close(); 
+                    System.out.println("close socket");                    
+                }                      
+                System.out.println("finish close session"); 
+            }catch(Exception e){
+                System.out.println("closeConnect Exception: "+e); 
+            } 
 	}
+        
+        
+        
 	public static ArrayList<String> getList(String cmd){
             ArrayList<String> list =  new ArrayList<String>();
             StringTokenizer st = new StringTokenizer(cmd,"@");
@@ -327,23 +380,7 @@ public class Agent implements Runnable{
         	list.add(st.nextToken());            
             return list;
 	}	
-        //close Socket & Thread for client
-	public static void closeConnect()throws Exception{
-            System.out.println("start close session");
-            if(mainThread!=null){
-                mainThread.interrupt();
-                mainThread = null;
-                System.out.println("close thread");
-            }
-            if(!clientSocket.isClosed()){
-                clientSocket.shutdownInput();
-                clientSocket.shutdownOutput();
-                clientSocket.close();                
-                System.out.println("close socket");
-            }
-            infromServer = null;            
-            System.out.println("finish close session");   
-	}        
+        
 	public enum CODE{
             LOGINSUCC, LOGINFAIL, LOGOUTSUCC, LOGOUTFAIL,		
             PAUSESUCC, PAUSEFAIL,
