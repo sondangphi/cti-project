@@ -23,8 +23,6 @@ import java.util.logging.Logger;
 
 import org.asterisk.main.*;
 import org.asterisk.model.AgentObject;
-//import org.asterisk.model.CustomerObject;
-//import org.asterisk.model.TableModel;
 import org.asteriskjava.manager.TimeoutException;
 
 public class Agent implements Runnable{
@@ -37,7 +35,7 @@ public class Agent implements Runnable{
 	private Socket clientSocket;
         private AgentObject agentObject;
         private LoginForm loginform;        
-        private MainForm mainForm2;
+        private MainForm mainForm;
         
         private String filename = "infor.properties";                         		
         private String Mysql_server = "172.168.10.208";      
@@ -45,26 +43,15 @@ public class Agent implements Runnable{
 	private String Mysql_user = "callcenter";
 	private String Mysql_pwd  = "callcenter";   
         private ConnectDatabase con;
-        private Utility uti;
-        
-//        public CustomerObject customer;
-        
-        private boolean close = true;
-        private TimerClock clock;
+        private Utility uti = new Utility();
+        private boolean close = true;        
         private TimerClock worktime;
-        
+        private TimerClock clock = null;
+        private TimerClock clockdialout = null;
         private BufferedReader infromServer;
         private PrintWriter outtoServer;        
         private String com;  
-        
-//        private int secs = 0;
-//        private int mins = 0;
-//        private int hrs = 0;
-//        private int tempsec = 0;
-//        private int tempmin = 0;
-//        private int temphr = 0;    
-//        private String time = "";  
-//        private DecimalFormat dFormat = new DecimalFormat("00");
+        private boolean dialout = false;
         
 	public Agent(){
 		
@@ -88,7 +75,6 @@ public class Agent implements Runnable{
             try{
                 String command = "";
                 CODE code;
-                uti = new Utility();
                 Mysql_dbname = uti.readInfor(filename, "MySql_database");
                 Mysql_server = uti.readInfor(filename, "MySql_server");
                 Mysql_user = uti.readInfor(filename, "MySql_user");
@@ -107,10 +93,10 @@ public class Agent implements Runnable{
                         System.out.println("LOGIN SUCCESS");
                         agentObject.setAgentName(cmdList.get(1));
                         agentObject.setSession(cmdList.get(2));
-                        mainForm2 = new MainForm(this, agentObject);
-                        mainForm2.setVisible(true);
+                        mainForm = new MainForm(this, agentObject);
+                        mainForm.setVisible(true);
                         loginform.setVisible(false);
-                        worktime = new TimerClock(mainForm2, false);
+                        worktime = new TimerClock(mainForm, false);
                         worktime.start();
                     break;
                     case LOGINFAIL: //result LOGIN FAIL                                                     
@@ -124,8 +110,8 @@ public class Agent implements Runnable{
                     break;
                     case LOGOUTSUCC: //result LOGOUT SUCCESS              
                         try {
-                            mainForm2.setVisible(false);
-                            mainForm2.dispose(); 
+                            mainForm.setVisible(false);
+                            mainForm.dispose(); 
                             close = false;
                             loginform.setVisible(true);
                             loginform.lb_status.setText("");
@@ -165,39 +151,61 @@ public class Agent implements Runnable{
                     break;
                     case RINGING: //EVENT RINGING
                         try{
-//                            printinfor();
                             String callerNum = cmdList.get(1);
-                            mainForm2.lb_status.setText("Ringing...");
-                            mainForm2.lb_callduration.setText("00:00:00");
-                            mainForm2.btn_pause.setEnabled(false);       
-                            mainForm2.setAllEnable(false);                                                      
+                            System.out.println("callerNum\t"+callerNum);
+                            mainForm.lb_status.setText("Ringing...");
+                            mainForm.lb_callduration.setText("00:00:00");
+                            mainForm.btn_pause.setEnabled(false);       
+                            mainForm.setAllEnable(false);  
+                            mainForm.lb_callernumber.setText(callerNum);
+                            dialout = false;
                         }catch(Exception e){
-//                            con.closeConnect();  
                         }
                     break;
                     case DIALOUT: //result 	
                         System.out.println("DIALOUT");                        
-                        mainForm2.lb_status.setText("Dial out...");
+                        mainForm.lb_status.setText("Dialing...");
+                        dialout = true;
                     break;
                     case BUSY: 
                     break;
                     case READY: 
                     break;
                     case HANGUP: 
-//                        System.out.println("HANGUP");
-                        mainForm2.lb_status.setText("Ready");
-                        mainForm2.btn_pause.setEnabled(true);
-                        mainForm2.setAllEnable(true);
-                        if(clock != null){
-                            clock.stop();
-                            clock = null;
-                        }                            
+                        if(dialout){
+                            dialout = false;
+                            mainForm.lb_status.setText("Ready");
+                            mainForm.btn_pause.setEnabled(true);
+                            mainForm.setAllEnable(true); 
+                            if(clockdialout != null){
+                                clockdialout.stop();
+                                clockdialout = null;
+                            }
+                        }else{
+                            mainForm.lb_status.setText("Ready");
+                            mainForm.btn_pause.setEnabled(true);
+                            mainForm.setAllEnable(true); 
+                            if(clock != null){
+                                clock.stop(); 
+                                clock = null;
+                                System.out.println("finish clock");
+                            }
+                        }          
                     break;
-                    case UP: //EVENT ANSWER CALL	     
-                        System.out.println("ANSWER");
-                        mainForm2.lb_status.setText("Busy");
-                        clock = new TimerClock(mainForm2, true);
-                        clock.start();
+                    case UP: //EVENT ANSWER CALL	  
+                        if(dialout){
+                            clockdialout = new TimerClock(mainForm, true);
+                            clockdialout.start();
+                            System.out.println("Dialout");
+                            mainForm.lb_status.setText("Busy");
+                            System.out.println("start clock");
+                        }else{
+                            System.out.println("ANSWER");
+                            mainForm.lb_status.setText("Busy");
+                            System.out.println("start clock");
+                            clock = new TimerClock(mainForm, true);
+                            clock.start();
+                        }
                     break;
                     default: 
                     break;
@@ -206,11 +214,16 @@ public class Agent implements Runnable{
             }  
             catch(SocketException e){
                 if(close){
-                    System.out.println("Socket exception client: "+e);
-                    System.out.println("logout & new login form");
-                    mainForm2.setVisible(false);
-                    loginform.setVisible(true);
-                    loginform.lb_status.setText("");
+                    try {
+                        System.out.println("Socket exception client: "+e);
+                        System.out.println("logout & new login form");
+                        mainForm.setVisible(false);
+                        loginform.setVisible(true);
+                        loginform.lb_status.setText("");
+                        closeConnect();
+                    } catch (Exception ex) {
+                        Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }                                                                                                        
             }
             catch (IllegalArgumentException e) {
