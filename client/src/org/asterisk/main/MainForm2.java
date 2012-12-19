@@ -12,6 +12,7 @@ import java.awt.Image;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -409,20 +410,17 @@ public class MainForm2 extends javax.swing.JFrame {
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txt_add, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel8Layout.createSequentialGroup()
-                                        .addComponent(txt_makh, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel8Layout.createSequentialGroup()
-                                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(cb_type, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txt_mobile, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(0, 0, 0)))
+                                .addComponent(txt_makh, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cb_type, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txt_mobile, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel8Layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -716,13 +714,26 @@ public class MainForm2 extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jPanel6Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel2, jLabel3, jLabel5, jLabel6, jLabel7, lb_agentid, lb_agentname, lb_extension, lb_queue});
+
         panel_dial.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Agent Dial Out", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
+
+        panel_number.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                panel_numberKeyPressed(evt);
+            }
+        });
 
         btn_1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_1.setText("1");
         btn_1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_1ActionPerformed(evt);
+            }
+        });
+        btn_1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_1KeyPressed(evt);
             }
         });
 
@@ -733,12 +744,22 @@ public class MainForm2 extends javax.swing.JFrame {
                 btn_2ActionPerformed(evt);
             }
         });
+        btn_2.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_2KeyPressed(evt);
+            }
+        });
 
         btn_3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_3.setText("3");
         btn_3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_3ActionPerformed(evt);
+            }
+        });
+        btn_3.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_3KeyPressed(evt);
             }
         });
 
@@ -749,12 +770,22 @@ public class MainForm2 extends javax.swing.JFrame {
                 btn_4ActionPerformed(evt);
             }
         });
+        btn_4.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_4KeyPressed(evt);
+            }
+        });
 
         btn_5.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_5.setText("5");
         btn_5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_5ActionPerformed(evt);
+            }
+        });
+        btn_5.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_5KeyPressed(evt);
             }
         });
 
@@ -765,12 +796,22 @@ public class MainForm2 extends javax.swing.JFrame {
                 btn_6ActionPerformed(evt);
             }
         });
+        btn_6.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_6KeyPressed(evt);
+            }
+        });
 
         btn_7.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_7.setText("7");
         btn_7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_7ActionPerformed(evt);
+            }
+        });
+        btn_7.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_7KeyPressed(evt);
             }
         });
 
@@ -781,6 +822,11 @@ public class MainForm2 extends javax.swing.JFrame {
                 btn_8ActionPerformed(evt);
             }
         });
+        btn_8.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_8KeyPressed(evt);
+            }
+        });
 
         btn_9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_9.setText("9");
@@ -789,12 +835,22 @@ public class MainForm2 extends javax.swing.JFrame {
                 btn_9ActionPerformed(evt);
             }
         });
+        btn_9.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_9KeyPressed(evt);
+            }
+        });
 
         btn_0.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_0.setText("0");
         btn_0.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_0ActionPerformed(evt);
+            }
+        });
+        btn_0.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                btn_0KeyPressed(evt);
             }
         });
 
@@ -815,6 +871,11 @@ public class MainForm2 extends javax.swing.JFrame {
         });
 
         txt_phonenum.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        txt_phonenum.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_phonenumKeyPressed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panel_numberLayout = new javax.swing.GroupLayout(panel_number);
         panel_number.setLayout(panel_numberLayout);
@@ -1179,13 +1240,13 @@ public class MainForm2 extends javax.swing.JFrame {
     private void btn_dialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dialActionPerformed
         // TODO add your handling code here:
         try{
-            if(dialNumber != ""){
+            dialNumber = txt_phonenum.getText();
+            if(dialNumber != "" && uti.checkNumber(dialNumber)){
                 String cmd  = "108@"+dialNumber;
                 agentClient.sendtoServer(cmd);
-//                agentClient.out.println(cmd);
                 System.out.println("Dial number: "+dialNumber);
             }else
-                System.out.println("No Dial number: "+dialNumber);
+                System.out.println("not allow: "+dialNumber);
         }catch(Exception e){
         }        
     }//GEN-LAST:event_btn_dialActionPerformed
@@ -1328,6 +1389,87 @@ public class MainForm2 extends javax.swing.JFrame {
         }         
         
     }//GEN-LAST:event_lb_locateMouseClicked
+
+    private void txt_phonenumKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_phonenumKeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode() == 10){
+             btn_dialActionPerformed(null);
+         }        
+    }//GEN-LAST:event_txt_phonenumKeyPressed
+
+    private void btn_1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_1KeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode() == 8){
+             deleteNumber();
+         }
+    }//GEN-LAST:event_btn_1KeyPressed
+
+    private void btn_2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_2KeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode() == 8){
+             deleteNumber();
+         }        
+    }//GEN-LAST:event_btn_2KeyPressed
+
+    private void btn_3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_3KeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode() == 8){
+             deleteNumber();
+         }        
+    }//GEN-LAST:event_btn_3KeyPressed
+
+    private void btn_4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_4KeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode() == 8){
+             deleteNumber();
+         }        
+    }//GEN-LAST:event_btn_4KeyPressed
+
+    private void btn_5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_5KeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode() == 8){
+             deleteNumber();
+         }        
+    }//GEN-LAST:event_btn_5KeyPressed
+
+    private void btn_6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_6KeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_6KeyPressed
+
+    private void btn_7KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_7KeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode() == 8){
+             deleteNumber();
+         }        
+    }//GEN-LAST:event_btn_7KeyPressed
+
+    private void btn_8KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_8KeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode() == 8){
+             deleteNumber();
+         }        
+    }//GEN-LAST:event_btn_8KeyPressed
+
+    private void btn_9KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_9KeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode() == 8){
+             deleteNumber();
+         }        
+    }//GEN-LAST:event_btn_9KeyPressed
+
+    private void btn_0KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_0KeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode() == 8){
+             deleteNumber();
+         }        
+    }//GEN-LAST:event_btn_0KeyPressed
+
+    private void panel_numberKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_panel_numberKeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode() == 8){
+             deleteNumber();
+         }        
+    }//GEN-LAST:event_panel_numberKeyPressed
 
     public void setAllEnable(boolean flag){
         btn_0.setEnabled(flag);
