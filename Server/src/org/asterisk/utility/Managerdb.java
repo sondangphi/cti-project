@@ -18,10 +18,10 @@ public class Managerdb {
 	private String user = "";
 	private String pwd = "";
 	private String serverName = "";
-//        private static String serverName = "localhost";
 	public String database = "";
 	private String driverName = "com.mysql.jdbc.Driver";
         private Utility uti = new Utility();	
+        private String filename = "infor.properties";
 	
 	public Managerdb(String db, String username, String pass,String host) throws IOException {
             try{
@@ -43,6 +43,17 @@ public class Managerdb {
 	public Managerdb(){
 		
 	}
+        public void checkConnect()throws SQLException, ClassNotFoundException, Exception{
+            if(!isConnect()){
+                database = uti.readInfor(filename, "MySql_database");
+                serverName = uti.readInfor(filename, "MySql_server");
+                user = uti.readInfor(filename, "MySql_user");
+                pwd = uti.readInfor(filename, "MySql_pwd");
+                Class.forName(driverName);		
+                connection = DriverManager.getConnection("jdbc:mysql://"+serverName+":3306/"+database,user,pwd); 
+                connection.setAutoCommit(true);
+            }            
+        }
         public boolean isConnect()throws SQLException{         
             if(connection.isClosed())
                 return false;
@@ -174,9 +185,17 @@ public class Managerdb {
             return sqlExecute(sqlcom)>0 ? true : false;            
         }
                 
-        public void writedialout(){
-            
+        public void finishDialout(String session, String talktime, String status)throws ClassNotFoundException, SQLException{
+            String sql = "UPDATE agent_dialout SET talktime ='"+talktime+"', status ='"+status+"'"
+                        + " WHERE session = '"+session+"'";
+            sqlExecute(sql); 
         }
+        
+       public void startDialout(String agentid, String iface, String queueid, String number, String loginSes, String session)throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO agent_dialout (agentid, interface, queueid, dialoutnumber, sessionLogin, session) VALUES "
+                    + "('"+agentid+"','"+iface+"','"+queueid+"','"+number+"','"+loginSes+"','"+session+"')";
+            sqlExecute(sql); 
+        }        
         
         public void checkSessionLogout()throws Exception{
             uti.writeAsteriskLog("- SYSTE  - Check DateTime Agent unLogout");
