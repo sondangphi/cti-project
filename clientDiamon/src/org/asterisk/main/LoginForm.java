@@ -217,7 +217,6 @@ public class LoginForm extends javax.swing.JFrame {
         });
 
         tx_iface.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        tx_iface.setText("8001");
         tx_iface.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tx_ifaceKeyPressed(evt);

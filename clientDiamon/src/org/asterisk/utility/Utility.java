@@ -109,7 +109,9 @@ public class Utility {
         public boolean checkIface(String t){
             return t.matches("([0-9]+)");
         }
-        
+        public boolean checkNumber(String t){
+            return t.matches("([0-9]+)");
+        }        
         public static String getTime(long ses){
             long hour ;
             long minute;
