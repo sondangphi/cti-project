@@ -330,25 +330,20 @@
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="txt_add" min="-2" pref="233" max="-2" attributes="0"/>
                                       <Group type="102" attributes="0">
-                                          <Group type="103" groupAlignment="0" attributes="0">
-                                              <Group type="102" attributes="0">
-                                                  <Component id="txt_makh" min="-2" pref="134" max="-2" attributes="0"/>
-                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                  <Component id="jLabel9" min="-2" pref="81" max="-2" attributes="0"/>
-                                              </Group>
-                                              <Group type="102" alignment="0" attributes="0">
-                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="cb_type" min="-2" pref="135" max="-2" attributes="0"/>
-                                                      <Component id="txt_mobile" min="-2" pref="135" max="-2" attributes="0"/>
-                                                  </Group>
-                                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                      <Component id="jLabel15" min="-2" pref="80" max="-2" attributes="0"/>
-                                                      <Component id="jLabel19" min="-2" pref="80" max="-2" attributes="0"/>
-                                                  </Group>
-                                              </Group>
+                                          <Component id="txt_makh" min="-2" pref="134" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Component id="jLabel9" min="-2" pref="81" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="cb_type" min="-2" pref="135" max="-2" attributes="0"/>
+                                              <Component id="txt_mobile" min="-2" pref="135" max="-2" attributes="0"/>
                                           </Group>
-                                          <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
+                                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                              <Component id="jLabel15" min="-2" pref="80" max="-2" attributes="0"/>
+                                              <Component id="jLabel19" min="-2" pref="80" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
                                   </Group>
                                   <Group type="103" groupAlignment="1" attributes="0">
@@ -882,34 +877,34 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel3" linkSize="14" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="lb_status" pref="27" max="32767" attributes="0"/>
                       </Group>
-                      <Component id="lb_agentid" max="32767" attributes="0"/>
+                      <Component id="lb_agentid" linkSize="14" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="jLabel5" pref="27" max="32767" attributes="0"/>
-                      <Component id="lb_extension" max="32767" attributes="0"/>
+                      <Component id="jLabel5" linkSize="14" pref="27" max="32767" attributes="0"/>
+                      <Component id="lb_extension" linkSize="14" max="32767" attributes="0"/>
                   </Group>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
-                          <Component id="jLabel6" min="-2" pref="27" max="-2" attributes="0"/>
+                          <Component id="jLabel6" linkSize="14" min="-2" pref="27" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="lb_agentname" min="-2" pref="22" max="-2" attributes="0"/>
+                          <Component id="lb_agentname" linkSize="14" min="-2" pref="22" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel7" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
-                      <Component id="lb_queue" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                      <Component id="jLabel7" linkSize="14" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
+                      <Component id="lb_queue" linkSize="14" alignment="3" min="-2" pref="23" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jLabel2" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
+                      <Component id="jLabel2" linkSize="14" alignment="3" min="-2" pref="20" max="-2" attributes="0"/>
                       <Component id="lb_callduration" alignment="3" min="-2" pref="26" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
@@ -1121,6 +1116,9 @@
       </Layout>
       <SubComponents>
         <Container class="javax.swing.JPanel" name="panel_number">
+          <Events>
+            <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="panel_numberKeyPressed"/>
+          </Events>
 
           <Layout>
             <DimensionLayout dim="0">
@@ -1209,6 +1207,7 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_1ActionPerformed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btn_1KeyPressed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btn_2">
@@ -1220,6 +1219,7 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_2ActionPerformed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btn_2KeyPressed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btn_3">
@@ -1231,6 +1231,7 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_3ActionPerformed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btn_3KeyPressed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btn_4">
@@ -1242,6 +1243,7 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_4ActionPerformed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btn_4KeyPressed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btn_5">
@@ -1253,6 +1255,7 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_5ActionPerformed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btn_5KeyPressed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btn_6">
@@ -1264,6 +1267,7 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_6ActionPerformed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btn_6KeyPressed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btn_7">
@@ -1275,6 +1279,7 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_7ActionPerformed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btn_7KeyPressed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btn_8">
@@ -1286,6 +1291,7 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_8ActionPerformed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btn_8KeyPressed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btn_9">
@@ -1297,6 +1303,7 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_9ActionPerformed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btn_9KeyPressed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btn_0">
@@ -1308,6 +1315,7 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_0ActionPerformed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="btn_0KeyPressed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btn_11">
@@ -1338,6 +1346,9 @@
                   <Font name="Tahoma" size="18" style="1"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txt_phonenumKeyPressed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
