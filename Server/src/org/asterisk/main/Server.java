@@ -103,6 +103,9 @@ public class Server{
                     if("success".equalsIgnoreCase(result)){
                         uti.writeAsteriskLog("- SYSTE  - Update datetime agent unlogout(remove queue)\t"+agentid+"\t"+session);
                         System.out.println("Remove queue success\t"+queue);
+                    }else{
+                        uti.writeAsteriskLog("- SYSTE  - Already remove queue(remove queue)\t"+agentid+"\t"+session);
+                        System.out.println("already remove queue\t"+queue);                        
                     }
                 }
             }
