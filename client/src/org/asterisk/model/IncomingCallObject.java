@@ -1,6 +1,6 @@
 package org.asterisk.model;
 
-public class CallObject {
+public class IncomingCallObject {
 	
 	String callerId;
 	String callerName;
