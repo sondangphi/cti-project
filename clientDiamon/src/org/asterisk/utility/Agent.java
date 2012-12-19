@@ -45,9 +45,9 @@ public class Agent implements Runnable{
         private ConnectDatabase con;
         private Utility uti = new Utility();
         private boolean close = true;        
-        private TimerClock worktime;
-        private TimerClock clock = null;
-        private TimerClock clockdialout = null;
+        private TimerClock clockWorktime;
+        private TimerClock clockDialin;
+        private TimerClock clockDialout;
         private BufferedReader infromServer;
         private PrintWriter outtoServer;        
         private String com;  
@@ -75,6 +75,9 @@ public class Agent implements Runnable{
             try{
                 String command = "";
                 CODE code;
+                clockDialin = new TimerClock(mainForm, true);
+                clockWorktime = new TimerClock(mainForm, false);
+                clockDialout = new TimerClock();
                 Mysql_dbname = uti.readInfor(filename, "MySql_database");
                 Mysql_server = uti.readInfor(filename, "MySql_server");
                 Mysql_user = uti.readInfor(filename, "MySql_user");
@@ -95,9 +98,9 @@ public class Agent implements Runnable{
                         agentObject.setSession(cmdList.get(2));
                         mainForm = new MainForm(this, agentObject);
                         mainForm.setVisible(true);
-                        loginform.setVisible(false);
-                        worktime = new TimerClock(mainForm, false);
-                        worktime.start();
+//                        loginform.setVisible(false);
+                        loginform.dispose();
+                        clockWorktime.start();
                     break;
                     case LOGINFAIL: //result LOGIN FAIL                                                     
                         try {
@@ -113,8 +116,9 @@ public class Agent implements Runnable{
                             mainForm.setVisible(false);
                             mainForm.dispose(); 
                             close = false;
-                            loginform.setVisible(true);
-                            loginform.lb_status.setText("");
+                            new LoginForm().setVisible(true);
+//                            loginform.setVisible(true);
+//                            loginform.lb_status.setText("");
                             closeConnect();  
                             System.out.println("LOGOUT SUCCESS");
                         } catch (Exception ex) {
@@ -126,14 +130,14 @@ public class Agent implements Runnable{
                         System.out.println("LOGOUT FAIL");
                     break;	            	
                     case PAUSESUCC: //result PAUSE
-                        worktime.pause();
+                        clockWorktime.pause();
                         System.out.println("PAUSESUCC");
                     break;
                     case PAUSEFAIL: //result PAUSE
                         System.out.println("PAUSEFAIL");
                     break;
                     case UNPAUSESUCC: //result UNPAUSESUCC
-                        worktime.resume();
+                        clockWorktime.resume();
                         System.out.println("UNPAUSESUCC");
                     break;
                     case UNPAUSEFAIL: //result UNPAUSE
@@ -177,34 +181,30 @@ public class Agent implements Runnable{
                             mainForm.lb_status.setText("Ready");
                             mainForm.btn_pause.setEnabled(true);
                             mainForm.setAllEnable(true); 
-                            if(clockdialout != null){
-                                clockdialout.stop();
-                                clockdialout = null;
+                            if(clockDialout != null){
+                                clockDialout.stop();
                             }
                         }else{
                             mainForm.lb_status.setText("Ready");
                             mainForm.btn_pause.setEnabled(true);
                             mainForm.setAllEnable(true); 
-                            if(clock != null){
-                                clock.stop(); 
-                                clock = null;
-                                System.out.println("finish clock");
+                            if(clockDialin != null){
+                                clockDialin.stop(); 
                             }
                         }          
                     break;
                     case UP: //EVENT ANSWER CALL	  
                         if(dialout){
-                            clockdialout = new TimerClock(mainForm, true);
-                            clockdialout.start();
+                            clockDialout = new TimerClock(mainForm, true);
+                            clockDialout.start();
                             System.out.println("Dialout");
                             mainForm.lb_status.setText("Busy");
                             System.out.println("start clock");
                         }else{
                             System.out.println("ANSWER");
                             mainForm.lb_status.setText("Busy");
-                            System.out.println("start clock");
-                            clock = new TimerClock(mainForm, true);
-                            clock.start();
+                            System.out.println("start clock");                            
+                            clockDialin.start();
                         }
                     break;
                     default: 
@@ -218,8 +218,9 @@ public class Agent implements Runnable{
                         System.out.println("Socket exception client: "+e);
                         System.out.println("logout & new login form");
                         mainForm.setVisible(false);
-                        loginform.setVisible(true);
-                        loginform.lb_status.setText("");
+                        mainForm.dispose();
+                        new LoginForm().setVisible(true);
+//                        loginform.lb_status.setText("");
                         closeConnect();
                     } catch (Exception ex) {
                         Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
