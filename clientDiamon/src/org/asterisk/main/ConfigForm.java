@@ -44,7 +44,7 @@ public class ConfigForm extends javax.swing.JFrame {
     public ConfigForm(LoginForm m) {
         initComponents();
         try{
-            Image image = Toolkit.getDefaultToolkit().getImage("images/system_config_services.png");
+            Image image = Toolkit.getDefaultToolkit().getImage("system_config_services.png");
             host = uti.readInfor(filename, "host");
             aport = uti.readInfor(filename, "aport");
             qport = uti.readInfor(filename, "qport");
@@ -56,14 +56,7 @@ public class ConfigForm extends javax.swing.JFrame {
             this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );
         }catch(Exception e){
         }        
-    }    
-    
-//    this.addWindowStateListener(new WindowAdapter() {
-//        public void windowClosing(WindowEvent e) {
-//            ExitAction.getInstance().actionPerformed(null);
-//        }
-//
-//    });    
+    }       
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -141,7 +134,7 @@ public class ConfigForm extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -152,14 +145,14 @@ public class ConfigForm extends javax.swing.JFrame {
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8)
                             .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(tx_aport, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(tx_qport, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(tx_server, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addGap(13, 13, 13))
+                .addGap(6, 6, 6))
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {jLabel2, jLabel3, jLabel8});
@@ -214,8 +207,7 @@ public class ConfigForm extends javax.swing.JFrame {
 
     private void btn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_finishActionPerformed
         // TODO add your handling code here:
-        try{
-//            this.setVisible(false);               
+        try{               
             host = tx_server.getText();
             aport = tx_aport.getText();
             qport = tx_qport.getText();
