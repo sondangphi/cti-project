@@ -75,9 +75,8 @@ public class Agent implements Runnable{
             try{
                 String command = "";
                 CODE code;
-                clockDialin = new TimerClock(mainForm, true);
-                clockWorktime = new TimerClock(mainForm, false);
-                clockDialout = new TimerClock();
+//                clockDialin = new TimerClock(mainForm, true);                
+//                clockDialout = new TimerClock(mainForm, true);
                 Mysql_dbname = uti.readInfor(filename, "MySql_database");
                 Mysql_server = uti.readInfor(filename, "MySql_server");
                 Mysql_user = uti.readInfor(filename, "MySql_user");
@@ -98,8 +97,8 @@ public class Agent implements Runnable{
                         agentObject.setSession(cmdList.get(2));
                         mainForm = new MainForm(this, agentObject);
                         mainForm.setVisible(true);
-//                        loginform.setVisible(false);
                         loginform.dispose();
+                        clockWorktime = new TimerClock(mainForm, false);
                         clockWorktime.start();
                     break;
                     case LOGINFAIL: //result LOGIN FAIL                                                     
@@ -117,8 +116,6 @@ public class Agent implements Runnable{
                             mainForm.dispose(); 
                             close = false;
                             new LoginForm().setVisible(true);
-//                            loginform.setVisible(true);
-//                            loginform.lb_status.setText("");
                             closeConnect();  
                             System.out.println("LOGOUT SUCCESS");
                         } catch (Exception ex) {
@@ -169,6 +166,8 @@ public class Agent implements Runnable{
                     case DIALOUT: //result 	
                         System.out.println("DIALOUT");                        
                         mainForm.lb_status.setText("Dialing...");
+                        mainForm.lb_callduration.setText("00:00:00");
+                        mainForm.lb_callernumber.setText("");
                         dialout = true;
                     break;
                     case BUSY: 
@@ -203,7 +202,8 @@ public class Agent implements Runnable{
                         }else{
                             System.out.println("ANSWER");
                             mainForm.lb_status.setText("Busy");
-                            System.out.println("start clock");                            
+                            System.out.println("start clock");   
+                            clockDialin = new TimerClock(mainForm, true);
                             clockDialin.start();
                         }
                     break;
@@ -220,7 +220,6 @@ public class Agent implements Runnable{
                         mainForm.setVisible(false);
                         mainForm.dispose();
                         new LoginForm().setVisible(true);
-//                        loginform.lb_status.setText("");
                         closeConnect();
                     } catch (Exception ex) {
                         Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);

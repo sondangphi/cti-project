@@ -41,7 +41,6 @@ public class TimerClock implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-//        throw new UnsupportedOperationException("Not supported yet.");
         if (e.getSource() == clock)
             secs++;     
         if (secs == 60){
@@ -62,9 +61,7 @@ public class TimerClock implements ActionListener{
         if(flag){
             mainform.lb_callduration.setText(time);
         }else
-            mainform.lb_workTime.setText(time);
-        
-//        System.out.println(time);        
+            mainform.lb_workTime.setText(time);               
     }
     
     public void start(){
@@ -72,6 +69,9 @@ public class TimerClock implements ActionListener{
     }
     public void stop(){
         clock.stop();
+        secs = 0;
+        mins = 0;
+        hrs = 0;        
     }    
     
      public void pause(){
