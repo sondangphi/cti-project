@@ -109,11 +109,32 @@ public class Managerdb {
 //                name = rs.getString("agentName");
 //            return name;
 //        }        
-        
-	public boolean checkStatus(String iface) throws ClassNotFoundException, SQLException{
-            String sqlCom = "SELECT * FROM agent_status where interface = '"+iface+"'";
-            ResultSet rs = sqlQuery(sqlCom);
-            return rs.next() ? false : true;
+        //su dung cho 1 agent/1 interface/ 1 queue
+	public boolean checkStatus(String agentid, String iface, String queueid) throws ClassNotFoundException, SQLException{
+            String sqlCom2 = "SELECT * FROM agent_status where interface = '"+iface+"'";
+            String sqlCom = "SELECT * FROM agent_status where agent_id = '"+agentid+"'";
+            ResultSet rs = sqlQuery(sqlCom);            
+            if(rs.next()){
+                String inface = rs.getString("interface");
+                String queue = rs.getString("queue");
+                System.out.println("inface: "+inface+"\t"+"queue: "+queue);
+                System.out.println("iface: "+iface+"\t"+"queueid: "+queueid);
+                if("null".equalsIgnoreCase(inface) && "null".equalsIgnoreCase(queue)){
+                    System.out.println("inface: "+inface+"\t"+"queue: "+queue);
+                    rs = sqlQuery(sqlCom2);
+                    if(rs.next())
+                        return false;
+                    return true;                
+                }else if(iface.equalsIgnoreCase(inface) && queueid.equalsIgnoreCase(queue))//same iface, same queue ->false
+                    return false;
+                else if(iface.equalsIgnoreCase(inface) && !queueid.equalsIgnoreCase(queue))//same iface, diff queue ->false
+                    return false;
+                else if(!iface.equalsIgnoreCase(inface) && queueid.equalsIgnoreCase(queue))//diff iface, same queue ->false
+                    return false;
+                else if(!iface.equalsIgnoreCase(inface) && !queueid.equalsIgnoreCase(queue))//diff iface, same queue ->false
+                    return false;               
+            }
+            return false ;
 	}
 	
 	public int updateStatus(String agentid, String iface, String queue) throws ClassNotFoundException, SQLException{
