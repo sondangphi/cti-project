@@ -3746,3 +3746,86 @@
 2012-12-20 15:43:15	- AGENT - Agent logout	127.0.0.1	d
 2012-12-20 15:43:16	- AGENT - Agent logout	127.0.0.1	c
 2012-12-20 15:43:16	- AGENT - Agent logout	127.0.0.1	t
+2012-12-20 16:19:20	- AGENT - Accept connect from address	127.0.0.1
+2012-12-20 16:19:20	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-20 16:19:39	- AGENT - Agent pause	127.0.0.1	a
+2012-12-20 16:19:41	- AGENT - Agent unpause	127.0.0.1	a
+2012-12-20 16:19:45	- AGENT - Agent logout	127.0.0.1	a
+2012-12-20 23:39:09	- AGENT - Accept connect from address	127.0.0.1
+2012-12-20 23:39:09	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-20 23:39:28	- AGENT - Agent Dialout 	a	0978420190
+2012-12-20 23:43:30	- AGENT - Agent logout	127.0.0.1	a
+2012-12-20 23:43:54	- AGENT - Accept connect from address	127.0.0.1
+2012-12-20 23:43:55	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-20 23:44:14	- AGENT - Agent Dialout 	a	0978420190
+2012-12-20 23:46:01	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-20 23:46:08	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-20 23:46:08	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-20 23:46:13	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-20 23:46:18	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-20 23:46:21	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-20 23:46:21	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-21 00:02:36	- AGENT - Agent logout	127.0.0.1	a
+2012-12-21 00:10:39	- AGENT - Accept connect from address	127.0.0.1
+2012-12-21 00:10:40	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-21 00:10:52	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:12:32	- AGENT - Agent logout	127.0.0.1	a
+2012-12-21 00:17:45	- AGENT - Accept connect from address	127.0.0.1
+2012-12-21 00:17:46	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-21 00:17:57	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:19:53	- AGENT - Agent logout	127.0.0.1	a
+2012-12-21 00:20:09	- AGENT - Accept connect from address	127.0.0.1
+2012-12-21 00:20:09	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-21 00:20:16	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:21:32	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:22:25	- AGENT - Agent logout	127.0.0.1	a
+2012-12-21 00:22:57	- AGENT - Accept connect from address	127.0.0.1
+2012-12-21 00:22:58	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-21 00:23:07	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:24:52	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-21 00:24:58	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-21 00:25:06	- AGENT - Caller complete	a	SIP/8001	0873058080
+2012-12-21 00:25:06	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-21 00:25:12	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:25:50	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:26:48	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:28:48	- AGENT - Agent Dialout 	a	01697829643
+2012-12-21 00:29:29	- AGENT - Agent Dialout 	a	01697829643
+2012-12-21 00:30:38	- AGENT - Agent logout	127.0.0.1	a
+2012-12-21 00:33:00	- AGENT - Accept connect from address	127.0.0.1
+2012-12-21 00:33:00	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-21 00:33:20	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-21 00:33:20	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-21 00:33:27	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-21 00:33:27	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-21 00:33:27	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-21 00:33:27	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-21 00:33:32	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-21 00:33:32	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-21 00:33:35	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-21 00:33:35	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-21 00:34:02	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-21 00:34:02	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-21 00:34:02	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-21 00:34:02	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-21 00:34:23	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:35:56	- AGENT - Agent logout - exit system	127.0.0.1	a
+2012-12-21 00:37:51	- AGENT - Accept connect from address	127.0.0.1
+2012-12-21 00:37:52	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-21 00:38:13	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:38:56	- AGENT - Agent pause	127.0.0.1	a
+2012-12-21 00:38:59	- AGENT - Agent unpause	127.0.0.1	a
+2012-12-21 00:39:04	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:39:33	- AGENT - Agent pause	127.0.0.1	a
+2012-12-21 00:39:38	- AGENT - Agent unpause	127.0.0.1	a
+2012-12-21 00:39:42	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:40:12	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:40:40	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:40:57	- AGENT - Agent Dialout 	a	0978420190
+2012-12-21 00:41:54	- AGENT - Agent logout	127.0.0.1	a
+2012-12-21 00:42:02	- AGENT - Accept connect from address	127.0.0.1
+2012-12-21 00:42:03	- AGENT - Agent login successful 	127.0.0.1	b
+2012-12-21 00:42:20	- AGENT - Agent Dialout 	b	0978420190
+2012-12-21 00:42:47	- AGENT - Agent Dialout 	b	0978420190
+2012-12-21 00:43:02	- AGENT - Agent Dialout 	b	0978420190
+2012-12-21 00:43:54	- AGENT - Agent logout	127.0.0.1	b
