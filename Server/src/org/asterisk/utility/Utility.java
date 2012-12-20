@@ -87,5 +87,9 @@ public class Utility {
             value = prop.getProperty(key);
             return value;
         }
+        
+        public boolean checkChannel(String t){        
+                return t.contains("-");
+        }         
 
 }
