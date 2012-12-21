@@ -52,7 +52,7 @@ public class Agent implements Runnable{
         private boolean close = true;
         private TimerClock clock;
         private TimerClock worktime;
-        
+        private boolean campaign = false;
         private BufferedReader infromServer;
         private PrintWriter outtoServer;        
         private String com;  
@@ -243,7 +243,6 @@ public class Agent implements Runnable{
                     case READY: 
                     break;
                     case HANGUP: 
-//                        System.out.println("HANGUP");
                         mainForm2.lb_status.setText("Ready");
                         mainForm2.btn_pause.setEnabled(true);
                         mainForm2.setAllEnable(true);
