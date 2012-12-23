@@ -23,7 +23,6 @@ import java.util.logging.Logger;
 
 import org.asterisk.main.*;
 import org.asterisk.model.AgentObject;
-import org.asteriskjava.manager.TimeoutException;
 
 public class Agent implements Runnable{
 
@@ -75,8 +74,6 @@ public class Agent implements Runnable{
             try{
                 String command = "";
                 CODE code;
-//                clockDialin = new TimerClock(mainForm, true);                
-//                clockDialout = new TimerClock(mainForm, true);
                 Mysql_dbname = uti.readInfor(filename, "MySql_database");
                 Mysql_server = uti.readInfor(filename, "MySql_server");
                 Mysql_user = uti.readInfor(filename, "MySql_user");
@@ -88,6 +85,20 @@ public class Agent implements Runnable{
                     command = infromServer.readLine();
                     System.out.println("***listen from server***");
                     System.out.println("***receive from server: "+command);
+                    if(command == null){
+                        System.out.println("null value from server");
+                        try {
+                            close = false;
+                            System.out.println("Server interupt! Please wait...");
+                            mainForm.setVisible(false);
+                            mainForm.dispose();                             
+                            new LoginForm().setVisible(true);
+                            closeConnect();  
+                            break;                            
+                        } catch (Exception ex) {
+                            System.out.println("Server is close! Please wait... " +ex);
+                        } 
+                    }                    
                     ArrayList<String> cmdList = getList(command);							
                     code = CODE.valueOf(cmdList.get(0).toUpperCase());
                     switch(code){
@@ -127,7 +138,8 @@ public class Agent implements Runnable{
                         System.out.println("LOGOUT FAIL");
                     break;	            	
                     case PAUSESUCC: //result PAUSE
-                        clockWorktime.pause();
+                        if(clockWorktime != null)
+                            clockWorktime.pause();
                         System.out.println("PAUSESUCC");
                     break;
                     case PAUSEFAIL: //result PAUSE
@@ -148,7 +160,10 @@ public class Agent implements Runnable{
                     break;
                     case HOLDFAIL: //result HOLD
                     break;
-                    case RESULT: //result ?
+                    case CHANGEPWD: //CHANGEPWD
+                        mainForm.chanpwdform.showDialog();
+                        System.out.println("change pass suc: "+cmdList.get(1));
+                        agentObject.setPass(cmdList.get(1));
                     break;
                     case RINGING: //EVENT RINGING
                         try{
@@ -159,7 +174,6 @@ public class Agent implements Runnable{
                             mainForm.btn_pause.setEnabled(false);       
                             mainForm.setAllEnable(false);  
                             mainForm.lb_callernumber.setText(callerNum);
-                            dialout = false;
                         }catch(Exception e){
                         }
                     break;
@@ -208,6 +222,7 @@ public class Agent implements Runnable{
                         }
                     break;
                     default: 
+                        System.out.println("Break...");
                     break;
                     }
                 }
@@ -253,10 +268,9 @@ public class Agent implements Runnable{
             System.out.println("getRole "+agentObject.getRole());
             System.out.println("getSesion "+agentObject.getSesion());
             System.out.println("getPenalty "+agentObject.getPenalty());            
-        }        
-        
+        }                
         //send request to server - string
-	public void sendtoServer(String t) throws IOException{
+	public void sendtoServer(String t){
             try{
                 if(clientSocket != null && outtoServer != null && infromServer != null){   
                     outtoServer.println(t);
@@ -270,7 +284,7 @@ public class Agent implements Runnable{
             }            
 	}        
         //close Socket & Thread for client
-	public void closeConnect()throws Exception{
+	public void closeConnect(){
             try{
                 System.out.println("start close session");
                 if(clientSocket != null && infromServer != null && outtoServer!= null){
@@ -302,6 +316,7 @@ public class Agent implements Runnable{
             HOLDSUCC, HOLDFAIL,
             TRANSSUCC, TRANSFAIL,
             UNPAUSESUCC, UNPAUSEFAIL,
-            DIALOUT, RINGING, AVAIL, BUSY, READY, RESULT, UP,HANGUP
+            DIALOUT, RINGING, AVAIL, BUSY, READY, RESULT, UP,HANGUP,
+            CHANGEPWD,
 	}
 }
