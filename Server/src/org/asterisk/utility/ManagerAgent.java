@@ -120,7 +120,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     ArrayList<String> cmdList = uti.getList(fromClient);
                     flag = Integer.parseInt(cmdList.get(0));				
                     switch(flag){
-                        case 100:                              
+                        case 100:   //login                      
                             getAgent(cmdList);	
                             if(mdb_agent.checkLogin(agent.getAgentId(), agent.getPass(), agent.getRole())){
                                 if(mdb_agent.checkStatus(agent.getAgentId(), agent.getInterface(), agent.getQueueId())){
@@ -153,7 +153,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                                 closeConnect();                                
                             }
                         break;
-                        case 102:  
+                        case 102://logout
                             if(agent != null){
                                 removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
                                 result = manager.sendAction(removeQueue).getResponse().toString();
@@ -171,7 +171,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                                 }		            		
                             }                            			            	
                         break;
-                        case 104:
+                        case 104: // pause & unpause
                             QueuePauseAction pauseAction = null;
                             if(cmdList.get(1).equalsIgnoreCase("off")){
                                 pauseAction = queuePause(agent.getInterface(), agent.getQueueId(), true);		
@@ -234,9 +234,16 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                                 
                             }                                                        
                         break;
-                        case 110:  
+                        case 110://change password
+                            String newpass = cmdList.get(1);
+                            if(mdb_agent.changePwd(newpass, agent.getAgentId())){
+                                agent.setPass(newpass);
+                                sendToAgent("CHANGEPWD@"+newpass);
+                            }else{
+                                sendToAgent("");
+                            }
                         break;
-                        case 112:  
+                        case 112:  //exit & logout                            
                             if(agent != null){
                                 removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
                                 result = manager.sendAction(removeQueue).getResponse().toString();
