@@ -31,21 +31,20 @@ import org.asterisk.utility.Utility;
  */
 public class LoginForm extends javax.swing.JFrame {
     	
-	private static String host = "localhost";
+	private  String host = "localhost";
         public AgentObject agentObject = null;
-	private static int qport = 33333;
-	private static int aport = 22222;
-	private static ArrayList <QueueObject>  listQueue;	
-        private static String role ="1";
-        private static String filename = "infor.properties";
-        private static Utility uti;
-        private static String agentId = "";
-        private static String pass = "";
-        private static String iface = "";
-        private static String queueId = "";
-        public static String cmd = null;
-        public static String queueName = "";
-        static int i =0;
+	private  int qport = 33333;
+	private  int aport = 22222;
+	private  ArrayList <QueueObject>  listQueue;	
+        private  String role ="1";
+        private  String filename = "infor.properties";
+        private  Utility uti;
+        private  String agentId = "";
+        private  String pass = "";
+        private  String iface = "";
+        private  String queueId = "";
+        public  String cmd = null;
+        public  String queueName = "";
     /**
      * Creates new form LoginForm
      */
@@ -472,7 +471,7 @@ public class LoginForm extends javax.swing.JFrame {
                         
     }
     
-    private static void getListQueue(){
+    private void getListQueue(){
         try{            
             Socket soc = new Socket(host, qport);            
             if(soc != null){                    		
