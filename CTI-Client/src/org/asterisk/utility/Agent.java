@@ -22,14 +22,15 @@ public class Agent implements Runnable{
 	/**
 	 * @param args
 	 */
-	static boolean running = true;
-//	static boolean connected = true;
-	static Thread mainThread;
-	static Socket clientSocket;
-        static AgentObject agentObject;
-        private static LoginForm loginform;        
-        private static BufferedReader infromServer = null;
-        MainForm2 mainForm2 = null;
+	private boolean running = true;
+	private  Thread mainThread;
+	private  Socket clientSocket;
+        private  AgentObject agentObject;
+        private LoginForm loginform;        
+        private BufferedReader infromServer;
+        private PrintWriter outtoServer;            
+        private MainForm2 mainForm2 = null;
+        private boolean close = true;
 	int data;
 	
 	public Agent(){
@@ -45,16 +46,14 @@ public class Agent implements Runnable{
             loginform = login;
             agentObject = loginform.agentObject;
             mainThread = new Thread(this);
-            mainThread.start();
-            sendtoServer(loginform.cmd);                
+            mainThread.start();                
 	}
 
 	public Agent(String address, int port, String cmd){
             try{
                 clientSocket = new Socket(address, port);	
                 mainThread = new Thread(this);
-                mainThread.start();
-                sendtoServer(cmd);                
+                mainThread.start();                                
             }catch(Exception ex){
             }
 	}	
@@ -65,10 +64,10 @@ public class Agent implements Runnable{
             try{
                 String command = null;
                 CODE code;
-//                MainForm mainForm = null;
-//                MainForm2 mainForm2 = null;
-                while(clientSocket.isConnected()){
-                    infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                outtoServer = new PrintWriter(clientSocket.getOutputStream());
+                infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+                sendtoServer(loginform.cmd);
+                while(running){                    
                     command = infromServer.readLine();
                     ArrayList<String> cmdList = getList(command);							
                     code = CODE.valueOf(cmdList.get(0).toUpperCase());
@@ -76,29 +75,29 @@ public class Agent implements Runnable{
                     case LOGINSUCC: //result LOGIN SUCCESS
                         System.out.println("LOGIN SUCCESS");
                         agentObject.setAgentName(cmdList.get(1));
+                        agentObject.setSession(cmdList.get(2));
                         mainForm2 = new MainForm2(this, agentObject);
                         mainForm2.setVisible(true);
                         loginform.setVisible(false);
-                        loginform.dispose();
-                        loginform = null;
                     break;
-                    case LOGINFAIL: //result LOGIN FAIL
-                        System.out.println("LOGIN FAIL");
-                        loginform.lb_status.setText("Login Fail! Please check information again.");
-//                        connected = false;                                           
+                    case LOGINFAIL: //result LOGIN FAIL                                 
                         try {
+                            System.out.println("LOGIN FAIL");
+                            loginform.lb_status.setText(cmdList.get(2)); 
                             closeConnect();
                             this.finalize();
                         } catch (Throwable ex) {
                             Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     break;
-                    case LOGOUTSUCC: //result LOGOUT SUCCESS
-                        System.out.println("logout");
-                        new LoginForm().setVisible(true);
-                        mainForm2.setVisible(false);
-                        mainForm2.dispose();                                        
+                    case LOGOUTSUCC: //result LOGOUT SUCCESS                                        
                         try {
+                            System.out.println("logout");
+                            mainForm2.setVisible(false);
+                            mainForm2.dispose();
+                            loginform.setVisible(true);
+                            loginform.lb_status.setText("");
+                            close = false;
                             closeConnect();  
                             this.finalize();
                         } catch (Throwable ex) {
@@ -162,22 +161,24 @@ public class Agent implements Runnable{
                     break;
                     default: 
                     break;
-                            }
                     }
+                }
             }  
             catch(SocketException e){
-                System.out.println("Socket exception client: "+e);
-                System.out.println("logout");
-//                new LoginForm().setVisible(true);   
-//                mainForm2.setVisible(false);
-//                mainForm2.dispose();                                                     
-//                try {
-//                    closeConnect();  
-//                    this.finalize();
-//                } catch (Throwable ex) {
-//                    Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
-//                }
-//                System.out.println("Interupt connection by Server");                
+                if(close){                                                  
+                    try {
+                        System.out.println("Socket exception client: "+e);
+                        System.out.println("logout & new login form");
+                        mainForm2.setVisible(false);
+                        mainForm2.dispose();
+                        loginform.setVisible(true);
+                        loginform.lb_status.setText(""); 
+                        closeConnect();  
+                    } catch (Throwable ex) {
+                        Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    System.out.println("Interupt connection by Server");                     
+                }               
             }
             catch (IllegalArgumentException e) {
                     e.printStackTrace();
@@ -190,11 +191,11 @@ public class Agent implements Runnable{
 
 	}
         //send request to server - string
-	public static void sendtoServer(String t) throws IOException{
-            PrintWriter outtoServer;
-            outtoServer = new PrintWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
-            outtoServer.println(t);
-            outtoServer.flush();
+	public void sendtoServer(String t) throws IOException{
+            if(clientSocket != null && outtoServer != null){
+                outtoServer.println(t);
+                outtoServer.flush();
+            }
 	}
 	public static ArrayList<String> getList(String cmd){
             ArrayList<String> list =  new ArrayList<String>();
@@ -204,20 +205,15 @@ public class Agent implements Runnable{
             return list;
 	}	
         //close Socket & Thread for client
-	public static void closeConnect()throws Exception{
+	public void closeConnect()throws Exception{
             System.out.println("start close session");
-            if(mainThread!=null){
-                mainThread.interrupt();
-                mainThread = null;
-                System.out.println("close thread");
-            }
-            if(!clientSocket.isClosed()){
-                clientSocket.shutdownInput();
-                clientSocket.shutdownOutput();
+            if(clientSocket != null && outtoServer != null && infromServer != null){
+                running = false;
+                outtoServer.close();
+                infromServer.close();
                 clientSocket.close();                
                 System.out.println("close socket");
-            }
-            infromServer = null;            
+            }             
             System.out.println("finish close session");            
 	}        
 	public enum CODE{

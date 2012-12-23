@@ -21,7 +21,7 @@ import org.asterisk.utility.Utility;
  */
 public class MainForm2 extends javax.swing.JFrame {
     
-    private static LoginForm loginform;
+    private LoginForm loginform;
     private Agent agentClient;
     private TrayIcon trayIcon;
     private SystemTray stray;    
@@ -143,7 +143,6 @@ public class MainForm2 extends javax.swing.JFrame {
         btn_back = new javax.swing.JButton();
         btn_dial = new javax.swing.JButton();
         btn_clear = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         btn_logout = new javax.swing.JButton();
         btn_pause = new javax.swing.JToggleButton();
@@ -526,19 +525,6 @@ public class MainForm2 extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("xyz"));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 286, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
         jPanel2.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
         btn_logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/logout.png"))); // NOI18N
@@ -639,9 +625,7 @@ public class MainForm2 extends javax.swing.JFrame {
                             .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(panel_dial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -654,10 +638,8 @@ public class MainForm2 extends javax.swing.JFrame {
                     .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(panel_dial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel_dial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lb_version))
         );
 
@@ -673,15 +655,11 @@ public class MainForm2 extends javax.swing.JFrame {
                 cmd  = "104@off";
                 agentClient.sendtoServer(cmd);
                 btn_logout.setEnabled(false);
-//                panel_dial.setEnabled(false);
-//                panel_number.setEnabled(false);
             }else{
                 btn_pause.setText("PAUSE");    
                 cmd  = "104@on";
                 agentClient.sendtoServer(cmd);  
                 btn_logout.setEnabled(true);
-//                panel_dial.setEnabled(true);
-//                panel_number.setEnabled(true);
             }
         }catch(Exception e){
             
@@ -911,7 +889,6 @@ public class MainForm2 extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JLabel lb_agentid;
