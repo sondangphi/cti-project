@@ -25,7 +25,7 @@ public class FeedbackForm extends javax.swing.JFrame {
 	private static String Mysql_pwd  = "callcenter";   
         private static ConnectDatabase con;
         private static Utility uti;
-        private MainForm2 mainform2 = null ;
+        private MainForm mainform2 = null ;
         private Agent agentclient;
         
         private static AgentObject agentObject = null;

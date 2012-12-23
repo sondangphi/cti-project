@@ -478,7 +478,6 @@ public class LoginForm extends javax.swing.JFrame {
                     if(!iface.equalsIgnoreCase("") && uti.checkIface(iface)){                        
                         if(!queueId.equalsIgnoreCase("")){
                             cmd = "100@"+agentId+"@"+pass+"@SIP/"+iface+"@"+queueId+"@"+role;
-//                            lb_status.setText(cmd);
                             Socket clientSocket = new Socket(host, aport);
 //                            clientSocket.setKeepAlive(true);
 //                            clientSocket.setSoTimeout(TIME_OUT);

@@ -37,7 +37,7 @@ public class Agent implements Runnable{
 	private Socket clientSocket;
         private AgentObject agentObject;
         private LoginForm loginform;        
-        private MainForm2 mainForm2;
+        private MainForm mainForm2;
         
         private String filename = "infor.properties";                         		
         private String Mysql_server = "172.168.10.208";      
@@ -55,17 +55,7 @@ public class Agent implements Runnable{
         private boolean campaign = false;
         private BufferedReader infromServer;
         private PrintWriter outtoServer;        
-        private String com;  
-        
-//        private int secs = 0;
-//        private int mins = 0;
-//        private int hrs = 0;
-//        private int tempsec = 0;
-//        private int tempmin = 0;
-//        private int temphr = 0;    
-//        private String time = "";  
-//        private DecimalFormat dFormat = new DecimalFormat("00");
-        
+        private String com;          
 	public Agent(){
 		
 	}
@@ -97,9 +87,23 @@ public class Agent implements Runnable{
                 infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));              
                 sendtoServer(com);
                 while(running){                    
-                    command = infromServer.readLine();
+                    command = infromServer.readLine();   
                     System.out.println("***listen from server***");
                     System.out.println("***receive from server: "+command);
+                    if(command == null){
+                        System.out.println("null value from server");
+                        try {
+                            close = false;
+                            System.out.println("Server is close! Please wait...");
+                            mainForm2.setVisible(false);
+                            mainForm2.dispose();                             
+                            new LoginForm().setVisible(true);
+                            closeConnect();  
+                            break;                            
+                        } catch (Exception ex) {
+                            System.out.println("Server is close! Please wait... " +ex);
+                        } 
+                    }
                     ArrayList<String> cmdList = getList(command);							
                     code = CODE.valueOf(cmdList.get(0).toUpperCase());
                     switch(code){
@@ -107,9 +111,10 @@ public class Agent implements Runnable{
                         System.out.println("LOGIN SUCCESS");
                         agentObject.setAgentName(cmdList.get(1));
                         agentObject.setSession(cmdList.get(2));
-                        mainForm2 = new MainForm2(this, agentObject);
+                        mainForm2 = new MainForm(this, agentObject);
                         mainForm2.setVisible(true);
                         loginform.setVisible(false);
+                        loginform.dispose();
                         worktime = new TimerClock(mainForm2, false);
                         worktime.start();
                     break;
@@ -127,14 +132,12 @@ public class Agent implements Runnable{
                             mainForm2.setVisible(false);
                             mainForm2.dispose(); 
                             close = false;
-                            loginform.setVisible(true);
-                            loginform.lb_status.setText("");
+                            new LoginForm().setVisible(true);
                             closeConnect();  
                             System.out.println("LOGOUT SUCCESS");
                         } catch (Exception ex) {
                             System.out.println("LOGOUTSUCC " +ex);
-                        }
-                        
+                        }                        
                     break;
                     case LOGOUTFAIL: //result LOGOUT FAIL
                         System.out.println("LOGOUT FAIL");
@@ -258,6 +261,7 @@ public class Agent implements Runnable{
                         clock.start();
                     break;
                     default: 
+                        System.out.println("default values from server\t"+command);
                     break;
                     }
                 }
@@ -267,8 +271,8 @@ public class Agent implements Runnable{
                     System.out.println("Socket exception client: "+e);
                     System.out.println("logout & new login form");
                     mainForm2.setVisible(false);
-                    loginform.setVisible(true);
-                    loginform.lb_status.setText("");
+                    mainForm2.dispose();
+                    new LoginForm().setVisible(true);
                 }                                                                                                        
             }
             catch (IllegalArgumentException e) {
