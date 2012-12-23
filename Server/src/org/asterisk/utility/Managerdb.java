@@ -201,7 +201,7 @@ public class Managerdb {
                     + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+talktime+"')";
             sqlExecute(sql);            
         }        
-        public boolean changePwd(String oldPwd, String newPwd, String agent) throws ClassNotFoundException, SQLException{            
+        public boolean changePwd(String newPwd, String agent) throws ClassNotFoundException, SQLException{            
             String sqlcom = "UPDATE agent_login SET password ='"+newPwd+"' WHERE agent_id ='"+agent+"'";                        
             return sqlExecute(sqlcom)>0 ? true : false;            
         }
