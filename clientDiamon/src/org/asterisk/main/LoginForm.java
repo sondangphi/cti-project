@@ -46,7 +46,6 @@ public class LoginForm extends javax.swing.JFrame {
         private String queueId = "";
         public String cmd;
         public String queueName = "";
-//        static int i =0;
         public Agent agent;
         private String filename = "infor.properties";
         private String Mysql_server = "172.168.10.208";      
@@ -61,7 +60,8 @@ public class LoginForm extends javax.swing.JFrame {
     ConfigForm configform;
     public LoginForm() {
         initComponents();
-        Image image = Toolkit.getDefaultToolkit().getImage("stock_lock.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("images/stock_lock.png");
+        this.setIconImage(image);
         try{            
             uti = new Utility();		
             File f = new File(filename);
@@ -99,7 +99,6 @@ public class LoginForm extends javax.swing.JFrame {
                 lb_notify_queue.setText("");
         }catch(Exception e){
         }
-        this.setIconImage(image);  
         setLocationRelativeTo(null);
         Color LightSkyBlue2 = new Color(164, 211, 238);
         Color white = new Color(255,255,255);    

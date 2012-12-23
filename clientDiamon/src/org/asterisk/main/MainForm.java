@@ -6,6 +6,7 @@ package org.asterisk.main;
 
 //import com.jniwrapper.win32.ie.Browser;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.GridLayout;
 import java.awt.Image;
@@ -31,10 +32,10 @@ import org.asterisk.utility.Utility;
 public class MainForm extends javax.swing.JFrame {
     
     private LoginForm loginform;
-    private Agent agentClient;
+    public  Agent agentClient;
     private TrayIcon trayIcon;
     private SystemTray stray;    
-    static AgentObject agentObject;
+    public  AgentObject agentObject;
     private Utility uti;
     private String dialNumber = "";
     public String callDuration = "00:00:00";
@@ -45,6 +46,7 @@ public class MainForm extends javax.swing.JFrame {
     private  String Mysql_user = "cti";
     private  String Mysql_pwd  = "123456"; 
     private ConnectDatabase con;
+    public ChangepwdForm chanpwdform;
 //    private FeedbackForm feedback;
 
     /**
@@ -52,17 +54,22 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm() {
         initComponents();
-        txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);        
+        txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);   
+        Image image = Toolkit.getDefaultToolkit().getImage("images/people.png");
+        this.setIconImage(image);
+        Color green2 = new Color(0, 238, 0);
+        Color royalBlue = new Color(65, 105, 225);
+        Color Blue1 = new Color(0, 0, 225);
+        btn_dial.setBackground(royalBlue);
     }
     
     public MainForm(Agent agent, AgentObject aOb) {
-//        jPanel9.set
         initComponents();        
         uti = new Utility();
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );        
         agentClient = agent;
         agentObject = aOb;        
-        Image image = Toolkit.getDefaultToolkit().getImage("people.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("images/people.png");
         this.setIconImage(image);
         if (SystemTray.isSupported()) {
             MouseListener mouseListener = new MouseListener() {
@@ -100,6 +107,10 @@ public class MainForm extends javax.swing.JFrame {
         lb_version.setHorizontalAlignment(javax.swing.JLabel.RIGHT);
         lb_version.setVerticalAlignment(javax.swing.JLabel.CENTER);
         txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);  
+        Color green2 = new Color(0, 238, 0);
+        Color royalBlue = new Color(65, 105, 225);
+        Color Blue1 = new Color(0, 0, 225);
+        btn_dial.setBackground(royalBlue);        
         try{
             Mysql_dbname = uti.readInfor(filename, "MySql_database");
             Mysql_server = uti.readInfor(filename, "MySql_server");
@@ -108,7 +119,7 @@ public class MainForm extends javax.swing.JFrame {
         }catch(Exception e){
         }
         
-        this.setTitle("Desktop Agent _ "+agentObject.getAgentId()+" _ "+agentObject.getAgentName());
+        this.setTitle("Agent Desktop .::. "+agentObject.getAgentId()+" _ "+agentObject.getAgentName());
 //        this.lb_locate.setToolTipText("Locate Map");
         setLocationRelativeTo(null);
     }    
@@ -182,7 +193,10 @@ public class MainForm extends javax.swing.JFrame {
         jMenu1 = new javax.swing.JMenu();
         MenuItem_logout = new javax.swing.JMenuItem();
         MenuItem_setting = new javax.swing.JMenuItem();
+        MenuItem_changepwd = new javax.swing.JMenuItem();
         MenuItem_exit = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        MenuItem_info = new javax.swing.JMenuItem();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -397,7 +411,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lb_callernumber, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel6Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel2, jLabel3, jLabel4, jLabel5, jLabel6, jLabel7, lb_agentid, lb_agentname, lb_callernumber, lb_extension, lb_queue});
@@ -550,8 +564,9 @@ public class MainForm extends javax.swing.JFrame {
         panel_numberLayout.setVerticalGroup(
             panel_numberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_numberLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(txt_phonenum, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel_numberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(panel_numberLayout.createSequentialGroup()
                         .addGroup(panel_numberLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -582,7 +597,8 @@ public class MainForm extends javax.swing.JFrame {
 
         panel_numberLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btn_0, btn_1, btn_11, btn_12, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9});
 
-        btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/gtk-go-back-ltr.png"))); // NOI18N
+        btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/123070_42045_16_back_icon.png.gif"))); // NOI18N
+        btn_back.setBorder(null);
         btn_back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_backActionPerformed(evt);
@@ -590,15 +606,15 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         btn_dial.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_dial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/com.mmmooo.SpeedDial_icon.png"))); // NOI18N
+        btn_dial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/1356109415_phone.png"))); // NOI18N
         btn_dial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_dialActionPerformed(evt);
             }
         });
 
-        btn_clear.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btn_clear.setText("Clear");
+        btn_clear.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btn_clear.setText("C");
         btn_clear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_clearActionPerformed(evt);
@@ -614,22 +630,27 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(panel_number, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_dialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btn_dial, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_clear))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panel_dialLayout.createSequentialGroup()
+                        .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_clear))
+                    .addGroup(panel_dialLayout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addComponent(btn_dial, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
 
-        panel_dialLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btn_back, btn_clear, btn_dial});
+        panel_dialLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btn_back, btn_clear});
 
         panel_dialLayout.setVerticalGroup(
             panel_dialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_dialLayout.createSequentialGroup()
-                .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addGroup(panel_dialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btn_dial, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_dial, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addComponent(panel_number, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -654,6 +675,14 @@ public class MainForm extends javax.swing.JFrame {
         MenuItem_setting.setEnabled(false);
         jMenu1.add(MenuItem_setting);
 
+        MenuItem_changepwd.setText("Change Password");
+        MenuItem_changepwd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuItem_changepwdActionPerformed(evt);
+            }
+        });
+        jMenu1.add(MenuItem_changepwd);
+
         MenuItem_exit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
         MenuItem_exit.setText("Exit");
         MenuItem_exit.addActionListener(new java.awt.event.ActionListener() {
@@ -664,6 +693,24 @@ public class MainForm extends javax.swing.JFrame {
         jMenu1.add(MenuItem_exit);
 
         jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("About");
+        jMenu2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenu2ActionPerformed(evt);
+            }
+        });
+
+        MenuItem_info.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_I, java.awt.event.InputEvent.ALT_MASK));
+        MenuItem_info.setText("Information");
+        MenuItem_info.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuItem_infoActionPerformed(evt);
+            }
+        });
+        jMenu2.add(MenuItem_info);
+
+        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -715,7 +762,6 @@ public class MainForm extends javax.swing.JFrame {
                 agentClient.sendtoServer(cmd);
                 btn_logout.setEnabled(false);
                 setAllEnable(false);
-//                lb_status.
                 lb_status.setText("Not Ready");
             }else{
                 btn_pause.setText("PAUSE");    
@@ -772,9 +818,7 @@ public class MainForm extends javax.swing.JFrame {
         try{
             String cmd  = "102";
             agentClient.sendtoServer(cmd);
-//            agentClient.out.println(cmd);
-            System.out.println("Logout program");
-//            agentClient = null;            
+            System.out.println("Logout program");   
         }catch(Exception e){
         }        
     }//GEN-LAST:event_MenuItem_logoutActionPerformed
@@ -903,6 +947,24 @@ public class MainForm extends javax.swing.JFrame {
         
     }//GEN-LAST:event_txt_phonenumKeyPressed
 
+    private void MenuItem_infoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_infoActionPerformed
+        // TODO add your handling code here:
+        System.out.println("");
+    }//GEN-LAST:event_MenuItem_infoActionPerformed
+
+    private void MenuItem_changepwdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_changepwdActionPerformed
+        // TODO add your handling code here:
+        chanpwdform = new ChangepwdForm(agentClient, agentObject);
+        chanpwdform.setVisible(true);
+    }//GEN-LAST:event_MenuItem_changepwdActionPerformed
+
+    private void jMenu2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu2ActionPerformed
+        // TODO add your handling code here:
+        System.out.println("About form open");
+         AboutForm about = new AboutForm();
+         about.setVisible(true);
+    }//GEN-LAST:event_jMenu2ActionPerformed
+
     public void setAllEnable(boolean flag){
         btn_0.setEnabled(flag);
         btn_1.setEnabled(flag);
@@ -962,7 +1024,9 @@ public class MainForm extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem MenuItem_changepwd;
     public javax.swing.JMenuItem MenuItem_exit;
+    private javax.swing.JMenuItem MenuItem_info;
     public javax.swing.JMenuItem MenuItem_logout;
     private javax.swing.JMenuItem MenuItem_setting;
     private javax.swing.JButton btn_0;
@@ -991,6 +1055,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel4;
