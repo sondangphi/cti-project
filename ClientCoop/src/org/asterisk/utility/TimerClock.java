@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DecimalFormat;
 import javax.swing.Timer;
-import org.asterisk.main.MainForm2;
+import org.asterisk.main.MainForm;
 
 /**
  *
@@ -23,17 +23,17 @@ public class TimerClock implements ActionListener{
     private int tempmin = 0;
     private int temphr = 0;    
     private String time = "";
-    private MainForm2 mainform = null;
+    private MainForm mainform = null;
     private boolean flag = true;
     private DecimalFormat dFormat = new DecimalFormat("00");
 
     public TimerClock() {
     }
-    public TimerClock(MainForm2 m) {
+    public TimerClock(MainForm m) {
         clock = new Timer(1000, this);
         mainform = m;
     }
-    public TimerClock(MainForm2 m, boolean f) {
+    public TimerClock(MainForm m, boolean f) {
         clock = new Timer(1000, this);
         mainform = m;
         flag = f;

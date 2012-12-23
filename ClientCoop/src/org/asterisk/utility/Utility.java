@@ -18,9 +18,10 @@ import java.util.Random;
 import java.util.StringTokenizer;
 
 public class Utility {
-        Properties prop = new Properties();
     
+        Properties prop = new Properties();    
         String filename = "infor.properties"; 
+        
 	public String getDatetimeNow(){		
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Calendar cal = Calendar.getInstance();
@@ -88,12 +89,10 @@ public class Utility {
         }
         
         public void writeInfor(String fname,String key, String value)throws Exception{
-//            System.out.println("write file"); 
             prop.setProperty(key, value);
             prop.store(new FileOutputStream(fname), null);
         }
         public String readInfor(String fname, String key)throws Exception{
-//            System.out.println("read file"); 
             String value = "";
             prop.load(new FileInputStream(fname));
             value = prop.getProperty(key);
@@ -150,17 +149,7 @@ public class Utility {
 
         static long mili(long h, long m, long s){        
             return s+m*60+h*3600;
-        }
-    
-//    static long divtime(String begin, String end) throws ParseException{
-//        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-//        Date date1 = format.parse(begin);
-//        Date date2 = format.parse(end);
-//        long difference = date2.getTime() - date1.getTime(); 
-//        System.out.println(difference);
-//        return difference/1000;
-////        System.out.println(difference);
-//    }    
+        }  
     
         public static long sumTime2(String begin, String end) throws ParseException{
             SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
