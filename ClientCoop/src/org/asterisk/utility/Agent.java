@@ -37,10 +37,10 @@ public class Agent implements Runnable{
 	private Socket clientSocket;
         private AgentObject agentObject;
         private LoginForm loginform;        
-        private MainForm mainForm2;
+        private MainForm mainForm;
         
         private String filename = "infor.properties";                         		
-        private String Mysql_server = "172.168.10.208";      
+        private String Mysql_server = "172.168.10.202";      
         private String Mysql_dbname = "ast_callcenter";
 	private String Mysql_user = "callcenter";
 	private String Mysql_pwd  = "callcenter";   
@@ -50,9 +50,11 @@ public class Agent implements Runnable{
         public CustomerObject customer;
         
         private boolean close = true;
-        private TimerClock clock;
+        private TimerClock clockDialin;
+        private TimerClock clockDialout;
         private TimerClock worktime;
         private boolean campaign = false;
+        private boolean dialout = false;
         private BufferedReader infromServer;
         private PrintWriter outtoServer;        
         private String com;          
@@ -95,8 +97,8 @@ public class Agent implements Runnable{
                         try {
                             close = false;
                             System.out.println("Server is close! Please wait...");
-                            mainForm2.setVisible(false);
-                            mainForm2.dispose();                             
+                            mainForm.setVisible(false);
+                            mainForm.dispose();                             
                             new LoginForm().setVisible(true);
                             closeConnect();  
                             break;                            
@@ -111,11 +113,11 @@ public class Agent implements Runnable{
                         System.out.println("LOGIN SUCCESS");
                         agentObject.setAgentName(cmdList.get(1));
                         agentObject.setSession(cmdList.get(2));
-                        mainForm2 = new MainForm(this, agentObject);
-                        mainForm2.setVisible(true);
+                        mainForm = new MainForm(this, agentObject);
+                        mainForm.setVisible(true);
                         loginform.setVisible(false);
                         loginform.dispose();
-                        worktime = new TimerClock(mainForm2, false);
+                        worktime = new TimerClock(mainForm, false);
                         worktime.start();
                     break;
                     case LOGINFAIL: //result LOGIN FAIL                                                     
@@ -129,8 +131,8 @@ public class Agent implements Runnable{
                     break;
                     case LOGOUTSUCC: //result LOGOUT SUCCESS              
                         try {
-                            mainForm2.setVisible(false);
-                            mainForm2.dispose(); 
+                            mainForm.setVisible(false);
+                            mainForm.dispose(); 
                             close = false;
                             new LoginForm().setVisible(true);
                             closeConnect();  
@@ -164,74 +166,76 @@ public class Agent implements Runnable{
                     break;
                     case HOLDFAIL: //result HOLD
                     break;
-                    case RESULT: //result ?
+                    case CHANGEPWD: //result
+                        mainForm.chanpwdform.showDialog();
+                        System.out.println("password have changed: "+cmdList.get(1));
+                        agentObject.setPass(cmdList.get(1));                        
                     break;
                     case RINGING: //EVENT RINGING
                         try{
-//                            printinfor();
+                            dialout = false;
                             String callerNum = cmdList.get(1);
-                            mainForm2.lb_status.setText("Ringing...");
-                            mainForm2.lb_callduration.setText("00:00:00");
-                            mainForm2.btn_pause.setEnabled(false);       
-                            mainForm2.btn_feedback.setEnabled(true);
-                            mainForm2.setAllEnable(false);
+                            mainForm.lb_status.setText("Ringing...");
+                            mainForm.lb_callduration.setText("00:00:00");
+                            mainForm.btn_pause.setEnabled(false);       
+                            mainForm.btn_feedback.setEnabled(true);
+                            mainForm.setAllEnable(false);
                             //open connect to database
                             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
                             if(con.isConnect()){
+                                System.out.println("get information of customer"); 
                                 String sql = "SELECT * FROM customer WHERE mobilephone ='"+callerNum+"'";
                                 ResultSet rs = con.executeQuery(sql);
                                 if(rs.next()){
                                     //get information of already custom and fill in data   
                                     System.out.println("callerNum: "+callerNum);
+                                    System.out.println("already information");
                                     customer = new CustomerObject(callerNum);
                                     customer.setName(rs.getString("fullname"));                                    
                                     customer.setAddress(rs.getString("address"));
                                     customer.setEmail(rs.getString("email"));
                                     customer.setGender(rs.getString("gender"));
                                     customer.setPhone1(rs.getString("homephone1"));
-                                    customer.setId(rs.getString("id"));
+                                    customer.setId(String.valueOf(rs.getObject("id")));                                                                         
+                                    mainForm.txt_add.setText(customer.getAddress());
+                                    mainForm.txt_name.setText(customer.getName());
+                                    mainForm.txt_email.setText(customer.getEmail());
+                                    mainForm.txt_mobile.setText(customer.getPhone());
+                                    mainForm.txt_phone1.setText(customer.getPhone1());
                                     String gender = customer.getGender();
-                                    System.out.println("already information"); 
-                                    mainForm2.txt_add.setText(customer.getAddress());
-                                    mainForm2.txt_name.setText(customer.getName());
-                                    mainForm2.txt_email.setText(customer.getEmail());
-                                    mainForm2.txt_mobile.setText(customer.getMobile());
-                                    mainForm2.txt_phone1.setText(customer.getPhone1());
                                     if(gender.equalsIgnoreCase("1"))
-                                        mainForm2.cb_gender.setSelectedIndex(0);
+                                        mainForm.cb_gender.setSelectedIndex(0);
                                     else
-                                        mainForm2.cb_gender.setSelectedIndex(1);
-                                    mainForm2.btn_new.setEnabled(false);
-                                    mainForm2.btn_update.setEnabled(true);
-                                    mainForm2.btn_feedback.setEnabled(true);
-                                    sql = "SELECT * FROM feedback WHERE mobile ='"+callerNum+"'";
+                                        mainForm.cb_gender.setSelectedIndex(1);
+                                    mainForm.btn_new.setEnabled(false);
+                                    mainForm.btn_update.setEnabled(true);
+                                    mainForm.btn_feedback.setEnabled(true);
+                                    sql = "SELECT * FROM feedback_history WHERE mobile = '"+callerNum+"'";
                                     rs = con.executeQuery(sql);
-                                    if(rs != null){
-                                        addTable(rs);
-                                    }                                                                                    
+                                    if(rs != null)
+                                        displayHistory(rs);                                                                                                                        
                                 }else{
                                     //new customer information, insert into database
                                     System.out.println("callerNum: "+callerNum);
                                     System.out.println("not ready information");  
-                                    mainForm2.txt_mobile.setText(callerNum);
-                                    mainForm2.btn_new.setEnabled(true);
-                                    mainForm2.btn_update.setEnabled(false);
-                                    mainForm2.btn_feedback.setEnabled(true);
-                                    mainForm2.txt_add.setText("");
-                                    mainForm2.txt_email.setText("");
-                                    mainForm2.txt_name.setText("");
-                                    mainForm2.txt_email.setText("");                                    
-                                    mainForm2.txt_phone1.setText("");  
+                                    mainForm.txt_mobile.setText(callerNum);
+                                    mainForm.btn_new.setEnabled(true);
+                                    mainForm.btn_update.setEnabled(false);
+                                    mainForm.btn_feedback.setEnabled(true);
+                                    mainForm.txt_add.setText("");                                    
+                                    mainForm.txt_name.setText("");
+                                    mainForm.txt_email.setText("");                                    
+                                    mainForm.txt_phone1.setText("");  
                                     String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
                                     int count = colname.length;
                                     Vector col = new Vector(count);
                                     Vector row = new  Vector();
                                     for (int i = 0; i <count; i++) 
                                         col.addElement(colname[i].toString());
-                                    mainForm2.table_report.setModel(new TableModel(col, row));
+                                    mainForm.table_report.setModel(new TableModel(col, row));
                                 }
                             }
-                            //close connect
+                            //close connect database
                             con.closeConnect();                                                       
                         }catch(Exception e){
                             con.closeConnect();  
@@ -239,26 +243,43 @@ public class Agent implements Runnable{
                     break;
                     case DIALOUT: //result 	
                         System.out.println("DIALOUT");                        
-                        mainForm2.lb_status.setText("Dial out...");
+                        mainForm.lb_status.setText("Dialing...");
+                        mainForm.lb_callduration.setText("00:00:00");
+                        dialout = true;
                     break;
                     case BUSY: 
                     break;
                     case READY: 
                     break;
                     case HANGUP: 
-                        mainForm2.lb_status.setText("Ready");
-                        mainForm2.btn_pause.setEnabled(true);
-                        mainForm2.setAllEnable(true);
-                        if(clock != null){
-                            clock.stop();
-                            clock = null;
-                        }                            
+                        if(dialout){
+                            mainForm.lb_status.setText("Ready");
+                            mainForm.btn_pause.setEnabled(true);
+                            mainForm.setAllEnable(true); 
+                            if(clockDialout != null){
+                                clockDialout.stop();
+                            }
+                        }else{
+                            mainForm.lb_status.setText("Ready");
+                            mainForm.btn_pause.setEnabled(true);
+                            mainForm.setAllEnable(true);      
+                            if(clockDialin != null){
+                                clockDialin.stop();                            
+                            }                                                      
+                        }                                           
                     break;
-                    case UP: //EVENT ANSWER CALL	     
-                        System.out.println("ANSWER");
-                        mainForm2.lb_status.setText("Busy");
-                        clock = new TimerClock(mainForm2, true);
-                        clock.start();
+                    case UP: //EVENT ANSWER CALL
+                        if(dialout){
+                            System.out.println("ANSWER dial out");
+                            mainForm.lb_status.setText("Busy");
+                            clockDialout = new TimerClock(mainForm, true);
+                            clockDialout.start();
+                        }else{
+                            System.out.println("ANSWER dial in");
+                            mainForm.lb_status.setText("Busy");
+                            clockDialin = new TimerClock(mainForm, true);
+                            clockDialin.start();                            
+                        }
                     break;
                     default: 
                         System.out.println("default values from server\t"+command);
@@ -270,8 +291,8 @@ public class Agent implements Runnable{
                 if(close){
                     System.out.println("Socket exception client: "+e);
                     System.out.println("logout & new login form");
-                    mainForm2.setVisible(false);
-                    mainForm2.dispose();
+                    mainForm.setVisible(false);
+                    mainForm.dispose();
                     new LoginForm().setVisible(true);
                 }                                                                                                        
             }
@@ -293,9 +314,9 @@ public class Agent implements Runnable{
 	}
         
         //xem lai doan nay, bi outofmemmory
-        public void addTable(ResultSet rs)throws Exception{
+        public void displayHistory(ResultSet rs)throws Exception{
             String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
-            mainForm2.table_report = null;
+//            mainForm.table_report = null;
             int count = colname.length;
             Vector col = new Vector(count);
             Vector row = new  Vector();
@@ -329,7 +350,7 @@ public class Agent implements Runnable{
             }
             for (int i = 0; i <count; i++) 
                 col.addElement(colname[i].toString());
-            mainForm2.table_report.setModel(new TableModel(col, row));                         
+            mainForm.table_report.setModel(new TableModel(col, row));                         
         }
         void printinfor(){
             System.out.println("getAgentId "+agentObject.getAgentId());
@@ -390,6 +411,7 @@ public class Agent implements Runnable{
             HOLDSUCC, HOLDFAIL,
             TRANSSUCC, TRANSFAIL,
             UNPAUSESUCC, UNPAUSEFAIL,
-            DIALOUT, RINGING, AVAIL, BUSY, READY, RESULT, UP,HANGUP
+            DIALOUT, RINGING, AVAIL, BUSY, READY, RESULT, UP,HANGUP,
+            CHANGEPWD,
 	}
 }

@@ -55,16 +55,14 @@ public class FeedbackForm extends javax.swing.JFrame {
     }
     
     public FeedbackForm(AgentObject agent, Agent agentc) {
-        initComponents();
-
-        
+        initComponents();        
         try{
             this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );
             uti = new Utility();
             agentObject = agent;
             agentclient = agentc;
             txt_name.setText(agentclient.customer.getName());
-            lb_mobile.setText(agentclient.customer.getMobile());
+            lb_mobile.setText(agentclient.customer.getPhone());
             Mysql_dbname = uti.readInfor(filename, "MySql_database");
             Mysql_server = uti.readInfor(filename, "MySql_server");
             Mysql_user = uti.readInfor(filename, "MySql_user");
@@ -358,9 +356,9 @@ public class FeedbackForm extends javax.swing.JFrame {
                 String solution = text_solution.getText();
                 String result = (String)cb_result.getItemAt(cb_result.getSelectedIndex());
                 String feedbackid = uti.getFeedbackId();
-                System.out.println(""+content);
-                System.out.println(""+solution);
-                String sql = "INSERT INTO feedback (feedbackid, name, mobile, agentid,type,categories,content,solution,results) "
+                System.out.println("content: "+content);
+                System.out.println("solution: "+solution);
+                String sql = "INSERT INTO feedback_history (feedbackid, name, mobile, agentid,type,categories,content,solution,results) "
                 + "VALUES ('"+feedbackid+"','"+name+"','"+mobile+"','"+agentObject.getAgentId()+"','"+type+"','"+categories+"','"+content+"','"+solution+"','"+result+"')";
                 con.executeUpdate(sql);
                 System.out.println("finish write feedback!");
@@ -368,7 +366,6 @@ public class FeedbackForm extends javax.swing.JFrame {
             con.closeConnect();
         }catch(Exception e){
         }
-
         this.dispose();
         this.setVisible(false);
     }//GEN-LAST:event_btn_saveActionPerformed

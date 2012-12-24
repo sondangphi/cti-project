@@ -54,7 +54,7 @@ public class ChangepwdForm extends javax.swing.JFrame {
             newpass2.setBackground(Khaki1);
             this.getContentPane().setBackground(Color.white);
             jPanel1.setBackground(Color.white);            
-            Image image = Toolkit.getDefaultToolkit().getImage("change_pass.png");
+            Image image = Toolkit.getDefaultToolkit().getImage("images/change_pass.png");
             this.setIconImage(image); 
         }catch(Exception e){
         }
@@ -215,17 +215,14 @@ public class ChangepwdForm extends javax.swing.JFrame {
                 System.out.println("newpwd1 != newpwd2");
             }            
         }else{
-            JOptionPane.showMessageDialog(this,"Password Wrong");
+            JOptionPane.showMessageDialog(this,"Password Wrong");            
             System.out.println("password == null");
         }
 //        this.dispose();
     }//GEN-LAST:event_btn_submitActionPerformed
 
     public void showDialog(){
-        int n = JOptionPane.showConfirmDialog(this,"Change Password Successful","Change Password",JOptionPane.CLOSED_OPTION);
-        if(n == 0){        
-        }else{        
-        }          
+        int n = JOptionPane.showConfirmDialog(this,"Change Password Successful","Change Password",JOptionPane.CLOSED_OPTION);          
         this.dispose(); 
     }
     private void btn_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelActionPerformed

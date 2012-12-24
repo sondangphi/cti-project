@@ -121,6 +121,11 @@ public class ConfigForm extends javax.swing.JFrame {
                 tx_serverMouseClicked(evt);
             }
         });
+        tx_server.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tx_serverKeyPressed(evt);
+            }
+        });
 
         tx_aport.setEnabled(false);
         tx_aport.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -265,6 +270,13 @@ public class ConfigForm extends javax.swing.JFrame {
         if(!tx_qport.isEnabled())
             tx_qport.setEnabled(true);
     }//GEN-LAST:event_tx_qportMouseClicked
+
+    private void tx_serverKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_serverKeyPressed
+        // TODO add your handling code here:
+         if(evt.getKeyCode() == 10){
+             btn_finishActionPerformed(null);
+         }        
+    }//GEN-LAST:event_tx_serverKeyPressed
 
     /**
      * @param args the command line arguments

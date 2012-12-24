@@ -44,6 +44,14 @@
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
               </AuxValues>
             </MenuItem>
+            <MenuItem class="javax.swing.JMenuItem" name="MenuItem_changepwd">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Change Password"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MenuItem_changepwdActionPerformed"/>
+              </Events>
+            </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="MenuItem_setting">
               <Properties>
                 <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
@@ -66,6 +74,21 @@
               <AuxValues>
                 <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
               </AuxValues>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="jMenu2">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Help"/>
+          </Properties>
+          <SubComponents>
+            <MenuItem class="javax.swing.JMenuItem" name="MenuItem_about">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="About"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MenuItem_aboutActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
@@ -134,9 +157,9 @@
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="panel_dial" min="-2" pref="218" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="main_tab" pref="0" max="32767" attributes="0"/>
+                  <Component id="main_tab" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace pref="23" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="jPanel4" max="32767" attributes="0"/>
                   <Component id="lb_version" max="32767" attributes="0"/>
@@ -156,7 +179,7 @@
                   <EmptySpace min="-2" pref="46" max="-2" attributes="0"/>
                   <Component id="btn_pause" min="-2" pref="114" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
-                  <Component id="jLabel12" min="-2" pref="74" max="-2" attributes="0"/>
+                  <Component id="jLabel12" min="-2" pref="62" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="lb_logintime" min="-2" pref="128" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -241,7 +264,7 @@
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="12" style="1"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Login Time"/>
+            <Property name="text" type="java.lang.String" value="Login at"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="lb_logintime">
@@ -339,15 +362,11 @@
                                                           <EmptySpace type="separate" max="-2" attributes="0"/>
                                                           <Component id="jLabel9" min="-2" pref="81" max="-2" attributes="0"/>
                                                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                          <Component id="txt_name" min="-2" pref="144" max="-2" attributes="0"/>
+                                                          <Component id="txt_name" min="-2" pref="141" max="-2" attributes="0"/>
                                                       </Group>
-                                                      <Group type="102" alignment="0" attributes="0">
-                                                          <Component id="txt_add" min="-2" pref="313" max="-2" attributes="0"/>
-                                                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                          <Component id="lb_locate" min="-2" pref="61" max="-2" attributes="0"/>
-                                                      </Group>
+                                                      <Component id="txt_add" min="-2" pref="384" max="-2" attributes="0"/>
                                                   </Group>
-                                                  <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                                       <Component id="jLabel17" linkSize="15" pref="66" max="32767" attributes="0"/>
                                                       <Component id="jLabel11" linkSize="15" max="32767" attributes="0"/>
@@ -380,7 +399,7 @@
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
                                           <Component id="btn_clear2" min="-2" pref="75" max="-2" attributes="0"/>
                                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                                          <Component id="btn_dial2" min="-2" pref="65" max="-2" attributes="0"/>
+                                          <Component id="jButton3" min="-2" pref="49" max="-2" attributes="0"/>
                                           <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                       </Group>
                                   </Group>
@@ -402,14 +421,11 @@
                               <Component id="cb_gender" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel10" linkSize="9" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
-                                  <Component id="txt_add" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel17" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
-                                  <Component id="txt_email1" alignment="3" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="lb_locate" linkSize="9" min="-2" pref="22" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" max="-2" attributes="0">
+                              <Component id="jLabel10" linkSize="9" pref="22" max="32767" attributes="0"/>
+                              <Component id="txt_add" linkSize="9" max="32767" attributes="0"/>
+                              <Component id="jLabel17" pref="22" max="32767" attributes="0"/>
+                              <Component id="txt_email1" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -427,13 +443,15 @@
                               <Component id="jLabel19" linkSize="9" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                               <Component id="txt_phone2" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="37" max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="3" max="-2" attributes="0">
-                              <Component id="btn_new" max="32767" attributes="0"/>
-                              <Component id="btn_update" max="32767" attributes="0"/>
-                              <Component id="btn_feedback" max="32767" attributes="0"/>
-                              <Component id="btn_clear2" max="32767" attributes="0"/>
-                              <Component id="btn_dial2" max="32767" attributes="0"/>
+                          <EmptySpace pref="19" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" max="-2" attributes="0">
+                                  <Component id="btn_new" max="32767" attributes="0"/>
+                                  <Component id="btn_update" max="32767" attributes="0"/>
+                                  <Component id="btn_feedback" max="32767" attributes="0"/>
+                                  <Component id="btn_clear2" max="32767" attributes="0"/>
+                              </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -512,9 +530,6 @@
                   </AuxValues>
                 </Component>
                 <Component class="javax.swing.JTextField" name="txt_mobile">
-                  <Properties>
-                    <Property name="editable" type="boolean" value="false"/>
-                  </Properties>
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
                   </AuxValues>
@@ -594,24 +609,6 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_clear2ActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JButton" name="btn_dial2">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="Dial"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_dial2ActionPerformed"/>
-                  </Events>
-                </Component>
-                <Component class="javax.swing.JLabel" name="lb_locate">
-                  <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/org/asterisk/image/gmap_70x70.png"/>
-                    </Property>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="lb_locateMouseClicked"/>
-                  </Events>
-                </Component>
                 <Component class="javax.swing.JLabel" name="jLabel16">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Email"/>
@@ -675,6 +672,16 @@
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
                   </AuxValues>
+                </Component>
+                <Component class="javax.swing.JButton" name="jButton3">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/org/asterisk/image/map_magnify.png"/>
+                    </Property>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -1390,7 +1397,7 @@
         <Component class="javax.swing.JButton" name="btn_back">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/org/asterisk/image/gtk-go-back-ltr.png"/>
+              <Image iconType="3" name="/org/asterisk/image/123070_42045_16_back_icon.png.gif"/>
             </Property>
           </Properties>
           <Events>

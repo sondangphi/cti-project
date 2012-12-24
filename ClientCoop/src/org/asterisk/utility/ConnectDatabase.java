@@ -16,11 +16,11 @@ import org.asterisk.model.QueueObject;
 public class ConnectDatabase {
 
 	private  Connection connection = null;
-	private  String user = "cti";
-	private  String pwd = "123456";
-	private  String database = "cti_database";
+	private  String user = "callcenter";
+	private  String pwd = "callcenter";
+	private  String database = "ast_callcenter";
 	private  String driverName = "com.mysql.jdbc.Driver";
-	private  String serverName = "172.168.10.208:3306/";
+	private  String serverName = "172.168.10.202:3306/";
 	
 	public ConnectDatabase() throws ClassNotFoundException, SQLException{
 		Class.forName(driverName);
@@ -60,9 +60,8 @@ public class ConnectDatabase {
 	}        
         
 	/*ket noi csdl mysql bang jdbc*/
-	public  ResultSet executeQuery(String sqlCom) throws ClassNotFoundException, SQLException{
-		
-		Class.forName(driverName);
+	public  ResultSet executeQuery(String sqlCom) throws ClassNotFoundException, SQLException{		
+//		Class.forName(driverName);
 //		connection = DriverManager.getConnection("jdbc:mysql://"+serverName+database,user,pwd);			
 		Statement stm = connection.createStatement();		
 		ResultSet rs = stm.executeQuery(sqlCom);//thi hanh lenh select va tra ve ket qua
@@ -70,7 +69,7 @@ public class ConnectDatabase {
 	}
 	public  int executeUpdate(String sql)throws ClassNotFoundException, SQLException{
 		
-		Class.forName(driverName);
+//		Class.forName(driverName);
 //		connection = DriverManager.getConnection("jdbc:mysql://"+serverName+database,user,pwd);
 		int result = 0;
 		Statement stm = connection.createStatement();	
