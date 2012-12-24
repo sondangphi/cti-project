@@ -51,6 +51,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
         private String dialoutTalktime = "0";
         private boolean dialout = false;
         private boolean dialin = false;
+        private boolean abadon = true;
         private String iface = "";
         private String incomeTemp;        
         private  BufferedReader inPutStream;
@@ -160,7 +161,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                                 if("success".equalsIgnoreCase(result)){
                                     close = false;
                                     System.out.println("remove queue success");
-                                    mdb_agent.updateStatus(agent.getAgentId(), "NULL", "NULL");		
+                                    mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
                                     mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());
                                     sendToAgent("LOGOUTSUCC");           
                                     uti.writeAgentLog("- AGENT - Agent logout\t"+addClient+"\t"+agent.getAgentId());
@@ -250,7 +251,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                                 result = manager.sendAction(removeQueue).getResponse().toString();
                                 if("success".equalsIgnoreCase(result)){
                                     System.out.println("remove queue success");
-                                    mdb_agent.updateStatus(agent.getAgentId(), "NULL", "NULL");		
+                                    mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
                                     mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());
                                     System.out.println("LOGOUTSUCC(exit system)");            
                                     uti.writeAgentLog("- AGENT - Agent logout - exit system\t"+addClient+"\t"+agent.getAgentId());
@@ -272,7 +273,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     if(close){
                         removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
                         result = manager.sendAction(removeQueue).getResponse().toString();
-                        mdb_agent.updateStatus(agent.getAgentId(), "NULL", "NULL");		
+                        mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
                         mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());   
                         uti.writeAgentLog("- AGENT - Interrup connection by client\t"+addClient+"\t"+agent.getAgentId());
 //                        removesocket();
@@ -417,7 +418,6 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     if(event instanceof AgentCalledEvent){
                         AgentCalledEvent callEvent = (AgentCalledEvent)event;
                         System.out.println("***********************\t AgentCalledEvent\t ***********************");  
-//                        iface = "";
                         iface = agent.getInterface().toString();//hay bi loi null pointer exception
                         String agentCaller = callEvent.getAgentCalled();
                         if(iface.equalsIgnoreCase(agentCaller)){
@@ -430,7 +430,6 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                             incomingCall.setcallerName(callerName);
                             incomingCall.setcallerNumber(callerNum);   
                             incomeTemp = incomingCall.getsession();
-//                            incomingCall.setdesNum("");//?????
                             mdb_agent.enterQueue(incomingCall.getsession(), agent.getAgentId(), iface, agent.getQueueId(), "3",callerNum);
                             uti.writeAgentLog("- AGENT - Enter Queue\t" + agent.getAgentId() + "\t" + iface + "\t" + callerNum);
                             sendToAgent("RINGING@"+callerNum);       
@@ -442,12 +441,13 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                         System.out.println("***********************\t AgentConnectEvent\t ***********************");
                         String agentCaller = connect.getMember();
                         if(iface.equalsIgnoreCase(agentCaller)){
+                            abadon = false;
                             System.out.println("iface(AgentConnectEvent):"+iface);
                             String ringtime = connect.getRingtime().toString();
                             mdb_agent.connectQueue(incomingCall.getsession(), agent.getAgentId(), iface, agent.getQueueId(), "4", ringtime);
                             uti.writeAgentLog("- AGENT - Connect Queue\t" + agent.getAgentId() + "\t" + iface + "\t" + incomingCall.getcallerNumber());
-                            sendToAgent("UP"); 
-                        }                               	
+                            sendToAgent("UP");                             
+                        }
                     }      
                     //complete call
                     /* An AgentsCompleteEvent is triggered after the state of all agents has been 
@@ -566,20 +566,23 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                             String channel = hangEvent.getChannel();                    
                             channel = channel.substring(0, channel.indexOf("-"));   
                             if(iface.equalsIgnoreCase(channel)){
-                                System.out.println("iface(hangup):"+iface);   
-                                sendToAgent("HANGUP");
-                                if(dialin){                                
-                                    System.out.println("hangup incoming call: "+channel);
-                                    mdb_agent.abandon(incomingCall.getsession(), agent.getAgentId(), iface, agent.getQueueId(), "7","");
-                                    uti.writeAgentLog("- AGENT - Abandon Call\t" + agent.getAgentId() + "\t" + iface + "\t" + incomingCall.getcallerNumber());                           
+                                System.out.println("iface(hangup):"+iface);                                   
+                                if(dialin){          
+                                    if(abadon){
+                                        System.out.println("hangup abadon call: "+channel);
+                                        mdb_agent.abandon(incomingCall.getsession(), agent.getAgentId(), iface, agent.getQueueId(), "7","");
+                                        uti.writeAgentLog("- AGENT - Abandon Call\t" + agent.getAgentId() + "\t" + iface + "\t" + incomingCall.getcallerNumber());     
+                                        abadon = true;
+                                    }       
+                                    System.out.println("hangup imcomning call: "+channel);
                                     dialin = false;
-//                                    sendToAgent("HANGUP");
+                                    sendToAgent("HANGUP");
                                 }
-//                                else if(dialout){
-//                                    System.out.println("hangup outgoing call\t "+dialoutNumber);
-//                                    sendToAgent("HANGUP");
-//                                    dialout = false;
-//                                }                                
+                                else if(dialout){
+                                    System.out.println("hangup outgoing call\t "+dialoutNumber);
+                                    sendToAgent("HANGUP");
+                                    dialout = false;
+                                }                                
                             }                             
                         }                             	
                     }                                                                                       

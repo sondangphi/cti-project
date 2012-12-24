@@ -119,7 +119,7 @@ public class Managerdb {
                 String queue = rs.getString("queue");
                 System.out.println("inface: "+inface+"\t"+"queue: "+queue);
                 System.out.println("iface: "+iface+"\t"+"queueid: "+queueid);
-                if("null".equalsIgnoreCase(inface) && "null".equalsIgnoreCase(queue)){
+                if("0".equalsIgnoreCase(inface) && "0".equalsIgnoreCase(queue)){
                     System.out.println("inface: "+inface+"\t"+"queue: "+queue);
                     rs = sqlQuery(sqlCom2);
                     if(rs.next())
