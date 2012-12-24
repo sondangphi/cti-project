@@ -25,7 +25,7 @@ import org.asterisk.main.*;
 import org.asterisk.model.AgentObject;
 import org.asterisk.model.CustomerObject;
 import org.asterisk.model.TableModel;
-import org.asteriskjava.manager.TimeoutException;
+//import org.asteriskjava.manager.TimeoutException;
 
 public class Agent implements Runnable{
 
