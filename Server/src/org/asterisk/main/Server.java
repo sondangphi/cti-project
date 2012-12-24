@@ -95,7 +95,7 @@ public class Server{
                     String iface = String.valueOf(rs.getObject("interface")); 
                     String queue = String.valueOf(rs.getObject("queue")); 
                     String session = rs.getString("session");    
-                    mdb_agent.updateStatus(agentid, "NULL", "NULL");
+                    mdb_agent.updateStatus(agentid, "0", "0");
                     mdb_agent.logoutAction(session, agentid);
                     uti.writeAsteriskLog("- SYSTE  - Update datetime agent unlogout(updatetime)\t"+agentid+"\t"+session);
                     System.out.println("update success logout:\t"+session);
