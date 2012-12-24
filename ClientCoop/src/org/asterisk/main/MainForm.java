@@ -48,6 +48,7 @@ public class MainForm extends javax.swing.JFrame {
     private FeedbackForm feedback;
     Browser bro = null;    
     LocateMap locate = new LocateMap();
+    public ChangepwdForm chanpwdform;
 //    JFrame frame = new JFrame("Locate Maps");
 
     /**
@@ -112,7 +113,7 @@ public class MainForm extends javax.swing.JFrame {
         }
         
         this.setTitle("Desktop Agent _ "+agentObject.getAgentId()+" _ "+agentObject.getAgentName());
-        this.lb_locate.setToolTipText("Locate Map");
+//        this.lb_locate.setToolTipText("Locate Map");
         setLocationRelativeTo(null);
     }    
 
@@ -167,8 +168,6 @@ public class MainForm extends javax.swing.JFrame {
         txt_name = new javax.swing.JTextField();
         btn_update = new javax.swing.JButton();
         btn_clear2 = new javax.swing.JButton();
-        btn_dial2 = new javax.swing.JButton();
-        lb_locate = new javax.swing.JLabel();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         txt_email1 = new javax.swing.JTextField();
@@ -176,6 +175,7 @@ public class MainForm extends javax.swing.JFrame {
         cb_type = new javax.swing.JComboBox();
         jLabel19 = new javax.swing.JLabel();
         txt_phone2 = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         table_report = new javax.swing.JTable();
@@ -220,8 +220,11 @@ public class MainForm extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         MenuItem_logout = new javax.swing.JMenuItem();
+        MenuItem_changepwd = new javax.swing.JMenuItem();
         MenuItem_setting = new javax.swing.JMenuItem();
         MenuItem_exit = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        MenuItem_about = new javax.swing.JMenuItem();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -269,7 +272,7 @@ public class MainForm extends javax.swing.JFrame {
         lb_workTime.setText("00:00:00");
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel12.setText("Login Time");
+        jLabel12.setText("Login at");
 
         lb_logintime.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lb_logintime.setText("2012-12-12 08:00:00");
@@ -283,7 +286,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(46, 46, 46)
                 .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lb_logintime, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -331,8 +334,6 @@ public class MainForm extends javax.swing.JFrame {
         jLabel15.setText("Phone 2");
         jLabel15.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        txt_mobile.setEditable(false);
-
         txt_email.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_emailActionPerformed(evt);
@@ -372,20 +373,6 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        btn_dial2.setText("Dial");
-        btn_dial2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_dial2ActionPerformed(evt);
-            }
-        });
-
-        lb_locate.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/gmap_70x70.png"))); // NOI18N
-        lb_locate.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lb_locateMouseClicked(evt);
-            }
-        });
-
         jLabel16.setText("Email");
         jLabel16.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -399,6 +386,13 @@ public class MainForm extends javax.swing.JFrame {
 
         jLabel19.setText("registration");
         jLabel19.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/map_magnify.png"))); // NOI18N
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -432,12 +426,9 @@ public class MainForm extends javax.swing.JFrame {
                                                 .addGap(18, 18, 18)
                                                 .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(txt_name, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                                .addComponent(txt_add, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(lb_locate, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                        .addGap(15, 15, 15)
+                                                .addComponent(txt_name, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                            .addComponent(txt_add, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18, 18, 18)
                                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 66, Short.MAX_VALUE)
                                             .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -464,7 +455,7 @@ public class MainForm extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(btn_clear2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btn_dial2, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())))
         );
@@ -482,13 +473,11 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cb_gender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txt_add, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txt_email1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lb_locate, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
+                    .addComponent(txt_add)
+                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
+                    .addComponent(txt_email1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -503,17 +492,18 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(cb_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_phone2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                    .addComponent(btn_new, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_update, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_feedback, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_clear2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_dial2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jButton3)
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                        .addComponent(btn_new, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_update, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_feedback, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_clear2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
-        jPanel8Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cb_gender, cb_type, jLabel10, jLabel11, jLabel14, jLabel18, jLabel19, jLabel4, jLabel9, lb_locate, txt_add, txt_makh, txt_name, txt_phone2});
+        jPanel8Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cb_gender, cb_type, jLabel10, jLabel11, jLabel14, jLabel18, jLabel19, jLabel4, jLabel9, txt_add, txt_makh, txt_name, txt_phone2});
 
         jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "History", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
@@ -986,7 +976,7 @@ public class MainForm extends javax.swing.JFrame {
 
         panel_numberLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btn_0, btn_1, btn_11, btn_12, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9});
 
-        btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/gtk-go-back-ltr.png"))); // NOI18N
+        btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/123070_42045_16_back_icon.png.gif"))); // NOI18N
         btn_back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_backActionPerformed(evt);
@@ -1051,6 +1041,14 @@ public class MainForm extends javax.swing.JFrame {
         });
         jMenu1.add(MenuItem_logout);
 
+        MenuItem_changepwd.setText("Change Password");
+        MenuItem_changepwd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuItem_changepwdActionPerformed(evt);
+            }
+        });
+        jMenu1.add(MenuItem_changepwd);
+
         MenuItem_setting.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK));
         MenuItem_setting.setText("Settings");
         MenuItem_setting.setEnabled(false);
@@ -1066,6 +1064,18 @@ public class MainForm extends javax.swing.JFrame {
         jMenu1.add(MenuItem_exit);
 
         jMenuBar1.add(jMenu1);
+
+        jMenu2.setText("Help");
+
+        MenuItem_about.setText("About");
+        MenuItem_about.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuItem_aboutActionPerformed(evt);
+            }
+        });
+        jMenu2.add(MenuItem_about);
+
+        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -1100,8 +1110,8 @@ public class MainForm extends javax.swing.JFrame {
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(panel_dial, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(main_tab, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                    .addComponent(main_tab))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lb_version, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -1175,11 +1185,7 @@ public class MainForm extends javax.swing.JFrame {
     private void MenuItem_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_logoutActionPerformed
         // TODO add your handling code here:
         try{
-            String cmd  = "102";
-            agentClient.sendtoServer(cmd);
-//            agentClient.out.println(cmd);
-            System.out.println("Logout program");
-//            agentClient = null;            
+            btn_logoutActionPerformed(null);           
         }catch(Exception e){
         }        
     }//GEN-LAST:event_MenuItem_logoutActionPerformed
@@ -1303,7 +1309,6 @@ public class MainForm extends javax.swing.JFrame {
         System.out.println("txt_add: "+this.txt_add.getText());
         feedback = new FeedbackForm(agentObject,agentClient);
         feedback.setVisible(true);     
-//        btn_feedback.setEnabled(false);
     }//GEN-LAST:event_btn_feedbackActionPerformed
 
     private void btn_newActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_newActionPerformed
@@ -1341,7 +1346,7 @@ public class MainForm extends javax.swing.JFrame {
             if(con.isConnect()){
                 String name = txt_name.getText();
                 String email = txt_email.getText();
-                String mobile =txt_mobile.getText();                
+                String mobile = txt_mobile.getText();                
                 String add = txt_add.getText();
                 String homephone1=txt_phone1.getText();
                 String gender = "";
@@ -1349,14 +1354,13 @@ public class MainForm extends javax.swing.JFrame {
                     gender = "1";
                 else if (cb_gender.getSelectedIndex() == 1)
                     gender = "0";                                
-                String sql = "UPDATE customer SET name ='"+name+"',email='"+email+"',mobile='"+mobile+"',add='"+add+"',homephone1='"+homephone1+"',gender='"+gender+"'"
+                String sql = "UPDATE customer SET fullname ='"+name+"',email='"+email+"',mobilephone='"+mobile+"',address='"+add+"',homephone1='"+homephone1+"',gender='"+gender+"'"
                         + " WHERE id = '"+agentClient.customer.getId()+"'" ;
                 con.executeUpdate(sql);                                                
                 System.out.println("update information success.");
                 btn_update.setEnabled(false);
             }
-            con.closeConnect();
-            
+            con.closeConnect();            
         }catch(Exception e){
             System.out.println(""+e);
         }        
@@ -1375,62 +1379,6 @@ public class MainForm extends javax.swing.JFrame {
         btn_update.setEnabled(false);
         btn_new.setEnabled(false);
     }//GEN-LAST:event_btn_clear2ActionPerformed
-
-    private void btn_dial2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dial2ActionPerformed
-        // TODO add your handling code here:
-        try{
-            String number = txt_mobile.getText();
-            if(!"".equalsIgnoreCase(number)){
-                String cmd  = "108@"+number;
-                agentClient.sendtoServer(cmd);
-                System.out.println("dial out: "+number);
-            }else{
-                System.out.println("dial fail");
-            }
-                
-        }catch(Exception e){
-        }
-    }//GEN-LAST:event_btn_dial2ActionPerformed
-
-    private void lb_locateMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lb_locateMouseClicked
-        // TODO add your handling code here:
-        try{            
-            if(txt_add.getText().equalsIgnoreCase("")){
-                System.out.println("null data");
-            }else{
-                String add =txt_add.getText();
-//                String link = "http://maps.google.com/maps?q="+add;
-//                link = link.replaceAll(" ", "%20");
-//                System.out.println("ulr: "+link);                      
-//                URI url = new URI(link);
-//                Desktop.getDesktop().browse(url);     
-                            
-            String url = "http://maps.google.com/maps?q="+add;
-            //            bro.navigate(url);
-
-            //            locate.setVisible(true);
-            bro = new Browser();
-            bro.navigate(url);
-            //            locate.add(bro);/ 
-            //            locate.setContentPane().add;
-            JPanel contentPane;
-            contentPane = new JPanel(new GridLayout(1,9));
-            contentPane.add(bro);
-            JFrame frame = new JFrame("Locate Maps");
-            frame.setSize(700, 500);
-            //        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-            frame.setLocationRelativeTo(null);
-            frame.getContentPane().add(contentPane, BorderLayout.CENTER);       
-            frame.setVisible(true);
-            frame.add(contentPane);
-            
-            
-            
-        }
-        }catch(Exception e){
-        }         
-        
-    }//GEN-LAST:event_lb_locateMouseClicked
 
     private void txt_phonenumKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_phonenumKeyPressed
         // TODO add your handling code here:
@@ -1517,6 +1465,56 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_emailActionPerformed
 
+    private void MenuItem_changepwdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_changepwdActionPerformed
+        // TODO add your handling code here:        
+        chanpwdform = new ChangepwdForm(agentClient, agentObject);
+        chanpwdform.setVisible(true);
+    }//GEN-LAST:event_MenuItem_changepwdActionPerformed
+
+    private void MenuItem_aboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_aboutActionPerformed
+        // TODO add your handling code here:
+        AboutForm about = new AboutForm();
+        about.setVisible(true);
+    }//GEN-LAST:event_MenuItem_aboutActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        try{            
+            if(txt_add.getText().equalsIgnoreCase("")){
+                System.out.println("null data");
+            }else{
+                String add =txt_add.getText();
+//                String link = "http://maps.google.com/maps?q="+add;
+//                link = link.replaceAll(" ", "%20");
+//                System.out.println("ulr: "+link);                      
+//                URI url = new URI(link);
+//                Desktop.getDesktop().browse(url);     
+                            
+            String url = "http://maps.google.com/maps?q="+add;
+            //            bro.navigate(url);
+
+            //            locate.setVisible(true);
+            bro = new Browser();
+            bro.navigate(url);
+            Image image = Toolkit.getDefaultToolkit().getImage("map_magnify.png");                        
+            JPanel contentPane;
+            contentPane = new JPanel(new GridLayout(1,9));
+            contentPane.add(bro);
+            JFrame frame = new JFrame("Locate Maps");
+            frame.setSize(700, 500);
+            frame.setIconImage(image);
+            frame.setLocationRelativeTo(null);
+            frame.getContentPane().add(contentPane, BorderLayout.CENTER);       
+            frame.setVisible(true);
+            frame.add(contentPane);
+            
+            
+            
+        }
+        }catch(Exception e){
+        }         
+    }//GEN-LAST:event_jButton3ActionPerformed
+
     public void setAllEnable(boolean flag){
         btn_0.setEnabled(flag);
         btn_1.setEnabled(flag);
@@ -1530,15 +1528,14 @@ public class MainForm extends javax.swing.JFrame {
         btn_9.setEnabled(flag);
         btn_11.setEnabled(flag);
         btn_12.setEnabled(flag);
+        btn_back.setEnabled(flag);        
         btn_dial.setEnabled(flag);
-        btn_dial2.setEnabled(flag);
         btn_clear.setEnabled(flag);
-        txt_phonenum.setEnabled(flag);
-        btn_logout.setEnabled(flag);
-        btn_back.setEnabled(flag);
-//            MenuItem_setting.setEnabled(flag);
+        btn_logout.setEnabled(flag);        
+        txt_phonenum.setEnabled(flag);        
         MenuItem_exit.setEnabled(flag);
         MenuItem_logout.setEnabled(flag);
+        MenuItem_changepwd.setEnabled(flag);
     }
     
     /**
@@ -1576,6 +1573,8 @@ public class MainForm extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem MenuItem_about;
+    private javax.swing.JMenuItem MenuItem_changepwd;
     public javax.swing.JMenuItem MenuItem_exit;
     public javax.swing.JMenuItem MenuItem_logout;
     private javax.swing.JMenuItem MenuItem_setting;
@@ -1596,7 +1595,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btn_clear;
     private javax.swing.JButton btn_clear2;
     public javax.swing.JButton btn_dial;
-    private javax.swing.JButton btn_dial2;
     public javax.swing.JButton btn_feedback;
     public javax.swing.JButton btn_logout;
     public javax.swing.JButton btn_new;
@@ -1605,6 +1603,7 @@ public class MainForm extends javax.swing.JFrame {
     public javax.swing.JComboBox cb_gender;
     public javax.swing.JComboBox cb_type;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -1623,6 +1622,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -1641,7 +1641,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel lb_agentname;
     public javax.swing.JLabel lb_callduration;
     private javax.swing.JLabel lb_extension;
-    private javax.swing.JLabel lb_locate;
     public javax.swing.JLabel lb_logintime;
     private javax.swing.JLabel lb_queue;
     public javax.swing.JLabel lb_status;
