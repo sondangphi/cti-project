@@ -221,10 +221,11 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                                 result = outGoingCall(dialoutNumber);                                                                          
                                 System.out.println("numberOut: "+dialoutNumber);   
                                 if("success".equalsIgnoreCase(result)){
+                                    dialout = true;
                                     System.out.println("Dial out success");	
                                     uti.writeAgentLog("- AGENT - Agent Dialout \t"+agent.getAgentId()+"\t"+dialoutNumber);
                                     sendToAgent("DIALOUT");  
-                                    System.out.println("Dial time: "+uti.getDatetime());
+                                    System.out.println("Dial time: "+uti.getDatetime());                                    
                                 }else{
                                     sendToAgent("DIALOUTFAIL");
                                     System.out.println("Dial out fail");	                          
@@ -489,40 +490,35 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     if(event instanceof QueueCallerAbandonEvent){
                         QueueCallerAbandonEvent abandon= (QueueCallerAbandonEvent)event;
                         System.out.println("***********************\t QueueCallerAbandonEvent\t ***********************"); 
-                        System.out.println("getHoldTime: "+abandon.getHoldTime().toString());            
-                        System.out.println("getPosition: "+abandon.getPosition().toString());            
-                        System.out.println("getChannel: "+abandon.getChannel());            
-                        System.out.println("getQueue: "+abandon.getQueue());            
-                        System.out.println("getServer: "+abandon.getServer());            
-                        System.out.println("getOriginalPosition: "+abandon.getOriginalPosition().toString());            
-                    }                    
-                    /* A HangupEvent is triggered when a channel is hung up.*/
-                    if(event instanceof HangupEvent){
-                        HangupEvent hangEvent = (HangupEvent)event;
-                        System.out.println("***********************\t HangupEvent\t ***********************");
-                        System.out.println("hangEvent.getChannel()\t"+hangEvent.getChannel()); 
-                        if(uti.checkChannel(hangEvent.getChannel())){
-                            String channel = hangEvent.getChannel();                    
-                            channel = channel.substring(0, channel.indexOf("-"));   
-                            if(iface.equalsIgnoreCase(channel)){
-                                System.out.println("iface(hangup):"+iface);                             
-                                sendToAgent("HANGUP");
-                                if(dialin){                                
-                                    System.out.println("hangup incoming call: "+channel);
-                                    mdb_agent.abandon(incomingCall.getsession(), agent.getAgentId(), iface, agent.getQueueId(), "7","");
-                                    uti.writeAgentLog("- AGENT - Abandon Call\t" + agent.getAgentId() + "\t" + iface + "\t" + incomingCall.getcallerNumber());                           
-                                    dialin = false;
-                                }else{
-//                                    sendToAgent("HANGUP");
-                                    System.out.println("hangup outgoing call\t "+dialoutNumber);
-                                    dialoutNumber = "";
-                                }                                
-                            }                             
-                        }else{
-                            System.out.println("hangup fail\t "+hangEvent.getChannel());
-                        }                             	
-                    }                    
-                    
+//                        System.out.println("getHoldTime: "+abandon.getHoldTime().toString());            
+//                        System.out.println("getPosition: "+abandon.getPosition().toString());            
+//                        System.out.println("getChannel: "+abandon.getChannel());            
+//                        System.out.println("getQueue: "+abandon.getQueue());            
+//                        System.out.println("getServer: "+abandon.getServer());            
+//                        System.out.println("getOriginalPosition: "+abandon.getOriginalPosition().toString());            
+                    }                            
+                    if(event instanceof NewStateEvent){                    
+                        System.out.println("***********************\t NewStateEvent\t ***********************");
+                        NewStateEvent stateEvent = (NewStateEvent)event;
+                        String callerIdNum = stateEvent.getCallerIdNum();
+                        String channelState = stateEvent.getChannelStateDesc();   
+                        System.out.println("callerIdNum: "+callerIdNum+"\tchannelState: "+channelState+"\tdialoutNumber: "+dialoutNumber);
+                        //begin talking dial out
+                        if(dialout && callerIdNum != null){
+                            if(callerIdNum.equalsIgnoreCase(dialoutNumber) && channelState.equalsIgnoreCase("UP")){
+//                                System.out.println("callerIdNum: "+callerIdNum+"\tchannelState: "+channelState+"");
+                                if(uti.checkChannel(stateEvent.getChannel())){
+                                    String channel = stateEvent.getChannel();                    
+                                    channel = channel.substring(0, channel.indexOf("-"));
+                                    System.out.println("channel: "+channel);
+                                    System.out.println("iface: "+iface);                              
+                                    clock = new TimerClock();
+                                    clock.start();
+                                    sendToAgent("UP");
+                                }
+                            }                        
+                        }
+                    }                                        
                     if(event instanceof DialEvent){
                         System.out.println("***********************\t DialEvent\t ***********************");
                         DialEvent dialevent = (DialEvent)event;
@@ -535,12 +531,11 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                             if(channel.equalsIgnoreCase(iface)){
                                 System.out.println("channel2\t"+channel);
                                 //begin dial out(Ringing)
-                                if("begin".equalsIgnoreCase(subevent)){
-                                    dialout = true;
+                                if("begin".equalsIgnoreCase(subevent)){                                    
                                     System.out.println("begin dial out");
                                     dialoutSession = uti.getSession();
                                     mdb_agent.startDialout(agent.getAgentId(), agent.getInterface(), agent.getQueueId(), dialoutNumber, agent.getSesion(), dialoutSession);                                
-                                }else if("end".equalsIgnoreCase(subevent)){//finish dial out
+                                }else if("end".equalsIgnoreCase(subevent)){ //finish dial out
                                     dialout = false;
                                     String status = dialevent.getDialStatus();
                                     System.out.println("status\t"+status);
@@ -554,46 +549,55 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                                     mdb_agent.finishDialout(dialoutSession, dialoutTalktime,status);
                                     dialoutSession = "";    
                                     dialoutTalktime = "0";
+                                    dialoutNumber = "";
                                 }
                             }                             
                         }else{
                             System.out.println("hangup fail\t "+dialevent.getChannel());
                         }  
-                    }                   
-                if(event instanceof NewStateEvent){                    
-                    System.out.println("***********************\t NewStateEvent\t ***********************");
-                    NewStateEvent stateEvent = (NewStateEvent)event;
-                    String callerIdNum = stateEvent.getCallerIdNum();
-                    String channelState = stateEvent.getChannelStateDesc();   
-                    //begin talking dial out
-                    if(dialout && callerIdNum.equalsIgnoreCase(dialoutNumber) && "UP".equalsIgnoreCase(channelState)){
-                        System.out.println("callerIdNum: "+callerIdNum+"\tchannelState: "+channelState+"");
-                        if(uti.checkChannel(stateEvent.getChannel())){
-                            String channel = stateEvent.getChannel();                    
-                            channel = channel.substring(0, channel.indexOf("-"));
-                            System.out.println("channel: "+channel);
-                            System.out.println("iface: "+iface);                              
-                            clock = new TimerClock();
-                            clock.start();
-                            sendToAgent("UP");
-                        }
-                    }
-                }                    
+                    }                    
+                    
+                    /* A HangupEvent is triggered when a channel is hung up.*/
+                    if(event instanceof HangupEvent){
+                        HangupEvent hangEvent = (HangupEvent)event;
+                        System.out.println("***********************\t HangupEvent\t ***********************");
+                        System.out.println("hangEvent.getChannel()\t"+hangEvent.getChannel()); 
+                        if(uti.checkChannel(hangEvent.getChannel())){
+                            String channel = hangEvent.getChannel();                    
+                            channel = channel.substring(0, channel.indexOf("-"));   
+                            if(iface.equalsIgnoreCase(channel)){
+                                System.out.println("iface(hangup):"+iface);   
+                                sendToAgent("HANGUP");
+                                if(dialin){                                
+                                    System.out.println("hangup incoming call: "+channel);
+                                    mdb_agent.abandon(incomingCall.getsession(), agent.getAgentId(), iface, agent.getQueueId(), "7","");
+                                    uti.writeAgentLog("- AGENT - Abandon Call\t" + agent.getAgentId() + "\t" + iface + "\t" + incomingCall.getcallerNumber());                           
+                                    dialin = false;
+//                                    sendToAgent("HANGUP");
+                                }
+//                                else if(dialout){
+//                                    System.out.println("hangup outgoing call\t "+dialoutNumber);
+//                                    sendToAgent("HANGUP");
+//                                    dialout = false;
+//                                }                                
+                            }                             
+                        }                             	
+                    }                                                                                       
             } 
             catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
             catch (ClassNotFoundException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
             catch (NullPointerException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
 	}		
 }
