@@ -598,7 +598,6 @@ public class MainForm extends javax.swing.JFrame {
         panel_numberLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btn_0, btn_1, btn_11, btn_12, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9});
 
         btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/123070_42045_16_back_icon.png.gif"))); // NOI18N
-        btn_back.setBorder(null);
         btn_back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_backActionPerformed(evt);
@@ -805,10 +804,10 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         try{
             String cmd  = "112";
-            agentClient.sendtoServer(cmd);
-            agentClient.closeConnect();
+            agentClient.sendtoServer(cmd);            
             System.out.println("Exit CTI CLIENT"); 
             System.exit(0);
+            agentClient.closeConnect();
         }catch(Exception e){
         }        
     }//GEN-LAST:event_MenuItem_exitActionPerformed
@@ -818,6 +817,7 @@ public class MainForm extends javax.swing.JFrame {
         try{
             String cmd  = "102";
             agentClient.sendtoServer(cmd);
+            Thread.sleep(3000);
             System.out.println("Logout program");   
         }catch(Exception e){
         }        
@@ -950,6 +950,8 @@ public class MainForm extends javax.swing.JFrame {
     private void MenuItem_infoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_infoActionPerformed
         // TODO add your handling code here:
         System.out.println("");
+        AboutForm about = new AboutForm();
+        about.setVisible(true);
     }//GEN-LAST:event_MenuItem_infoActionPerformed
 
     private void MenuItem_changepwdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_changepwdActionPerformed
@@ -987,6 +989,7 @@ public class MainForm extends javax.swing.JFrame {
 //            MenuItem_setting.setEnabled(flag);
         MenuItem_exit.setEnabled(flag);
         MenuItem_logout.setEnabled(flag);
+        MenuItem_changepwd.setEnabled(flag);
     }
     
     /**
