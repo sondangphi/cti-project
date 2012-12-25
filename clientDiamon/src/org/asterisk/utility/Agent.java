@@ -161,10 +161,14 @@ public class Agent implements Runnable{
                     case HOLDFAIL: //result HOLD
                     break;
                     case CHANGEPWD: //CHANGEPWD
-                        mainForm.chanpwdform.showDialog();
-                        System.out.println("change pass suc: "+cmdList.get(1));
+                        mainForm.chanpwdform.showDialog("Change Password Success");                        
                         agentObject.setPass(cmdList.get(1));
-                    break;
+                        System.out.println("change pass success");
+                    break;                        
+                    case CHANGEPWDFAIL: //CHANGEPWD
+                        mainForm.chanpwdform.showDialog("Change Password Fail");                        
+                        System.out.println("change pass fail");
+                    break;                                
                     case RINGING: //EVENT RINGING
                         try{
                             String callerNum = cmdList.get(1);
@@ -175,52 +179,59 @@ public class Agent implements Runnable{
                             mainForm.setAllEnable(false);  
                             mainForm.lb_callernumber.setText(callerNum);
                         }catch(Exception e){
+                            System.out.println("RINGING: "+e);
                         }
                     break;
+                    case CONNECTED://connected incoming call
+                        System.out.println("CONNECTED incoming call");
+                        mainForm.lb_status.setText("Busy"); 
+                        clockDialin = new TimerClock(mainForm, true);
+                        clockDialin.start();
+                    break;
+                    case COMPLETED://connected incoming call
+                        mainForm.lb_status.setText("Ready");
+                        mainForm.btn_pause.setEnabled(true);
+                        mainForm.setAllEnable(true); 
+                        if(clockDialin != null){
+                            clockDialin.stop(); 
+                        }
+                    break;
+                    case RINGNOANWSER: 
+                        mainForm.lb_status.setText("Ready");
+                        mainForm.btn_pause.setEnabled(true);
+                        mainForm.setAllEnable(true);
+                    break;                        
                     case DIALOUT: //result 	
-                        System.out.println("DIALOUT");                        
+                        System.out.println("DIALOUT");    
+                        dialout = true;
                         mainForm.lb_status.setText("Dialing...");
                         mainForm.lb_callduration.setText("00:00:00");
                         mainForm.lb_callernumber.setText("");
-                        dialout = true;
+                        mainForm.btn_pause.setEnabled(false);       
+                        mainForm.setAllEnable(false);                        
                     break;
-                    case BUSY: 
+                    case CONNECTEDDIALOUT: 
+                        clockDialout = new TimerClock(mainForm, true);
+                        clockDialout.start();                        
+                        mainForm.lb_status.setText("Busy");
+                        System.out.println("Connected dialout");
                     break;
-                    case READY: 
-                    break;
-                    case HANGUP: 
-                        if(dialout){
-                            dialout = false;
-                            mainForm.lb_status.setText("Ready");
-                            mainForm.btn_pause.setEnabled(true);
-                            mainForm.setAllEnable(true); 
-                            if(clockDialout != null){
-                                clockDialout.stop();
-                            }
-                        }else{
-                            mainForm.lb_status.setText("Ready");
-                            mainForm.btn_pause.setEnabled(true);
-                            mainForm.setAllEnable(true); 
-                            if(clockDialin != null){
-                                clockDialin.stop(); 
-                            }
-                        }          
-                    break;
-                    case UP: //EVENT ANSWER CALL	  
-                        if(dialout){
-                            clockDialout = new TimerClock(mainForm, true);
-                            clockDialout.start();
-                            System.out.println("Dialout");
-                            mainForm.lb_status.setText("Busy");
-                            System.out.println("start clock");
-                        }else{
-                            System.out.println("ANSWER");
-                            mainForm.lb_status.setText("Busy");
-                            System.out.println("start clock");   
-                            clockDialin = new TimerClock(mainForm, true);
-                            clockDialin.start();
+                    case HANGUPDIALOUT:                         
+                        mainForm.lb_status.setText("Ready");
+                        mainForm.btn_pause.setEnabled(true);
+                        mainForm.setAllEnable(true); 
+                        if(clockDialout != null){
+                            clockDialout.stop();
                         }
-                    break;
+                        System.out.println("hangup dialout");
+                    break;                          
+                    case HANGUPABANDON: 
+                        mainForm.lb_status.setText("Ready");
+                        mainForm.btn_pause.setEnabled(true);
+                        mainForm.setAllEnable(true);          
+                    break;                        
+                    case UP: //EVENT ANSWER CALL	  
+                    break;                        
                     default: 
                         System.out.println("Break...");
                     break;
@@ -293,7 +304,11 @@ public class Agent implements Runnable{
                     outtoServer.close();
                     clientSocket.close(); 
                     System.out.println("close socket");                    
-                }                      
+                }                  
+                if(mainThread !=  null){
+                    mainThread.interrupt();
+                    System.out.println("finish interrupt mainThread");                
+                }
                 System.out.println("finish close session"); 
             }catch(Exception e){
                 System.out.println("closeConnect Exception: "+e); 
@@ -316,7 +331,9 @@ public class Agent implements Runnable{
             HOLDSUCC, HOLDFAIL,
             TRANSSUCC, TRANSFAIL,
             UNPAUSESUCC, UNPAUSEFAIL,
-            DIALOUT, RINGING, AVAIL, BUSY, READY, RESULT, UP,HANGUP,
-            CHANGEPWD,
+            AVAIL, BUSY, READY, RESULT, UP,HANGUP,
+            CHANGEPWD,CHANGEPWDFAIL,
+            RINGING,RINGNOANWSER,CONNECTED, COMPLETED,HANGUPABANDON,
+            DIALOUT,CONNECTEDDIALOUT,HANGUPDIALOUT,
 	}
 }

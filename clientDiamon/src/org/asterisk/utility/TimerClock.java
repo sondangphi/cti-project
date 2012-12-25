@@ -65,9 +65,11 @@ public class TimerClock implements ActionListener{
     }
     
     public void start(){
+        System.out.println("start clock");
         clock.start();
     }
     public void stop(){
+        System.out.println("stop clock");
         clock.stop();
         secs = 0;
         mins = 0;
@@ -75,12 +77,14 @@ public class TimerClock implements ActionListener{
     }    
     
      public void pause(){
+         System.out.println("pause clock");
         temphr = hrs;
         tempmin = mins;
         tempsec = secs;
         clock.stop();
     }       
      public void resume(){
+         System.out.println("resume clock");
          if(hrs != 0 || mins != 0 || secs != 0){
             hrs = temphr;
             mins = tempmin;
