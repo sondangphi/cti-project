@@ -42,12 +42,7 @@ public class AgentListen implements Runnable, ManagerEventListener{
     public ArrayList<Socket> lists = new ArrayList<Socket>();
     
     public AgentListen(){
-    }
-//    public AgentListen(int p) throws IOException{
-//        port = p;        
-//        thread = new Thread(this);
-//        thread.start();
-//    }        
+    }       
     public AgentListen(int p, Managerdb mdb) throws IOException{
         mdb_agent = mdb;
         port = p;        
@@ -62,7 +57,6 @@ public class AgentListen implements Runnable, ManagerEventListener{
             userAsterisk = uti.readInfor(filename, "Asterisk_user");
             hostAsterisk = uti.readInfor(filename, "Asterisk_server");                            
             aserver = new ServerSocket(port);
-//            Socket clientsocket;
             /*connect to asterisk server*/
             connectAsterisk(hostAsterisk, userAsterisk, pwdAsterisk);
             manager.login();            
@@ -74,17 +68,12 @@ public class AgentListen implements Runnable, ManagerEventListener{
                 while(true){                    
                     Socket clientsocket = new Socket();
                     clientsocket = aserver.accept();                 
-//                    clientsocket.setKeepAlive(true);
-//                    lists.add(clientsocket);
                     System.out.println("socket timeout\t"+clientsocket.getSoTimeout()); 
                     System.out.println("socket localport\t"+clientsocket.getPort());
                     agent = new ManagerAgent(manager, clientsocket, mdb_agent);
-//                    agent = new ManagerAgent(this, manager, clientsocket, mdb_agent);
-//                    new ManagerAgent(manager, clientsocket, mdb_agent);
                     String add = clientsocket.getInetAddress().getHostAddress().toString();
                     uti.writeAgentLog("- AGENT - Accept connect from address"+"\t"+add);							
                     System.out.println("acept connect from agent\t"+add);
-//                    checkSocket();
                 }
             }else{
                 uti.writeAsteriskLog("- SYSTE  - Connect to Asterisk Server Fail");
@@ -94,7 +83,10 @@ public class AgentListen implements Runnable, ManagerEventListener{
             }                                    
         }catch(Exception e){            
             System.out.println("AgentListen thread exception\r\n"+e);
-        }                
+        }      
+        catch(Throwable e){            
+            System.out.println("AgentListen thread exception\r\n"+e);
+        } 
     }
     
     public void connectAsterisk(String host, String username, String password){

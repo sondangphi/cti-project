@@ -161,6 +161,11 @@ public class Managerdb {
                     + "('"+ses+"','"+agent+"')";
             sqlExecute(sql);
 	}
+	public void pauseAction(String ses, String agent, String iface, String queueId, String loginSession) throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO pause_action (session, agent_id, interface, queueId, loginSession) VALUES "
+                    + "('"+ses+"','"+agent+"','"+iface+"','"+queueId+"','"+loginSession+"')";
+            sqlExecute(sql);
+	}        
         public int unpauseAction(String ses,String agentid) throws ClassNotFoundException, SQLException{
             String datetime = uti.getDatetime();
             String sql = "UPDATE pause_action SET datetime_unpause ='"+datetime+"'"
@@ -213,7 +218,7 @@ public class Managerdb {
         }
         
        public void startDialout(String agentid, String iface, String queueid, String number, String loginSes, String session)throws ClassNotFoundException, SQLException{
-            String sql = "INSERT INTO agent_dialout (agentid, interface, queueid, dialoutnumber, sessionLogin, session) VALUES "
+            String sql = "INSERT INTO agent_dialout (agentid, interface, queueid, dialoutnumber, loginSession, session) VALUES "
                     + "('"+agentid+"','"+iface+"','"+queueid+"','"+number+"','"+loginSes+"','"+session+"')";
             sqlExecute(sql); 
         }        
