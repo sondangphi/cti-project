@@ -27,7 +27,7 @@ public class ConfigForm extends javax.swing.JFrame {
     public ConfigForm() {
         initComponents();
         try{
-            Image image = Toolkit.getDefaultToolkit().getImage("images/system_config_services.png");
+            Image image = Toolkit.getDefaultToolkit().getImage("system_config_services.png");
             host = uti.readInfor(filename, "host");
             aport = uti.readInfor(filename, "aport");
             qport = uti.readInfor(filename, "qport");
@@ -44,7 +44,7 @@ public class ConfigForm extends javax.swing.JFrame {
     public ConfigForm(LoginForm m) {
         initComponents();
         try{
-            Image image = Toolkit.getDefaultToolkit().getImage("images/system_config_services.png");
+            Image image = Toolkit.getDefaultToolkit().getImage("system_config_services.png");
             host = uti.readInfor(filename, "host");
             aport = uti.readInfor(filename, "aport");
             qport = uti.readInfor(filename, "qport");

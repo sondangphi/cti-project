@@ -5,6 +5,8 @@
 package org.asterisk.main;
 
 import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
 import org.asterisk.model.AgentObject;
@@ -76,6 +78,8 @@ public class FeedbackForm extends javax.swing.JFrame {
             cb_type1.setBackground(white);
             cb_type2.setBackground(white);
             cb_result1.setEnabled(false);
+            Image image = Toolkit.getDefaultToolkit().getImage("people.png");
+            this.setIconImage(image);
         }catch(Exception e){
         }
         
