@@ -225,6 +225,10 @@ public class ChangepwdForm extends javax.swing.JFrame {
         int n = JOptionPane.showConfirmDialog(this,"Change Password Successful","Change Password",JOptionPane.CLOSED_OPTION);          
         this.dispose(); 
     }
+    public void showDialog(String t){
+        int n = JOptionPane.showConfirmDialog(this,t,"Change Password",JOptionPane.CLOSED_OPTION);          
+        this.dispose(); 
+    }    
     private void btn_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelActionPerformed
         // TODO add your handling code here:
         this.dispose();
