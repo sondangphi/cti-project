@@ -113,7 +113,6 @@ public class MainForm extends javax.swing.JFrame {
         }
         
         this.setTitle("Desktop Agent _ "+agentObject.getAgentId()+" _ "+agentObject.getAgentName());
-//        this.lb_locate.setToolTipText("Locate Map");
         setLocationRelativeTo(null);
     }    
 
@@ -1124,21 +1123,12 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:        
         try{
             String cmd = "";
-            if(btn_pause.isSelected() && btn_pause.isEnabled()){
-                btn_pause.setText("UNPAUSE");
+            if(btn_pause.isSelected() && btn_pause.isEnabled()){                
                 cmd  = "104@off";
                 agentClient.sendtoServer(cmd);
-                btn_logout.setEnabled(false);
-                setAllEnable(false);
-//                lb_status.
-                lb_status.setText("Not Ready");
-            }else{
-                btn_pause.setText("PAUSE");    
+            }else{                    
                 cmd  = "104@on";
                 agentClient.sendtoServer(cmd);  
-                btn_logout.setEnabled(true);
-                setAllEnable(true);
-                lb_status.setText("Ready");
             }
         }catch(Exception e){
             
@@ -1533,7 +1523,7 @@ public class MainForm extends javax.swing.JFrame {
         btn_clear.setEnabled(flag);
         btn_logout.setEnabled(flag);        
         txt_phonenum.setEnabled(flag);        
-        MenuItem_exit.setEnabled(flag);
+//        MenuItem_exit.setEnabled(flag);
         MenuItem_logout.setEnabled(flag);
         MenuItem_changepwd.setEnabled(flag);
     }

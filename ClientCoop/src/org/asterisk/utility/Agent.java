@@ -145,6 +145,11 @@ public class Agent implements Runnable{
                         System.out.println("LOGOUT FAIL");
                     break;	            	
                     case PAUSESUCC: //result PAUSE
+                        mainForm.btn_logout.setEnabled(false);
+                        mainForm.setAllEnable(false);      
+                        mainForm.lb_status.setText("Not Ready");
+                        mainForm.btn_pause.setText("UNPAUSE");
+                        mainForm.btn_pause.setSelected(true);
                         worktime.pause();
                         System.out.println("PAUSESUCC");
                     break;
@@ -153,6 +158,11 @@ public class Agent implements Runnable{
                     break;
                     case UNPAUSESUCC: //result UNPAUSESUCC
                         worktime.resume();
+                        mainForm.btn_pause.setText("PAUSE");
+                        mainForm.btn_logout.setEnabled(true);
+                        mainForm.setAllEnable(true);      
+                        mainForm.lb_status.setText("Ready");
+                        mainForm.btn_pause.setSelected(false);
                         System.out.println("UNPAUSESUCC");
                     break;
                     case UNPAUSEFAIL: //result UNPAUSE
@@ -249,7 +259,10 @@ public class Agent implements Runnable{
                     break;
                     case BUSY: 
                     break;
-                    case READY: 
+                    case RINGNOANWSER: 
+                        mainForm.lb_status.setText("Ready");
+                        mainForm.btn_pause.setEnabled(true);
+                        mainForm.setAllEnable(true);
                     break;
                     case HANGUP: 
                         if(dialout){
@@ -412,6 +425,6 @@ public class Agent implements Runnable{
             TRANSSUCC, TRANSFAIL,
             UNPAUSESUCC, UNPAUSEFAIL,
             DIALOUT, RINGING, AVAIL, BUSY, READY, RESULT, UP,HANGUP,
-            CHANGEPWD,
+            CHANGEPWD,RINGNOANWSER, STARTDIALOUT
 	}
 }
