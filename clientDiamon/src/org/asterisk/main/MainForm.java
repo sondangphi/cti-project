@@ -55,7 +55,7 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() {
         initComponents();
         txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);   
-        Image image = Toolkit.getDefaultToolkit().getImage("images/people.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("images/icon_main.png");
         this.setIconImage(image);
         Color green2 = new Color(0, 238, 0);
         Color royalBlue = new Color(65, 105, 225);
@@ -69,7 +69,7 @@ public class MainForm extends javax.swing.JFrame {
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );        
         agentClient = agent;
         agentObject = aOb;        
-        Image image = Toolkit.getDefaultToolkit().getImage("images/people.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("images/icon_main.png");
         this.setIconImage(image);
         if (SystemTray.isSupported()) {
             MouseListener mouseListener = new MouseListener() {
@@ -759,9 +759,6 @@ public class MainForm extends javax.swing.JFrame {
                 btn_pause.setText("UNPAUSE");
                 cmd  = "104@off";
                 agentClient.sendtoServer(cmd);
-                btn_logout.setEnabled(false);
-                setAllEnable(false);
-                lb_status.setText("Not Ready");
             }else{
                 btn_pause.setText("PAUSE");    
                 cmd  = "104@on";
@@ -987,7 +984,7 @@ public class MainForm extends javax.swing.JFrame {
         btn_logout.setEnabled(flag);
         btn_back.setEnabled(flag);
 //            MenuItem_setting.setEnabled(flag);
-        MenuItem_exit.setEnabled(flag);
+//        MenuItem_exit.setEnabled(flag);
         MenuItem_logout.setEnabled(flag);
         MenuItem_changepwd.setEnabled(flag);
     }

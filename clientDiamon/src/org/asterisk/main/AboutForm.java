@@ -24,12 +24,6 @@ public class AboutForm extends javax.swing.JFrame {
      */
     public AboutForm() {
         initComponents();
-        String info = "Xorcom Contact Center System (XCS)\r\n"
-                + "Copyright by NTTNETWORKS\r\n "
-                + "Add: \r\n"
-                + "Tel: 0862558080 \r\n"
-                + "Website: www.nttnetworks.com\r\n"
-                + "Email: info@nttnetworks.com\r\n";   
         htmlPane  = new JEditorPane();
         String website = "http://www.nttnetworks.com";
         jLabel7.setText("<html><a href=\" " + website + "\">www.nttnetworks.com</a></html>");
@@ -40,7 +34,7 @@ public class AboutForm extends javax.swing.JFrame {
         }
         setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE ); 
-        Image image = Toolkit.getDefaultToolkit().getImage("images/info_blue.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("images/icon_info.png");
         this.setIconImage(image); 
         jLabel1.setHorizontalAlignment(javax.swing.JLabel.CENTER);  
         jLabel2.setHorizontalAlignment(javax.swing.JLabel.CENTER);  
