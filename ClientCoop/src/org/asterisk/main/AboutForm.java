@@ -40,7 +40,7 @@ public class AboutForm extends javax.swing.JFrame {
         }
         setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE ); 
-        Image image = Toolkit.getDefaultToolkit().getImage("info_blue.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("images/icon_info.png");
         this.setIconImage(image); 
         jLabel1.setHorizontalAlignment(javax.swing.JLabel.CENTER);  
         jLabel2.setHorizontalAlignment(javax.swing.JLabel.CENTER);  

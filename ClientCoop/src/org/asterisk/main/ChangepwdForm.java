@@ -30,7 +30,7 @@ public class ChangepwdForm extends javax.swing.JFrame {
     public ChangepwdForm() {
         initComponents();
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );     
-        Image image = Toolkit.getDefaultToolkit().getImage("change_pass.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("images/icon_changepwd.png");
         this.setIconImage(image); 
         Color Khaki1 = new Color( 255, 246, 143); 
         oldpass.setBackground(Khaki1);
