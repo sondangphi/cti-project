@@ -47,10 +47,13 @@ public class Agent implements Runnable{
         private TimerClock clockWorktime;
         private TimerClock clockDialin;
         private TimerClock clockDialout;
-        private BufferedReader infromServer;
-        private PrintWriter outtoServer;        
+//        private BufferedReader infromServer;
+//        private PrintWriter outtoServer;        
         private String com;  
         private boolean dialout = false;
+        
+        DataInputStream in;
+        DataOutputStream out;        
         
 	public Agent(){
 		
@@ -78,11 +81,14 @@ public class Agent implements Runnable{
                 Mysql_server = uti.readInfor(filename, "MySql_server");
                 Mysql_user = uti.readInfor(filename, "MySql_user");
                 Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
-                outtoServer = new PrintWriter(clientSocket.getOutputStream());
-                infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));              
+//                outtoServer = new PrintWriter(clientSocket.getOutputStream());
+//                infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));     
+                in = new DataInputStream(clientSocket.getInputStream());
+                out = new DataOutputStream(clientSocket.getOutputStream());                
                 sendtoServer(com);
                 while(running){                    
-                    command = infromServer.readLine();
+//                    command = infromServer.readLine();
+                    command = in.readUTF();
                     System.out.println("***listen from server***");
                     System.out.println("***receive from server: "+command);
                     if(command == null){
@@ -126,6 +132,7 @@ public class Agent implements Runnable{
                             mainForm.setVisible(false);
                             mainForm.dispose(); 
                             close = false;
+                            clockWorktime.stop();
                             new LoginForm().setVisible(true);
                             closeConnect();  
                             System.out.println("LOGOUT SUCCESS");
@@ -140,6 +147,10 @@ public class Agent implements Runnable{
                     case PAUSESUCC: //result PAUSE
                         if(clockWorktime != null)
                             clockWorktime.pause();
+                        mainForm.btn_logout.setEnabled(false);
+                        mainForm.setAllEnable(false);
+                        mainForm.lb_status.setText("Not Ready");
+                        mainForm.btn_pause.setSelected(true);
                         System.out.println("PAUSESUCC");
                     break;
                     case PAUSEFAIL: //result PAUSE
@@ -147,6 +158,10 @@ public class Agent implements Runnable{
                     break;
                     case UNPAUSESUCC: //result UNPAUSESUCC
                         clockWorktime.resume();
+                        mainForm.btn_logout.setEnabled(true);
+                        mainForm.setAllEnable(true);
+                        mainForm.lb_status.setText("Ready");
+                        mainForm.btn_pause.setSelected(false);                        
                         System.out.println("UNPAUSESUCC");
                     break;
                     case UNPAUSEFAIL: //result UNPAUSE
@@ -209,7 +224,12 @@ public class Agent implements Runnable{
                         mainForm.lb_callernumber.setText("");
                         mainForm.btn_pause.setEnabled(false);       
                         mainForm.setAllEnable(false);                        
-                    break;
+                    break;                        
+                    case DIALOUTFAIL: 
+                        mainForm.lb_status.setText("Ready");
+                        mainForm.btn_pause.setEnabled(true);
+                        mainForm.setAllEnable(true);
+                    break;                                
                     case CONNECTEDDIALOUT: 
                         clockDialout = new TimerClock(mainForm, true);
                         clockDialout.start();                        
@@ -283,9 +303,9 @@ public class Agent implements Runnable{
         //send request to server - string
 	public void sendtoServer(String t){
             try{
-                if(clientSocket != null && outtoServer != null && infromServer != null){   
-                    outtoServer.println(t);
-                    outtoServer.flush();
+                if(clientSocket != null && in != null && out != null){   
+                    out.writeUTF(t);
+                    out.flush();
                     System.out.println("send to server: "+t);
                 }else{
                     System.out.println("socket is close: "+t);
@@ -293,15 +313,26 @@ public class Agent implements Runnable{
             }catch(Exception e){
                 System.out.println("Exception(sendtoServer): "+e);
             }            
+//            try{
+//                if(clientSocket != null && outtoServer != null && infromServer != null){   
+//                    outtoServer.println(t);
+//                    outtoServer.flush();
+//                    System.out.println("send to server: "+t);
+//                }else{
+//                    System.out.println("socket is close: "+t);
+//                }
+//            }catch(Exception e){
+//                System.out.println("Exception(sendtoServer): "+e);
+//            }            
 	}        
         //close Socket & Thread for client
 	public void closeConnect(){
             try{
                 System.out.println("start close session");
-                if(clientSocket != null && infromServer != null && outtoServer!= null){
+                if(clientSocket != null && in != null && out!= null){
                     running = false;
-                    infromServer.close();
-                    outtoServer.close();
+                    in.close();
+                    out.close();
                     clientSocket.close(); 
                     System.out.println("close socket");                    
                 }                  
@@ -313,6 +344,24 @@ public class Agent implements Runnable{
             }catch(Exception e){
                 System.out.println("closeConnect Exception: "+e); 
             } 
+            
+//            try{
+//                System.out.println("start close session");
+//                if(clientSocket != null && infromServer != null && outtoServer!= null){
+//                    running = false;
+//                    infromServer.close();
+//                    outtoServer.close();
+//                    clientSocket.close(); 
+//                    System.out.println("close socket");                    
+//                }                  
+//                if(mainThread !=  null){
+//                    mainThread.interrupt();
+//                    System.out.println("finish interrupt mainThread");                
+//                }
+//                System.out.println("finish close session"); 
+//            }catch(Exception e){
+//                System.out.println("closeConnect Exception: "+e); 
+//            } 
 	}
         
         
@@ -334,6 +383,6 @@ public class Agent implements Runnable{
             AVAIL, BUSY, READY, RESULT, UP,HANGUP,
             CHANGEPWD,CHANGEPWDFAIL,
             RINGING,RINGNOANWSER,CONNECTED, COMPLETED,HANGUPABANDON,
-            DIALOUT,CONNECTEDDIALOUT,HANGUPDIALOUT,
+            DIALOUT,DIALOUTFAIL,CONNECTEDDIALOUT,HANGUPDIALOUT,
 	}
 }

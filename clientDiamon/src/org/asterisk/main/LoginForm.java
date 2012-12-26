@@ -51,16 +51,14 @@ public class LoginForm extends javax.swing.JFrame {
         private String Mysql_server = "172.168.10.208";      
         private String Mysql_dbname = "cti_database";
 	private String Mysql_user = "cti";
-	private String Mysql_pwd  = "123456";       
-        
-//        private int TIME_OUT = 60000;
+	private String Mysql_pwd  = "123456";               
     /**
      * Creates new form LoginForm
      */
     ConfigForm configform;
     public LoginForm() {
         initComponents();
-        Image image = Toolkit.getDefaultToolkit().getImage("images/stock_lock.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("images/icon_login.png");
         this.setIconImage(image);
         try{            
             uti = new Utility();		
@@ -406,8 +404,8 @@ public class LoginForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lb_pic, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panel_1, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(panel_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         pack();
