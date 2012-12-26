@@ -51,7 +51,9 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
         private String dialoutSession;
         private String dialoutStatus = "";
         private String dialoutTalktime = "0";
-        private boolean dialout = false;
+        private boolean beginDialout = true;
+        private boolean connectDialout;
+        private boolean completeDialout;
         private boolean dialin = false;
         private boolean ring = true;
         private boolean connect = false;
@@ -60,8 +62,11 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
         private boolean abandonCall = true;
         private String iface = "";
         private String incomeTemp;        
-        private  BufferedReader inPutStream;
-        private  PrintWriter outPutStream;
+//        private  BufferedReader inPutStream;
+//        private  PrintWriter outPutStream;
+        DataInputStream in;
+        DataOutputStream out;
+        
         private boolean close = true;
         private TimerClock clock;
         private String uniqueidDialout = "";
@@ -113,11 +118,14 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                 manager.sendAction(new StatusAction());
                 addClient = clientSocket.getInetAddress().toString();
                 addClient = addClient.substring(1);
-                outPutStream = new PrintWriter(clientSocket.getOutputStream());
-                inPutStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));   
+//                outPutStream = new PrintWriter(clientSocket.getOutputStream());
+//                inPutStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));  
+                in = new DataInputStream(clientSocket.getInputStream());
+                out = new DataOutputStream(clientSocket.getOutputStream());
                 System.out.println("***open inputstream & outputstream***");
                 while(connected){                    
-                    fromClient = inPutStream.readLine();
+//                    fromClient = inPutStream.readLine();
+                    fromClient = in.readUTF();
                     System.out.println("***listen from client***");
                     System.out.println("***Receive from client: "+fromClient);
                     ArrayList<String> cmdList = uti.getList(fromClient);
@@ -145,7 +153,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                                             closeConnect();                                        
                                         }
                                     }else{
-                                        sendToAgent("LOGINFAIL@Agent Already Login");
+                                        sendToAgent("LOGINFAIL@Already Login");
                                         System.out.println("Interface Already login");
                                         uti.writeAgentLog("- AGENT - Agent login fail (already login)\t"+addClient+"\t"+agent.getAgentId());
                                         closeConnect();
@@ -227,7 +235,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                                 dialoutNumber = cmdList.get(1).toString();
                                 result = outGoingCall(dialoutNumber);                                                                                                            
                                 if("success".equalsIgnoreCase(result)){
-                                    dialout = true;
+                                    beginDialout = true;
                                     System.out.println("Dial out success: "+dialoutNumber);	
                                     uti.writeAgentLog("- AGENT - Agent Dialout \t"+agent.getAgentId()+"\t"+dialoutNumber);
 //                                    sendToAgent("DIALOUT");                                      
@@ -372,11 +380,29 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 	}
 	
 	public void closeConnect() throws Throwable{
+//            try{
+//                System.out.println("start close session");
+//                if(clientSocket != null){
+//                    inPutStream.close();
+//                    outPutStream.close();
+//                    clientSocket.close();      
+//                    System.out.println("close socket");
+//                    connected = false;
+//                }
+//                if(thread !=  null){
+//                    thread.interrupt();
+//                    System.out.println("finish interrupt thread");                
+//                }
+//                System.out.println("finish close session");                           
+//            }catch(IOException e){
+//                System.out.println("closeConnect(IOException): "+e);
+//            }
+
             try{
                 System.out.println("start close session");
                 if(clientSocket != null){
-                    inPutStream.close();
-                    outPutStream.close();
+                    in.close();
+                    out.close();
                     clientSocket.close();      
                     System.out.println("close socket");
                     connected = false;
@@ -386,24 +412,33 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     System.out.println("finish interrupt thread");                
                 }
                 System.out.println("finish close session");                           
-//                this.finalize();
             }catch(IOException e){
                 System.out.println("closeConnect(IOException): "+e);
-            }
+            }            
 	}
 	
 	public void sendToAgent(String data) throws IOException{
+//            try{
+//                if(clientSocket != null && outPutStream != null){                  
+//                    System.out.println("senttoagent:\t"+data+"\t"+agent.getAgentId());
+//                    outPutStream.println(data);
+//                    outPutStream.flush();
+//                }else
+//                    System.out.println("senttoagent: socket close: "+data);
+//            }catch(Exception e){
+//                System.out.println("sendToClient(IOException): "+e);
+//            }             
+
             try{
-                if(clientSocket != null && outPutStream != null){                  
+                if(clientSocket != null && out != null){                  
                     System.out.println("senttoagent:\t"+data+"\t"+agent.getAgentId());
-                    outPutStream.println(data);
-                    outPutStream.flush();
+                    out.writeUTF(data);
+                    out.flush();
                 }else
                     System.out.println("senttoagent: socket close: "+data);
             }catch(Exception e){
                 System.out.println("sendToClient(IOException): "+e);
-            }             
-            
+            }            
 	}      
         
         void printinfor(){
@@ -530,20 +565,22 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                         if(channel.equalsIgnoreCase(iface)){
                             String subevent = dialevent.getSubEvent().toString();
                             //begin dial out(Ringing)
-                            if("begin".equalsIgnoreCase(subevent)){   
+                            if("begin".equalsIgnoreCase(subevent) && beginDialout){   
                                 System.out.println("begin dial out(channel): "+channel);
-                                System.out.println("getUniqueId: "+dialevent.getUniqueId());
-                                System.out.println("getDestUniqueId: "+dialevent.getDestUniqueId());
-                                dialout = true;
+                                beginDialout = false;
+                                connectDialout = true;
+                                completeDialout = true;
                                 abandonCall = false;
                                 dialin  = false;                                
                                 sendToAgent("DIALOUT");
                                 uniqueidDialout = dialevent.getDestUniqueId();
                                 dialoutSession = uti.getSession();
                                 mdb_agent.startDialout(agent.getAgentId(), agent.getInterface(), agent.getQueueId(), dialoutNumber, agent.getSesion(), dialoutSession);                                
-                            }else if("end".equalsIgnoreCase(subevent) && dialout == true){ 
+                            }else if("end".equalsIgnoreCase(subevent) && completeDialout && !"".equalsIgnoreCase(dialoutSession)){ 
                             //finish dial out
-                                dialout = false;
+                                beginDialout = true;
+                                completeDialout = false;
+                                connectDialout = false;
                                 String status = dialevent.getDialStatus();
                                 System.out.println("status\t"+status);
                                 if("ANSWER".equalsIgnoreCase(status)){
@@ -558,12 +595,10 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                                 dialoutTalktime = "0";
                                 dialoutNumber = "";
                                 sendToAgent("HANGUPDIALOUT");
-                                System.out.println("getUniqueId: "+dialevent.getUniqueId());
-                                System.out.println("getDestUniqueId: "+dialevent.getDestUniqueId());
                             }
                         }                             
                     }else{
-                        System.out.println("hangup fail\t "+dialevent.getChannel());
+                        System.out.println("dialout fail\t "+dialevent.getChannel());
                     }  
                 }                
                 if(event instanceof NewStateEvent){                    
@@ -572,19 +607,14 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     String callerIdNum = stateEvent.getCallerIdNum();
                     String channelState = stateEvent.getChannelStateDesc();                           
                     //begin talking dial out
-                    if(dialout && callerIdNum != null){
+                    if(callerIdNum != null && connectDialout == true){
                         if(callerIdNum.equalsIgnoreCase(dialoutNumber) && channelState.equalsIgnoreCase("UP") && uniqueidDialout.equalsIgnoreCase(stateEvent.getUniqueId())){
-                            if(uti.checkChannel(stateEvent.getChannel())){
-                                System.out.println("callerIdNum: "+callerIdNum+"\tchannelState: "+channelState+"\tdialoutNumber: "+dialoutNumber);
-                                System.out.println("getUniqueId: "+stateEvent.getUniqueId());
-                                String channel = stateEvent.getChannel();                    
-                                channel = channel.substring(0, channel.indexOf("-"));
-                                System.out.println("channel: "+channel);
-                                System.out.println("iface: "+iface);                              
-                                clock = new TimerClock();
-                                clock.start();
-                                sendToAgent("CONNECTEDDIALOUT");//CONNECTEDDIALOUT
-                            }
+                            System.out.println("callerIdNum: "+callerIdNum+"\tchannelState: "+channelState+"\tdialoutNumber: "+dialoutNumber);       
+                            connectDialout = false;                            
+                            clock = new TimerClock();
+                            clock.start();
+                            sendToAgent("CONNECTEDDIALOUT");//CONNECTEDDIALOUT
+//                            && connectDialout == true
                         }
                     }
                 }                

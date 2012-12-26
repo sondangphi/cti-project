@@ -175,34 +175,34 @@ public class Managerdb {
 	}        
         
         public void writeDialLog(String ses, String agentid, String iface, String queue, String event)throws ClassNotFoundException, SQLException{
-            String sql = "INSERT INTO dial_event (session, agent_id, interface, queue, event) VALUES "
+            String sql = "INSERT INTO inbound_call (session, agent_id, interface, queue, event) VALUES "
                     + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"')";
             sqlExecute(sql);            
         }
         
         public void enterQueue(String ses, String agentid, String iface, String queue, String event, String caller)throws ClassNotFoundException, SQLException{
-            String sql = "INSERT INTO dial_event (session, agent_id, interface, queue, event, note1) VALUES "
+            String sql = "INSERT INTO inbound_call (session, agent_id, interface, queue, event, note1) VALUES "
                     + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+caller+"')";
             sqlExecute(sql);            
         }      
         public void connectQueue(String ses, String agentid, String iface, String queue, String event, String ringtime)throws ClassNotFoundException, SQLException{
-            String sql = "INSERT INTO dial_event (session, agent_id, interface, queue, event, note1) VALUES "
+            String sql = "INSERT INTO inbound_call (session, agent_id, interface, queue, event, note1) VALUES "
                     + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+ringtime+"')";
             sqlExecute(sql);            
         }         
         public void ringNoans(String ses, String agentid, String iface, String queue, String event, String ringtime)throws ClassNotFoundException, SQLException{
-            String sql = "INSERT INTO dial_event (session, agent_id, interface, queue, event, note1) VALUES "
+            String sql = "INSERT INTO inbound_call (session, agent_id, interface, queue, event, note1) VALUES "
                     + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+ringtime+"')";
             sqlExecute(sql);            
         }        
         //chua bik dau lenh sql
         public void abandon(String ses, String agentid, String iface, String queue, String event, String ringtime)throws ClassNotFoundException, SQLException{
-            String sql = "INSERT INTO dial_event (session, agent_id, interface, queue, event, note1) VALUES "
+            String sql = "INSERT INTO inbound_call (session, agent_id, interface, queue, event, note1) VALUES "
                     + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+ringtime+"')";
             sqlExecute(sql);            
         } 
         public void completeCall(String ses, String agentid, String iface, String queue, String event, String talktime)throws ClassNotFoundException, SQLException{
-            String sql = "INSERT INTO dial_event (session, agent_id, interface, queue, event, note1) VALUES "
+            String sql = "INSERT INTO inbound_call (session, agent_id, interface, queue, event, note1) VALUES "
                     + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+talktime+"')";
             sqlExecute(sql);            
         }        
@@ -212,13 +212,13 @@ public class Managerdb {
         }
                 
         public void finishDialout(String session, String talktime, String status)throws ClassNotFoundException, SQLException{
-            String sql = "UPDATE agent_dialout SET talktime ='"+talktime+"', status ='"+status+"'"
+            String sql = "UPDATE outbound_call SET talktime ='"+talktime+"', status ='"+status+"'"
                         + " WHERE session = '"+session+"'";
             sqlExecute(sql); 
         }
         
        public void startDialout(String agentid, String iface, String queueid, String number, String loginSes, String session)throws ClassNotFoundException, SQLException{
-            String sql = "INSERT INTO agent_dialout (agentid, interface, queueid, dialoutnumber, loginSession, session) VALUES "
+            String sql = "INSERT INTO outbound_call (agentid, interface, queueid, dialoutnumber, loginSession, session) VALUES "
                     + "('"+agentid+"','"+iface+"','"+queueid+"','"+number+"','"+loginSes+"','"+session+"')";
             sqlExecute(sql); 
         }        
