@@ -66,7 +66,7 @@ public class MainForm extends javax.swing.JFrame {
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );        
         agentClient = agent;
         agentObject = aOb;        
-        Image image = Toolkit.getDefaultToolkit().getImage("people.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("images/icon_main.png");
         this.setIconImage(image);
         if (SystemTray.isSupported()) {
             MouseListener mouseListener = new MouseListener() {

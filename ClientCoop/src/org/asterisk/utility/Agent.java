@@ -58,6 +58,10 @@ public class Agent implements Runnable{
         private BufferedReader infromServer;
         private PrintWriter outtoServer;        
         private String com;          
+        
+        DataInputStream in;
+        DataOutputStream out;
+        
 	public Agent(){
 		
 	}
@@ -86,10 +90,13 @@ public class Agent implements Runnable{
                 Mysql_user = uti.readInfor(filename, "MySql_user");
                 Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
                 outtoServer = new PrintWriter(clientSocket.getOutputStream());
-                infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));              
+                infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));  
+                in = new DataInputStream(clientSocket.getInputStream());
+                out = new DataOutputStream(clientSocket.getOutputStream());                 
                 sendtoServer(com);
                 while(running){                    
-                    command = infromServer.readLine();   
+//                    command = infromServer.readLine();  
+                    command = in.readUTF();
                     System.out.println("***listen from server***");
                     System.out.println("***receive from server: "+command);
                     if(command == null){
@@ -387,10 +394,21 @@ public class Agent implements Runnable{
         
         //send request to server - string
 	public void sendtoServer(String t) throws IOException{
+//            try{
+//                if(clientSocket != null && outtoServer != null && infromServer != null){   
+//                    outtoServer.println(t);
+//                    outtoServer.flush();
+//                    System.out.println("send to server: "+t);
+//                }else{
+//                    System.out.println("socket is close: "+t);
+//                }
+//            }catch(Exception e){
+//                System.out.println("Exception(sendtoServer): "+e);
+//            }   
             try{
-                if(clientSocket != null && outtoServer != null && infromServer != null){   
-                    outtoServer.println(t);
-                    outtoServer.flush();
+                if(clientSocket != null && out != null && in != null){   
+                    out.writeUTF(t);
+                    out.flush();
                     System.out.println("send to server: "+t);
                 }else{
                     System.out.println("socket is close: "+t);
@@ -401,19 +419,33 @@ public class Agent implements Runnable{
 	}        
         //close Socket & Thread for client
 	public void closeConnect()throws Exception{
+//            try{
+//                System.out.println("start close session");
+//                if(clientSocket != null && infromServer != null && outtoServer!= null){
+//                    running = false;
+//                    infromServer.close();
+//                    outtoServer.close();
+//                    clientSocket.close(); 
+//                    System.out.println("close socket");                    
+//                }                      
+//                System.out.println("finish close session"); 
+//            }catch(Exception e){
+//                System.out.println("closeConnect Exception: "+e); 
+//            } 
+            
             try{
                 System.out.println("start close session");
-                if(clientSocket != null && infromServer != null && outtoServer!= null){
+                if(clientSocket != null && in != null && out!= null){
                     running = false;
-                    infromServer.close();
-                    outtoServer.close();
+                    in.close();
+                    out.close();
                     clientSocket.close(); 
                     System.out.println("close socket");                    
                 }                      
                 System.out.println("finish close session"); 
             }catch(Exception e){
                 System.out.println("closeConnect Exception: "+e); 
-            } 
+            }            
 	}
         
         

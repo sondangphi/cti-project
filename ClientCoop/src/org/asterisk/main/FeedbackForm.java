@@ -52,6 +52,8 @@ public class FeedbackForm extends javax.swing.JFrame {
             cb_type1.setBackground(white);
             cb_type2.setBackground(white);
             cb_result1.setEnabled(false);
+            Image image = Toolkit.getDefaultToolkit().getImage("images/icon_feedback.gif");
+            this.setIconImage(image);            
         }catch(Exception e){
         }                
     }
@@ -78,7 +80,7 @@ public class FeedbackForm extends javax.swing.JFrame {
             cb_type1.setBackground(white);
             cb_type2.setBackground(white);
             cb_result1.setEnabled(false);
-            Image image = Toolkit.getDefaultToolkit().getImage("people.png");
+            Image image = Toolkit.getDefaultToolkit().getImage("images/icon_feedback.gif");
             this.setIconImage(image);
         }catch(Exception e){
         }

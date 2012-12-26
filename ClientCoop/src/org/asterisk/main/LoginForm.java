@@ -61,7 +61,7 @@ public class LoginForm extends javax.swing.JFrame {
     ConfigForm configform;
     public LoginForm() {
         initComponents();
-        Image image = Toolkit.getDefaultToolkit().getImage("stock_lock.png");
+        Image image = Toolkit.getDefaultToolkit().getImage("images/icon_login.png");
         try{            
             uti = new Utility();		
             File f = new File(filename);

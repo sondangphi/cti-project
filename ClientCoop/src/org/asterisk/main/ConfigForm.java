@@ -27,7 +27,7 @@ public class ConfigForm extends javax.swing.JFrame {
     public ConfigForm() {
         initComponents();
         try{
-            Image image = Toolkit.getDefaultToolkit().getImage("system_config_services.png");
+            Image image = Toolkit.getDefaultToolkit().getImage("images/icon_config.png");
             host = uti.readInfor(filename, "host");
             aport = uti.readInfor(filename, "aport");
             qport = uti.readInfor(filename, "qport");
@@ -44,7 +44,7 @@ public class ConfigForm extends javax.swing.JFrame {
     public ConfigForm(LoginForm m) {
         initComponents();
         try{
-            Image image = Toolkit.getDefaultToolkit().getImage("system_config_services.png");
+            Image image = Toolkit.getDefaultToolkit().getImage("images/icon_config.png");
             host = uti.readInfor(filename, "host");
             aport = uti.readInfor(filename, "aport");
             qport = uti.readInfor(filename, "qport");
@@ -193,8 +193,6 @@ public class ConfigForm extends javax.swing.JFrame {
         );
 
         jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel2, jLabel3, jLabel8, tx_aport, tx_qport, tx_server});
-
-        jLabel1.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
