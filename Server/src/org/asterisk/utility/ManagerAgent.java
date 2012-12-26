@@ -55,17 +55,17 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
         private boolean connectDialout;
         private boolean completeDialout;
         private boolean dialin = false;
-        private boolean ring = true;
+        private boolean ringing = true;
         private boolean connect = false;
         private boolean complete = false;
         private boolean ringno = false;
         private boolean abandonCall = true;
         private String iface = "";
         private String incomeTemp;        
-//        private  BufferedReader inPutStream;
-//        private  PrintWriter outPutStream;
-        DataInputStream in;
-        DataOutputStream out;
+        private  BufferedReader inPutStream;
+        private  PrintWriter outPutStream;
+//        DataInputStream in;
+//        DataOutputStream out;
         
         private boolean close = true;
         private TimerClock clock;
@@ -118,14 +118,14 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                 manager.sendAction(new StatusAction());
                 addClient = clientSocket.getInetAddress().toString();
                 addClient = addClient.substring(1);
-//                outPutStream = new PrintWriter(clientSocket.getOutputStream());
-//                inPutStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));  
-                in = new DataInputStream(clientSocket.getInputStream());
-                out = new DataOutputStream(clientSocket.getOutputStream());
+                outPutStream = new PrintWriter(clientSocket.getOutputStream());
+                inPutStream = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));  
+//                in = new DataInputStream(clientSocket.getInputStream());
+//                out = new DataOutputStream(clientSocket.getOutputStream());
                 System.out.println("***open inputstream & outputstream***");
                 while(connected){                    
-//                    fromClient = inPutStream.readLine();
-                    fromClient = in.readUTF();
+                    fromClient = inPutStream.readLine();
+//                    fromClient = in.readUTF();
                     System.out.println("***listen from client***");
                     System.out.println("***Receive from client: "+fromClient);
                     ArrayList<String> cmdList = uti.getList(fromClient);
@@ -380,29 +380,11 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
 	}
 	
 	public void closeConnect() throws Throwable{
-//            try{
-//                System.out.println("start close session");
-//                if(clientSocket != null){
-//                    inPutStream.close();
-//                    outPutStream.close();
-//                    clientSocket.close();      
-//                    System.out.println("close socket");
-//                    connected = false;
-//                }
-//                if(thread !=  null){
-//                    thread.interrupt();
-//                    System.out.println("finish interrupt thread");                
-//                }
-//                System.out.println("finish close session");                           
-//            }catch(IOException e){
-//                System.out.println("closeConnect(IOException): "+e);
-//            }
-
             try{
                 System.out.println("start close session");
                 if(clientSocket != null){
-                    in.close();
-                    out.close();
+                    inPutStream.close();
+                    outPutStream.close();
                     clientSocket.close();      
                     System.out.println("close socket");
                     connected = false;
@@ -414,31 +396,49 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                 System.out.println("finish close session");                           
             }catch(IOException e){
                 System.out.println("closeConnect(IOException): "+e);
-            }            
+            }
+
+//            try{
+//                System.out.println("start close session");
+//                if(clientSocket != null){
+//                    in.close();
+//                    out.close();
+//                    clientSocket.close();      
+//                    System.out.println("close socket");
+//                    connected = false;
+//                }
+//                if(thread !=  null){
+//                    thread.interrupt();
+//                    System.out.println("finish interrupt thread");                
+//                }
+//                System.out.println("finish close session");                           
+//            }catch(IOException e){
+//                System.out.println("closeConnect(IOException): "+e);
+//            }            
 	}
 	
 	public void sendToAgent(String data) throws IOException{
-//            try{
-//                if(clientSocket != null && outPutStream != null){                  
-//                    System.out.println("senttoagent:\t"+data+"\t"+agent.getAgentId());
-//                    outPutStream.println(data);
-//                    outPutStream.flush();
-//                }else
-//                    System.out.println("senttoagent: socket close: "+data);
-//            }catch(Exception e){
-//                System.out.println("sendToClient(IOException): "+e);
-//            }             
-
             try{
-                if(clientSocket != null && out != null){                  
+                if(clientSocket != null && outPutStream != null){                  
                     System.out.println("senttoagent:\t"+data+"\t"+agent.getAgentId());
-                    out.writeUTF(data);
-                    out.flush();
+                    outPutStream.println(data);
+                    outPutStream.flush();
                 }else
                     System.out.println("senttoagent: socket close: "+data);
             }catch(Exception e){
                 System.out.println("sendToClient(IOException): "+e);
-            }            
+            }             
+
+//            try{
+//                if(clientSocket != null && out != null){                  
+//                    System.out.println("senttoagent:\t"+data+"\t"+agent.getAgentId());
+//                    out.writeUTF(data);
+//                    out.flush();
+//                }else
+//                    System.out.println("senttoagent: socket close: "+data);
+//            }catch(Exception e){
+//                System.out.println("sendToClient(IOException): "+e);
+//            }            
 	}      
         
         void printinfor(){
@@ -463,9 +463,9 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     System.out.println("***********************\t AgentCalledEvent\t ***********************");  
                     iface = agent.getInterface().toString();//hay bi loi null pointer exception
                     String agentCaller = callEvent.getAgentCalled();
-                    if(iface.equalsIgnoreCase(agentCaller) && ring){                        
+                    if(iface.equalsIgnoreCase(agentCaller) && ringing){                        
                         dialin = true;
-                        ring = false;
+                        ringing = false;
                         connect = true;
                         ringno = true;
                         abandonCall = true;
@@ -495,8 +495,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                         System.out.println("iface(AgentConnectEvent):"+iface);
                         String ringtime = connectEvent.getRingtime().toString();
                         mdb_agent.connectQueue(incomingCall.getsession(), agent.getAgentId(), iface, agent.getQueueId(), CONNECT, ringtime);
-                        uti.writeAgentLog("- AGENT - Connect Queue\t" + agent.getAgentId() + "\t" + iface + "\t" + incomingCall.getcallerNumber());
-//                            sendToAgent("UP");                             
+                        uti.writeAgentLog("- AGENT - Connect Queue\t" + agent.getAgentId() + "\t" + iface + "\t" + incomingCall.getcallerNumber());                             
                         sendToAgent("CONNECTED");
                     }
                 }      
@@ -509,7 +508,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     String channel = comEvent.getMember();  
                     iface = agent.getInterface().toString();
                     if(iface.equalsIgnoreCase(channel) && complete){
-                        ring = true;
+                        ringing = true;
                         System.out.println("iface(AgentCompleteEvent):"+iface);
                         String reason = comEvent.getReason().toString();
                         String talkTime = comEvent.getTalkTime().toString();
@@ -534,7 +533,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     iface = agent.getInterface().toString();
                     if(iface.equalsIgnoreCase(channel) && ringno){                            
                         abandonCall = false;
-                        ring = true;
+                        ringing = true;
                         ringno = false;
                         System.out.println("iface(AgentRingNoAnswerEvent):"+iface);
                         String ringTime = String.valueOf(noAnsEvent.getRingtime()/1000);
@@ -545,16 +544,16 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                     }                                                                                    
                 }                     
                 //abandon queue
-                if(event instanceof QueueCallerAbandonEvent){
-                    QueueCallerAbandonEvent abandon= (QueueCallerAbandonEvent)event;
-                    System.out.println("***********************\t QueueCallerAbandonEvent\t ***********************"); 
+//                if(event instanceof QueueCallerAbandonEvent){
+//                    QueueCallerAbandonEvent abandon= (QueueCallerAbandonEvent)event;
+//                    System.out.println("***********************\t QueueCallerAbandonEvent\t ***********************"); 
 //                        System.out.println("getHoldTime: "+abandon.getHoldTime().toString());            
 //                        System.out.println("getPosition: "+abandon.getPosition().toString());            
 //                        System.out.println("getChannel: "+abandon.getChannel());            
 //                        System.out.println("getQueue: "+abandon.getQueue());            
 //                        System.out.println("getServer: "+abandon.getServer());            
 //                        System.out.println("getOriginalPosition: "+abandon.getOriginalPosition().toString());            
-                }                            
+//                }                            
                 if(event instanceof DialEvent){
                     System.out.println("***********************\t DialEvent\t ***********************");
                     DialEvent dialevent = (DialEvent)event;
@@ -614,7 +613,6 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                             clock = new TimerClock();
                             clock.start();
                             sendToAgent("CONNECTEDDIALOUT");//CONNECTEDDIALOUT
-//                            && connectDialout == true
                         }
                     }
                 }                
@@ -630,7 +628,7 @@ public class ManagerAgent implements Runnable,ManagerEventListener {
                             if(iface.equalsIgnoreCase(channel)){
                                 abandonCall = false; 
                                 dialin = false; 
-                                ring = true;
+                                ringing = true;
                                 sendToAgent("HANGUPABANDON");
                                 System.out.println("hangup abadon call: "+channel);
                                 mdb_agent.abandon(incomingCall.getsession(), agent.getAgentId(), iface, agent.getQueueId(), ABANDON,"");
