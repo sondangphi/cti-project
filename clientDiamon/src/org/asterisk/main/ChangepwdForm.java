@@ -187,29 +187,34 @@ public class ChangepwdForm extends javax.swing.JFrame {
             if(newpwd1.equalsIgnoreCase(newpwd2) ){
                 System.out.println("pwd1 == pwd2");
                 if(uti.checkPwd(newpwd1)){           
-                    System.out.println("pwd right");
-                    if(oldpwd.equalsIgnoreCase(agentobject.getPass())){
+                    System.out.println("pwd right");                    
+//                    if(oldpwd.equals(agentobject.getPass())){
+                    oldpwd = new String (oldpwd.toString());
+                    String agentpwd = new String(agentobject.getPass().toString());
+                    System.out.println("oldpwd: "+oldpwd+"\tagentpwd: "+agentpwd);
+                    if(agentpwd.equals(oldpwd)){
                         if(!oldpwd.equalsIgnoreCase(newpwd1)){
                             agentclient.sendtoServer("110@"+newpwd1);
                             System.out.println("change passs");
                         }else{
                             JOptionPane.showMessageDialog(this,"New password must difference old password");
+                            System.out.println("New password must difference old password");
                         }                                
                     }else{
-                        JOptionPane.showMessageDialog(this,"Password Wrong");
-                        System.out.println("pwd wrong");
+                        JOptionPane.showMessageDialog(this,"Input Password Wrong");
+                        System.out.println("Input Password Wrong");
                     }
                 }else{
                     JOptionPane.showMessageDialog(this,"Password not suitable");
-                    System.out.println("pwd not suitable");
+                    System.out.println("Password not suitable");
                 }
             }else{
                 JOptionPane.showMessageDialog(this,"Comfirm password not match");
-                System.out.println("newpwd1 != newpwd2");
+                System.out.println("Comfirm password not match");
             }            
         }else{
-            JOptionPane.showMessageDialog(this,"Password Wrong");
-            System.out.println("password == null");
+            JOptionPane.showMessageDialog(this,"Password must not null");
+            System.out.println("Password must not null");
         }
 //        this.dispose();
     }//GEN-LAST:event_btn_submitActionPerformed
