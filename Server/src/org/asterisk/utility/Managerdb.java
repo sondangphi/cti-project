@@ -179,33 +179,61 @@ public class Managerdb {
                     + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"')";
             sqlExecute(sql);            
         }
-        
+        //co login session
+        public void inboudCallLog(String ses,String loginses, String agentid, String iface, String queue, String event, String note1)throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO inbound_call (session,loginSession, agent_id, interface, queue, event, note1) VALUES "
+                    + "('"+ses+"','"+loginses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+note1+"')";
+            sqlExecute(sql);            
+        }        
+        //khong co login session
         public void enterQueue(String ses, String agentid, String iface, String queue, String event, String caller)throws ClassNotFoundException, SQLException{
             String sql = "INSERT INTO inbound_call (session, agent_id, interface, queue, event, note1) VALUES "
                     + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+caller+"')";
             sqlExecute(sql);            
+        }     
+        //co login session
+        public void enterQueue(String ses,String loginses, String agentid, String iface, String queue, String event, String caller)throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO inbound_call (session,loginSession, agent_id, interface, queue, event, note1) VALUES "
+                    + "('"+ses+"','"+loginses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+caller+"')";
+            sqlExecute(sql);            
         }      
+        //khong co login session
         public void connectQueue(String ses, String agentid, String iface, String queue, String event, String ringtime)throws ClassNotFoundException, SQLException{
             String sql = "INSERT INTO inbound_call (session, agent_id, interface, queue, event, note1) VALUES "
                     + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+ringtime+"')";
             sqlExecute(sql);            
-        }         
+        }  
+        //co login session
+        public void connectQueue(String ses,String loginses, String agentid, String iface, String queue, String event, String ringtime)throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO inbound_call (session,loginSession, agent_id, interface, queue, event, note1) VALUES "
+                    + "('"+ses+"','"+loginses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+ringtime+"')";
+            sqlExecute(sql);            
+        }        
         public void ringNoans(String ses, String agentid, String iface, String queue, String event, String ringtime)throws ClassNotFoundException, SQLException{
             String sql = "INSERT INTO inbound_call (session, agent_id, interface, queue, event, note1) VALUES "
                     + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+ringtime+"')";
             sqlExecute(sql);            
-        }        
-        //chua bik dau lenh sql
+        }   
+        public void ringNoans(String ses,String loginses, String agentid, String iface, String queue, String event, String ringtime)throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO inbound_call (session, agent_id, interface, queue, event, note1) VALUES "
+                    + "('"+ses+"','"+loginses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+ringtime+"')";
+            sqlExecute(sql);            
+        }                
         public void abandon(String ses, String agentid, String iface, String queue, String event, String ringtime)throws ClassNotFoundException, SQLException{
             String sql = "INSERT INTO inbound_call (session, agent_id, interface, queue, event, note1) VALUES "
                     + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+ringtime+"')";
             sqlExecute(sql);            
-        } 
+        }         
         public void completeCall(String ses, String agentid, String iface, String queue, String event, String talktime)throws ClassNotFoundException, SQLException{
             String sql = "INSERT INTO inbound_call (session, agent_id, interface, queue, event, note1) VALUES "
                     + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+talktime+"')";
             sqlExecute(sql);            
-        }        
+        } 
+        public void completeCall(String ses,String loginses, String agentid, String iface, String queue, String event, String talktime)throws ClassNotFoundException, SQLException{
+            String sql = "INSERT INTO inbound_call (session, agent_id, interface, queue, event, note1) VALUES "
+                    + "('"+ses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+talktime+"')";
+            sqlExecute(sql);            
+        }         
         public boolean changePwd(String newPwd, String agent) throws ClassNotFoundException, SQLException{            
             String sqlcom = "UPDATE agent_login SET password ='"+newPwd+"' WHERE agent_id ='"+agent+"'";                        
             return sqlExecute(sqlcom)>0 ? true : false;            
