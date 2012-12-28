@@ -61,6 +61,8 @@ public class MainForm extends javax.swing.JFrame {
         Color royalBlue = new Color(65, 105, 225);
         Color Blue1 = new Color(0, 0, 225);
         btn_dial.setBackground(royalBlue);
+        btn_clear.setToolTipText("Clear");
+        btn_back.setToolTipText("Back");        
     }
     
     public MainForm(Agent agent, AgentObject aOb) {
@@ -109,8 +111,12 @@ public class MainForm extends javax.swing.JFrame {
         txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);  
         Color green2 = new Color(0, 238, 0);
         Color royalBlue = new Color(65, 105, 225);
+        Color red1 = new Color(255, 0, 0);        
         Color Blue1 = new Color(0, 0, 225);
+        btn_hangup.setBackground(red1);
         btn_dial.setBackground(royalBlue);        
+        btn_clear.setToolTipText("Clear");
+        btn_back.setToolTipText("Back");
         try{
             Mysql_dbname = uti.readInfor(filename, "MySql_database");
             Mysql_server = uti.readInfor(filename, "MySql_server");
@@ -188,6 +194,7 @@ public class MainForm extends javax.swing.JFrame {
         btn_back = new javax.swing.JButton();
         btn_dial = new javax.swing.JButton();
         btn_clear = new javax.swing.JButton();
+        btn_hangup = new javax.swing.JButton();
         lb_version = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -212,7 +219,7 @@ public class MainForm extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Desktop Agent");
+        setTitle("Agent Desktop");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -605,7 +612,7 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         btn_dial.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_dial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/1356109415_phone.png"))); // NOI18N
+        btn_dial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/call_phone.png"))); // NOI18N
         btn_dial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_dialActionPerformed(evt);
@@ -620,6 +627,14 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        btn_hangup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/hangup_phone.png"))); // NOI18N
+        btn_hangup.setEnabled(false);
+        btn_hangup.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_hangupActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panel_dialLayout = new javax.swing.GroupLayout(panel_dial);
         panel_dial.setLayout(panel_dialLayout);
         panel_dialLayout.setHorizontalGroup(
@@ -627,19 +642,27 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(panel_dialLayout.createSequentialGroup()
                 .addGap(4, 4, 4)
                 .addComponent(panel_number, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_dialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel_dialLayout.createSequentialGroup()
-                        .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panel_dialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panel_dialLayout.createSequentialGroup()
+                                .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btn_clear))
+                            .addGroup(panel_dialLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(btn_dial, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap())))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_dialLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_clear))
-                    .addGroup(panel_dialLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(btn_dial, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(btn_hangup, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
 
         panel_dialLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btn_back, btn_clear});
+
+        panel_dialLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btn_dial, btn_hangup});
 
         panel_dialLayout.setVerticalGroup(
             panel_dialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -649,7 +672,9 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btn_dial, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_dial)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btn_hangup)
                 .addContainerGap())
             .addComponent(panel_number, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
@@ -722,8 +747,8 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lb_version, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lb_version, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -964,6 +989,16 @@ public class MainForm extends javax.swing.JFrame {
          about.setVisible(true);
     }//GEN-LAST:event_jMenu2ActionPerformed
 
+    private void btn_hangupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hangupActionPerformed
+        // TODO add your handling code here:
+        try{
+            String command = "106";
+            agentClient.sendtoServer(command);
+        }catch(Exception e){
+        
+        }
+    }//GEN-LAST:event_btn_hangupActionPerformed
+
     public void setAllEnable(boolean flag){
         btn_0.setEnabled(flag);
         btn_1.setEnabled(flag);
@@ -1044,6 +1079,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btn_back;
     private javax.swing.JButton btn_clear;
     public javax.swing.JButton btn_dial;
+    public javax.swing.JButton btn_hangup;
     public javax.swing.JButton btn_logout;
     public javax.swing.JToggleButton btn_pause;
     private javax.swing.JLabel jLabel12;

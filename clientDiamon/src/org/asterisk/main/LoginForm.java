@@ -159,7 +159,7 @@ public class LoginForm extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Desktop Agent Login");
+        setTitle("Agent Desktop Login");
         setFont(new java.awt.Font(".Vn3DH", 1, 10)); // NOI18N
         setForeground(new java.awt.Color(121, 163, 240));
         setName("main_frame"); // NOI18N
@@ -175,7 +175,7 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        panel_1.setBorder(javax.swing.BorderFactory.createTitledBorder("Desktop Agent "));
+        panel_1.setBorder(javax.swing.BorderFactory.createTitledBorder("Agent Desktop"));
 
         btn_login.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btn_login.setText("Login");
