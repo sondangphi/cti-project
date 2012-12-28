@@ -132,9 +132,9 @@ public class Agent implements Runnable{
                             mainForm.setVisible(false);
                             mainForm.dispose(); 
                             close = false;
-                            clockWorktime.stop();
-                            new LoginForm().setVisible(true);
+                            clockWorktime.stop();                            
                             closeConnect();  
+                            new LoginForm().setVisible(true);
                             System.out.println("LOGOUT SUCCESS");
                         } catch (Exception ex) {
                             System.out.println("LOGOUTSUCC " +ex);
@@ -193,6 +193,7 @@ public class Agent implements Runnable{
                             mainForm.btn_pause.setEnabled(false);       
                             mainForm.setAllEnable(false);  
                             mainForm.lb_callernumber.setText(callerNum);
+                            mainForm.btn_hangup.setEnabled(true);
                         }catch(Exception e){
                             System.out.println("RINGING: "+e);
                         }
@@ -207,6 +208,7 @@ public class Agent implements Runnable{
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setEnabled(true);
                         mainForm.setAllEnable(true); 
+                        mainForm.btn_hangup.setEnabled(false);
                         if(clockDialin != null){
                             clockDialin.stop(); 
                         }
@@ -215,6 +217,7 @@ public class Agent implements Runnable{
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setEnabled(true);
                         mainForm.setAllEnable(true);
+                        mainForm.btn_hangup.setEnabled(false);
                     break;                        
                     case DIALOUT: //result 	
                         System.out.println("DIALOUT");    
@@ -223,12 +226,14 @@ public class Agent implements Runnable{
                         mainForm.lb_callduration.setText("00:00:00");
                         mainForm.lb_callernumber.setText("");
                         mainForm.btn_pause.setEnabled(false);       
-                        mainForm.setAllEnable(false);                        
+                        mainForm.setAllEnable(false);      
+                        mainForm.btn_hangup.setEnabled(true);
                     break;                        
                     case DIALOUTFAIL: 
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setEnabled(true);
                         mainForm.setAllEnable(true);
+                        mainForm.btn_hangup.setEnabled(false);
                     break;                                
                     case CONNECTEDDIALOUT: 
                         clockDialout = new TimerClock(mainForm, true);
@@ -240,6 +245,7 @@ public class Agent implements Runnable{
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setEnabled(true);
                         mainForm.setAllEnable(true); 
+                        mainForm.btn_hangup.setEnabled(false);
                         if(clockDialout != null){
                             clockDialout.stop();
                         }
@@ -248,12 +254,21 @@ public class Agent implements Runnable{
                     case HANGUPABANDON: 
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setEnabled(true);
-                        mainForm.setAllEnable(true);          
+                        mainForm.setAllEnable(true);      
+                        mainForm.btn_hangup.setEnabled(false);
                     break;                        
-                    case UP: //EVENT ANSWER CALL	  
-                    break;                        
+                    case HANGUPSUCCESS: //EVENT ANSWER CALL	
+//                        mainForm.lb_status.setText("Ready");
+//                        mainForm.btn_pause.setEnabled(true);
+//                        mainForm.setAllEnable(true);
+                        System.out.println("HANGUPSUCCESS");
+                        mainForm.btn_hangup.setEnabled(false);
+                    break;      
+                    case HANGUPFAIL: //EVENT ANSWER CALL	  
+                        System.out.println("HANGUPFAIL");
+                    break;                         
                     default: 
-                        System.out.println("Break...");
+                        System.out.println("Default Break...");
                     break;
                     }
                 }
@@ -264,9 +279,9 @@ public class Agent implements Runnable{
                         System.out.println("Socket exception client: "+e);
                         System.out.println("logout & new login form");
                         mainForm.setVisible(false);
-                        mainForm.dispose();
-                        new LoginForm().setVisible(true);
+                        mainForm.dispose();                        
                         closeConnect();
+                        new LoginForm().setVisible(true);
                     } catch (Exception ex) {
                         Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -380,6 +395,7 @@ public class Agent implements Runnable{
             HOLDSUCC, HOLDFAIL,
             TRANSSUCC, TRANSFAIL,
             UNPAUSESUCC, UNPAUSEFAIL,
+            HANGUPSUCCESS,HANGUPFAIL,
             AVAIL, BUSY, READY, RESULT, UP,HANGUP,
             CHANGEPWD,CHANGEPWDFAIL,
             RINGING,RINGNOANWSER,CONNECTED, COMPLETED,HANGUPABANDON,
