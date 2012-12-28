@@ -196,3 +196,687 @@
 2012-12-27 16:30:18	- AGENT - Agent logout	127.0.0.1	6003
 2012-12-27 16:30:21	- AGENT - Agent logout	127.0.0.1	6002
 2012-12-27 16:30:24	- AGENT - Agent logout - exit system	127.0.0.1	6001
+2012-12-28 09:31:26	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 09:31:26	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 09:32:35	- AGENT - Interrup connection by client	127.0.0.1	a
+2012-12-28 09:34:40	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 09:34:40	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 09:35:47	- AGENT - Enter Queue	a	SIP/8001	8005
+2012-12-28 09:35:47	- AGENT - Enter Queue	a	SIP/8001	8005
+2012-12-28 09:35:54	- AGENT - Connect Queue	a	SIP/8001	8005
+2012-12-28 09:35:54	- AGENT - Connect Queue	a	SIP/8001	8005
+2012-12-28 09:35:57	- AGENT - Caller complete	a	SIP/8001	8005
+2012-12-28 09:35:57	- AGENT - Caller complete	a	SIP/8001	8005
+2012-12-28 09:37:06	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 09:45:33	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 09:45:33	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 09:45:47	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 09:45:54	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 09:45:55	- AGENT - Agent login successful 	127.0.0.1	b
+2012-12-28 09:46:27	- AGENT - Agent logout	127.0.0.1	b
+2012-12-28 09:46:44	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 09:46:44	- AGENT - Agent login successful 	127.0.0.1	t
+2012-12-28 09:49:24	- AGENT - Enter Queue	t	SIP/8001	8005
+2012-12-28 09:49:28	- AGENT - Connect Queue	t	SIP/8001	8005
+2012-12-28 09:49:31	- AGENT - Agent complete	t	SIP/8001	8005
+2012-12-28 09:51:51	- AGENT - Interrup connection by client	127.0.0.1	t
+2012-12-28 09:55:13	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 09:55:13	- AGENT - Agent login successful 	127.0.0.1	t
+2012-12-28 09:55:19	- AGENT - Agent Dialout 	t	18008198
+2012-12-28 09:55:30	- AGENT - Agent logout	127.0.0.1	t
+2012-12-28 09:56:20	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 09:56:20	- AGENT - Agent login successful 	127.0.0.1	q
+2012-12-28 09:57:08	- AGENT - Enter Queue	t	SIP/8001	0873058080
+2012-12-28 09:57:08	- AGENT - Enter Queue	q	SIP/8001	0873058080
+2012-12-28 09:57:12	- AGENT - Connect Queue	t	SIP/8001	0873058080
+2012-12-28 09:57:12	- AGENT - Connect Queue	q	SIP/8001	0873058080
+2012-12-28 09:57:14	- AGENT - Caller complete	t	SIP/8001	0873058080
+2012-12-28 09:57:14	- AGENT - Caller complete	q	SIP/8001	0873058080
+2012-12-28 09:57:15	- AGENT - Agent logout	127.0.0.1	q
+2012-12-28 10:04:47	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 10:04:48	- AGENT - Agent login successful 	127.0.0.1	e
+2012-12-28 10:04:55	- AGENT - Agent Dialout 	e	18008198
+2012-12-28 10:05:12	- AGENT - Enter Queue	e	SIP/8001	0873058080
+2012-12-28 10:05:15	- AGENT - Connect Queue	e	SIP/8001	0873058080
+2012-12-28 10:05:17	- AGENT - Caller complete	e	SIP/8001	0873058080
+2012-12-28 10:05:18	- AGENT - Agent logout	127.0.0.1	e
+2012-12-28 10:05:24	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 10:05:24	- AGENT - Agent login successful 	127.0.0.1	t
+2012-12-28 10:05:31	- AGENT - Enter Queue	t	SIP/8001	0873058080
+2012-12-28 10:05:33	- AGENT - Connect Queue	t	SIP/8001	0873058080
+2012-12-28 10:05:36	- AGENT - Agent complete	t	SIP/8001	0873058080
+2012-12-28 10:05:43	- AGENT - Agent Dialout 	t	1800577775
+2012-12-28 10:05:52	- AGENT - Agent logout	127.0.0.1	t
+2012-12-28 10:35:06	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 10:35:06	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 10:35:15	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 10:35:22	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 10:35:25	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 10:35:28	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 10:35:33	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 10:35:44	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 10:35:47	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-28 10:35:57	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 10:35:59	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 10:36:01	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 10:36:13	- AGENT - Agent Dialout 	a	18008198
+2012-12-28 10:36:33	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 10:49:17	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 10:49:17	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 10:49:24	- AGENT - Enter Queue	a	SIP/8001	8005
+2012-12-28 10:49:28	- AGENT - Connect Queue	a	SIP/8001	8005
+2012-12-28 10:49:30	- AGENT - Agent complete	a	SIP/8001	8005
+2012-12-28 10:50:35	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 10:55:42	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 10:55:42	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 10:55:49	- AGENT - Agent Dialout 	a	18008198
+2012-12-28 10:56:21	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 11:07:48	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:07:48	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 11:08:08	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 11:08:13	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 11:08:21	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 11:08:30	- AGENT - Agent Dialout 	a	18008198
+2012-12-28 11:08:46	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 11:18:15	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:18:16	- AGENT - Agent login successful 	127.0.0.1	t
+2012-12-28 11:18:24	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:18:24	- AGENT - Agent login successful 	127.0.0.1	e
+2012-12-28 11:18:34	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:18:34	- AGENT - Agent login successful 	127.0.0.1	f
+2012-12-28 11:18:43	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:18:43	- AGENT - Agent login successful 	127.0.0.1	b
+2012-12-28 11:18:50	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:18:50	- AGENT - Agent login fail (already login)	127.0.0.1	c
+2012-12-28 11:18:52	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:18:52	- AGENT - Agent login successful 	127.0.0.1	c
+2012-12-28 11:19:39	- AGENT - Enter Queue	b	SIP/8004	0873058080
+2012-12-28 11:19:50	- AGENT - Ring noAns	b	SIP/8004	0873058080
+2012-12-28 11:19:53	- AGENT - Enter Queue	t	SIP/8001	0873058080
+2012-12-28 11:20:04	- AGENT - Ring noAns	t	SIP/8001	0873058080
+2012-12-28 11:20:07	- AGENT - Enter Queue	c	SIP/8005	0873058080
+2012-12-28 11:20:09	- AGENT - Ring noAns	c	SIP/8005	0873058080
+2012-12-28 11:20:27	- AGENT - Enter Queue	e	SIP/8002	0873058080
+2012-12-28 11:20:30	- AGENT - Connect Queue	e	SIP/8002	0873058080
+2012-12-28 11:20:35	- AGENT - Agent complete	e	SIP/8002	0873058080
+2012-12-28 11:20:43	- AGENT - Enter Queue	f	SIP/8003	0873058080
+2012-12-28 11:20:49	- AGENT - Connect Queue	f	SIP/8003	0873058080
+2012-12-28 11:20:56	- AGENT - Agent complete	f	SIP/8003	0873058080
+2012-12-28 11:21:01	- AGENT - Enter Queue	b	SIP/8004	0873058080
+2012-12-28 11:21:04	- AGENT - Ring noAns	b	SIP/8004	0873058080
+2012-12-28 11:21:04	- AGENT - Enter Queue	t	SIP/8001	0873058080
+2012-12-28 11:21:04	- AGENT - Enter Queue	c	SIP/8001	0873058080
+2012-12-28 11:21:11	- AGENT - Ring noAns	t	SIP/8001	0873058080
+2012-12-28 11:21:11	- AGENT - Ring noAns	c	SIP/8001	0873058080
+2012-12-28 11:21:15	- AGENT - Enter Queue	c	SIP/8005	0873058080
+2012-12-28 11:21:16	- AGENT - Ring noAns	c	SIP/8005	0873058080
+2012-12-28 11:21:16	- AGENT - Enter Queue	e	SIP/8002	0873058080
+2012-12-28 11:21:18	- AGENT - Ring noAns	e	SIP/8002	0873058080
+2012-12-28 11:21:18	- AGENT - Enter Queue	f	SIP/8003	0873058080
+2012-12-28 11:21:20	- AGENT - Ring noAns	f	SIP/8003	0873058080
+2012-12-28 11:21:20	- AGENT - Enter Queue	b	SIP/8004	0873058080
+2012-12-28 11:21:21	- AGENT - Ring noAns	b	SIP/8004	0873058080
+2012-12-28 11:21:21	- AGENT - Enter Queue	t	SIP/8001	0873058080
+2012-12-28 11:21:21	- AGENT - Enter Queue	c	SIP/8001	0873058080
+2012-12-28 11:21:25	- AGENT - Ring noAns	t	SIP/8001	0873058080
+2012-12-28 11:21:25	- AGENT - Ring noAns	c	SIP/8001	0873058080
+2012-12-28 11:21:28	- AGENT - Enter Queue	b	SIP/8004	0873058080
+2012-12-28 11:21:32	- AGENT - Ring noAns	b	SIP/8004	0873058080
+2012-12-28 11:21:46	- AGENT - Agent Dialout 	c	18008198
+2012-12-28 11:21:54	- AGENT - Agent Dialout 	e	18008198
+2012-12-28 11:22:02	- AGENT - Agent Dialout 	b	1800577775
+2012-12-28 11:22:11	- AGENT - Agent Dialout 	t	1800577775
+2012-12-28 11:22:15	- AGENT - Agent Dialout 	t	1800577775
+2012-12-28 11:22:17	- AGENT - Agent Dialout 	t	1800577775
+2012-12-28 11:22:28	- AGENT - Agent Dialout 	f	18008198
+2012-12-28 11:22:57	- AGENT - Agent logout	127.0.0.1	b
+2012-12-28 11:23:00	- AGENT - Agent logout	127.0.0.1	e
+2012-12-28 11:23:01	- AGENT - Agent logout	127.0.0.1	c
+2012-12-28 11:23:03	- AGENT - Agent logout	127.0.0.1	t
+2012-12-28 11:23:04	- AGENT - Agent logout	127.0.0.1	f
+2012-12-28 11:27:25	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:27:25	- AGENT - Agent login successful 	127.0.0.1	c
+2012-12-28 11:27:30	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:27:30	- AGENT - Agent login successful 	127.0.0.1	t
+2012-12-28 11:27:38	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:27:38	- AGENT - Agent login successful 	127.0.0.1	e
+2012-12-28 11:27:46	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:27:46	- AGENT - Agent login successful 	127.0.0.1	q
+2012-12-28 11:27:54	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:27:54	- AGENT - Agent login fail (already login)	127.0.0.1	c
+2012-12-28 11:28:03	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:28:03	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 11:28:21	- AGENT - Enter Queue	c	SIP/8001	0873058080
+2012-12-28 11:28:21	- AGENT - Enter Queue	c	SIP/8001	0873058080
+2012-12-28 11:28:32	- AGENT - Ring noAns	c	SIP/8001	0873058080
+2012-12-28 11:28:32	- AGENT - Ring noAns	c	SIP/8001	0873058080
+2012-12-28 11:29:52	- AGENT - Interrup connection by client	127.0.0.1	c
+2012-12-28 11:29:53	- AGENT - Interrup connection by client	127.0.0.1	t
+2012-12-28 11:29:54	- AGENT - Interrup connection by client	127.0.0.1	e
+2012-12-28 11:29:56	- AGENT - Interrup connection by client	127.0.0.1	q
+2012-12-28 11:29:57	- AGENT - Interrup connection by client	127.0.0.1	a
+2012-12-28 11:39:09	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:39:09	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 11:39:18	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:39:18	- AGENT - Agent login successful 	127.0.0.1	c
+2012-12-28 11:39:29	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 11:39:40	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 11:39:43	- AGENT - Enter Queue	c	SIP/8003	0873058080
+2012-12-28 11:39:47	- AGENT - Connect Queue	c	SIP/8003	0873058080
+2012-12-28 11:39:55	- AGENT - Agent complete	c	SIP/8003	0873058080
+2012-12-28 11:40:03	- AGENT - Agent Dialout 	c	18008198
+2012-12-28 11:40:11	- AGENT - Agent Dialout 	a	1800577775
+2012-12-28 11:40:24	- AGENT - Agent logout	127.0.0.1	c
+2012-12-28 11:40:26	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 11:41:05	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:41:05	- AGENT - Agent login successful 	127.0.0.1	t
+2012-12-28 11:41:16	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:41:16	- AGENT - Agent login successful 	127.0.0.1	e
+2012-12-28 11:41:25	- AGENT - Enter Queue	t	SIP/8001	0873058080
+2012-12-28 11:41:28	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 11:41:28	- AGENT - Connect Queue	t	SIP/8001	0873058080
+2012-12-28 11:41:32	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 11:41:32	- AGENT - Agent complete	t	SIP/8001	0873058080
+2012-12-28 11:41:36	- AGENT - Enter Queue	e	SIP/8003	0873058080
+2012-12-28 11:41:45	- AGENT - Connect Queue	e	SIP/8003	0873058080
+2012-12-28 11:41:52	- AGENT - Agent complete	e	SIP/8003	0873058080
+2012-12-28 11:42:04	- AGENT - Agent Dialout 	t	18008198
+2012-12-28 11:42:12	- AGENT - Agent Dialout 	e	1800577775
+2012-12-28 11:42:26	- AGENT - Agent logout	127.0.0.1	e
+2012-12-28 11:42:27	- AGENT - Agent logout	127.0.0.1	t
+2012-12-28 11:54:58	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:54:58	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 11:55:10	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 11:55:13	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 11:55:17	- AGENT - Caller complete	a	SIP/8001	0873058080
+2012-12-28 11:55:21	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 11:55:25	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-28 11:55:29	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 11:55:38	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 11:55:38	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 11:55:45	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 11:55:49	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-28 11:55:56	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 11:56:00	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 11:56:00	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 11:56:07	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 11:56:07	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 11:58:37	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 12:05:01	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 12:05:01	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 12:05:09	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 12:05:13	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 12:05:16	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 12:05:20	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 12:05:23	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-28 12:05:24	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 12:05:29	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 12:05:29	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 12:05:34	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 12:05:38	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-28 12:05:42	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 12:05:44	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 12:05:44	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 12:05:50	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 12:05:50	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 12:07:19	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:11:48	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:11:48	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:12:08	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:12:10	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:12:14	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 13:12:24	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:12:40	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:12:40	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:12:49	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:12:52	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:12:55	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 13:13:12	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:13:18	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:13:18	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:13:24	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:13:34	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 13:13:37	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:13:39	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:13:43	- AGENT - Caller complete	a	SIP/8001	0873058080
+2012-12-28 13:14:46	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:18:00	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:18:00	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:18:07	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:18:18	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 13:18:21	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:18:32	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 13:18:35	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:18:37	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 13:23:13	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:24:24	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:24:41	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:27:20	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:28:11	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:28:11	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:28:18	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:28:25	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:28:49	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 13:29:28	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:30:56	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:30:56	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:31:24	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:31:35	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 13:31:38	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:31:40	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:31:43	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 13:31:47	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:31:53	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:31:53	- AGENT - Agent login successful 	127.0.0.1	t
+2012-12-28 13:31:58	- AGENT - Enter Queue	t	SIP/8001	0873058080
+2012-12-28 13:32:06	- AGENT - Connect Queue	t	SIP/8001	0873058080
+2012-12-28 13:32:09	- AGENT - Agent complete	t	SIP/8001	0873058080
+2012-12-28 13:32:15	- AGENT - Enter Queue	t	SIP/8001	0873058080
+2012-12-28 13:32:22	- AGENT - Connect Queue	t	SIP/8001	0873058080
+2012-12-28 13:32:27	- AGENT - Agent complete	t	SIP/8001	0873058080
+2012-12-28 13:32:38	- AGENT - Agent logout	127.0.0.1	t
+2012-12-28 13:33:00	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:33:00	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:33:10	- AGENT - Interrup connection by client	127.0.0.1	a
+2012-12-28 13:34:26	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:34:26	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:34:35	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:34:46	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 13:34:49	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:34:59	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 13:35:02	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:35:06	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 13:35:46	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:35:54	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:35:54	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:36:31	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:36:36	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:36:36	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:36:52	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 13:36:52	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 13:41:31	- AGENT - Interrup connection by client	127.0.0.1	a
+2012-12-28 13:41:51	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:41:51	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:42:00	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:42:05	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-28 13:42:10	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:42:17	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:42:17	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:42:24	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:42:30	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:42:40	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:42:59	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 13:42:59	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 13:43:09	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:43:09	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:43:12	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:43:23	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:44:01	- AGENT - Caller complete	a	SIP/8001	0873058080
+2012-12-28 13:44:01	- AGENT - Caller complete	a	SIP/8001	0873058080
+2012-12-28 13:44:14	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:44:14	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:44:19	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:44:27	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:44:40	- AGENT - Caller complete	a	SIP/8001	0873058080
+2012-12-28 13:44:40	- AGENT - Caller complete	a	SIP/8001	0873058080
+2012-12-28 13:44:43	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:44:43	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:44:48	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:45:11	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:47:15	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:47:15	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:48:44	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:48:44	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:48:57	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:49:04	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:49:38	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:49:38	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:49:46	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:49:52	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:50:05	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 13:50:07	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:50:12	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:50:12	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:50:19	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:50:23	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:50:32	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 13:50:43	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:50:48	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:50:48	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:50:55	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:50:58	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:51:09	- AGENT - Caller complete	a	SIP/8001	0873058080
+2012-12-28 13:51:28	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:51:30	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:51:37	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 13:51:43	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:51:48	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:51:48	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:51:53	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:51:56	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:52:00	- AGENT - Caller complete	a	SIP/8001	0873058080
+2012-12-28 13:54:24	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:54:32	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:54:33	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:54:37	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:54:43	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:55:20	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 13:56:42	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:57:10	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:57:10	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:57:24	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:57:32	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 13:57:42	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 13:57:58	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 13:58:04	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 13:58:05	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 13:58:13	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 13:58:17	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:00:47	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 14:00:49	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 14:01:24	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:01:24	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:01:34	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:01:38	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:01:43	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 14:01:48	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 14:03:07	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:03:16	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:03:30	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:03:41	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 14:03:44	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:03:44	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-28 14:04:54	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:04:54	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:05:07	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:05:09	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:05:11	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 14:05:29	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 14:05:46	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:05:46	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:08:26	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:08:26	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-28 14:08:26	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 14:08:29	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:08:29	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 14:08:30	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:08:30	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 14:10:00	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:10:00	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:10:09	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:10:11	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:10:13	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 14:10:16	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 14:10:25	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:10:25	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:10:48	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:10:48	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:10:51	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:10:51	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:11:29	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:11:29	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:11:40	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:11:42	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:11:44	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 14:12:15	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:12:15	- AGENT - Agent login fail (already login)	127.0.0.1	a
+2012-12-28 14:12:53	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:12:53	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:13:01	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:13:08	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:13:12	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 14:13:18	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 14:13:24	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:13:24	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:13:31	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:13:31	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:13:41	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:13:41	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:13:42	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 14:13:42	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 14:13:45	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 14:13:51	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:13:51	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:13:59	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:13:59	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:13:59	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:14:08	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 14:14:08	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 14:14:08	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 14:14:11	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:14:11	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:14:11	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:14:21	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 14:14:22	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 14:14:22	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 14:14:25	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:14:25	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:14:25	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:14:29	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 14:14:29	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 14:14:29	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 14:20:56	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 14:29:43	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:29:43	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:29:51	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:29:56	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:29:57	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 14:30:01	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 14:30:09	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:30:09	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:30:17	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:30:21	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:30:26	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 14:31:47	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:31:53	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-28 14:32:02	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 14:32:09	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:32:09	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:32:20	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:32:25	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:32:27	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 14:33:23	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 14:33:44	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:33:44	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:33:53	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:33:55	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:33:57	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 14:33:58	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 14:34:04	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:34:04	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 14:34:10	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:34:12	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:34:15	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 14:34:21	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:34:26	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 14:34:29	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 14:34:40	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 14:34:40	- AGENT - Agent login successful 	127.0.0.1	b
+2012-12-28 14:34:49	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 14:35:00	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 14:35:03	- AGENT - Enter Queue	b	SIP/8002	0873058080
+2012-12-28 14:35:10	- AGENT - Connect Queue	b	SIP/8002	0873058080
+2012-12-28 14:35:14	- AGENT - Caller complete	b	SIP/8002	0873058080
+2012-12-28 14:48:01	- AGENT - Interrup connection by client	127.0.0.1	b
+2012-12-28 14:48:04	- AGENT - Interrup connection by client	127.0.0.1	a
+2012-12-28 15:14:44	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 15:14:44	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 15:15:30	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 15:15:34	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 15:15:47	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 15:16:04	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 15:16:06	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 15:16:09	- AGENT - Caller complete	a	SIP/8001	0873058080
+2012-12-28 15:16:16	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 15:16:16	- AGENT - Agent login successful 	127.0.0.1	b
+2012-12-28 15:16:28	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 15:16:38	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 15:16:41	- AGENT - Enter Queue	b	SIP/8002	0873058080
+2012-12-28 15:16:45	- AGENT - Connect Queue	b	SIP/8002	0873058080
+2012-12-28 15:16:50	- AGENT - Caller complete	b	SIP/8002	0873058080
+2012-12-28 15:17:03	- AGENT - Agent logout	127.0.0.1	b
+2012-12-28 15:17:10	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 15:17:18	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 15:17:18	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 15:17:23	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 15:17:23	- AGENT - Agent login successful 	127.0.0.1	b
+2012-12-28 15:17:32	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 15:17:40	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 15:17:45	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 15:17:50	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 15:18:01	- AGENT - Enter Queue	b	SIP/8002	0873058080
+2012-12-28 15:18:06	- AGENT - Connect Queue	b	SIP/8002	0873058080
+2012-12-28 15:18:14	- AGENT - Caller complete	b	SIP/8002	0873058080
+2012-12-28 15:18:20	- AGENT - Agent logout	127.0.0.1	b
+2012-12-28 15:21:10	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 15:21:10	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 15:21:22	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 15:21:26	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 15:21:29	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 15:21:33	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 15:21:41	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 15:21:41	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 15:21:53	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 15:21:53	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-28 15:21:53	- AGENT - Ring noAns	a	SIP/8001	0873058080
+2012-12-28 15:21:56	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 15:21:58	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 15:22:11	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 15:23:12	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 15:23:12	- AGENT - Agent login successful 	127.0.0.1	b
+2012-12-28 15:23:26	- AGENT - Enter Queue	b	SIP/8002	0873058080
+2012-12-28 15:23:32	- AGENT - Connect Queue	b	SIP/8002	0873058080
+2012-12-28 15:23:46	- AGENT - Caller complete	b	SIP/8002	0873058080
+2012-12-28 15:27:39	- AGENT - Interrup connection by client	127.0.0.1	a
+2012-12-28 15:27:41	- AGENT - Agent logout - exit system	127.0.0.1	b
+2012-12-28 15:28:08	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 15:28:08	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 15:28:18	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 15:28:24	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 15:28:32	- AGENT - Caller complete	a	SIP/8001	0873058080
+2012-12-28 15:28:49	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 15:28:55	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 15:29:06	- AGENT - Caller complete	a	SIP/8001	0873058080
+2012-12-28 15:29:15	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 15:29:20	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 15:29:27	- AGENT - Caller complete	a	SIP/8001	0873058080
+2012-12-28 15:29:33	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 15:29:37	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 15:29:40	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 15:29:45	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 15:29:48	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 15:29:50	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 15:31:06	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 15:31:06	- AGENT - Agent login successful 	127.0.0.1	b
+2012-12-28 15:31:16	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 15:31:16	- AGENT - Agent login successful 	127.0.0.1	c
+2012-12-28 15:35:06	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 15:35:08	- AGENT - Abandon Call	a	SIP/8001	0873058080
+2012-12-28 15:35:14	- AGENT - Enter Queue	b	SIP/8002	0873058080
+2012-12-28 15:35:24	- AGENT - Ring noAns	b	SIP/8002	0873058080
+2012-12-28 15:35:27	- AGENT - Enter Queue	c	SIP/8003	0873058080
+2012-12-28 15:35:29	- AGENT - Connect Queue	c	SIP/8003	0873058080
+2012-12-28 15:35:44	- AGENT - Agent complete	c	SIP/8003	0873058080
+2012-12-28 15:36:21	- AGENT - Agent logout	127.0.0.1	c
+2012-12-28 15:36:23	- AGENT - Agent logout	127.0.0.1	b
+2012-12-28 15:36:24	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 15:38:33	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 15:38:33	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 15:38:59	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 15:39:01	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 15:39:03	- AGENT - Caller complete	a	SIP/8001	0873058080
+2012-12-28 15:39:27	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 15:39:44	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 16:19:37	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 16:19:38	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 16:19:45	- AGENT - Enter Queue	a	SIP/8001	0873058080
+2012-12-28 16:19:47	- AGENT - Connect Queue	a	SIP/8001	0873058080
+2012-12-28 16:19:49	- AGENT - Agent complete	a	SIP/8001	0873058080
+2012-12-28 16:19:59	- AGENT - Enter Queue	a	SIP/8001	8005
+2012-12-28 16:20:04	- AGENT - Ring noAns	a	SIP/8001	8005
+2012-12-28 16:20:07	- AGENT - Enter Queue	a	SIP/8001	8005
+2012-12-28 16:20:12	- AGENT - Connect Queue	a	SIP/8001	8005
+2012-12-28 16:20:14	- AGENT - Agent complete	a	SIP/8001	8005
+2012-12-28 16:20:16	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 16:20:21	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 16:20:21	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 16:20:26	- AGENT - Enter Queue	a	SIP/8001	8005
+2012-12-28 16:20:27	- AGENT - Connect Queue	a	SIP/8001	8005
+2012-12-28 16:20:30	- AGENT - Agent complete	a	SIP/8001	8005
+2012-12-28 16:20:43	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 16:26:36	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 16:26:36	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 16:26:42	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 16:26:42	- AGENT - Agent login successful 	127.0.0.1	b
+2012-12-28 16:26:45	- AGENT - Agent logout	127.0.0.1	b
+2012-12-28 16:26:51	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 16:26:51	- AGENT - Agent login successful 	127.0.0.1	c
+2012-12-28 16:27:05	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 16:27:05	- AGENT - Agent login successful 	127.0.0.1	d
+2012-12-28 16:28:05	- AGENT - Agent logout	127.0.0.1	a
+2012-12-28 16:28:13	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 16:28:13	- AGENT - Agent login successful 	127.0.0.1	t
+2012-12-28 16:28:28	- AGENT - Enter Queue	d	SIP/8004	8001
+2012-12-28 16:28:39	- AGENT - Connect Queue	d	SIP/8004	8001
+2012-12-28 16:28:40	- AGENT - Enter Queue	t	SIP/8002	0873058080
+2012-12-28 16:28:42	- AGENT - Connect Queue	t	SIP/8002	0873058080
+2012-12-28 16:28:51	- AGENT - Agent Dialout 	c	18008198
+2012-12-28 16:29:11	- AGENT - Caller complete	t	SIP/8002	0873058080
+2012-12-28 16:29:12	- AGENT - Agent complete	d	SIP/8004	8001
+2012-12-28 16:30:18	- AGENT - Enter Queue	c	SIP/8003	8005
+2012-12-28 16:30:22	- AGENT - Abandon Call	c	SIP/8003	8005
+2012-12-28 16:30:30	- AGENT - Enter Queue	d	SIP/8004	8001
+2012-12-28 16:30:40	- AGENT - Ring noAns	d	SIP/8004	8001
+2012-12-28 16:30:43	- AGENT - Enter Queue	t	SIP/8002	8001
+2012-12-28 16:30:54	- AGENT - Ring noAns	t	SIP/8002	8001
+2012-12-28 16:30:57	- AGENT - Enter Queue	c	SIP/8003	8001
+2012-12-28 16:31:00	- AGENT - Ring noAns	c	SIP/8003	8001
+2012-12-28 16:32:06	- AGENT - Enter Queue	d	SIP/8004	0873058080
+2012-12-28 16:32:09	- AGENT - Ring noAns	d	SIP/8004	0873058080
+2012-12-28 16:32:09	- AGENT - Enter Queue	t	SIP/8002	0873058080
+2012-12-28 16:32:17	- AGENT - Ring noAns	t	SIP/8002	0873058080
+2012-12-28 16:32:20	- AGENT - Enter Queue	c	SIP/8003	0873058080
+2012-12-28 16:32:29	- AGENT - Ring noAns	c	SIP/8003	0873058080
+2012-12-28 16:32:29	- AGENT - Enter Queue	d	SIP/8004	0873058080
+2012-12-28 16:32:30	- AGENT - Ring noAns	d	SIP/8004	0873058080
+2012-12-28 16:32:34	- AGENT - Enter Queue	t	SIP/8002	0873058080
+2012-12-28 16:32:37	- AGENT - Ring noAns	t	SIP/8002	0873058080
+2012-12-28 16:32:48	- AGENT - Agent logout	127.0.0.1	c
+2012-12-28 16:32:50	- AGENT - Agent logout	127.0.0.1	d
+2012-12-28 16:32:59	- AGENT - Enter Queue	t	SIP/8002	8005
+2012-12-28 16:33:02	- AGENT - Abandon Call	t	SIP/8002	8005
+2012-12-28 16:33:11	- AGENT - Enter Queue	t	SIP/8002	0873058080
+2012-12-28 16:33:16	- AGENT - Connect Queue	t	SIP/8002	0873058080
+2012-12-28 16:33:20	- AGENT - Caller complete	t	SIP/8002	0873058080
+2012-12-28 16:33:24	- AGENT - Agent logout	127.0.0.1	t
+2012-12-28 16:33:29	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 16:33:29	- AGENT - Agent login successful 	127.0.0.1	t
+2012-12-28 16:33:41	- AGENT - Enter Queue	t	SIP/8002	0873058080
+2012-12-28 16:33:52	- AGENT - Ring noAns	t	SIP/8002	0873058080
+2012-12-28 16:33:55	- AGENT - Enter Queue	t	SIP/8002	0873058080
+2012-12-28 16:34:05	- AGENT - Ring noAns	t	SIP/8002	0873058080
+2012-12-28 16:34:08	- AGENT - Enter Queue	t	SIP/8002	0873058080
+2012-12-28 16:34:12	- AGENT - Ring noAns	t	SIP/8002	0873058080
+2012-12-28 16:34:31	- AGENT - Agent logout	127.0.0.1	t
+2012-12-28 16:40:27	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 16:40:27	- AGENT - Agent login successful 	127.0.0.1	a
+2012-12-28 16:40:35	- AGENT - Accept connect from address	127.0.0.1
+2012-12-28 16:40:35	- AGENT - Agent login successful 	127.0.0.1	c
+2012-12-28 16:40:42	- AGENT - Enter Queue	a	SIP/8002	0873058080
+2012-12-28 16:40:46	- AGENT - Abandon Call	a	SIP/8002	0873058080
+2012-12-28 16:41:03	- AGENT - Enter Queue	c	SIP/8003	8005
+2012-12-28 16:41:13	- AGENT - Abandon Call	c	SIP/8003	8005
+2012-12-28 16:41:32	- AGENT - Enter Queue	a	SIP/8002	8001
+2012-12-28 16:41:38	- AGENT - Abandon Call	a	SIP/8002	8001
+2012-12-28 16:42:14	- AGENT - Enter Queue	c	SIP/8003	0873058080
+2012-12-28 16:42:25	- AGENT - Ring noAns	c	SIP/8003	0873058080
+2012-12-28 16:42:28	- AGENT - Enter Queue	a	SIP/8002	0873058080
+2012-12-28 16:42:38	- AGENT - Ring noAns	a	SIP/8002	0873058080
+2012-12-28 16:42:41	- AGENT - Enter Queue	c	SIP/8003	0873058080
+2012-12-28 16:42:45	- AGENT - Ring noAns	c	SIP/8003	0873058080
+2012-12-28 16:49:11	- AGENT - Agent Dialout 	c	18008198
+2012-12-28 16:49:42	- AGENT - Agent Dialout 	c	0978420190
+2012-12-28 16:50:16	- AGENT - Agent Dialout 	c	18008198
+2012-12-28 16:59:34	- AGENT - Agent Dialout 	c	18008198
+2012-12-28 17:18:33	- AGENT - Agent logout	127.0.0.1	c
+2012-12-28 17:18:34	- AGENT - Agent logout	127.0.0.1	a

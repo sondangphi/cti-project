@@ -117,10 +117,10 @@ public class Managerdb {
             if(rs.next()){
                 String inface = rs.getString("interface");
                 String queue = rs.getString("queue");
-                System.out.println("inface: "+inface+"\t"+"queue: "+queue);
-                System.out.println("iface: "+iface+"\t"+"queueid: "+queueid);
+//                System.out.println("inface: "+inface+"\t"+"queue: "+queue);
+//                System.out.println("iface: "+iface+"\t"+"queueid: "+queueid);
                 if("0".equalsIgnoreCase(inface) && "0".equalsIgnoreCase(queue)){
-                    System.out.println("inface: "+inface+"\t"+"queue: "+queue);
+//                    System.out.println("inface: "+inface+"\t"+"queue: "+queue);
                     rs = sqlQuery(sqlCom2);
                     if(rs.next())
                         return false;
@@ -180,7 +180,7 @@ public class Managerdb {
             sqlExecute(sql);            
         }
         //co login session
-        public void inboudCallLog(String ses,String loginses, String agentid, String iface, String queue, String event, String note1)throws ClassNotFoundException, SQLException{
+        public void inboundCallLog(String ses,String loginses, String agentid, String iface, String queue, String event, String note1)throws ClassNotFoundException, SQLException{
             String sql = "INSERT INTO inbound_call (session,loginSession, agent_id, interface, queue, event, note1) VALUES "
                     + "('"+ses+"','"+loginses+"','"+agentid+"','"+iface+"','"+queue+"','"+event+"','"+note1+"')";
             sqlExecute(sql);            

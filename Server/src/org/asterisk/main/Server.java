@@ -22,9 +22,11 @@ public class Server{
         private static String Mysql_dbname = "ast_callcenter";
 	private static String Mysql_user = "callcenter";
 	private static String Mysql_pwd  = "callcenter";
-        private static String Asterisk_server = "172.168.10.202";
-        private static String Asterisk_user = "manager";
-        private static String Asterisk_pwd = "123456";
+        private static String astServer = "172.168.10.202";
+        private static String astUserSystem = "manager";
+        private static String astPwdSystem = "123456";
+        private static String astUserEvent = "manager";
+        private static String astPwdEvent = "123456";        
 	private static Managerdb mdb_agent;
         private static QueueListen qlisten;  
         private static AgentListen alisten; 
@@ -49,10 +51,12 @@ public class Server{
                 uti.writeInfor(filename, "MySql_user", Mysql_user);
                 uti.writeInfor(filename, "MySql_pwd", Mysql_pwd);
                 uti.writeInfor(filename, "Port_agent", Integer.toString(Port_agent));
-                uti.writeInfor(filename, "Port_queue", Integer.toString(Port_queue));                
-                uti.writeInfor(filename, "Asterisk_pwd", Asterisk_pwd);
-                uti.writeInfor(filename, "Asterisk_user", Asterisk_user);
-                uti.writeInfor(filename, "Asterisk_server", Asterisk_server);
+                uti.writeInfor(filename, "Port_queue", Integer.toString(Port_queue));    
+                uti.writeInfor(filename, "astServer", astServer);
+                uti.writeInfor(filename, "astPwdSystem", astPwdSystem);
+                uti.writeInfor(filename, "astUserSystem", astUserSystem);                
+                uti.writeInfor(filename, "astUserEvent", astUserEvent);
+                uti.writeInfor(filename, "astPwdEvent", astPwdEvent);                
             }
             //Read configuration file
             System.out.println("Read configuration file!"); 
@@ -116,7 +120,7 @@ public class Server{
             QueueRemoveAction queueRemove = new QueueRemoveAction();
             queueRemove.setInterface(iface);
             queueRemove.setQueue(queue);
-            manager = alisten.manager;
+            manager = alisten.managerSystem;
             String result = manager.sendAction(queueRemove).getResponse().toString();
             return result;
 	}

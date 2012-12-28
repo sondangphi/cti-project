@@ -52,3 +52,179 @@
 2012-12-27 16:30:45	- SYSTE  - Reload Asterisk Server
 2012-12-27 16:31:04	- SYSTE  - Reload Asterisk Server
 2012-12-27 16:31:40	- SYSTE  - Reload Asterisk Server
+2012-12-28 09:30:36	- SYSTE  - Connect to Database Successful
+2012-12-28 09:30:36	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 09:30:36	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 09:30:41	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 09:45:23	- SYSTE  - Connect to Database Successful
+2012-12-28 09:45:23	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 09:45:23	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 09:45:28	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 09:46:35	- SYSTE  - Connect to Database Successful
+2012-12-28 09:46:35	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 09:46:35	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 09:46:40	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 09:54:46	- SYSTE  - Connect to Database Successful
+2012-12-28 09:54:46	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 09:54:46	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 09:54:51	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 10:04:40	- SYSTE  - Connect to Database Successful
+2012-12-28 10:04:40	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 10:04:40	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 10:04:45	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 10:34:57	- SYSTE  - Connect to Database Successful
+2012-12-28 10:34:57	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 10:34:57	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 10:35:02	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 10:48:59	- SYSTE  - Connect to Database Successful
+2012-12-28 10:48:59	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 10:49:04	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 10:55:32	- SYSTE  - Connect to Database Successful
+2012-12-28 10:55:32	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 10:55:32	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 10:55:37	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 11:38:57	- SYSTE  - Connect to Database Successful
+2012-12-28 11:38:57	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 11:38:58	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 11:39:02	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 11:54:42	- SYSTE  - Connect to Database Successful
+2012-12-28 11:54:42	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 11:54:42	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 11:54:47	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 12:04:37	- SYSTE  - Connect to Database Successful
+2012-12-28 12:04:37	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 12:04:37	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 12:04:42	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 13:11:40	- SYSTE  - Connect to Database Successful
+2012-12-28 13:11:40	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 13:11:40	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 13:11:45	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 13:23:28	- SYSTE  - Connect to Database Successful
+2012-12-28 13:23:28	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 13:23:28	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 13:23:33	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 13:30:28	- SYSTE  - Connect to Database Successful
+2012-12-28 13:30:28	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 13:30:28	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 13:30:33	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 13:33:25	- SYSTE  - Connect to Database Successful
+2012-12-28 13:33:25	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 13:33:25	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 13:33:30	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 13:41:38	- SYSTE  - Connect to Database Successful
+2012-12-28 13:41:38	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 13:41:39	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 13:41:43	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 13:46:59	- SYSTE  - Connect to Database Successful
+2012-12-28 13:46:59	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 13:46:59	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 13:47:04	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 13:48:35	- SYSTE  - Connect to Database Successful
+2012-12-28 13:48:35	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 13:48:35	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 13:48:40	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 13:48:40	- SYSTE  - Update datetime agent unlogout(updatetime)	a	bPBaMOjt9Hxs2j1
+2012-12-28 13:48:40	- SYSTE  - Update datetime agent unlogout(remove queue)	a	bPBaMOjt9Hxs2j1
+2012-12-28 13:49:30	- SYSTE  - Connect to Database Successful
+2012-12-28 13:49:30	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 13:49:30	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 13:49:35	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 13:49:35	- SYSTE  - Update datetime agent unlogout(updatetime)	a	c0mnTuORIiIRoXO
+2012-12-28 13:49:35	- SYSTE  - Update datetime agent unlogout(remove queue)	a	c0mnTuORIiIRoXO
+2012-12-28 13:56:52	- SYSTE  - Connect to Database Successful
+2012-12-28 13:56:52	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 13:56:53	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 13:56:57	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 13:59:32	- SYSTE  - Connect to Database Successful
+2012-12-28 13:59:32	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 13:59:37	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 13:59:37	- SYSTE  - Update datetime agent unlogout(updatetime)	a	aAyVPhg4hfgU5F7
+2012-12-28 14:01:00	- SYSTE  - Connect to Database Successful
+2012-12-28 14:01:00	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 14:01:00	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 14:01:05	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 14:04:42	- SYSTE  - Connect to Database Successful
+2012-12-28 14:04:42	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 14:04:43	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 14:04:47	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 14:04:47	- SYSTE  - Update datetime agent unlogout(updatetime)	a	FkJqoHhD05nVrIO
+2012-12-28 14:04:47	- SYSTE  - Update datetime agent unlogout(remove queue)	a	FkJqoHhD05nVrIO
+2012-12-28 14:09:48	- SYSTE  - Connect to Database Successful
+2012-12-28 14:09:48	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 14:09:48	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 14:09:53	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 14:09:53	- SYSTE  - Update datetime agent unlogout(updatetime)	a	lg8SUQOivgsZDqy
+2012-12-28 14:09:53	- SYSTE  - Update datetime agent unlogout(remove queue)	a	lg8SUQOivgsZDqy
+2012-12-28 14:11:09	- SYSTE  - Connect to Database Successful
+2012-12-28 14:11:09	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 14:11:09	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 14:11:14	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 14:11:14	- SYSTE  - Update datetime agent unlogout(updatetime)	a	HLje3Olwbdg8q8J
+2012-12-28 14:11:14	- SYSTE  - Update datetime agent unlogout(remove queue)	a	HLje3Olwbdg8q8J
+2012-12-28 14:12:37	- SYSTE  - Connect to Database Successful
+2012-12-28 14:12:37	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 14:12:38	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 14:12:42	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 14:12:42	- SYSTE  - Update datetime agent unlogout(updatetime)	a	cccsLO8puPILUzE
+2012-12-28 14:12:42	- SYSTE  - Already remove queue(remove queue)	a	cccsLO8puPILUzE
+2012-12-28 14:29:29	- SYSTE  - Connect to Database Successful
+2012-12-28 14:29:29	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 14:29:29	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 14:29:34	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 14:31:27	- SYSTE  - Connect to Database Successful
+2012-12-28 14:31:27	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 14:31:32	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 14:31:32	- SYSTE  - Update datetime agent unlogout(updatetime)	a	r3E3YXRkvbjgnh3
+2012-12-28 14:33:32	- SYSTE  - Connect to Database Successful
+2012-12-28 14:33:32	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 14:33:32	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 14:33:37	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 15:14:28	- SYSTE  - Connect to Database Successful
+2012-12-28 15:14:28	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 15:14:29	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 15:14:33	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 15:21:02	- SYSTE  - Connect to Database Successful
+2012-12-28 15:21:02	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 15:21:02	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 15:21:07	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 15:36:28	- SYSTE  - Disconnect to Asterisk Server
+
+2012-12-28 15:38:26	- SYSTE  - Connect to Database Successful
+2012-12-28 15:38:26	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 15:38:26	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 15:38:31	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 16:05:30	- SYSTE  - Connect to Database Successful
+2012-12-28 16:05:30	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 16:05:35	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 16:08:06	- SYSTE  - Connect to Database Successful
+2012-12-28 16:08:08	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 16:08:37	- SYSTE  - Connect to Database Successful
+2012-12-28 16:08:38	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 16:08:51	- SYSTE  - Connect to Database Successful
+2012-12-28 16:08:52	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 16:09:08	- SYSTE  - Connect to Database Successful
+2012-12-28 16:09:09	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 16:09:17	- SYSTE  - Connect to Database Successful
+2012-12-28 16:09:17	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 16:10:07	- SYSTE  - Connect to Database Successful
+2012-12-28 16:10:09	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 16:10:38	- SYSTE  - Connect to Database Successful
+2012-12-28 16:10:38	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 16:12:01	- SYSTE  - Connect to Database Successful
+2012-12-28 16:12:02	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 16:13:49	- SYSTE  - Connect to Database Successful
+2012-12-28 16:13:49	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 16:14:23	- SYSTE  - Connect to Database Successful
+2012-12-28 16:14:23	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 16:19:19	- SYSTE  - Connect to Database Successful
+2012-12-28 16:19:19	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 16:19:19	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 16:19:24	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 16:25:48	- SYSTE  - Connect to Database Successful
+2012-12-28 16:25:48	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 16:25:49	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 16:25:53	- SYSTE  - Check DateTime Agent unLogout
+2012-12-28 16:40:17	- SYSTE  - Connect to Database Successful
+2012-12-28 16:40:17	- SYSTE  - Check DateTime Agent Pause
+2012-12-28 16:40:18	- SYSTE  - Connect to Asterisk Server Successful
+2012-12-28 16:40:23	- SYSTE  - Check DateTime Agent unLogout
