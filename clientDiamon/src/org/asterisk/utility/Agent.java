@@ -157,6 +157,7 @@ public class Agent implements Runnable{
                         mainForm.setAllEnable(false);
                         mainForm.lb_status.setText("Not Ready");
                         mainForm.btn_pause.setSelected(true);
+                        mainForm.setPauseIcon(true);
                         System.out.println("PAUSESUCC");
                         uti.writelog("PAUSE SUCCESS\t"+agentObject.getAgentId());
                     break;
@@ -169,7 +170,8 @@ public class Agent implements Runnable{
                         mainForm.btn_logout.setEnabled(true);
                         mainForm.setAllEnable(true);
                         mainForm.lb_status.setText("Ready");
-                        mainForm.btn_pause.setSelected(false);                        
+                        mainForm.btn_pause.setSelected(false);  
+                        mainForm.setPauseIcon(false);
                         System.out.println("UNPAUSESUCC");
                         uti.writelog("UNPAUSE SUCCESS\t"+agentObject.getAgentId());
                     break;
