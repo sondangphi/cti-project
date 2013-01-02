@@ -17,6 +17,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URI;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -110,13 +112,17 @@ public class MainForm extends javax.swing.JFrame {
         lb_version.setVerticalAlignment(javax.swing.JLabel.CENTER);
         txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);  
         Color green2 = new Color(0, 238, 0);
+        Color white = new Color(255, 255, 255);
         Color royalBlue = new Color(65, 105, 225);
         Color red1 = new Color(255, 0, 0);        
         Color Blue1 = new Color(0, 0, 225);
-        btn_hangup.setBackground(red1);
-        btn_dial.setBackground(royalBlue);        
+        btn_hangup.setBackground(white);
+        btn_dial.setBackground(white);        
         btn_clear.setToolTipText("Clear");
         btn_back.setToolTipText("Back");
+        Image image2 = Toolkit.getDefaultToolkit().getImage("images/icon_pause.png");
+        Icon ic = new ImageIcon(image2);
+        btn_pause.setIcon(ic);         
         try{
             Mysql_dbname = uti.readInfor(filename, "MySql_database");
             Mysql_server = uti.readInfor(filename, "MySql_server");
@@ -156,11 +162,11 @@ public class MainForm extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         btn_logout = new javax.swing.JButton();
-        btn_pause = new javax.swing.JToggleButton();
         jLabel13 = new javax.swing.JLabel();
         lb_workTime = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         lb_logintime = new javax.swing.JLabel();
+        btn_pause = new javax.swing.JToggleButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -227,20 +233,12 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        btn_logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/logout.png"))); // NOI18N
-        btn_logout.setText("Logout");
+        btn_logout.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/logoutbtn.png"))); // NOI18N
+        btn_logout.setPreferredSize(new java.awt.Dimension(115, 45));
         btn_logout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_logoutActionPerformed(evt);
-            }
-        });
-
-        btn_pause.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/pause.png"))); // NOI18N
-        btn_pause.setText("Pause");
-        btn_pause.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btn_pause.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_pauseActionPerformed(evt);
             }
         });
 
@@ -249,6 +247,7 @@ public class MainForm extends javax.swing.JFrame {
 
         lb_workTime.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lb_workTime.setText("00:00:00");
+        lb_workTime.setPreferredSize(new java.awt.Dimension(51, 15));
 
         jLabel12.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel12.setText("Login at");
@@ -256,39 +255,47 @@ public class MainForm extends javax.swing.JFrame {
         lb_logintime.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lb_logintime.setText("2012-12-12 08:00:00");
 
+        btn_pause.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/icon_unpause.png"))); // NOI18N
+        btn_pause.setPreferredSize(new java.awt.Dimension(115, 45));
+        btn_pause.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_pauseActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(btn_logout, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
-                .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btn_logout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lb_logintime, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel13)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lb_workTime, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(6, 6, 6))
+                .addGap(4, 4, 4))
         );
-
-        jPanel2Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btn_logout, btn_pause});
-
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(btn_logout, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_pause, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lb_logintime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(lb_workTime, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lb_logintime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lb_workTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel13))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btn_pause, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_logout, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btn_logout, btn_pause});
@@ -604,7 +611,7 @@ public class MainForm extends javax.swing.JFrame {
 
         panel_numberLayout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btn_0, btn_1, btn_11, btn_12, btn_2, btn_3, btn_4, btn_5, btn_6, btn_7, btn_8, btn_9});
 
-        btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/123070_42045_16_back_icon.png.gif"))); // NOI18N
+        btn_back.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/back_icon.png.gif"))); // NOI18N
         btn_back.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_backActionPerformed(evt);
@@ -612,7 +619,7 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         btn_dial.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        btn_dial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/call_phone.png"))); // NOI18N
+        btn_dial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/anwsercall.png"))); // NOI18N
         btn_dial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_dialActionPerformed(evt);
@@ -627,7 +634,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        btn_hangup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/hangup_phone.png"))); // NOI18N
+        btn_hangup.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/hangupcall.png"))); // NOI18N
         btn_hangup.setEnabled(false);
         btn_hangup.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -756,7 +763,7 @@ public class MainForm extends javax.swing.JFrame {
                                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(panel_dial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 4, Short.MAX_VALUE)))
+                        .addGap(0, 16, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -775,28 +782,6 @@ public class MainForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void btn_pauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pauseActionPerformed
-        // TODO add your handling code here:        
-        try{
-            String cmd = "";
-            if(btn_pause.isSelected() && btn_pause.isEnabled()){
-                btn_pause.setText("UNPAUSE");
-                cmd  = "104@off";
-                agentClient.sendtoServer(cmd);
-            }else{
-                btn_pause.setText("PAUSE");    
-                cmd  = "104@on";
-                agentClient.sendtoServer(cmd);  
-                btn_logout.setEnabled(true);
-                setAllEnable(true);
-                lb_status.setText("Ready");
-            }
-        }catch(Exception e){
-            
-        }         
-        
-    }//GEN-LAST:event_btn_pauseActionPerformed
 
     private void btn_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_logoutActionPerformed
         // TODO add your handling code here:
@@ -999,6 +984,27 @@ public class MainForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btn_hangupActionPerformed
 
+    private void btn_pauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pauseActionPerformed
+        // TODO add your handling code here:
+        try{
+            String cmd = "";
+            if(btn_pause.isSelected() && btn_pause.isEnabled()){
+//                btn_pause2.setText("UNPAUSE");
+                cmd  = "104@off";
+                agentClient.sendtoServer(cmd);
+            }else{
+//                btn_pause2.setText("PAUSE");    
+                cmd  = "104@on";
+                agentClient.sendtoServer(cmd);  
+                btn_logout.setEnabled(true);
+                setAllEnable(true);
+                lb_status.setText("Ready");
+            }
+        }catch(Exception e){
+            
+        }         
+    }//GEN-LAST:event_btn_pauseActionPerformed
+
     public void setAllEnable(boolean flag){
         btn_0.setEnabled(flag);
         btn_1.setEnabled(flag);
@@ -1022,6 +1028,18 @@ public class MainForm extends javax.swing.JFrame {
 //        MenuItem_exit.setEnabled(flag);
         MenuItem_logout.setEnabled(flag);
         MenuItem_changepwd.setEnabled(flag);
+    }
+    
+    public void setPauseIcon(boolean flag){
+        if(flag){
+            Image image = Toolkit.getDefaultToolkit().getImage("images/icon_unpause.png");
+            Icon ic = new ImageIcon(image);
+            btn_pause.setIcon(ic);            
+        }else{
+            Image image = Toolkit.getDefaultToolkit().getImage("images/icon_pause.png");
+            Icon ic = new ImageIcon(image);
+            btn_pause.setIcon(ic);            
+        }
     }
     
     /**
