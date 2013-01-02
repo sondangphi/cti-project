@@ -1,6 +1,7 @@
 package org.asterisk.utility;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -19,8 +20,8 @@ import java.util.StringTokenizer;
 
 public class Utility {
         Properties prop = new Properties();
-    
-        String filename = "infor.properties"; 
+        String logFolder = "log";            
+        String fileName = "client.log"; 
 	public String getDatetimeNow(){		
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Calendar cal = Calendar.getInstance();
@@ -33,34 +34,17 @@ public class Utility {
             String datetime = dateFormat.format(cal.getTime()).toString();	
             return datetime;
 	}
-	public void writeLog(String log) throws IOException{
+
+        public void writelog(String log) throws IOException{
+            File root = new File(logFolder);
+            root.mkdirs();
+            File child = new File(root, fileName);
+            child.createNewFile();            
             Writer output;
-            output = new BufferedWriter(new FileWriter("logfile.log",true));
-            output.append(getDatetimeNow()+"\t"+log);
-            output.close();
-	}
-	
-	public void writeLog(String log,String file) throws IOException{
-            Writer output;
-            output = new BufferedWriter(new FileWriter(file,true));
-            output.append(getDatetimeNow()+"\t"+log+"\r\n");
-            output.close();
-	}
-	
-	public void writeAsteriskLog(String log) throws IOException{
-            Writer output;
-            output = new BufferedWriter(new FileWriter("AsteriskLogFile.log",true));
+            output = new BufferedWriter(new FileWriter(child,true));
             output.append(getDatetimeNow() + "\t" +log+ "\r\n");
             output.close();
-	}
-	
-	public void writeAgentLog(String log) throws IOException{
-            Writer output;
-            output = new BufferedWriter(new FileWriter("AgentLogFile.log",true));
-            output.append(getDatetimeNow() + "\t" + log + "\r\n");
-            output.close();
-	}
-	
+        }        		
 	public ArrayList<String> getList(String cmd){
             ArrayList<String> list =  new ArrayList<String>();
             StringTokenizer st = new StringTokenizer(cmd,"@");

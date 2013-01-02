@@ -450,7 +450,6 @@ public class LoginForm extends javax.swing.JFrame {
         // TODO add your handling code here:   
         agentObject = new AgentObject();
         char [] p = pwd.getPassword();
-//        Agent agentClient = null;
         pass     = new String(p);
         agentId = tx_agent.getText();        
         iface  = tx_iface.getText();
@@ -458,7 +457,8 @@ public class LoginForm extends javax.swing.JFrame {
         queueName = listQueue.get(cb_queue.getSelectedIndex()).getQueueName();
         agentObject.setAgentId(agentId);
         agentObject.setPass(pass);
-        agentObject.setInterface("SIP/"+iface);        
+//        agentObject.setInterface("SIP/"+iface);        
+        agentObject.setInterface(iface);
         agentObject.setRole(role);
         agentObject.setQueueId(queueId);
         agentObject.setQueueName(queueName);
@@ -466,6 +466,7 @@ public class LoginForm extends javax.swing.JFrame {
         lb_notify_iface.setText("");
         lb_notify_pwd.setText("");
         lb_notify_agent.setText("");        
+        lb_status.setText("");      
         try{
             //kiem tra thong tin nguoi dung nhap vao
             if(!agentId.equalsIgnoreCase("") && uti.checkAgent(agentId)){                
@@ -473,19 +474,28 @@ public class LoginForm extends javax.swing.JFrame {
                     if(!iface.equalsIgnoreCase("") && uti.checkIface(iface)){                        
                         if(!queueId.equalsIgnoreCase("")){
                             cmd = "100@"+agentId+"@"+pass+"@SIP/"+iface+"@"+queueId+"@"+role;
-//                            lb_status.setText(cmd);
                             Socket clientSocket = new Socket(host, aport);
 //                            clientSocket.setKeepAlive(true);
-//                            clientSocket.setSoTimeout(TIME_OUT);
                             System.out.println("socket timeout\t"+clientSocket.getSoTimeout()); 
                             if(clientSocket != null){
                                 System.out.println("connect to server "+clientSocket.getInetAddress().toString());
                                 agent = new Agent(clientSocket, this, agentObject, cmd);
                             }
-                        }else lb_notify_queue.setText("(*)");                            
-                    }else lb_notify_iface.setText("(*)");
-                }else lb_notify_pwd.setText("(*)");
-            }else lb_notify_agent.setText("(*)");       
+                        }else {   
+                            lb_notify_queue.setText("(*)");                            
+                        }
+                    }else {
+                        lb_status.setText("Extension not appropriate");
+                        lb_notify_iface.setText("(*)");
+                    }
+                }else {
+                    lb_status.setText("Password not appropriate");
+                    lb_notify_pwd.setText("(*)");
+                }
+            }else {
+                lb_status.setText("Agent Id not appropriate");                
+                lb_notify_agent.setText("(*)");       
+            }
             
         }catch(Exception e){
             System.out.println("btn_loginActionPerformed\t"+e); 
