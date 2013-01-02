@@ -141,7 +141,7 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                                             System.out.println("LOGIN success");
                                             String agentName = mdb_agent.getAgentName(agent.getAgentId());
                                             sendToAgent("LOGINSUCC@"+agentName+"@"+agent.getSesion());
-                                            uti.writeAgentLog("- AGENT - Agent login successful \t"+addClient+"\t"+agent.getAgentId());
+                                            uti.writeAgentLog("- AGENT - Agent login OK \t"+addClient+"\t"+agent.getAgentId());
 
                                         }else{
                                             sendToAgent("LOGINFAIL@Check Information again");
@@ -571,12 +571,12 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                             System.out.println("dialoutNumber: "+dialoutNumber);
                             //begin dial out(Ringing)
                             if("begin".equalsIgnoreCase(subevent) && beginDialout){
-                                System.out.println("subevent: "+subevent);
+                                System.out.println("subevent: "+subevent);                                
                                 if(!dialoutNumber.equals("")){
                                     System.out.println("begin dial out(channel): "+channel);
-                                    hangupChannel = dialevent.getChannel();
-                                    beginDialout = false;
+                                    hangupChannel = dialevent.getChannel();                                    
                                     connectDialout = true;
+                                    beginDialout = false;
                                     completeDialout = true;
                                     abandonCall = false;                    
                                     sendToAgent("DIALOUT");

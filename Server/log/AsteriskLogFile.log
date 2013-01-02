@@ -1,0 +1,13 @@
+2013-01-02 11:38:59	- SYSTE  - Connect to Database Successful
+2013-01-02 11:38:59	- SYSTE  - Check DateTime Agent Pause
+2013-01-02 11:38:59	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-02 11:39:04	- SYSTE  - Check DateTime Agent unLogout
+2013-01-02 11:41:41	- SYSTE  - Reload Asterisk Server
+2013-01-02 11:43:27	- SYSTE  - Shutdown Asterisk Server
+2013-01-02 11:43:27	- SYSTE  - Disconnect to Asterisk Server
+
+2013-01-02 11:43:27	- SYSTE  - Reconnect to Asterisk Server
+2013-01-02 11:43:54	- SYSTE  - Shutdown Asterisk Server
+2013-01-02 11:43:54	- SYSTE  - Disconnect to Asterisk Server
+
+2013-01-02 11:44:04	- SYSTE  - Reconnect to Asterisk Server
