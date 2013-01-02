@@ -1,6 +1,7 @@
 package org.asterisk.utility;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -17,13 +18,12 @@ import java.util.StringTokenizer;
 public class Utility {
         Properties prop = new Properties();
         TimerClock clock = null;
-    
+        String logFolder = "log"; 
         String filename = "infor.properties"; 
 	public String getDatetime(){		
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Calendar cal = Calendar.getInstance();
             String datetime = dateFormat.format(cal.getTime()).toString();
-//            clock.secs;
             return datetime;
 	}
 	public String getDate(){		
@@ -46,18 +46,36 @@ public class Utility {
             output.close();
 	}
 	
-	public void writeAsteriskLog(String log) throws IOException{
+	public void writeAsteriskLog(String log) throws IOException{                        
+            File root = new File(logFolder);
+            root.mkdirs();
+            File child = new File(root, "AsteriskLogFile.log");
+            child.createNewFile();            
             Writer output;
-            output = new BufferedWriter(new FileWriter("AsteriskLogFile.log",true));
+            output = new BufferedWriter(new FileWriter(child,true));
             output.append(getDatetime() + "\t" +log+ "\r\n");
-            output.close();
+            output.close();   
+            
+//            Writer output;
+//            output = new BufferedWriter(new FileWriter("AsteriskLogFile.log",true));
+//            output.append(getDatetime() + "\t" +log+ "\r\n");
+//            output.close();            
 	}
 	
 	public void writeAgentLog(String log) throws IOException{
+            File root = new File(logFolder);
+            root.mkdirs();
+            File child = new File(root, "AgentLogFile.log");
+            child.createNewFile();            
             Writer output;
-            output = new BufferedWriter(new FileWriter("AgentLogFile.log",true));
-            output.append(getDatetime() + "\t" + log + "\r\n");
-            output.close();
+            output = new BufferedWriter(new FileWriter(child,true));
+            output.append(getDatetime() + "\t" +log+ "\r\n");
+            output.close();             
+                                    
+//            Writer output;
+//            output = new BufferedWriter(new FileWriter("AgentLogFile.log",true));
+//            output.append(getDatetime() + "\t" + log + "\r\n");
+//            output.close();
 	}
 	
 	public ArrayList<String> getList(String cmd){

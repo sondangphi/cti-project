@@ -76,7 +76,7 @@ public class AgentListen implements Runnable, ManagerEventListener{
                     System.out.println("socket localport\t"+clientsocket.getPort());
                     new ManagerAgent(managerSystem, clientsocket, mdb_agent);
                     String add = clientsocket.getInetAddress().getHostAddress().toString();
-                    uti.writeAgentLog("- AGENT - Accept connect from address"+"\t"+add);							
+                    uti.writeAgentLog("- AGENT - Accept connect "+"\t"+add);							
                     System.out.println("acept connect from agent\t"+add);
                 }
             }else{
@@ -116,10 +116,8 @@ public class AgentListen implements Runnable, ManagerEventListener{
             }
         }
     }
-    int i = 0;
     @Override
     public void onManagerEvent(ManagerEvent event){
-//        System.out.println("new event: "+i++);
         // TODO Auto-generated method stub		
         try {
             /* A ConnectEvent is triggered after successful login to the Asterisk server.*/
