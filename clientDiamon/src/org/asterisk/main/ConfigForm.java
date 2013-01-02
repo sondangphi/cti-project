@@ -78,6 +78,7 @@ public class ConfigForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Configuration");
         setResizable(false);
 
         jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {

@@ -94,6 +94,7 @@ public class Agent implements Runnable{
                     if(command == null){
                         System.out.println("null value from server");
                         try {
+                            uti.writelog("DISCONNECT SERVER(read null value)\t"+agentObject.getAgentId()+"\r\n");
                             close = false;
                             System.out.println("Server interupt! Please wait...");
                             mainForm.setVisible(false);
@@ -117,32 +118,37 @@ public class Agent implements Runnable{
                         loginform.dispose();
                         clockWorktime = new TimerClock(mainForm, false);
                         clockWorktime.start();
+                        uti.writelog("LOGIN SUCCESS\t"+agentObject.getAgentId());
+                        
                     break;
                     case LOGINFAIL: //result LOGIN FAIL                                                     
                         try {
+                            uti.writelog("LOGIN FAIL\t"+agentObject.getAgentId());
                             System.out.println("LOGIN FAIL");
                             loginform.lb_status.setText(cmdList.get(1));
-                            closeConnect();
+                            closeConnect();                            
                         } catch (Throwable ex) {
                             Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     break;
                     case LOGOUTSUCC: //result LOGOUT SUCCESS              
                         try {
+                            uti.writelog("LOGOUT SUCCESS\t"+agentObject.getAgentId()+"\r\n");
                             mainForm.setVisible(false);
                             mainForm.dispose(); 
                             close = false;
                             clockWorktime.stop();                            
                             closeConnect();  
                             new LoginForm().setVisible(true);
-                            System.out.println("LOGOUT SUCCESS");
+                            System.out.println("LOGOUT SUCCESS");                            
                         } catch (Exception ex) {
                             System.out.println("LOGOUTSUCC " +ex);
                         }
                         
                     break;
                     case LOGOUTFAIL: //result LOGOUT FAIL
-                        System.out.println("LOGOUT FAIL");
+                        System.out.println("LOGOUT FAIL\t"+agentObject.getAgentId());
+                        uti.writelog("LOGOUT FAIL");
                     break;	            	
                     case PAUSESUCC: //result PAUSE
                         if(clockWorktime != null)
@@ -152,9 +158,11 @@ public class Agent implements Runnable{
                         mainForm.lb_status.setText("Not Ready");
                         mainForm.btn_pause.setSelected(true);
                         System.out.println("PAUSESUCC");
+                        uti.writelog("PAUSE SUCCESS\t"+agentObject.getAgentId());
                     break;
                     case PAUSEFAIL: //result PAUSE
                         System.out.println("PAUSEFAIL");
+                        uti.writelog("PAUSE FAIL\t"+agentObject.getAgentId());
                     break;
                     case UNPAUSESUCC: //result UNPAUSESUCC
                         clockWorktime.resume();
@@ -163,9 +171,11 @@ public class Agent implements Runnable{
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setSelected(false);                        
                         System.out.println("UNPAUSESUCC");
+                        uti.writelog("UNPAUSE SUCCESS\t"+agentObject.getAgentId());
                     break;
                     case UNPAUSEFAIL: //result UNPAUSE
                         System.out.println("UNPAUSEFAIL");
+                        uti.writelog("UNPAUSE FAIL\t"+agentObject.getAgentId());
                     break;
                     case TRANSSUCC: //result TRANSFER	            			
                     break;
@@ -179,10 +189,12 @@ public class Agent implements Runnable{
                         mainForm.chanpwdform.showDialog("Change Password Success");                        
                         agentObject.setPass(cmdList.get(1));
                         System.out.println("change pass success");
+                        uti.writelog("CHANGE PASSWORD SUCCESS\t"+agentObject.getAgentId());
                     break;                        
                     case CHANGEPWDFAIL: //CHANGEPWD
                         mainForm.chanpwdform.showDialog("Change Password Fail");                        
                         System.out.println("change pass fail");
+                        uti.writelog("CHANGE PASSWORD FAIL\t"+agentObject.getAgentId());
                     break;                                
                     case RINGING: //EVENT RINGING
                         try{
@@ -194,6 +206,7 @@ public class Agent implements Runnable{
                             mainForm.setAllEnable(false);  
                             mainForm.lb_callernumber.setText(callerNum);
                             mainForm.btn_hangup.setEnabled(true);
+                            uti.writelog("RINGING\t"+callerNum);
                         }catch(Exception e){
                             System.out.println("RINGING: "+e);
                         }
@@ -203,6 +216,7 @@ public class Agent implements Runnable{
                         mainForm.lb_status.setText("Busy"); 
                         clockDialin = new TimerClock(mainForm, true);
                         clockDialin.start();
+                        uti.writelog("CONNECTED\t"+mainForm.lb_callernumber.getText());
                     break;
                     case COMPLETED://connected incoming call
                         mainForm.lb_status.setText("Ready");
@@ -212,15 +226,18 @@ public class Agent implements Runnable{
                         if(clockDialin != null){
                             clockDialin.stop(); 
                         }
+                        uti.writelog("COMPLETED\t"+mainForm.lb_callernumber.getText());
                     break;
                     case RINGNOANWSER: 
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setEnabled(true);
                         mainForm.setAllEnable(true);
                         mainForm.btn_hangup.setEnabled(false);
+                        uti.writelog("RING NOANWSER\t"+mainForm.lb_callernumber.getText());
                     break;                        
                     case DIALOUT: //result 	
-                        System.out.println("DIALOUT");    
+                        System.out.println("DIALOUT");  
+                        uti.writelog("DIALOUT\t"+mainForm.dialNumber);
                         dialout = true;
                         mainForm.lb_status.setText("Dialing...");
                         mainForm.lb_callduration.setText("00:00:00");
@@ -230,18 +247,21 @@ public class Agent implements Runnable{
                         mainForm.btn_hangup.setEnabled(true);
                     break;                        
                     case DIALOUTFAIL: 
+                        uti.writelog("DIALOUT FAIL\t"+mainForm.dialNumber);
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setEnabled(true);
                         mainForm.setAllEnable(true);
                         mainForm.btn_hangup.setEnabled(false);
                     break;                                
                     case CONNECTEDDIALOUT: 
+                        uti.writelog("CONNECTED DIALOUT\t"+mainForm.dialNumber);
                         clockDialout = new TimerClock(mainForm, true);
                         clockDialout.start();                        
                         mainForm.lb_status.setText("Busy");
                         System.out.println("Connected dialout");
                     break;
-                    case HANGUPDIALOUT:                         
+                    case HANGUPDIALOUT:              
+                        uti.writelog("HANGUP DIALOUT\t"+mainForm.dialNumber);
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setEnabled(true);
                         mainForm.setAllEnable(true); 
@@ -257,7 +277,7 @@ public class Agent implements Runnable{
                         mainForm.setAllEnable(true);      
                         mainForm.btn_hangup.setEnabled(false);
                     break;                        
-                    case HANGUPSUCCESS: //EVENT ANSWER CALL	
+                    case HANGUPSUCCESS: //
 //                        mainForm.lb_status.setText("Ready");
 //                        mainForm.btn_pause.setEnabled(true);
 //                        mainForm.setAllEnable(true);
@@ -277,7 +297,7 @@ public class Agent implements Runnable{
                 if(close){
                     try {
                         System.out.println("Socket exception client: "+e);
-                        System.out.println("logout & new login form");
+                        uti.writelog("DISCONNECT SERVER(interupt)\t"+agentObject.getAgentId()+"\r\n");
                         mainForm.setVisible(false);
                         mainForm.dispose();                        
                         closeConnect();
