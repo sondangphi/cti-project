@@ -6,7 +6,9 @@ package org.asterisk.main;
 
 import com.jniwrapper.win32.ie.Browser;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Desktop;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.SystemTray;
@@ -16,13 +18,24 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.net.URI;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Vector;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.text.StyledEditorKit;
 import org.asterisk.model.AgentObject;
 import org.asterisk.utility.Agent;
 import org.asterisk.utility.ConnectDatabase;
+import org.asterisk.utility.DatePicker;
 import org.asterisk.utility.Utility;
+
 
 /**
  *
@@ -49,6 +62,14 @@ public class MainForm extends javax.swing.JFrame {
     Browser bro = null;    
     LocateMap locate = new LocateMap();
     public ChangepwdForm chanpwdform;
+    
+    //ResultSet result;
+    //DefaultTableModel dt;
+    //Vector rowdata;
+    //String sql;
+    //int i=0;
+   
+    
 //    JFrame frame = new JFrame("Locate Maps");
 
     /**
@@ -56,12 +77,15 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm() {
         initComponents();
-        txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);        
+        txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);    
     }
     
     public MainForm(Agent agent, AgentObject aOb) {
 //        jPanel9.set
-        initComponents();        
+        initComponents();   
+       
+        //tblPromotions.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        //tblCoop.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         uti = new Utility();
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );        
         agentClient = agent;
@@ -129,6 +153,7 @@ public class MainForm extends javax.swing.JFrame {
 
     }
     
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -179,7 +204,38 @@ public class MainForm extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         table_report = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
+        btnShowPro = new javax.swing.JButton();
+        jPanel15 = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tblPromotions = new javax.swing.JTable();
+        jPanel17 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        txtContent = new javax.swing.JTextArea();
+        jPanel9 = new javax.swing.JPanel();
+        btnSearch = new javax.swing.JButton();
+        btnChooseStart = new javax.swing.JButton();
+        btnChooseEnd = new javax.swing.JButton();
+        txtTimeEnd = new javax.swing.JTextField();
+        txtTimeStart = new javax.swing.JTextField();
+        txtAutoSearchPro = new javax.swing.JTextField();
+        chkTime = new javax.swing.JCheckBox();
+        ChkName = new javax.swing.JCheckBox();
+        btnClearPro = new javax.swing.JButton();
+        jLabel24 = new javax.swing.JLabel();
+        txtResultPro = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
+        jPanel13 = new javax.swing.JPanel();
+        txtResultCoop = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        txtAutoSearchCoop = new javax.swing.JTextField();
+        btnClearCoop = new javax.swing.JButton();
+        jPanel7 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tblCoop = new javax.swing.JTable();
+        jPanel16 = new javax.swing.JPanel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        txtDetail = new javax.swing.JTextArea();
+        btnShowCoop = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -284,13 +340,13 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(btn_logout, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(46, 46, 46)
                 .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 474, Short.MAX_VALUE)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lb_logintime, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel13)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
                 .addComponent(lb_workTime)
                 .addContainerGap())
         );
@@ -434,7 +490,7 @@ public class MainForm extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(cb_gender, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txt_email1, javax.swing.GroupLayout.DEFAULT_SIZE, 145, Short.MAX_VALUE)))
+                                            .addComponent(txt_email1, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)))
                                     .addGroup(jPanel8Layout.createSequentialGroup()
                                         .addComponent(txt_mobile, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
@@ -523,11 +579,13 @@ public class MainForm extends javax.swing.JFrame {
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 842, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 31, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout Panel1Layout = new javax.swing.GroupLayout(Panel1);
@@ -547,33 +605,385 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         main_tab.addTab("Mini CRM", Panel1);
+
+        btnShowPro.setText("Show Data");
+        btnShowPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowProActionPerformed(evt);
+            }
+        });
+
+        tblPromotions.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        tblPromotions.setEnabled(false);
+        tblPromotions.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPromotionsMouseClicked(evt);
+            }
+        });
+        tblPromotions.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblPromotionsKeyReleased(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tblPromotions);
+
+        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
+        jPanel15.setLayout(jPanel15Layout);
+        jPanel15Layout.setHorizontalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
+        );
+        jPanel15Layout.setVerticalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+        );
+
+        jPanel17.setBorder(javax.swing.BorderFactory.createTitledBorder("Content"));
+
+        txtContent.setEditable(false);
+        txtContent.setColumns(20);
+        txtContent.setLineWrap(true);
+        txtContent.setRows(5);
+        txtContent.setWrapStyleWord(true);
+        jScrollPane7.setViewportView(txtContent);
+
+        javax.swing.GroupLayout jPanel17Layout = new javax.swing.GroupLayout(jPanel17);
+        jPanel17.setLayout(jPanel17Layout);
+        jPanel17Layout.setHorizontalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel17Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE))
+        );
+        jPanel17Layout.setVerticalGroup(
+            jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 348, Short.MAX_VALUE)
+        );
+
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Search by"));
+
+        btnSearch.setText("Search");
+        btnSearch.setEnabled(false);
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSearchActionPerformed(evt);
+            }
+        });
+
+        btnChooseStart.setText("Start Day");
+        btnChooseStart.setEnabled(false);
+        btnChooseStart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChooseStartActionPerformed(evt);
+            }
+        });
+
+        btnChooseEnd.setText("End Day");
+        btnChooseEnd.setEnabled(false);
+        btnChooseEnd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChooseEndActionPerformed(evt);
+            }
+        });
+
+        txtTimeEnd.setEditable(false);
+        txtTimeEnd.setEnabled(false);
+
+        txtTimeStart.setEditable(false);
+        txtTimeStart.setEnabled(false);
+
+        txtAutoSearchPro.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAutoSearchProKeyTyped(evt);
+            }
+        });
+
+        chkTime.setText(" Time");
+        chkTime.setEnabled(false);
+        chkTime.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                chkTimeMouseClicked(evt);
+            }
+        });
+
+        ChkName.setSelected(true);
+        ChkName.setText("Search by Name");
+        ChkName.setEnabled(false);
+        ChkName.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                ChkNameMouseClicked(evt);
+            }
+        });
+
+        btnClearPro.setText("Clear");
+        btnClearPro.setEnabled(false);
+        btnClearPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearProActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtTimeEnd, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtTimeStart, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addComponent(btnChooseStart)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addComponent(btnChooseEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnClearPro, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(chkTime)
+                            .addGroup(jPanel9Layout.createSequentialGroup()
+                                .addComponent(ChkName)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtAutoSearchPro, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ChkName)
+                    .addComponent(txtAutoSearchPro, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(chkTime)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTimeStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnChooseStart)
+                    .addComponent(btnSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtTimeEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnChooseEnd)
+                    .addComponent(btnClearPro))
+                .addContainerGap())
+        );
+
+        jLabel24.setText("Results were found");
+
+        txtResultPro.setEditable(false);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 766, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnShowPro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel24)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtResultPro, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 13, Short.MAX_VALUE))
+                    .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 426, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel24)
+                    .addComponent(txtResultPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnShowPro, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         main_tab.addTab("Promotions", jPanel1);
+
+        jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder("Search Field"));
+
+        txtResultCoop.setEditable(false);
+        txtResultCoop.setEnabled(false);
+
+        jLabel20.setText("Results were found");
+
+        txtAutoSearchCoop.setEnabled(false);
+        txtAutoSearchCoop.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtAutoSearchCoopKeyTyped(evt);
+            }
+        });
+
+        btnClearCoop.setText("Clear");
+        btnClearCoop.setEnabled(false);
+        btnClearCoop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearCoopActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
+        jPanel13.setLayout(jPanel13Layout);
+        jPanel13Layout.setHorizontalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtAutoSearchCoop)
+                    .addGroup(jPanel13Layout.createSequentialGroup()
+                        .addComponent(jLabel20)
+                        .addGap(9, 9, 9)
+                        .addComponent(txtResultCoop, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnClearCoop, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+        jPanel13Layout.setVerticalGroup(
+            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel13Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(txtAutoSearchCoop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtResultCoop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel20))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnClearCoop)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel7.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        tblCoop.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        tblCoop.setEnabled(false);
+        tblCoop.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCoopMouseClicked(evt);
+            }
+        });
+        tblCoop.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblCoopKeyReleased(evt);
+            }
+        });
+        jScrollPane4.setViewportView(tblCoop);
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane4))
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 189, Short.MAX_VALUE)
+        );
+
+        jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder("Detail"));
+
+        txtDetail.setEditable(false);
+        txtDetail.setColumns(20);
+        txtDetail.setLineWrap(true);
+        txtDetail.setRows(5);
+        txtDetail.setWrapStyleWord(true);
+        txtDetail.setEnabled(false);
+        jScrollPane5.setViewportView(txtDetail);
+
+        javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
+        jPanel16.setLayout(jPanel16Layout);
+        jPanel16Layout.setHorizontalGroup(
+            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
+        );
+        jPanel16Layout.setVerticalGroup(
+            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+
+        btnShowCoop.setText("Show Data");
+        btnShowCoop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnShowCoopActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 766, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnShowCoop, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 426, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(13, 13, 13)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(7, 7, 7)
+                        .addComponent(btnShowCoop, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         main_tab.addTab("Co.op Systems", jPanel3);
@@ -598,16 +1008,16 @@ public class MainForm extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(778, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 766, Short.MAX_VALUE)
+            .addComponent(jScrollPane2)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 253, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -1085,32 +1495,35 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(panel_dial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(main_tab)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lb_version, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(lb_version, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(panel_dial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(main_tab, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(panel_dial, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(main_tab))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(main_tab, javax.swing.GroupLayout.PREFERRED_SIZE, 453, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lb_version, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -1505,6 +1918,484 @@ public class MainForm extends javax.swing.JFrame {
         }         
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    private void txtAutoSearchCoopKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAutoSearchCoopKeyTyped
+        // TODO add your handling code here:
+        try{
+            
+
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+             if(con.isConnect()){
+                 
+             
+            String sql="SELECT * FROM coopmart_name WHERE name LIKE '%"+txtAutoSearchCoop.getText()+"%'";
+            ResultSet result=con.executeQuery(sql);
+          
+            tblCoop.getTableHeader().setReorderingAllowed(false);
+             String strHeader[]={"Number","Name","Address","Phone","Fax","Date of Establishment"};
+                   DefaultTableModel dt=new DefaultTableModel(strHeader,0)
+                    {
+
+                     @Override
+                     public boolean isCellEditable(int i, int i1) {
+                         return false;
+                     }
+                        
+                    };
+
+                    int i=0;
+                    while (result.next()) {
+                        i++;
+                        Vector rowdata = new Vector();
+
+                        rowdata.add(Integer.toString(i));
+                        
+                        rowdata.add(result.getString("name"));
+                        rowdata.add(result.getString("address"));
+                        rowdata.add(result.getString("phone"));
+                        rowdata.add(result.getString("fax"));
+                        rowdata.add(result.getString("date_establishment"));
+
+                        dt.addRow(rowdata);
+                        
+                    }
+                        
+
+            tblCoop.setModel(dt);
+            TableColumn column = null;
+                     for (int k = 0;k < tblCoop.getColumnCount(); k++) {
+                        column = tblCoop.getColumnModel().getColumn(k);
+
+                        if (k == 0) {
+                            column.setPreferredWidth(50);
+
+                        } 
+
+                        else {
+                            column.setPreferredWidth(100);
+
+                        }
+                    }
+                int j=dt.getRowCount();
+         
+                if(j==0)
+                {
+                    txtResultCoop.setForeground(Color.RED);
+                    txtResultCoop.setText("no record found");
+                  
+
+                }
+                else
+                {
+                    txtResultCoop.setForeground(Color.BLACK);
+                    txtResultCoop.setText(Integer.toString(j));
+                   
+                }
+                    
+            result.close();
+            
+             }
+             con.closeConnect();
+             
+        }
+        catch(IOException | SQLException | ClassNotFoundException e)
+        {
+            JOptionPane.showMessageDialog(null,"Error:"+ e.toString());
+        }
+
+    }//GEN-LAST:event_txtAutoSearchCoopKeyTyped
+
+    private void btnShowCoopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowCoopActionPerformed
+        // TODO add your handling code here:
+        ShowCoopAction();
+
+    }//GEN-LAST:event_btnShowCoopActionPerformed
+
+    private void tblCoopMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCoopMouseClicked
+        // TODO add your handling code here:
+        ClickTableCoop();
+
+    }//GEN-LAST:event_tblCoopMouseClicked
+
+    private void tblCoopKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCoopKeyReleased
+        // TODO add your handling code here:
+        ClickTableCoop();
+    }//GEN-LAST:event_tblCoopKeyReleased
+
+    private void txtAutoSearchProKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAutoSearchProKeyTyped
+        // TODO add your handling code here:
+        try{
+             tblPromotions.getTableHeader().setReorderingAllowed(false);
+             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+             if(con.isConnect()){
+                if(ChkName.isSelected())
+                {
+                    String sql="SELECT * FROM promotions WHERE name LIKE'%"+txtAutoSearchPro.getText()+"%'";
+                
+                ResultSet result=con.executeQuery(sql);
+                //loadDataPro();
+                String strHeader[]={"Number","Name","Time Start","Time End","Content","Location"};
+                DefaultTableModel dt =new DefaultTableModel(strHeader,0)
+                {
+
+                 @Override
+                 public boolean isCellEditable(int i, int i1) {
+                     return false;
+                 }
+
+                };
+
+                   int i=0;
+                   while (result.next()) {
+                       i++;
+                       Vector rowdata = new Vector();
+                       rowdata.add(Integer.toString(i));
+                       rowdata.add(result.getString("name"));
+                       rowdata.add(result.getString("time_start"));
+                       rowdata.add(result.getString("time_end"));
+                       rowdata.add(result.getString("content"));
+                       rowdata.add(result.getString("location"));
+
+                       dt.addRow(rowdata);
+                   }
+                tblPromotions.setModel(dt);
+                TableColumn column = null;
+                for (int k = 0;k < tblPromotions.getColumnCount(); k++) {
+                        column = tblPromotions.getColumnModel().getColumn(k);
+
+                        if (k == 0) {
+                            column.setPreferredWidth(50);
+
+                        } 
+
+                        else {
+                            column.setPreferredWidth(100);
+
+                        }
+                    }
+                
+                int j=dt.getRowCount();
+         
+                if(j==0)
+                {
+                    txtResultPro.setForeground(Color.RED);
+                    txtResultPro.setText("no record found");
+                  
+
+                }
+                else
+                {
+                    txtResultPro.setForeground(Color.BLACK);
+                    txtResultPro.setText(Integer.toString(j));
+                   
+                }
+
+                
+                result.close();
+                }
+             }
+             con.closeConnect();
+
+        }
+        catch(IOException | SQLException | ClassNotFoundException e)
+        {
+            JOptionPane.showMessageDialog(null,"Error:"+ e.toString());
+        }
+
+    }//GEN-LAST:event_txtAutoSearchProKeyTyped
+
+    private void ChkNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ChkNameMouseClicked
+        // TODO add your handling code here:
+       
+       if(ChkName.isSelected())
+       {
+         
+            btnClearPro.setEnabled(true);
+            txtAutoSearchPro.setEnabled(true);   
+              
+       } 
+       else
+       {
+                txtAutoSearchPro.setEnabled(false);
+                if(chkTime.isSelected())
+                {
+                    
+               
+                }
+                else
+                {
+                   
+                    btnClearPro.setEnabled(false);
+                }
+    
+       } 
+             
+       
+
+    }//GEN-LAST:event_ChkNameMouseClicked
+
+    private void chkTimeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkTimeMouseClicked
+        // TODO add your handling code here:
+        
+            if(chkTime.isSelected())
+            {
+                txtTimeStart.setEnabled(true);
+                txtTimeEnd.setEnabled(true);
+                btnChooseStart.setEnabled(true);
+                btnChooseEnd.setEnabled(true);
+                btnSearch.setEnabled(true);
+                if(ChkName.isSelected())
+                {
+                
+                //btnClearPro.setEnabled(true);
+                }
+                else
+                {
+                    btnClearPro.setEnabled(true);
+                }
+            }
+            else
+            {
+                
+               txtTimeStart.setEnabled(false);
+               txtTimeEnd.setEnabled(false);
+               btnChooseStart.setEnabled(false);
+               btnChooseEnd.setEnabled(false);
+               btnSearch.setEnabled(false);
+               if(ChkName.isSelected())
+               {
+                   btnClearPro.setEnabled(true);
+               }
+               else
+               {
+               
+                   btnClearPro.setEnabled(false);
+                }
+              
+            } 
+        
+       
+        
+
+    }//GEN-LAST:event_chkTimeMouseClicked
+
+    private void btnChooseStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseStartActionPerformed
+        // TODO add your handling code here:
+       
+       
+        
+         JFrame f = new JFrame();
+        String s=new DatePicker(f).setPickedDate();
+         if("".equals(s)) {
+            JOptionPane.showMessageDialog(null,"Please Choose True Day");
+        }
+        else
+        {
+              txtTimeStart.setText(s);
+                
+        }
+    }//GEN-LAST:event_btnChooseStartActionPerformed
+
+    private void btnChooseEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseEndActionPerformed
+        // TODO add your handling code here:
+       
+       
+        
+         String s=txtTimeStart.getText();
+
+        if(s.length()==0)
+        {
+                JOptionPane.showMessageDialog(null,"No Start Day");
+        }
+
+        else{
+                
+            JFrame f = new JFrame();
+            String e=new DatePicker(f).setPickedDate();
+            if("".equals(e)) {
+                JOptionPane.showMessageDialog(null,"Please Choose True Day");
+            }
+            else
+            {
+                String sStr[]=s.split("-");
+                String eStr[]=e.split("-");
+
+
+                String s1=sStr[0]+sStr[1]+sStr[2];
+                String e1=eStr[0]+eStr[1]+eStr[2];
+
+                int s2=Integer.parseInt(s1);
+                int e2=Integer.parseInt(e1);
+                if(s2>=e2)
+                {
+                    JOptionPane.showMessageDialog(null,"End Day must be larger Start Day");
+                    txtTimeEnd.setText("");
+                }
+                else{
+                    txtTimeEnd.setText(e);
+                }
+            }
+        }
+  
+    }//GEN-LAST:event_btnChooseEndActionPerformed
+
+    private void btnShowProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowProActionPerformed
+        // TODO add your handling code here:
+            ShowProAction();
+       
+       
+    }//GEN-LAST:event_btnShowProActionPerformed
+
+    private void tblPromotionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPromotionsMouseClicked
+        // TODO add your handling code here:
+        ClickTablePro();
+
+    }//GEN-LAST:event_tblPromotionsMouseClicked
+
+    private void tblPromotionsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblPromotionsKeyReleased
+        // TODO add your handling code here:
+        ClickTablePro();
+    }//GEN-LAST:event_tblPromotionsKeyReleased
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+      try{
+           con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+           if(con.isConnect()){
+                String sql="SELECT * FROM promotions ";
+                String kt=""; 
+                
+                        try{
+                             if(ChkName.isSelected()&&chkTime.isSelected())
+                              {
+                                    if(txtAutoSearchPro.getText().equals(kt)||txtTimeStart.getText().equals(kt)
+                                            ||txtTimeStart.getText().equals(kt)
+                                            ||txtTimeEnd.getText().equals(kt)
+                                            ||txtTimeEnd.getText().equals("Time End Field"))
+                                    {
+                                     JOptionPane.showMessageDialog(null, "Please insert full data");
+
+                                    }
+                                    else
+                                    {
+                                        sql+="WHERE name LIKE '%"+txtAutoSearchPro.getText()
+                                          +"%' AND time_start >= '"+txtTimeStart.getText()
+                                          +"' AND time_start <= '"+txtTimeEnd.getText()
+                                          +"' AND time_end >= '"+txtTimeStart.getText()
+                                          +"' AND time_end <= '"+txtTimeEnd.getText()+"'"; 
+                                    }
+                              }
+                             else if(chkTime.isSelected())
+                              {
+                                  if(txtTimeStart.getText().equals(kt)||txtTimeEnd.getText().equals(kt))
+                                    {
+                                     JOptionPane.showMessageDialog(null, "Please insert full data");
+
+                                    }
+                                    else
+                                    {
+                                        sql+="WHERE time_start >= '"+txtTimeStart.getText()
+                                          +"' AND time_start <= '"+txtTimeEnd.getText()
+                                          +"' AND time_end >= '"+txtTimeStart.getText()
+                                          +"' AND time_end <= '"+txtTimeEnd.getText()+"'";
+                                    }
+                              }
+                            ResultSet result=con.executeQuery(sql);
+
+                            tblPromotions.getTableHeader().setReorderingAllowed(false);
+                             String strHeader[]={"Number","Name","Time Start","Time End","Content","Location"};
+                             DefaultTableModel dt =new DefaultTableModel(strHeader,0)
+                            {
+
+                             @Override
+                             public boolean isCellEditable(int i, int i1) {
+                                 return false;
+                             }
+
+                            };
+
+                                   int i=0;
+                                   while (result.next()) {
+                                       i++;
+                                       Vector rowdata = new Vector();
+                                       rowdata.add(Integer.toString(i));
+                                       rowdata.add(result.getString("name"));
+                                       rowdata.add(result.getString("time_start"));
+                                       rowdata.add(result.getString("time_end"));
+                                       rowdata.add(result.getString("content"));
+                                       rowdata.add(result.getString("location"));
+
+                                       dt.addRow(rowdata);
+                                   }
+
+
+                                 tblPromotions.setModel(dt);
+
+
+                             TableColumn column = null;
+                                for (int k = 0;k < tblPromotions.getColumnCount(); k++) {
+                                        column = tblPromotions.getColumnModel().getColumn(k);
+
+                                        if (k == 0) {
+                                            column.setPreferredWidth(50);
+
+                                        } 
+
+                                        else {
+                                            column.setPreferredWidth(100);
+
+                                        }
+                                    }
+
+                             int j=dt.getRowCount();
+
+                             if(j==0)
+                             {
+                                 txtResultPro.setForeground(Color.RED);
+                                 txtResultPro.setText("no record found");
+                             }
+                             else
+                             {
+                                 txtResultPro.setForeground(Color.BLACK);
+                                 txtResultPro.setText(Integer.toString(j));
+                             }
+                            result.close();
+                        
+             
+                        }
+                        catch(Exception ex)
+                        {
+                            JOptionPane.showMessageDialog(null,"Error:"+ ex.toString());
+                        }
+                    
+               
+     
+            }
+            con.closeConnect();
+
+         } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,"Error:"+ ex.toString());
+         } 
+        
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void btnClearProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearProActionPerformed
+        // TODO add your handling code here:
+       txtContent.setText("");
+       txtAutoSearchPro.setText("");
+       txtTimeStart.setText("");
+       txtTimeEnd.setText("");
+       ShowProAction();
+          
+    }//GEN-LAST:event_btnClearProActionPerformed
+
+    private void btnClearCoopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearCoopActionPerformed
+        // TODO add your handling code here:
+        txtAutoSearchCoop.setText("");
+        txtResultCoop.setText("");
+        txtDetail.setText("");
+        ShowCoopAction();
+    }//GEN-LAST:event_btnClearCoopActionPerformed
+
     public void setAllEnable(boolean flag){
         btn_0.setEnabled(flag);
         btn_1.setEnabled(flag);
@@ -1527,6 +2418,224 @@ public class MainForm extends javax.swing.JFrame {
         MenuItem_logout.setEnabled(flag);
         MenuItem_changepwd.setEnabled(flag);
     }
+    
+     public void ClickTableCoop()
+    {
+        
+         int row=tblCoop.getSelectedRow();
+        
+        String col2=""+this.tblCoop.getValueAt(row,1);
+        String col3=""+this.tblCoop.getValueAt(row,2);
+        String col4=""+this.tblCoop.getValueAt(row,3);
+        String col5=""+this.tblCoop.getValueAt(row,4);
+        String col6=""+this.tblCoop.getValueAt(row,5);
+        txtDetail.setText("Name : "+col2+"\n"
+                         +"Address : "+col3+"\n"
+                         +"Phone Number : "+col4+"\n"
+                         +"Fax : "+col5+"\n"
+                         +"Day of Establishment : "+col6+"\n"
+                );
+       
+     
+    }
+    /**/
+    public void ClickTablePro()
+    {
+         int row=tblPromotions.getSelectedRow();
+        
+        String col1=""+this.tblPromotions.getValueAt(row,1);
+        String col2=""+this.tblPromotions.getValueAt(row,2);
+        String col3=""+this.tblPromotions.getValueAt(row,3);
+        String col4=""+this.tblPromotions.getValueAt(row,4);
+       
+        txtContent.setText("Promotions : "+col1+"\n"
+                          +"Time Start : "+col2+"\n"
+                          +"Time End : "+col3+"\n"
+                          +"Content : \n"+col4);
+     
+    }
+   /**/  
+  /**
+   private void ResizeTablePromotion()
+  {
+       tblPromotions.getTableHeader().setReorderingAllowed(false);
+       TableColumn column = null;
+        for (int i = 0; i < tblPromotions.getColumnCount(); i++) {
+            column = tblPromotions.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(50);
+            } 
+
+            else {
+                column.setPreferredWidth(100);
+             
+            }
+        }
+  
+  }/**/
+   /**
+      private void ResizeTableCoop()
+  {
+       tblCoop.getTableHeader().setReorderingAllowed(false);
+       TableColumn column = null;
+        for (int i = 0; i < tblCoop.getColumnCount(); i++) {
+            column = tblCoop.getColumnModel().getColumn(i);
+            if (i == 0) {
+                column.setPreferredWidth(50);
+            } 
+
+            else {
+                column.setPreferredWidth(100);
+             
+            }
+        }
+  
+  }/**/
+      private void ShowProAction()
+      {
+           try {
+              con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+            if(con.isConnect()){
+                String sql="SELECT * FROM promotions";
+               // btnClearPro.setEnabled(true);
+                ChkName.setEnabled(true);
+                chkTime.setEnabled(true);
+                txtAutoSearchPro.setEnabled(true);
+                btnClearPro.setEnabled(true);
+                tblPromotions.setEnabled(true);
+               
+                tblPromotions.getTableHeader().setReorderingAllowed(false);//dont't move column
+                tblPromotions.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);//don't auto resize
+                ResultSet result=con.executeQuery(sql);
+              
+                String strHeader[]={"Number","Name","Time Start","Time End","Content","Location"};
+                DefaultTableModel dt =new DefaultTableModel(strHeader,0)
+                    {
+
+                     @Override
+                     public boolean isCellEditable(int i, int i1) {
+                         return false;
+                     }
+
+                    };
+
+                   int i=0;
+                   while (result.next()) {
+                       i++;
+                       Vector rowdata = new Vector();
+                       rowdata.add(Integer.toString(i));
+                       rowdata.add(result.getString("name"));
+                       rowdata.add(result.getString("time_start"));
+                       rowdata.add(result.getString("time_end"));
+                       rowdata.add(result.getString("content"));
+                       rowdata.add(result.getString("location"));
+
+                       dt.addRow(rowdata);
+                   }
+
+             
+                
+
+                tblPromotions.setModel(dt);
+                TableColumn column = null;
+                for (int k = 0;k < tblPromotions.getColumnCount(); k++) {
+                        column = tblPromotions.getColumnModel().getColumn(k);
+
+                        if (k == 0) {
+                            column.setPreferredWidth(50);
+
+                        } 
+
+                        else {
+                            column.setPreferredWidth(100);
+
+                        }
+                    }
+                
+                int j=dt.getRowCount();
+
+                txtResultPro.setText(Integer.toString(j));
+                result.close();
+            }
+             con.closeConnect();
+        }
+        catch (IOException | SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
+        }
+      }
+      private void ShowCoopAction()
+      {
+         try {
+                con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+            
+                if(con.isConnect()){
+
+                  txtAutoSearchCoop.setEnabled(true);
+                  txtResultCoop.setEnabled(true);
+                  txtDetail.setEnabled(true);
+                  tblCoop.setEnabled(true);
+                  btnClearCoop.setEnabled(true);
+                  tblCoop.getTableHeader().setReorderingAllowed(false);
+
+                 // tblCoop.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
+                  ResultSet result = con.executeQuery("SELECT * FROM coopmart_name");
+                  //loadDataCoopName();
+                   String strHeader[]={"Number","Name","Address","Phone","Fax","Date of Establishment"};
+                        DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
+                          {
+
+                        @Override
+                        public boolean isCellEditable(int i, int i1) {
+                            return false;
+                        }
+
+                          };
+
+                          int i=0;
+                          while (result.next()) {
+                              i++;
+                                Vector rowdata = new Vector();
+
+                                rowdata.add(Integer.toString(i));
+
+                                rowdata.add(result.getString("name"));
+                                rowdata.add(result.getString("address"));
+                                rowdata.add(result.getString("phone"));
+                                rowdata.add(result.getString("fax"));
+                                rowdata.add(result.getString("date_establishment"));
+
+                                dt.addRow(rowdata);
+                            }
+                    tblCoop.setModel(dt);
+                    
+                     
+                     TableColumn column = null;
+                     for (int k = 0;k < tblCoop.getColumnCount(); k++) {
+                        column = tblCoop.getColumnModel().getColumn(k);
+
+                        if (k == 0) {
+                            column.setPreferredWidth(50);
+
+                        } 
+
+                        else {
+                            column.setPreferredWidth(100);
+
+                        }
+                    }
+                      int j=dt.getRowCount();
+
+                txtResultCoop.setText(Integer.toString(j));
+               
+                }
+                con.closeConnect();
+              }
+              catch (IOException | SQLException | ClassNotFoundException ex) {
+                  JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
+              }
+
+      }
     
     /**
      * @param args the command line arguments
@@ -1563,12 +2672,20 @@ public class MainForm extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox ChkName;
     private javax.swing.JMenuItem MenuItem_about;
     private javax.swing.JMenuItem MenuItem_changepwd;
     public javax.swing.JMenuItem MenuItem_exit;
     public javax.swing.JMenuItem MenuItem_logout;
     private javax.swing.JMenuItem MenuItem_setting;
     private javax.swing.JPanel Panel1;
+    private javax.swing.JButton btnChooseEnd;
+    private javax.swing.JButton btnChooseStart;
+    private javax.swing.JButton btnClearCoop;
+    private javax.swing.JButton btnClearPro;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnShowCoop;
+    private javax.swing.JButton btnShowPro;
     private javax.swing.JButton btn_0;
     private javax.swing.JButton btn_1;
     private javax.swing.JButton btn_11;
@@ -1592,6 +2709,7 @@ public class MainForm extends javax.swing.JFrame {
     public javax.swing.JButton btn_update;
     public javax.swing.JComboBox cb_gender;
     public javax.swing.JComboBox cb_type;
+    private javax.swing.JCheckBox chkTime;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel10;
@@ -1605,6 +2723,8 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1616,15 +2736,25 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel15;
+    private javax.swing.JPanel jPanel16;
+    private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JTable jTable1;
     private javax.swing.JTable jTable2;
     private javax.swing.JLabel lb_agentid;
@@ -1640,6 +2770,16 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel panel_dial;
     private javax.swing.JPanel panel_number;
     public javax.swing.JTable table_report;
+    private javax.swing.JTable tblCoop;
+    private javax.swing.JTable tblPromotions;
+    private javax.swing.JTextField txtAutoSearchCoop;
+    private javax.swing.JTextField txtAutoSearchPro;
+    private javax.swing.JTextArea txtContent;
+    private javax.swing.JTextArea txtDetail;
+    private javax.swing.JTextField txtResultCoop;
+    private javax.swing.JTextField txtResultPro;
+    private javax.swing.JTextField txtTimeEnd;
+    private javax.swing.JTextField txtTimeStart;
     public javax.swing.JTextField txt_add;
     public javax.swing.JTextField txt_email;
     public javax.swing.JTextField txt_email1;
