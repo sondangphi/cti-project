@@ -75,34 +75,35 @@ public class MainForm extends javax.swing.JFrame {
         agentObject = aOb;        
         Image image = Toolkit.getDefaultToolkit().getImage("images/icon_main.png");
         this.setIconImage(image);
-        if (SystemTray.isSupported()) {
-            MouseListener mouseListener = new MouseListener() {
-                public void mouseClicked(MouseEvent e) {
-                    System.out.println("Tray Icon – Mouse clicked!");
-                    setVisible(true);
-                    stray.remove(trayIcon);
-                }
-                public void mouseEntered(MouseEvent e) {
-//                System.out.println("Tray Icon – Mouse entered!");
-                }
-                public void mouseExited(MouseEvent e) {
-//                System.out.println("Tray Icon – Mouse exited!");
-                }
-                public void mousePressed(MouseEvent e) {
-//                System.out.println("Tray Icon – Mouse pressed!");
-                }
-                public void mouseReleased(MouseEvent e) {
-//                System.out.println("Tray Icon – Mouse released!");
-                }
-            };                                    
-            stray = SystemTray.getSystemTray();                        
-            trayIcon = new TrayIcon(image, "CTI Client");
-            trayIcon.setImageAutoSize(true);
-            trayIcon.addMouseListener(mouseListener);     
-//
-        } else {
-            System.out.println("system tray not supported");
-        }        
+//        setUndecorated(true);
+//        if (SystemTray.isSupported()) {
+//            MouseListener mouseListener = new MouseListener() {
+//                public void mouseClicked(MouseEvent e) {
+//                    System.out.println("Tray Icon – Mouse clicked!");
+//                    setVisible(true);
+//                    stray.remove(trayIcon);
+//                }
+//                public void mouseEntered(MouseEvent e) {
+////                System.out.println("Tray Icon – Mouse entered!");
+//                }
+//                public void mouseExited(MouseEvent e) {
+////                System.out.println("Tray Icon – Mouse exited!");
+//                }
+//                public void mousePressed(MouseEvent e) {
+////                System.out.println("Tray Icon – Mouse pressed!");
+//                }
+//                public void mouseReleased(MouseEvent e) {
+////                System.out.println("Tray Icon – Mouse released!");
+//                }
+//            };                                    
+//            stray = SystemTray.getSystemTray();                        
+//            trayIcon = new TrayIcon(image, "CTI Client");
+//            trayIcon.setImageAutoSize(true);
+//            trayIcon.addMouseListener(mouseListener);     
+////
+//        } else {
+//            System.out.println("system tray not supported");
+//        }        
         lb_agentid.setText(agentObject.getAgentId());
         lb_agentname.setText(agentObject.getAgentName());
         lb_extension.setText(agentObject.getInterface());
@@ -787,14 +788,14 @@ public class MainForm extends javax.swing.JFrame {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
-        try{
-            setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );
-            stray.add(trayIcon); 
-            setVisible(false);
-            System.out.println("Close Main Form");  
-        }catch(Exception e){
-            System.out.println("Exception(formWindowClosing): "+e);
-        }      
+//        try{
+//            setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );
+//            stray.add(trayIcon); 
+//            setVisible(false);
+//            System.out.println("Close Main Form");  
+//        }catch(Exception e){
+//            System.out.println("Exception(formWindowClosing): "+e);
+//        }      
     }//GEN-LAST:event_formWindowClosing
 
     private void MenuItem_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_exitActionPerformed
