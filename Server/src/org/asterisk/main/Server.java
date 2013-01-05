@@ -75,10 +75,10 @@ public class Server{
                 mdb_agent.checkSessionPause();
                 //start thread AgentListen
                 alisten = new AgentListen( Port_agent, mdb_agent );
+                //check agent unLogout
+                checkSessionLogout();                
                 //start thread QueueListen                
                 qlisten = new QueueListen( Port_queue, mdb_agent );
-                //check agent unLogout
-                checkSessionLogout();
             } else {
                 uti.writeAsteriskLog("- SYSTE  - Connect to Database Fail");
                 System.out.println("Connect to Database Fail");

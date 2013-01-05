@@ -11,3 +11,25 @@
 2013-01-02 11:43:54	- SYSTE  - Disconnect to Asterisk Server
 
 2013-01-02 11:44:04	- SYSTE  - Reconnect to Asterisk Server
+2013-01-04 11:48:51	- SYSTE  - Connect to Database Successful
+2013-01-04 11:48:51	- SYSTE  - Check DateTime Agent Pause
+2013-01-04 11:48:52	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-04 11:48:56	- SYSTE  - Check DateTime Agent unLogout
+2013-01-04 11:53:31	- SYSTE  - Connect to Database Successful
+2013-01-04 11:53:31	- SYSTE  - Check DateTime Agent Pause
+2013-01-04 11:53:32	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-04 11:53:36	- SYSTE  - Check DateTime Agent unLogout
+2013-01-04 17:29:19	- SYSTE  - Connect to Database Successful
+2013-01-04 17:29:19	- SYSTE  - Check DateTime Agent Pause
+2013-01-04 17:29:20	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-04 17:29:24	- SYSTE  - Check DateTime Agent unLogout
+2013-01-05 09:19:42	- SYSTE  - Connect to Database Successful
+2013-01-05 09:19:43	- SYSTE  - Check DateTime Agent Pause
+2013-01-05 09:19:43	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-05 09:19:48	- SYSTE  - Check DateTime Agent unLogout
+2013-01-05 09:24:57	- SYSTE  - Connect to Database Successful
+2013-01-05 09:24:57	- SYSTE  - Check DateTime Agent Pause
+2013-01-05 09:24:57	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-05 09:25:02	- SYSTE  - Check DateTime Agent unLogout
+2013-01-05 09:25:02	- SYSTE  - Update datetime agent unlogout(updatetime)	a	JlUK2NONhnXAk8B
+2013-01-05 09:25:02	- SYSTE  - Update datetime agent unlogout(remove queue)	a	JlUK2NONhnXAk8B
