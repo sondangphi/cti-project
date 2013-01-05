@@ -404,7 +404,8 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                     inPutStream.close();
                     outPutStream.close();
                     clientSocket.close();      
-                    System.out.println("close socket");
+                    managerEvent.removeEventListener(this);
+                    System.out.println("close socket");                    
                 }
                 if(thread !=  null){
                     thread.interrupt();
@@ -459,21 +460,21 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
 //            }            
 	}      
         
-        void printinfor(){
-            System.out.println("getAgentId "+agent.getAgentId());
-            System.out.println("getAgentName "+agent.getAgentName());
-            System.out.println("getInterface "+agent.getInterface());
-            System.out.println("getPass "+agent.getPass());
-            System.out.println("getQueueId "+agent.getQueueId());
-            System.out.println("getQueueName "+agent.getQueueName());
-            System.out.println("getRole "+agent.getRole());
-            System.out.println("getSesion "+agent.getSesion());
-            System.out.println("getPenalty "+agent.getPenalty());            
-        }
+//        void printinfor(){
+//            System.out.println("getAgentId "+agent.getAgentId());
+//            System.out.println("getAgentName "+agent.getAgentName());
+//            System.out.println("getInterface "+agent.getInterface());
+//            System.out.println("getPass "+agent.getPass());
+//            System.out.println("getQueueId "+agent.getQueueId());
+//            System.out.println("getQueueName "+agent.getQueueName());
+//            System.out.println("getRole "+agent.getRole());
+//            System.out.println("getSesion "+agent.getSesion());
+//            System.out.println("getPenalty "+agent.getPenalty());            
+//        }
 	@Override
 	public synchronized void onManagerEvent(ManagerEvent event) {
             if (!connected)           
-                return;          
+                return;      
             // TODO Auto-generated method stub
             try {   
                 //enter queue                
