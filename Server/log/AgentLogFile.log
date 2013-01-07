@@ -96,3 +96,60 @@
 2013-01-05 09:27:38	- AGENT - Enter Queue	b	SIP/8001	0873058080
 2013-01-05 09:27:40	- AGENT - Ring noAns	b	SIP/8001	0873058080
 2013-01-05 09:27:55	- AGENT - Agent logout	127.0.0.1	b
+2013-01-07 09:37:42	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 09:37:42	- AGENT - Agent login OK 	172.168.10.20	a
+2013-01-07 09:37:47	- AGENT - Agent pause	172.168.10.20	a
+2013-01-07 09:37:48	- AGENT - Agent unpause	172.168.10.20	a
+2013-01-07 09:37:53	- AGENT - Agent logout	172.168.10.20	a
+2013-01-07 09:40:07	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 09:40:07	- AGENT - Agent login OK 	172.168.10.20	a
+2013-01-07 09:40:09	- AGENT - Agent logout	172.168.10.20	a
+2013-01-07 10:12:26	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 10:12:26	- AGENT - Agent login OK 	172.168.10.20	a
+2013-01-07 10:18:40	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 10:18:40	- AGENT - Agent login OK 	172.168.10.20	a
+2013-01-07 10:19:34	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 10:19:34	- AGENT - Agent login OK 	172.168.10.20	b
+2013-01-07 10:19:36	- AGENT - Agent pause	172.168.10.20	b
+2013-01-07 10:19:41	- AGENT - Agent unpause	172.168.10.20	b
+2013-01-07 10:19:42	- AGENT - Agent logout	172.168.10.20	b
+2013-01-07 10:23:34	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 10:23:34	- AGENT - Agent login OK 	172.168.10.20	a
+2013-01-07 10:28:16	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 10:28:32	- AGENT - Agent login OK 	172.168.10.20	a
+2013-01-07 10:30:42	- AGENT - Agent logout	172.168.10.20	a
+2013-01-07 10:31:48	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 10:32:49	- AGENT - Agent login OK 	172.168.10.20	a
+2013-01-07 10:37:27	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 10:37:33	- AGENT - Agent login fail (already login)	172.168.10.20	a
+2013-01-07 10:45:27	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 10:45:28	- AGENT - Agent login OK 	172.168.10.20	a
+2013-01-07 10:47:00	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 10:47:00	- AGENT - Agent login OK 	172.168.10.20	b
+2013-01-07 10:47:23	- AGENT - Agent logout	172.168.10.20	a
+2013-01-07 10:48:56	- AGENT - Agent logout	172.168.10.20	b
+2013-01-07 10:49:09	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 10:49:09	- AGENT - Agent login OK 	172.168.10.20	a
+2013-01-07 10:49:26	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 10:49:26	- AGENT - Agent login OK 	172.168.10.20	b
+2013-01-07 10:50:15	- AGENT - Agent pause	172.168.10.20	a
+2013-01-07 10:50:19	- AGENT - Agent unpause	172.168.10.20	a
+2013-01-07 10:50:36	- AGENT - Agent pause	172.168.10.20	a
+2013-01-07 10:50:37	- AGENT - Agent unpause	172.168.10.20	a
+2013-01-07 10:51:23	- AGENT - Agent logout - exit system	172.168.10.20	a
+2013-01-07 10:56:54	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 10:56:54	- AGENT - Agent login OK 	172.168.10.20	a
+2013-01-07 10:58:11	- AGENT - Agent logout	172.168.10.20	a
+2013-01-07 10:58:19	- AGENT - Accept connect 	172.168.10.20
+2013-01-07 10:58:19	- AGENT - Agent login OK 	172.168.10.20	b
+2013-01-07 10:58:20	- AGENT - Agent logout	172.168.10.20	b
+2013-01-07 12:08:45	- AGENT - Accept connect 	127.0.0.1
+2013-01-07 12:08:45	- AGENT - Agent login OK 	127.0.0.1	6001
+2013-01-07 12:10:37	- AGENT - Accept connect 	127.0.0.1
+2013-01-07 12:10:37	- AGENT - Agent login OK 	127.0.0.1	6100
+2013-01-07 12:10:57	- AGENT - Agent pause	127.0.0.1	6100
+2013-01-07 12:10:58	- AGENT - Agent unpause	127.0.0.1	6100
+2013-01-07 12:10:59	- AGENT - Agent pause	127.0.0.1	6001
+2013-01-07 12:11:01	- AGENT - Agent unpause	127.0.0.1	6001
+2013-01-07 12:11:22	- AGENT - Agent logout	127.0.0.1	6100
+2013-01-07 12:11:24	- AGENT - Agent logout	127.0.0.1	6001

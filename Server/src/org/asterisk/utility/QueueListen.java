@@ -40,11 +40,10 @@ public class QueueListen implements Runnable{
     public void run() {
         try{
             qserver = new ServerSocket(port);
-            QueueInfo qInfor = null;
             while(true){
                 System.out.println("start queue_listen");
                 Socket client = qserver.accept();                
-                qInfor = new QueueInfo( client, mdb_queue );
+                new QueueInfo( client, mdb_queue );
                 System.out.println("send list queue for client");
             }
         }catch(Exception e){
