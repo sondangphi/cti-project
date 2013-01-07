@@ -28,7 +28,7 @@ public class Server{
         private static String astUserEvent = "manager";
         private static String astPwdEvent = "123456";        
 	private static Managerdb mdb_agent;
-        private static QueueListen qlisten;  
+//        private static QueueListen qlisten;  
         private static AgentListen alisten; 
         private static ManagerConnection manager;
         static String filename = "infor.properties";                         		
@@ -74,11 +74,12 @@ public class Server{
                 //check agent Pause
                 mdb_agent.checkSessionPause();
                 //start thread AgentListen
-                alisten = new AgentListen( Port_agent, mdb_agent );
+                alisten = new AgentListen( Port_agent, mdb_agent );                
                 //check agent unLogout
                 checkSessionLogout();                
                 //start thread QueueListen                
-                qlisten = new QueueListen( Port_queue, mdb_agent );
+//                qlisten = new QueueListen( Port_queue, mdb_agent );
+                new QueueListen( Port_queue, mdb_agent );
             } else {
                 uti.writeAsteriskLog("- SYSTE  - Connect to Database Fail");
                 System.out.println("Connect to Database Fail");

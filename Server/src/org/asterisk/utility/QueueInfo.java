@@ -22,12 +22,7 @@ public class QueueInfo implements Runnable{
             client = clientS;
             thread = new Thread(this);
             thread.start();            		
-	}   
-//	public QueueInfo(Socket clientS) {
-//            client = clientS;
-//            thread = new Thread(this);
-//            thread.start();            		
-//	}        
+	}           
         public QueueInfo() {
 	
 	}
@@ -46,12 +41,4 @@ public class QueueInfo implements Runnable{
             } catch (Exception e) {	
             }
 	}
-//        
-//        private void closeConnect()throws Exception{
-//            if(client != null)
-//                client.close();
-//            if(thread != null)
-//                thread.interrupt();
-//        }
-
 }
