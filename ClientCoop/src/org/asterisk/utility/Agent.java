@@ -34,7 +34,7 @@ public class Agent implements Runnable{
 	 */
 	private boolean running = true;
 	private Thread mainThread;
-	private Socket clientSocket;
+	public Socket clientSocket;
         private AgentObject agentObject;
         private LoginForm loginform;        
         private MainForm mainForm;
@@ -126,6 +126,7 @@ public class Agent implements Runnable{
                         loginform.dispose();
                         worktime = new TimerClock(mainForm, false);
                         worktime.start();
+                        new KeepAlive(this);
                     break;
                     case LOGINFAIL: //result LOGIN FAIL                                                     
                         try {
@@ -308,7 +309,10 @@ public class Agent implements Runnable{
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setEnabled(true);
                         mainForm.setAllEnable(true);          
-                    break;                                                
+                    break;       
+                    case PING: 
+                        System.out.println("PING from server\t");
+                    break;                        
                     default: 
                         System.out.println("default values from server\t"+command);
                     break;
@@ -469,5 +473,6 @@ public class Agent implements Runnable{
             CHANGEPWD,CHANGEPWDFAIL,
             RINGING,RINGNOANWSER,CONNECTED, COMPLETED,HANGUPABANDON,
             DIALOUT,CONNECTEDDIALOUT,HANGUPDIALOUT,
+            PING,
 	}
 }
