@@ -31,7 +31,7 @@ public class Agent implements Runnable{
 	 */
 	private boolean running = true;
 	private Thread mainThread;
-	private Socket clientSocket;
+	public Socket clientSocket;
         private AgentObject agentObject;
         private LoginForm loginform;        
         private MainForm mainForm;
@@ -44,9 +44,9 @@ public class Agent implements Runnable{
         private ConnectDatabase con;
         private Utility uti = new Utility();
         private boolean close = true;        
-        private TimerClock clockWorktime;
-        private TimerClock clockDialin;
-        private TimerClock clockDialout;
+        private TimerClock clockWorktime = null;
+        private TimerClock clockDialin = null;
+        private TimerClock clockDialout = null;
         private BufferedReader infromServer;
         private PrintWriter outtoServer;        
         private String com;  
@@ -75,6 +75,7 @@ public class Agent implements Runnable{
 	public void run() {
             // TODO Auto-generated method stub
             try{
+                clientSocket.setKeepAlive(true);
                 String command = "";
                 CODE code;
                 Mysql_dbname = uti.readInfor(filename, "MySql_database");
@@ -82,7 +83,7 @@ public class Agent implements Runnable{
                 Mysql_user = uti.readInfor(filename, "MySql_user");
                 Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
                 outtoServer = new PrintWriter(clientSocket.getOutputStream());
-                infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));     
+                infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));                 
 //                in = new DataInputStream(clientSocket.getInputStream());
 //                out = new DataOutputStream(clientSocket.getOutputStream());                
                 sendtoServer(com);
@@ -94,7 +95,7 @@ public class Agent implements Runnable{
                     if(command == null){
                         System.out.println("null value from server");
                         try {
-                            uti.writelog("DISCONNECT SERVER(read null value)\t"+agentObject.getAgentId()+"\r\n");
+                            uti.writelog("DISCONNECT SERVER - Server interrupt\t"+agentObject.getAgentId()+"\r\n");
                             close = false;
                             System.out.println("Server interupt! Please wait...");
                             mainForm.setVisible(false);
@@ -119,6 +120,7 @@ public class Agent implements Runnable{
                         clockWorktime = new TimerClock(mainForm, false);
                         clockWorktime.start();
                         uti.writelog("LOGIN SUCCESS\t"+agentObject.getAgentId());
+                        new KeepAlive(this);
                         
                     break;
                     case LOGINFAIL: //result LOGIN FAIL                                                     
@@ -216,6 +218,8 @@ public class Agent implements Runnable{
                     case CONNECTED://connected incoming call
                         System.out.println("CONNECTED incoming call");
                         mainForm.lb_status.setText("Busy"); 
+                        if(clockDialin != null)
+                            clockDialin.stop();
                         clockDialin = new TimerClock(mainForm, true);
                         clockDialin.start();
                         uti.writelog("CONNECTED\t"+mainForm.lb_callernumber.getText());
@@ -257,6 +261,8 @@ public class Agent implements Runnable{
                     break;                                
                     case CONNECTEDDIALOUT: 
                         uti.writelog("CONNECTED DIALOUT\t"+mainForm.dialNumber);
+                        if(clockDialout != null)
+                            clockDialout.stop();
                         clockDialout = new TimerClock(mainForm, true);
                         clockDialout.start();                        
                         mainForm.lb_status.setText("Busy");
@@ -288,9 +294,13 @@ public class Agent implements Runnable{
                     break;      
                     case HANGUPFAIL: //EVENT ANSWER CALL	  
                         System.out.println("HANGUPFAIL");
-                    break;                         
+                    break;             
+                    case PING:
+                        System.out.println("PING from server...");
+                        uti.writelog("PING from server\t"+agentObject.getAgentId());
+                    break;                        
                     default: 
-                        System.out.println("Default Break...");
+                        System.out.println("Default value...");
                     break;
                     }
                 }
@@ -422,5 +432,6 @@ public class Agent implements Runnable{
             CHANGEPWD,CHANGEPWDFAIL,
             RINGING,RINGNOANWSER,CONNECTED, COMPLETED,HANGUPABANDON,
             DIALOUT,DIALOUTFAIL,CONNECTEDDIALOUT,HANGUPDIALOUT,
+            PING,
 	}
 }

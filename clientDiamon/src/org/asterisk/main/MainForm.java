@@ -678,7 +678,7 @@ public class MainForm extends javax.swing.JFrame {
         );
 
         lb_version.setFont(new java.awt.Font("Tahoma", 2, 9)); // NOI18N
-        lb_version.setText("version 1.0.0 (Build 04012013)");
+        lb_version.setText("version 1.0.0 (Build 10012013)");
         lb_version.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jMenu1.setText("File");
@@ -944,8 +944,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_txt_phonenumKeyPressed
 
     private void MenuItem_infoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_infoActionPerformed
-        // TODO add your handling code here:
-        System.out.println("");
+        // TODO add your handling code here:        
         AboutForm about = new AboutForm();
         about.setVisible(true);
     }//GEN-LAST:event_MenuItem_infoActionPerformed
