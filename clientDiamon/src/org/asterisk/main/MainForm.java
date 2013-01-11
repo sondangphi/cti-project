@@ -62,9 +62,11 @@ public class MainForm extends javax.swing.JFrame {
         Color green2 = new Color(0, 238, 0);
         Color royalBlue = new Color(65, 105, 225);
         Color Blue1 = new Color(0, 0, 225);
+        Color LightSkyBlue1 = new Color(176, 226, 255);
         btn_dial.setBackground(royalBlue);
         btn_clear.setToolTipText("Clear");
         btn_back.setToolTipText("Back");        
+        txt_phonenum.setBackground(LightSkyBlue1);
     }
     
     public MainForm(Agent agent, AgentObject aOb) {
@@ -271,7 +273,7 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addComponent(btn_logout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37)
                 .addComponent(jLabel12)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -655,7 +657,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_dialLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel_dialLayout.createSequentialGroup()
-                        .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, 48, Short.MAX_VALUE)
+                        .addComponent(btn_back, javax.swing.GroupLayout.DEFAULT_SIZE, 49, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btn_hangup, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
