@@ -343,6 +343,23 @@ public class Managerdb {
                 }
             }
         }        
+        public void checkAgentPause(String loginses)throws Exception{
+            checkConnect();
+            uti.writeAsteriskLog("- SYSTE  - Check Agent unPause when interrupt");
+            String date = uti.getDate();            
+            String sql = "SELECT * FROM pause_action WHERE loginSession = '"+loginses+"' AND CAST(datetime_pause AS DATE) >=  '"+date+"'";
+            ResultSet rs = sqlQuery(sql);
+            while(rs.next()){
+                String datepause = String.valueOf(rs.getObject("datetime_unpause"));               
+                if(datepause.equalsIgnoreCase("null")){
+                    String agentid = String.valueOf(rs.getObject("agent_id"));               
+                    String session = rs.getString("session");  
+                    unpauseAction(session, agentid);
+                    uti.writeAsteriskLog("- SYSTE  - Update Agent unPause when interrupt\t"+agentid+"\t"+session);
+                    System.out.println("update unpause success(interrupt)\t"+session);
+                }
+            }
+        }        
         
         public ArrayList<QueueObject> listQueue() throws IOException{
             checkConnect();

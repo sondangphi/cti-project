@@ -88,7 +88,7 @@ public class Server{
 	}
         
         public static void checkSessionLogout()throws Exception{
-            Thread.sleep(5000);
+            Thread.sleep(10000);
             uti.writeAsteriskLog("- SYSTE  - Check DateTime Agent unLogout");
             String date = uti.getDate();            
             String sql = "SELECT * FROM login_action WHERE CAST(datetime_login AS DATE) >=  '"+date+"'";
