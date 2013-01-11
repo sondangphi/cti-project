@@ -72,6 +72,7 @@ public class AgentListen implements Runnable, ManagerEventListener{
                 while(true){                    
                     Socket clientsocket = new Socket();
                     clientsocket = aserver.accept();                 
+                    clientsocket.setKeepAlive(true);
                     System.out.println("socket timeout\t"+clientsocket.getSoTimeout()); 
                     System.out.println("socket localport\t"+clientsocket.getPort());
                     new ManagerAgent(managerSystem, clientsocket, mdb_agent);
