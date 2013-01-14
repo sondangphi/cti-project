@@ -10,8 +10,9 @@ package org.asterisk.utility;
  */
 public class KeepAlive implements Runnable{
 
-    Agent agent;
-    Thread thread;
+    private Agent agent;
+    private Thread thread;
+    public int COUNT = 0;
     public KeepAlive(Agent a) {
         agent = a;
         thread = new Thread(this);
@@ -23,9 +24,14 @@ public class KeepAlive implements Runnable{
        try{
            while(true){
                Thread.sleep(10000);
-               agent.sendtoServer("222");
-               if(agent.clientSocket.isClosed())
-                   return;                              
+               if(COUNT >= 3){
+                   if(agent.agentTimeout())
+                       return;
+               }
+              if(agent.clientSocket.isClosed())
+                   return; 
+               agent.sendtoServer("222");    
+               COUNT ++;
            }
        }catch(Exception e){
        }
