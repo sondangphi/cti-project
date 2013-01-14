@@ -1,6 +1,7 @@
 package org.asterisk.main;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -60,6 +61,7 @@ public class LoginForm extends javax.swing.JFrame {
      */
     ConfigForm configform;
     public LoginForm() {
+        listQueue = null;
         initComponents();
         Image image = Toolkit.getDefaultToolkit().getImage("images/icon_login.png");
         try{            
@@ -104,17 +106,20 @@ public class LoginForm extends javax.swing.JFrame {
         Color LightSkyBlue2 = new Color(164, 211, 238);
         Color white = new Color(255,255,255);    
         Color yellow2 = new Color(238, 238, 0);        
-        Color Khaki1 = new Color( 255, 246, 143);                           
+        Color Khaki1 = new Color( 255, 246, 143);  
+        Color LightGoldenrod1 = new Color(255, 236, 139);
+        Color PaleGoldenrod = new Color(238, 232, 170);
         this.getContentPane().setBackground(white);
         panel_1.setBackground(white);
         mn_main.setBackground(white);
-        submn_config.setBackground(white);
-        submn_quit.setBackground(white);
-        submn_reload.setBackground(white);
         cb_queue.setBackground(Khaki1);
         tx_agent.setBackground(Khaki1);
         tx_iface.setBackground(Khaki1);
         pwd.setBackground(Khaki1);        
+        
+        lb_option.setText("<html><u>Option</u></html>");
+        lb_option.setForeground(Color.BLUE);
+        lb_option.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));        
     }
 
     /**
@@ -142,13 +147,12 @@ public class LoginForm extends javax.swing.JFrame {
         lb_notify_pwd = new javax.swing.JLabel();
         lb_notify_agent = new javax.swing.JLabel();
         lb_notify_queue = new javax.swing.JLabel();
-        lb_pic = new javax.swing.JLabel();
         lb_status = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        lb_option = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        lb_pic = new javax.swing.JLabel();
         mn_main = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        submn_config = new javax.swing.JMenuItem();
-        submn_reload = new javax.swing.JMenuItem();
-        submn_quit = new javax.swing.JMenuItem();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -162,7 +166,7 @@ public class LoginForm extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Desktop Agent Login");
+        setTitle("Agent Desktop Login");
         setFont(new java.awt.Font(".Vn3DH", 1, 10)); // NOI18N
         setForeground(new java.awt.Color(121, 163, 240));
         setName("main_frame"); // NOI18N
@@ -177,8 +181,6 @@ public class LoginForm extends javax.swing.JFrame {
                 formKeyPressed(evt);
             }
         });
-
-        panel_1.setBorder(javax.swing.BorderFactory.createTitledBorder("Desktop Agent "));
 
         btn_login.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btn_login.setText("Login");
@@ -321,71 +323,62 @@ public class LoginForm extends javax.swing.JFrame {
                     .addComponent(lb_queue, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cb_queue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lb_notify_queue, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
                 .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_login, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(btn_login, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         panel_1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lb_agent, lb_iface, lb_pwd, lb_queue});
 
         panel_1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cb_queue, pwd, tx_agent, tx_iface});
 
+        lb_status.setForeground(new java.awt.Color(255, 0, 0));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/xcs_logo_r1-90x30.png"))); // NOI18N
+
+        lb_option.setText("Option");
+        lb_option.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                lb_optionMousePressed(evt);
+            }
+        });
+        lb_option.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                lb_optionAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+
+        jPanel1.setOpaque(false);
+
         lb_pic.setBackground(new java.awt.Color(255, 0, 0));
-        lb_pic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/stock_lock.png"))); // NOI18N
+        lb_pic.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/Lock120x120.png"))); // NOI18N
         lb_pic.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lb_picMouseClicked(evt);
             }
         });
 
-        lb_status.setForeground(new java.awt.Color(255, 0, 0));
-
-        jMenu1.setText("File");
-        jMenu1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jMenu1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu1ActionPerformed(evt);
-            }
-        });
-
-        submn_config.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
-        submn_config.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        submn_config.setText("Configuration");
-        submn_config.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                submn_configActionPerformed(evt);
-            }
-        });
-        jMenu1.add(submn_config);
-
-        submn_reload.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK));
-        submn_reload.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        submn_reload.setText("Reload");
-        submn_reload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                submn_reloadActionPerformed(evt);
-            }
-        });
-        jMenu1.add(submn_reload);
-
-        submn_quit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.ALT_MASK));
-        submn_quit.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        submn_quit.setText("Exit");
-        submn_quit.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                submn_quitMouseClicked(evt);
-            }
-        });
-        submn_quit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                submn_quitActionPerformed(evt);
-            }
-        });
-        jMenu1.add(submn_quit);
-
-        mn_main.add(jMenu1);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lb_pic)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(lb_pic, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         setJMenuBar(mn_main);
 
@@ -394,43 +387,41 @@ public class LoginForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(16, 16, 16)
-                .addComponent(lb_pic, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 31, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(42, 42, 42)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(lb_status, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panel_1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(15, 15, 15))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(lb_option, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(lb_status, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(lb_status, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(28, 28, 28)
+                        .addComponent(panel_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lb_pic, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(panel_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(lb_option)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void submn_quitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submn_quitMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_submn_quitMouseClicked
-
-    private void submn_quitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_quitActionPerformed
-        // TODO add your handling code here:
-        System.exit(0);        
-    }//GEN-LAST:event_submn_quitActionPerformed
-
-    private void submn_configActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_configActionPerformed
-        // TODO add your handling code here:
-        configform = new ConfigForm(this);
-        configform.setVisible(true);
-        this.setEnabled(false);                
-    }//GEN-LAST:event_submn_configActionPerformed
 
     private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
         // TODO add your handling code here:
@@ -459,8 +450,10 @@ public class LoginForm extends javax.swing.JFrame {
         pass     = new String(p);
         agentId = tx_agent.getText();        
         iface  = tx_iface.getText();
-        queueId = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
-        queueName = listQueue.get(cb_queue.getSelectedIndex()).getQueueName();
+//        if(listQueue != null && cb_queue.getSize()!=0){
+            queueId = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
+            queueName = listQueue.get(cb_queue.getSelectedIndex()).getQueueName();
+//        }
         agentObject.setAgentId(agentId);
         agentObject.setPass(pass);
         agentObject.setInterface("SIP/"+iface);        
@@ -479,30 +472,35 @@ public class LoginForm extends javax.swing.JFrame {
                         if(!queueId.equalsIgnoreCase("")){
                             cmd = "100@"+agentId+"@"+pass+"@SIP/"+iface+"@"+queueId+"@"+role;
                             Socket clientSocket = new Socket(host, aport);
-//                            clientSocket.setKeepAlive(true);
+                            clientSocket.setKeepAlive(true);
 //                            clientSocket.setSoTimeout(TIME_OUT);
-                            System.out.println("socket timeout\t"+clientSocket.getSoTimeout()); 
+//                            System.out.println("socket timeout\t"+clientSocket.getSoTimeout()); 
                             if(clientSocket != null){
                                 System.out.println("connect to server "+clientSocket.getInetAddress().toString());
                                 agent = new Agent(clientSocket, this, agentObject, cmd);
                             }
-                        }else lb_notify_queue.setText("(*)");                            
-                    }else lb_notify_iface.setText("(*)");
-                }else lb_notify_pwd.setText("(*)");
-            }else lb_notify_agent.setText("(*)");       
+                        }else {                            
+                            lb_notify_queue.setText("(*)");    
+                            lb_status.setText("Check Queue again");
+                        }
+                    }else {
+                        lb_notify_iface.setText("(*)");
+                        lb_status.setText("Check Extension again");
+                    }
+                }else {
+                    lb_notify_pwd.setText("(*)");   
+                    lb_status.setText("Check Password again");
+                }
+            }else {
+                lb_notify_agent.setText("(*)");
+                lb_status.setText("Check AgentID again");
+            }       
             
         }catch(Exception e){
             System.out.println("btn_loginActionPerformed\t"+e); 
         }
         
     }//GEN-LAST:event_btn_loginActionPerformed
-
-    private void submn_reloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_reloadActionPerformed
-        // TODO add your handling code here:
-        this.dispose();        
-        LoginForm f = new LoginForm();
-        f.setVisible(true);
-    }//GEN-LAST:event_submn_reloadActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         // TODO add your handling code here:
@@ -533,10 +531,6 @@ public class LoginForm extends javax.swing.JFrame {
         // TODO add your handling code here:     
     }//GEN-LAST:event_lb_picMouseClicked
 
-    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenu1ActionPerformed
-
     private void pwdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pwdKeyPressed
         // TODO add your handling code here:
          if(evt.getKeyCode() == 10){
@@ -547,10 +541,10 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void cb_queueKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cb_queueKeyPressed
         // TODO add your handling code here:
-         if(evt.getKeyCode() == 10){
-             System.out.println("tx_iface\t"+evt.getKeyCode());
-             btn_loginActionPerformed(null);
-         }        
+//         if(evt.getKeyCode() == 10){
+//             System.out.println("tx_iface\t"+evt.getKeyCode());
+//             btn_loginActionPerformed(null);
+//         }        
     }//GEN-LAST:event_cb_queueKeyPressed
 
     private void btn_loginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_loginKeyPressed
@@ -567,6 +561,17 @@ public class LoginForm extends javax.swing.JFrame {
         tx_iface.setText("");
         pwd.setText("");         
     }//GEN-LAST:event_btn_clearKeyPressed
+
+    private void lb_optionAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_lb_optionAncestorAdded
+        // TODO add your handling code here:
+    }//GEN-LAST:event_lb_optionAncestorAdded
+
+    private void lb_optionMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lb_optionMousePressed
+        // TODO add your handling code here:
+        configform = new ConfigForm(this);
+        configform.setVisible(true);
+        this.setEnabled(false);        
+    }//GEN-LAST:event_lb_optionMousePressed
 
     /**
      * @param args the command line arguments
@@ -609,13 +614,15 @@ public class LoginForm extends javax.swing.JFrame {
     private javax.swing.JButton btn_login;
     private static javax.swing.JComboBox cb_queue;
     private javax.swing.JFrame jFrame1;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lb_agent;
     private javax.swing.JLabel lb_iface;
     private javax.swing.JLabel lb_notify_agent;
     private javax.swing.JLabel lb_notify_iface;
     private javax.swing.JLabel lb_notify_pwd;
     public static javax.swing.JLabel lb_notify_queue;
+    private javax.swing.JLabel lb_option;
     private javax.swing.JLabel lb_pic;
     private javax.swing.JLabel lb_pwd;
     private javax.swing.JLabel lb_queue;
@@ -623,9 +630,6 @@ public class LoginForm extends javax.swing.JFrame {
     private javax.swing.JMenuBar mn_main;
     private javax.swing.JPanel panel_1;
     private javax.swing.JPasswordField pwd;
-    private javax.swing.JMenuItem submn_config;
-    private javax.swing.JMenuItem submn_quit;
-    private javax.swing.JMenuItem submn_reload;
     private javax.swing.JTextField tx_agent;
     private javax.swing.JTextField tx_iface;
     // End of variables declaration//GEN-END:variables

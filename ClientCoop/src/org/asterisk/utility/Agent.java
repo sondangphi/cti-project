@@ -37,7 +37,7 @@ public class Agent implements Runnable{
 	public Socket clientSocket;
         private AgentObject agentObject;
         private LoginForm loginform;        
-        private MainForm mainForm;
+        public static MainForm mainForm;
         
         private String filename = "infor.properties";                         		
         private String Mysql_server = "172.168.10.202";      
@@ -58,6 +58,7 @@ public class Agent implements Runnable{
         private BufferedReader infromServer;
         private PrintWriter outtoServer;        
         private String com;          
+        private KeepAlive keepAlive;
         
 //        DataInputStream in;
 //        DataOutputStream out;
@@ -126,7 +127,7 @@ public class Agent implements Runnable{
                         loginform.dispose();
                         worktime = new TimerClock(mainForm, false);
                         worktime.start();
-                        new KeepAlive(this);
+                        keepAlive = new KeepAlive(this);
                     break;
                     case LOGINFAIL: //result LOGIN FAIL                                                     
                         try {
@@ -141,6 +142,7 @@ public class Agent implements Runnable{
                         try {
                             mainForm.setVisible(false);
                             mainForm.dispose(); 
+                            mainForm = null;
                             close = false;
                             new LoginForm().setVisible(true);
                             closeConnect();  
@@ -156,7 +158,7 @@ public class Agent implements Runnable{
                         mainForm.btn_logout.setEnabled(false);
                         mainForm.setAllEnable(false);      
                         mainForm.lb_status.setText("Not Ready");
-                        mainForm.btn_pause.setText("UNPAUSE");
+//                        mainForm.btn_pause.setText("UNPAUSE");
                         mainForm.btn_pause.setSelected(true);
                         worktime.pause();
                         System.out.println("PAUSESUCC");
@@ -166,7 +168,7 @@ public class Agent implements Runnable{
                     break;
                     case UNPAUSESUCC: //result UNPAUSESUCC
                         worktime.resume();
-                        mainForm.btn_pause.setText("PAUSE");
+//                        mainForm.btn_pause.setText("PAUSE");
                         mainForm.btn_logout.setEnabled(true);
                         mainForm.setAllEnable(true);      
                         mainForm.lb_status.setText("Ready");
@@ -312,6 +314,7 @@ public class Agent implements Runnable{
                     break;       
                     case PING: 
                         System.out.println("PING from server\t");
+                        keepAlive.COUNT = 0;
                     break;                        
                     default: 
                         System.out.println("default values from server\t"+command);
@@ -384,17 +387,18 @@ public class Agent implements Runnable{
                 col.addElement(colname[i].toString());
             mainForm.table_report.setModel(new TableModel(col, row));                         
         }
-        void printinfor(){
-            System.out.println("getAgentId "+agentObject.getAgentId());
-            System.out.println("getAgentName "+agentObject.getAgentName());
-            System.out.println("getInterface "+agentObject.getInterface());
-            System.out.println("getPass "+agentObject.getPass());
-            System.out.println("getQueueId "+agentObject.getQueueId());
-            System.out.println("getQueueName "+agentObject.getQueueName());
-            System.out.println("getRole "+agentObject.getRole());
-            System.out.println("getSesion "+agentObject.getSesion());
-            System.out.println("getPenalty "+agentObject.getPenalty());            
-        }        
+        
+        public boolean agentTimeout(){
+            try{
+                mainForm.setVisible(false);
+                mainForm.dispose(); 
+                mainForm = null;
+                close = false;
+                new LoginForm().setVisible(true);
+                closeConnect();                 
+            }catch(Exception e){}
+            return true;
+        }
         
         //send request to server - string
 	public void sendtoServer(String t) throws IOException{
