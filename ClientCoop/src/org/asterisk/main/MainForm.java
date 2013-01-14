@@ -139,6 +139,7 @@ public class MainForm extends javax.swing.JFrame {
         
         this.setTitle("Desktop Agent _ "+agentObject.getAgentId()+" _ "+agentObject.getAgentName());
         setLocationRelativeTo(null);
+        showCampaign();
     }    
 
     public void updateNumber(){
@@ -241,7 +242,9 @@ public class MainForm extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblCamp = new javax.swing.JTable();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        tblCustom = new javax.swing.JTable();
         jPanel4 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -673,7 +676,7 @@ public class MainForm extends javax.swing.JFrame {
             jPanel17Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel17Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel17Layout.setVerticalGroup(
@@ -812,11 +815,11 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(btnShowPro, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel24)
                         .addGap(18, 18, 18)
-                        .addComponent(txtResultPro))
+                        .addComponent(txtResultPro, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1000,7 +1003,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblCamp.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -1011,23 +1014,49 @@ public class MainForm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        tblCamp.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCampMouseClicked(evt);
+            }
+        });
+        tblCamp.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblCampKeyReleased(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tblCamp);
+
+        tblCustom.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane8.setViewportView(tblCustom);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
+                .addContainerGap(694, Short.MAX_VALUE)
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jScrollPane2)
+            .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 253, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -2439,6 +2468,16 @@ public class MainForm extends javax.swing.JFrame {
         }         
     }//GEN-LAST:event_btn_pauseActionPerformed
 
+    private void tblCampMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCampMouseClicked
+        // TODO add your handling code here:
+        showCustomer();
+    }//GEN-LAST:event_tblCampMouseClicked
+
+    private void tblCampKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCampKeyReleased
+        // TODO add your handling code here:
+        showCustomer();
+    }//GEN-LAST:event_tblCampKeyReleased
+
 //    private void callCustomer(String List<String>() list){
 //    }
     
@@ -2682,6 +2721,181 @@ public class MainForm extends javax.swing.JFrame {
               }
 
       }
+      private void showCampaign()
+    {
+         try {
+                con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+            
+                if(con.isConnect()){
+
+                  String sql="SELECT * FROM ("
+                           + "SELECT c.id as campaign_id,c.create_day as create_day,c.start_day as start_day,c.end_day as end_day, a.agent_id as agent_id, a.agentName as agent_name"
+                           + " FROM ((_campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
+                           + "INNER JOIN _call k ON k.camp_detail_id = d.id)"
+                           + "INNER JOIN agent_login a ON k.agent_id = a.agent_id) "
+                           + "AS asd ";
+                  
+                 sql+=" where agent_id= '"+lb_agentid.getText()+"' and end_day > '"+lb_logintime.getText()+"' "
+                         + " group by campaign_id,create_day,start_day,end_day,agent_id";
+                  ResultSet result = con.executeQuery(sql);
+                         String strHeader[]={"Number","Campaign id","Day Create","Start Day","End Day"};
+                        DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
+                          {
+
+                        @Override
+                        public boolean isCellEditable(int i, int i1) {
+                            return false;
+                        }
+
+                          };
+
+                          int i=0;
+                          while (result.next()) {
+                              i++;
+                                Vector rowdata = new Vector();
+
+                                rowdata.add(Integer.toString(i));
+
+                                 
+                                rowdata.add(result.getString("campaign_id"));
+                                rowdata.add(result.getString("create_day"));
+                                rowdata.add(result.getString("start_day"));
+                                rowdata.add(result.getString("end_day"));
+                               // rowdata.add(result.getString("agent_id"));
+                                
+
+                                dt.addRow(rowdata);
+                            }
+                     tblCamp.setModel(dt);
+                    
+                     
+                     TableColumn column = null;
+                     for (int k = 0;k < tblCamp.getColumnCount(); k++) {
+                        column = tblCamp.getColumnModel().getColumn(k);
+
+                        if (k == 0) {
+                            column.setPreferredWidth(50);
+
+                        } 
+
+                        else {
+                            column.setPreferredWidth(100);
+
+                        }
+                    }
+                      
+               
+                }
+                con.closeConnect();
+              }
+              catch (IOException | SQLException | ClassNotFoundException ex) {
+                  JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
+              }
+    }
+    private void showCustomer()
+    {
+         try {
+                con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+            
+                if(con.isConnect()){
+
+                    
+                  
+                 
+
+                 String sql="SELECT customer_id, name, gender, address, birthday,GROUP_CONCAT(number)as number,status"
+                         + " FROM ( "
+                         + " SELECT c.id AS campaign_id,c.create_day as create_day,c.start_day as start_day,c.end_day as end_day,"
+                         + " a.agent_id AS agent_id, a.agentname AS agent_name, "
+                         + " i.id AS customer_id, i.name AS name, i.gender AS gender, i.address AS address, i.birthday AS birthday,"
+                         + " p.number AS number,s.desc AS status"
+                         + " FROM (((((("
+                         + " _campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
+                         + " INNER JOIN _call k ON k.camp_detail_id = d.id) "
+                         + " INNER JOIN agent_login a ON k.agent_id = a.agent_id)"
+                         + " INNER JOIN _customer_info i ON d.cus_id = i.id)"
+                         + " INNER JOIN _phone p ON i.id = p.cus_id)"
+                         + " INNER JOIN _call_status s ON s.id=k.status_id)) AS asd ";
+                 
+      
+                  
+                    
+                    int row=tblCamp.getSelectedRow();
+        
+                    String col1=""+this.tblCamp.getValueAt(row,1);
+                   // String col2=""+this.tblCamp.getValueAt(row,2);
+                      sql+=" WHERE agent_id = '"+lb_agentid.getText()+"' and campaign_id = '"+col1+"'"
+                              + " GROUP BY customer_id, name, gender, address, birthday ";
+                   ResultSet result = con.executeQuery(sql);
+                 
+                   String strHeader[]={"Number","Customer id","Name","Gender","Address","Birthday","Number","Status"};
+                        DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
+                          {
+
+                        @Override
+                        public boolean isCellEditable(int i, int i1) {
+                            return false;
+                        }
+
+                          };
+
+                          int i=0;
+                          while (result.next()) {
+                              i++;
+                                Vector rowdata = new Vector();
+
+                                rowdata.add(Integer.toString(i));
+
+                                 
+                                rowdata.add(result.getString("customer_id"));
+                                rowdata.add(result.getString("name"));
+                                int a=Integer.parseInt(result.getString("gender"));
+
+                                String a1="";
+                                if(a==1)
+                                {
+                                    a1="nữ";
+                                    System.out.println(a1);
+                                }
+                                else if(a==0)
+                                {
+                                    a1="nam";
+                                }
+                                rowdata.add(a1);
+                                rowdata.add(result.getString("address"));
+                                rowdata.add(result.getString("birthday"));
+                                rowdata.add(result.getString("number"));
+                                rowdata.add(result.getString("status"));
+                                
+
+                                dt.addRow(rowdata);
+                            }
+                     tblCustom.setModel(dt);
+                    
+                     
+                     TableColumn column = null;
+                     for (int k = 0;k < tblCustom.getColumnCount(); k++) {
+                        column = tblCustom.getColumnModel().getColumn(k);
+
+                        if (k == 0) {
+                            column.setPreferredWidth(50);
+
+                        } 
+
+                        else {
+                            column.setPreferredWidth(100);
+
+                        }
+                    }
+                      
+               
+                }
+                con.closeConnect();
+              }
+              catch (IOException | SQLException | ClassNotFoundException ex) {
+                  JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
+              }
+    }
     
     /**
      * @param args the command line arguments
@@ -2802,8 +3016,8 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
     private javax.swing.JLabel lb_agentid;
     private javax.swing.JLabel lb_agentname;
     public javax.swing.JLabel lb_callduration;
@@ -2817,7 +3031,9 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel panel_dial;
     private javax.swing.JPanel panel_number;
     public javax.swing.JTable table_report;
+    private javax.swing.JTable tblCamp;
     private javax.swing.JTable tblCoop;
+    private javax.swing.JTable tblCustom;
     private javax.swing.JTable tblPromotions;
     private javax.swing.JTextField txtAutoSearchCoop;
     private javax.swing.JTextField txtAutoSearchPro;
