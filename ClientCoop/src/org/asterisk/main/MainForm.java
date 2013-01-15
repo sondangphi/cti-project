@@ -23,6 +23,8 @@ import java.net.URI;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -63,6 +65,8 @@ public class MainForm extends javax.swing.JFrame {
     LocateMap locate = new LocateMap();
     public ChangepwdForm chanpwdform;
     private final String EXIT = "112";
+    private final String PAUSE = "104@off";
+    private final String UNPAUSE = "104@on";
     
     //ResultSet result;
     //DefaultTableModel dt;
@@ -537,9 +541,9 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(cb_gender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txt_add)
-                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
+                    .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txt_email1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -566,7 +570,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel8Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cb_gender, cb_type, jLabel10, jLabel11, jLabel14, jLabel18, jLabel19, jLabel4, jLabel9, txt_add, txt_makh, txt_name, txt_phone2});
+        jPanel8Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cb_gender, cb_type, jLabel10, jLabel11, jLabel14, jLabel18, jLabel19, jLabel4, jLabel9, txt_add, txt_email, txt_email1, txt_makh, txt_name, txt_phone2});
 
         jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "History", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
@@ -2443,31 +2447,44 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClearCoopActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        
+        // TODO add your handling code here:       
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btn_hangupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hangupActionPerformed
         // TODO add your handling code here:
+        try{
+            String command = "106";
+            agentClient.sendtoServer(command);
+        }catch(Exception e){
         
+        }          
     }//GEN-LAST:event_btn_hangupActionPerformed
 
     private void btn_pauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pauseActionPerformed
         // TODO add your handling code here:
         try{
-            String cmd = "";
-            if(btn_pause.isSelected() && btn_pause.isEnabled()){                
-                cmd  = "104@off";
-                agentClient.sendtoServer(cmd);
-            }else{                    
-                cmd  = "104@on";
-                agentClient.sendtoServer(cmd);  
+            if(btn_pause.isSelected() && btn_pause.isEnabled()){                            
+                agentClient.sendtoServer(PAUSE);
+            }else{                                
+                agentClient.sendtoServer(UNPAUSE);  
             }
         }catch(Exception e){
             
         }         
     }//GEN-LAST:event_btn_pauseActionPerformed
 
+    public void setPauseIcon(boolean flag){
+        if(flag){
+            Image image = Toolkit.getDefaultToolkit().getImage("images/icon_unpause.png");
+            Icon ic = new ImageIcon(image);
+            btn_pause.setIcon(ic);            
+        }else{
+            Image image = Toolkit.getDefaultToolkit().getImage("images/icon_pause.png");
+            Icon ic = new ImageIcon(image);
+            btn_pause.setIcon(ic);            
+        }
+    }    
+    
     private void tblCampMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCampMouseClicked
         // TODO add your handling code here:
         showCustomer();
