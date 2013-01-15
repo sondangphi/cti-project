@@ -10,6 +10,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintStream;
 import java.io.PrintWriter;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.sql.ResultSet;
@@ -34,7 +35,7 @@ public class Agent implements Runnable{
 	public Socket clientSocket;
         private AgentObject agentObject;
         private LoginForm loginform;        
-        private MainForm mainForm;
+        public static MainForm mainForm;
         
         private String filename = "infor.properties";                         		
         private String Mysql_server = "172.168.10.208";      
@@ -51,6 +52,9 @@ public class Agent implements Runnable{
         private PrintWriter outtoServer;        
         private String com;  
         private boolean dialout = false;
+        private KeepAlive keepAlive;
+                
+//        private int vitualPort = 1234;
         
 //        DataInputStream in;
 //        DataOutputStream out;        
@@ -75,6 +79,8 @@ public class Agent implements Runnable{
 	public void run() {
             // TODO Auto-generated method stub
             try{
+//                ServerSocket vitualServer = new ServerSocket(vitualPort);
+//                vitualServer.accept();
                 clientSocket.setKeepAlive(true);
                 String command = "";
                 CODE code;
@@ -99,7 +105,8 @@ public class Agent implements Runnable{
                             close = false;
                             System.out.println("Server interupt! Please wait...");
                             mainForm.setVisible(false);
-                            mainForm.dispose();                             
+                            mainForm.dispose();  
+                            mainForm = null;
                             new LoginForm().setVisible(true);
                             closeConnect();  
                             break;                            
@@ -120,7 +127,7 @@ public class Agent implements Runnable{
                         clockWorktime = new TimerClock(mainForm, false);
                         clockWorktime.start();
                         uti.writelog("LOGIN SUCCESS\t"+agentObject.getAgentId());
-                        new KeepAlive(this);
+                        keepAlive  = new KeepAlive(this);
                         
                     break;
                     case LOGINFAIL: //result LOGIN FAIL                                                     
@@ -137,7 +144,8 @@ public class Agent implements Runnable{
                         try {
                             uti.writelog("LOGOUT SUCCESS\t"+agentObject.getAgentId()+"\r\n");
                             mainForm.setVisible(false);
-                            mainForm.dispose(); 
+                            mainForm.dispose();
+                            mainForm = null;
                             close = false;
                             clockWorktime.stop();                            
                             closeConnect();  
@@ -298,6 +306,7 @@ public class Agent implements Runnable{
                     case PING:
                         System.out.println("PING from server...");
                         uti.writelog("PING from server\t"+agentObject.getAgentId());
+                        keepAlive.COUNT = 0;
                     break;                        
                     default: 
                         System.out.println("Default value...");
@@ -335,6 +344,19 @@ public class Agent implements Runnable{
             }
 
 	}
+        
+        public boolean  agentLogout(){
+            try{
+                mainForm.setVisible(false);
+                mainForm.dispose();
+                mainForm = null;
+                close = false;
+                clockWorktime.stop();                            
+                closeConnect();  
+                new LoginForm().setVisible(true);                
+            }catch(Exception e){}
+            return true;
+        }
         
         void printinfor(){
             System.out.println("getAgentId "+agentObject.getAgentId());
