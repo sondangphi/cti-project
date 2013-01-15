@@ -5,13 +5,14 @@
 package org.asterisk.utility;
 
 /**
+ *KEEP CONNECT TO SERVER
  *
- * @author leehoa
  */
 public class KeepAlive implements Runnable{
 
-    ManagerAgent agent;
-    Thread thread;
+    private ManagerAgent agent;
+    private Thread thread;
+    public int COUNT = 0;
     public KeepAlive(ManagerAgent a) {
         agent = a;
         thread = new Thread(this);
@@ -22,11 +23,16 @@ public class KeepAlive implements Runnable{
     public void run() {
        try{
            Thread.sleep(5000);
-           while(true){
-               Thread.sleep(10000);
+           while(true){               
+               Thread.sleep(10000);       
+               if(COUNT >= 3){//logout and stop keepalive
+                   if(agent.agentLogout())
+                       return;
+               }               
+               if(agent.clientSocket.isClosed())//return if socket is closed
+                   return;         
                agent.sendToAgent("PING");
-               if(agent.clientSocket.isClosed())
-                   return;               
+               COUNT ++;
            }
        }catch(Exception e){
        }
