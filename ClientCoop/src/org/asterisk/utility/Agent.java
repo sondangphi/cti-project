@@ -158,7 +158,7 @@ public class Agent implements Runnable{
                         mainForm.btn_logout.setEnabled(false);
                         mainForm.setAllEnable(false);      
                         mainForm.lb_status.setText("Not Ready");
-//                        mainForm.btn_pause.setText("UNPAUSE");
+                        mainForm.setPauseIcon(true);
                         mainForm.btn_pause.setSelected(true);
                         worktime.pause();
                         System.out.println("PAUSESUCC");
@@ -168,9 +168,9 @@ public class Agent implements Runnable{
                     break;
                     case UNPAUSESUCC: //result UNPAUSESUCC
                         worktime.resume();
-//                        mainForm.btn_pause.setText("PAUSE");
                         mainForm.btn_logout.setEnabled(true);
                         mainForm.setAllEnable(true);      
+                        mainForm.setPauseIcon(false);
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setSelected(false);
                         System.out.println("UNPAUSESUCC");
@@ -312,6 +312,9 @@ public class Agent implements Runnable{
                         mainForm.btn_pause.setEnabled(true);
                         mainForm.setAllEnable(true);          
                     break;       
+                    case HANGUPSUCCESS:
+                        System.out.println("HANGUPSUCCESS");
+                    break;
                     case PING: 
                         System.out.println("PING from server\t");
                         keepAlive.COUNT = 0;
@@ -476,7 +479,7 @@ public class Agent implements Runnable{
             AVAIL, BUSY, READY, RESULT, UP,HANGUP,
             CHANGEPWD,CHANGEPWDFAIL,
             RINGING,RINGNOANWSER,CONNECTED, COMPLETED,HANGUPABANDON,
-            DIALOUT,CONNECTEDDIALOUT,HANGUPDIALOUT,
+            DIALOUT,CONNECTEDDIALOUT,HANGUPDIALOUT,HANGUPSUCCESS,
             PING,
 	}
 }
