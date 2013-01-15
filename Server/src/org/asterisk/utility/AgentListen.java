@@ -21,8 +21,8 @@ import org.asteriskjava.manager.event.ReloadEvent;
 import org.asteriskjava.manager.event.ShutdownEvent;
 
 /**
- *
- * @author leehoa
+ * LISTEN CLIENT CONNECT
+ * 
  */
 public class AgentListen implements Runnable, ManagerEventListener{
     
