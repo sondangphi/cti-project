@@ -8,13 +8,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.IIOException;
+import javax.net.ssl.SSLSocket;
 import javax.swing.ImageIcon;
 import org.asterisk.model.AgentObject;
 import org.asterisk.model.QueueObject;
@@ -51,12 +55,16 @@ public class LoginForm extends javax.swing.JFrame {
         private String Mysql_server = "172.168.10.208";      
         private String Mysql_dbname = "cti_database";
 	private String Mysql_user = "cti";
-	private String Mysql_pwd  = "123456";               
+	private String Mysql_pwd  = "123456"; 
+        
+        private static int virtualPort = 1234;
+        private static ServerSocket virtualServer;
+        private static Thread thr;
     /**
      * Creates new form LoginForm
      */
     ConfigForm configform;
-    public LoginForm() {
+    public LoginForm() {        
         initComponents();
         Image image = Toolkit.getDefaultToolkit().getImage("images/icon_login.png");
         this.setIconImage(image);
@@ -107,7 +115,6 @@ public class LoginForm extends javax.swing.JFrame {
         mn_main.setBackground(white);
         submn_config.setBackground(white);
         submn_quit.setBackground(white);
-        submn_reload.setBackground(white);
         cb_queue.setBackground(Khaki1);
         tx_agent.setBackground(Khaki1);
         tx_iface.setBackground(Khaki1);
@@ -144,7 +151,6 @@ public class LoginForm extends javax.swing.JFrame {
         mn_main = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         submn_config = new javax.swing.JMenuItem();
-        submn_reload = new javax.swing.JMenuItem();
         submn_quit = new javax.swing.JMenuItem();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
@@ -355,16 +361,6 @@ public class LoginForm extends javax.swing.JFrame {
         });
         jMenu1.add(submn_config);
 
-        submn_reload.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.ALT_MASK));
-        submn_reload.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        submn_reload.setText("Reload");
-        submn_reload.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                submn_reloadActionPerformed(evt);
-            }
-        });
-        jMenu1.add(submn_reload);
-
         submn_quit.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.ALT_MASK));
         submn_quit.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         submn_quit.setText("Exit");
@@ -410,22 +406,6 @@ public class LoginForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void submn_quitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submn_quitMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_submn_quitMouseClicked
-
-    private void submn_quitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_quitActionPerformed
-        // TODO add your handling code here:
-        System.exit(0);        
-    }//GEN-LAST:event_submn_quitActionPerformed
-
-    private void submn_configActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_configActionPerformed
-        // TODO add your handling code here:
-        configform = new ConfigForm(this);
-        configform.setVisible(true);
-        this.setEnabled(false);                
-    }//GEN-LAST:event_submn_configActionPerformed
 
     private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
         // TODO add your handling code here:
@@ -503,13 +483,6 @@ public class LoginForm extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btn_loginActionPerformed
 
-    private void submn_reloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_reloadActionPerformed
-        // TODO add your handling code here:
-        this.dispose();        
-        LoginForm f = new LoginForm();
-        f.setVisible(true);
-    }//GEN-LAST:event_submn_reloadActionPerformed
-
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_formKeyPressed
@@ -531,17 +504,18 @@ public class LoginForm extends javax.swing.JFrame {
     }//GEN-LAST:event_tx_ifaceKeyPressed
 
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
-        // TODO add your handling code here:        
-         System.out.println("close loginform");
+        // TODO add your handling code here:                 
+//         if (thr != null) {
+//             if (thr.isAlive()) {
+//                 thr.interrupt();
+//                 System.out.println("close loginform");
+//             }
+//         }
     }//GEN-LAST:event_formWindowClosed
 
     private void lb_picMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lb_picMouseClicked
         // TODO add your handling code here:     
     }//GEN-LAST:event_lb_picMouseClicked
-
-    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jMenu1ActionPerformed
 
     private void pwdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pwdKeyPressed
         // TODO add your handling code here:
@@ -553,10 +527,10 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void cb_queueKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cb_queueKeyPressed
         // TODO add your handling code here:
-         if(evt.getKeyCode() == 10){
-             System.out.println("tx_iface\t"+evt.getKeyCode());
-             btn_loginActionPerformed(null);
-         }        
+//         if(evt.getKeyCode() == 10){
+//             System.out.println("tx_iface\t"+evt.getKeyCode());
+//             btn_loginActionPerformed(null);
+//         }        
     }//GEN-LAST:event_cb_queueKeyPressed
 
     private void btn_loginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_loginKeyPressed
@@ -574,6 +548,26 @@ public class LoginForm extends javax.swing.JFrame {
         pwd.setText("");         
     }//GEN-LAST:event_btn_clearKeyPressed
 
+    private void jMenu1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenu1ActionPerformed
+
+    private void submn_quitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_quitActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_submn_quitActionPerformed
+
+    private void submn_quitMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_submn_quitMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_submn_quitMouseClicked
+
+    private void submn_configActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submn_configActionPerformed
+        // TODO add your handling code here:
+        configform = new ConfigForm(this);
+        configform.setVisible(true);
+        this.setEnabled(false);
+    }//GEN-LAST:event_submn_configActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -581,7 +575,11 @@ public class LoginForm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new LoginForm().setVisible(true);                
+//                try {                
+                    new LoginForm().setVisible(true);
+//                } catch (IOException ex) {
+//                    Logger.getLogger(LoginForm.class.getName()).log(Level.SEVERE, null, ex);
+//                }
             }
         });
                         
@@ -631,7 +629,6 @@ public class LoginForm extends javax.swing.JFrame {
     private javax.swing.JPasswordField pwd;
     private javax.swing.JMenuItem submn_config;
     private javax.swing.JMenuItem submn_quit;
-    private javax.swing.JMenuItem submn_reload;
     private javax.swing.JTextField tx_agent;
     private javax.swing.JTextField tx_iface;
     // End of variables declaration//GEN-END:variables

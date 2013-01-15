@@ -49,6 +49,7 @@ public class MainForm extends javax.swing.JFrame {
     private  String Mysql_pwd  = "123456"; 
     private ConnectDatabase con;
     public ChangepwdForm chanpwdform;
+    private String EXIT = "112";
 //    private FeedbackForm feedback;
 
     /**
@@ -208,7 +209,6 @@ public class MainForm extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         MenuItem_logout = new javax.swing.JMenuItem();
-        MenuItem_setting = new javax.swing.JMenuItem();
         MenuItem_changepwd = new javax.swing.JMenuItem();
         MenuItem_exit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
@@ -694,11 +694,6 @@ public class MainForm extends javax.swing.JFrame {
         });
         jMenu1.add(MenuItem_logout);
 
-        MenuItem_setting.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK));
-        MenuItem_setting.setText("Settings");
-        MenuItem_setting.setEnabled(false);
-        jMenu1.add(MenuItem_setting);
-
         MenuItem_changepwd.setText("Change Password");
         MenuItem_changepwd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -799,15 +794,30 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void MenuItem_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_exitActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here:        
         try{
-            String cmd  = "112";
-            agentClient.sendtoServer(cmd);            
-            System.out.println("Exit CTI CLIENT"); 
-            System.exit(0);
-            agentClient.closeConnect();
+            int option = JOptionPane.showConfirmDialog(this,"Do you realy want to EXIT program?","Comfirm",JOptionPane.YES_NO_OPTION);  
+            if(option == 0){
+                agentClient.sendtoServer(EXIT);                
+                agentClient.closeConnect();
+                System.out.println("Exit CTI CLIENT: "+option); 
+//                Thread.sleep(2000);
+                System.exit(0);                
+            }else if(option == 1){
+                System.out.println("CANCEL: "+option);
+            }else{
+                System.out.println("CLOSE: "+option);
+            }           
         }catch(Exception e){
-        }        
+        }         
+//        try{
+//            String cmd  = "112";
+//            agentClient.sendtoServer(cmd);            
+//            System.out.println("Exit CTI CLIENT"); 
+//            System.exit(0);
+//            agentClient.closeConnect();
+//        }catch(Exception e){
+//        }        
     }//GEN-LAST:event_MenuItem_exitActionPerformed
 
     private void MenuItem_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_logoutActionPerformed
@@ -947,8 +957,9 @@ public class MainForm extends javax.swing.JFrame {
 
     private void MenuItem_infoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_infoActionPerformed
         // TODO add your handling code here:        
-        AboutForm about = new AboutForm();
-        about.setVisible(true);
+//        AboutForm about = new AboutForm();
+//        about.setVisible(true);
+        new AboutForm().setVisible(true);
     }//GEN-LAST:event_MenuItem_infoActionPerformed
 
     private void MenuItem_changepwdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_changepwdActionPerformed
@@ -1071,7 +1082,6 @@ public class MainForm extends javax.swing.JFrame {
     public javax.swing.JMenuItem MenuItem_exit;
     private javax.swing.JMenuItem MenuItem_info;
     public javax.swing.JMenuItem MenuItem_logout;
-    private javax.swing.JMenuItem MenuItem_setting;
     private javax.swing.JButton btn_0;
     private javax.swing.JButton btn_1;
     private javax.swing.JButton btn_11;
