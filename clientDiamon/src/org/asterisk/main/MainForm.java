@@ -680,7 +680,7 @@ public class MainForm extends javax.swing.JFrame {
         );
 
         lb_version.setFont(new java.awt.Font("Tahoma", 2, 9)); // NOI18N
-        lb_version.setText("version 1.0.0 (Build 10012013)");
+        lb_version.setText("version 1.0.0 (Build 15012013)");
         lb_version.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jMenu1.setText("File");
