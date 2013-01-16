@@ -13,31 +13,29 @@ import java.net.ServerSocket;
 public class KeepAlive implements Runnable{
     private Agent agent;
     private Thread thread;
-    public int COUNT = 0;
+
     public KeepAlive(Agent a) {
         agent = a;
         thread = new Thread(this);
         thread.start();
     }    
 
+    public void interrupt() {
+        if (thread != null) {
+            if (thread.isAlive()) {
+                thread.interrupt();
+            }
+        }
+    }
+    
     @Override
     public void run() {
        try{
            while(true){
-               Thread.sleep(10000);
-               if(COUNT >= 4){
-                   if(agent.agentLogout())
-                       return;
-               }               
-               if(agent.clientSocket.isClosed())
-                   return;      
+               Thread.sleep(5000);
                agent.sendtoServer("222");
-               COUNT ++;
-               System.out.println("count is : "+COUNT);
-                       
            }
-       }catch(Exception e){
-       }
+       }catch(Exception e){}
     }
     
 }
