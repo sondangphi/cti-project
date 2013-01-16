@@ -59,6 +59,8 @@ public class Agent implements Runnable{
         private PrintWriter outtoServer;        
         private String com;          
         private KeepAlive keepAlive;
+        private Thread keep_alive; 
+        private Object synObject = new Object();        
         
 //        DataInputStream in;
 //        DataOutputStream out;
@@ -101,19 +103,25 @@ public class Agent implements Runnable{
                     System.out.println("***listen from server***");
                     System.out.println("***receive from server: "+command);
                     if(command == null){
-                        System.out.println("null value from server");
-                        try {
-                            close = false;
-                            System.out.println("Server is close! Please wait...");
-                            mainForm.setVisible(false);
-                            mainForm.dispose();                             
-                            new LoginForm().setVisible(true);
-                            closeConnect();  
-                            break;                            
-                        } catch (Exception ex) {
-                            System.out.println("Server is close! Please wait... " +ex);
-                        } 
+                        agentLogout(); 
+                        System.out.println("null value from server");                        
                     }
+                    if (keep_alive != null) {
+                        if (keep_alive.isAlive()) {
+                            keep_alive.interrupt();
+                        }
+                    }
+                    keep_alive = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(10000);
+                                System.out.println("server interrupt1: " +clientSocket.getRemoteSocketAddress().toString());
+                                agentLogout();
+                            } catch (InterruptedException ex) { }  
+                        }
+                    });
+                    keep_alive.start();                    
                     ArrayList<String> cmdList = getList(command);							
                     code = CODE.valueOf(cmdList.get(0).toUpperCase());
                     switch(code){
@@ -138,18 +146,9 @@ public class Agent implements Runnable{
                             Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     break;
-                    case LOGOUTSUCC: //result LOGOUT SUCCESS              
-                        try {
-                            mainForm.setVisible(false);
-                            mainForm.dispose(); 
-                            mainForm = null;
-                            close = false;
-                            new LoginForm().setVisible(true);
-                            closeConnect();  
-                            System.out.println("LOGOUT SUCCESS");
-                        } catch (Exception ex) {
-                            System.out.println("LOGOUTSUCC " +ex);
-                        }                        
+                    case LOGOUTSUCC: //result LOGOUT SUCCESS      
+                        agentLogout();
+                        System.out.println("LOGOUT SUCCESS");                       
                     break;
                     case LOGOUTFAIL: //result LOGOUT FAIL
                         System.out.println("LOGOUT FAIL");
@@ -203,6 +202,7 @@ public class Agent implements Runnable{
                             mainForm.lb_callduration.setText("00:00:00");
                             mainForm.btn_pause.setEnabled(false);       
                             mainForm.btn_feedback.setEnabled(true);
+                            mainForm.btn_hangup.setEnabled(true);
                             mainForm.setAllEnable(false);
                             //open connect to database
                             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
@@ -274,6 +274,7 @@ public class Agent implements Runnable{
                     case COMPLETED://connected incoming call
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setEnabled(true);
+                        mainForm.btn_hangup.setEnabled(false);
                         mainForm.setAllEnable(true); 
                         if(clockDialin != null){
                             clockDialin.stop(); 
@@ -282,13 +283,15 @@ public class Agent implements Runnable{
                     case RINGNOANWSER: 
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setEnabled(true);
+                        mainForm.btn_hangup.setEnabled(false);
                         mainForm.setAllEnable(true);
                     break;                                                
                     case DIALOUT: //result 	
                         System.out.println("DIALOUT");                        
                         mainForm.lb_status.setText("Dialing...");
                         mainForm.lb_callduration.setText("00:00:00");
-                        mainForm.btn_pause.setEnabled(false);       
+                        mainForm.btn_pause.setEnabled(false);    
+                        mainForm.btn_hangup.setEnabled(true);
                         mainForm.setAllEnable(false);                                
                         dialout = true;
                     break;
@@ -301,6 +304,7 @@ public class Agent implements Runnable{
                     case HANGUPDIALOUT:                         
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setEnabled(true);
+                        mainForm.btn_hangup.setEnabled(false);
                         mainForm.setAllEnable(true); 
                         if(clockDialout != null){
                             clockDialout.stop();
@@ -310,14 +314,15 @@ public class Agent implements Runnable{
                     case HANGUPABANDON: 
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setEnabled(true);
+                        mainForm.btn_hangup.setEnabled(false);
                         mainForm.setAllEnable(true);          
                     break;       
                     case HANGUPSUCCESS:
                         System.out.println("HANGUPSUCCESS");
+                        mainForm.btn_hangup.setEnabled(false);
                     break;
                     case PING: 
                         System.out.println("PING from server\t");
-                        keepAlive.COUNT = 0;
                     break;                        
                     default: 
                         System.out.println("default values from server\t"+command);
@@ -326,13 +331,8 @@ public class Agent implements Runnable{
                 }
             }  
             catch(SocketException e){
-                if(close){
-                    System.out.println("Socket exception client: "+e);
-                    System.out.println("logout & new login form");
-                    mainForm.setVisible(false);
-                    mainForm.dispose();
-                    new LoginForm().setVisible(true);
-                }                                                                                                        
+                agentLogout();
+                System.out.println("Socket exception client: "+e);                                                                                                        
             }
             catch (IllegalArgumentException e) {
                     e.printStackTrace();
@@ -403,10 +403,30 @@ public class Agent implements Runnable{
             return true;
         }
         
+        public boolean agentLogout(){
+            synchronized(synObject){     
+                if(close){
+                    try{
+                        mainForm.setVisible(false);
+                        mainForm.dispose();
+                        mainForm = null;
+                        close = false;
+                        worktime.stop();                            
+                        closeConnect();  
+                        new LoginForm().setVisible(true);                
+                    }catch(Exception e){
+                        System.out.println("agentLogout: "+e);
+                        return false;
+                    }            
+                }
+            }  
+            return true;
+        }        
+        
         //send request to server - string
 	public void sendtoServer(String t) throws IOException{
             try{
-                if(clientSocket != null && outtoServer != null && infromServer != null){   
+                if(clientSocket != null){   
                     outtoServer.println(t);
                     outtoServer.flush();
                     System.out.println("send to server: "+t);
@@ -435,12 +455,18 @@ public class Agent implements Runnable{
                 System.out.println("start close session");
                 if(clientSocket != null && infromServer != null && outtoServer!= null){
                     running = false;
-                    infromServer.close();
-                    outtoServer.close();
                     clientSocket.close(); 
                     System.out.println("close socket");                    
                 }                      
+                if(mainThread != null)
+                    mainThread.interrupt();
                 System.out.println("finish close session"); 
+                keepAlive.interrupt();
+                if (keep_alive != null) {
+                    if (keep_alive.isAlive()) {
+                        keep_alive.interrupt();
+                    }
+                }                 
             }catch(Exception e){
                 System.out.println("closeConnect Exception: "+e); 
             } 

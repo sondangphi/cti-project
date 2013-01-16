@@ -4,37 +4,38 @@
  */
 package org.asterisk.utility;
 
+import java.net.ServerSocket;
+
 /**
  *
  * @author leehoa
  */
 public class KeepAlive implements Runnable{
-
     private Agent agent;
     private Thread thread;
-    public int COUNT = 0;
+
     public KeepAlive(Agent a) {
         agent = a;
         thread = new Thread(this);
         thread.start();
     }    
 
+    public void interrupt() {
+        if (thread != null) {
+            if (thread.isAlive()) {
+                thread.interrupt();
+            }
+        }
+    }
+    
     @Override
     public void run() {
        try{
            while(true){
-               Thread.sleep(10000);
-               if(COUNT >= 3){
-                   if(agent.agentTimeout())
-                       return;
-               }
-              if(agent.clientSocket.isClosed())
-                   return; 
-               agent.sendtoServer("222");    
-               COUNT ++;
+               Thread.sleep(5000);
+               agent.sendtoServer("222");
            }
-       }catch(Exception e){
-       }
+       }catch(Exception e){}
     }
     
 }
