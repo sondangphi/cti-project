@@ -23,7 +23,6 @@ public class KeepAlive implements Runnable{
     @Override
     public void run() {
         try{
-            Thread.sleep(5000);
             while(run){  
                 try{
                     Thread.sleep(10000);       
@@ -33,7 +32,6 @@ public class KeepAlive implements Runnable{
                     }else if(agent.clientSocket.isClosed()){//return if socket is closed 
                         run = false;   
                     }else{
-                        agent.sendToAgent("PING");
                         COUNT ++; 
                     }                   
                 }catch(Exception ex){
