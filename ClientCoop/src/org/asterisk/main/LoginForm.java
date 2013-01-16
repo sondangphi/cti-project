@@ -462,7 +462,7 @@ public class LoginForm extends javax.swing.JFrame {
 //        }
         agentObject.setAgentId(agentId);
         agentObject.setPass(pass);
-        agentObject.setInterface("SIP/"+iface);        
+        agentObject.setInterface(iface);        
         agentObject.setRole(role);
         agentObject.setQueueId(queueId);
         agentObject.setQueueName(queueName);
