@@ -223,6 +223,7 @@ public class ConfigForm extends javax.swing.JFrame {
             uti.writeInfor(filename, "host", host);
             uti.writeInfor(filename, "aport", aport);
             uti.writeInfor(filename, "qport", qport);
+            uti.writeInfor(filename, "MySql_Server", host);
             this.dispose();
             loginform.setEnabled(true);
             loginform.setVisible(true);
