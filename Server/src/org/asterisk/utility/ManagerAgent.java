@@ -83,7 +83,8 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
 
         //start thread
 	public ManagerAgent(ManagerConnection m, Socket client, Managerdb db) throws IOException, Throwable{
-            try{                
+            try{         
+                System.out.println("new connection");
                 managerEvent = m;
                 clientSocket = client;
                 mdb_agent = db;
@@ -122,200 +123,219 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
 //                in = new DataInputStream(clientSocket.getInputStream());
 //                out = new DataOutputStream(clientSocket.getOutputStream());
                 System.out.println("***open inputstream & outputstream***");
-                while(connected){                    
-                    fromClient = inPutStream.readLine();
-                    System.out.println("***Receive from client: "+fromClient);
-                    if(fromClient == null){
-                        System.out.println("null value from client");
-                        if(agent != null){
-                            removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
-                            result = managerEvent.sendAction(removeQueue).getResponse().toString();
-                            if("success".equalsIgnoreCase(result)){
-                                System.out.println("remove queue success"); 
-                                System.out.println("LOGOUTSUCC(exit system)");            
-                                uti.writeAgentLog("- AGENT - System interrupt\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
-                                try {                                        
-                                    close = false;
-                                    mdb_agent.checkAgentPause(agent.getSesion());
-                                    mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
-                                    mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());                                    
-                                    closeConnect();
-                                } catch (Throwable ex) {
-                                    Logger.getLogger(ManagerAgent.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                            }	            		
-                        }                           
-                    }
-                    ArrayList<String> cmdList = uti.getList(fromClient);
-                    flag = Integer.parseInt(cmdList.get(0));				
-                    switch(flag){
-                        case 100:   //login  
-                            try{
-                                getAgent(cmdList);	
-                                if(mdb_agent.checkLogin(agent.getAgentId(), agent.getPass(), agent.getRole())){
-                                    if(mdb_agent.checkStatus(agent.getAgentId(), agent.getInterface(), agent.getQueueId())){
-                                        QueueAddAction qAdd = addQueue(agent.getAgentId(), agent.getInterface(), agent.getQueueId(),agent.getPenalty());
-                                        result = managerEvent.sendAction(qAdd, 60000).getResponse().toString();
-                                        if("success".equalsIgnoreCase(result)){
-                                            mdb_agent.updateStatus(agent.getAgentId(), agent.getInterface(), agent.getQueueId());
-                                            mdb_agent.loginAction(agent.getSesion(),agent.getAgentId(), agent.getInterface(), agent.getQueueId());
-                                            System.out.println("LOGIN success");
-                                            String agentName = mdb_agent.getAgentName(agent.getAgentId());
-                                            sendToAgent("LOGINSUCC@"+agentName+"@"+agent.getSesion());
-                                            uti.writeAgentLog("- AGENT - Agent login OK \t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
-                                            keepAlive = new KeepAlive(this);
+                try{
+                    while(connected && clientSocket != null){ 
+                        fromClient = inPutStream.readLine();
+                        System.out.println("***Receive from client: "+fromClient);
+//                        if(fromClient == null){
+//                            System.out.println("null value from client");
+//                            if(agent != null){
+//                                removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
+//                                result = managerEvent.sendAction(removeQueue, 30000).getResponse().toString();
+//                                if("success".equalsIgnoreCase(result)){
+//                                    System.out.println("remove queue success"); 
+//                                    System.out.println("LOGOUTSUCC(exit system)");            
+//                                    uti.writeAgentLog("- AGENT - System interrupt\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
+//                                    try {                                        
+//                                        close = false;
+//                                        mdb_agent.checkAgentPause(agent.getSesion());
+//                                        mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
+//                                        mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());                                    
+//                                        closeConnect();
+//                                    } catch (Throwable ex) {                                    
+//                                    }
+//                                }else
+//                                    uti.writeAgentLog("- AGENT - System interrupt fail(remove queue)\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
+//                            }                           
+//                        }
+                        ArrayList<String> cmdList = uti.getList(fromClient);
+                        flag = Integer.parseInt(cmdList.get(0));				
+                        switch(flag){
+                            case 100:   //login  
+                                try{
+                                    getAgent(cmdList);	
+                                    if(mdb_agent.checkLogin(agent.getAgentId(), agent.getPass(), agent.getRole())){
+                                        if(mdb_agent.checkStatus(agent.getAgentId(), agent.getInterface(), agent.getQueueId())){
+                                            QueueAddAction qAdd = addQueue(agent.getAgentId(), agent.getInterface(), agent.getQueueId(),agent.getPenalty());
+                                            result = managerEvent.sendAction(qAdd, 60000).getResponse().toString();
+                                            if("success".equalsIgnoreCase(result)){
+                                                mdb_agent.updateStatus(agent.getAgentId(), agent.getInterface(), agent.getQueueId());
+                                                mdb_agent.loginAction(agent.getSesion(),agent.getAgentId(), agent.getInterface(), agent.getQueueId());
+                                                System.out.println("LOGIN success");
+                                                String agentName = mdb_agent.getAgentName(agent.getAgentId());
+                                                sendToAgent("LOGINSUCC@"+agentName+"@"+agent.getSesion());
+                                                uti.writeAgentLog("- AGENT - Agent login OK \t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
+                                                keepAlive = new KeepAlive(this);
+                                            }else{
+                                                sendToAgent("LOGINFAIL@Check Information again");
+                                                System.out.println("LOGIN fail");  
+                                                uti.writeAgentLog("- AGENT - Agent login fail(add queue fail)\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
+                                                closeConnect();                                        
+                                            }
                                         }else{
-                                            sendToAgent("LOGINFAIL@Check Information again");
-                                            System.out.println("LOGIN fail");  
-                                            uti.writeAgentLog("- AGENT - Agent login fail(add queue fail)\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
-                                            closeConnect();                                        
+                                            sendToAgent("LOGINFAIL@Already Login");
+                                            System.out.println("Interface Already login");
+                                            uti.writeAgentLog("- AGENT - Already login\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
+                                            closeConnect();
                                         }
-                                    }else{
-                                        sendToAgent("LOGINFAIL@Already Login");
-                                        System.out.println("Interface Already login");
-                                        uti.writeAgentLog("- AGENT - Already login\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
-                                        closeConnect();
-                                    }
-                                }else {
-                                    System.out.println("wrong user OR pass");                                
-                                    sendToAgent("LOGINFAIL@Wrong Username or Password");
-                                    uti.writeAgentLog("- AGENT - Wrong user|pass\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
-                                    closeConnect();                                
-                                }                                
-                            }catch(Throwable t){
-                            }
-                        break;
-                        case 102://logout
-                            if(agent != null){
-                                removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
-                                result = managerEvent.sendAction(removeQueue).getResponse().toString();
-                                if("success".equalsIgnoreCase(result)){
-                                    close = false;
-                                    System.out.println("remove queue success");
-                                    mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
-                                    mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());
-                                    sendToAgent("LOGOUTSUCC");           
-                                    uti.writeAgentLog("- AGENT - Agent logout\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
-                                    try {          
-                                        mdb_agent.checkAgentPause(agent.getSesion());
-                                        closeConnect();
-                                    } catch (Throwable ex) {
-                                        Logger.getLogger(ManagerAgent.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
-                                }else{		          
-                                    System.out.println("logout result: "+result);                                    
-                                    sendToAgent("LOGOUTFAIL@Server error");
-                                    uti.writeAgentLog("- AGENT - Agent logout fail\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
-                                }		            		
-                            }                            			            	
-                        break;
-                        case 104: // pause & unpause
-                            QueuePauseAction pauseAction = null;
-                            if(cmdList.get(1).equalsIgnoreCase("off")){
-                                pauseAction = queuePause(agent.getInterface(), agent.getQueueId(), true);		
-                                result = managerEvent.sendAction(pauseAction).getResponse().toString();
-                                if("success".equalsIgnoreCase(result)){
-                                    System.out.println("Pause queue success");
-                                    pauseSession = uti.getSession();
-                                    mdb_agent.pauseAction(pauseSession, agent.getAgentId(),agent.getInterface(),agent.getQueueId(),agent.getSesion());
-                                    sendToAgent("PAUSESUCC");
-                                    uti.writeAgentLog("- AGENT - Pause success\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId());
-                                }else{
-                                    System.out.println("Pause queue fail");                                        
-                                    sendToAgent("PAUSEFAIL");
-                                    uti.writeAgentLog("- AGENT - Pause fail\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId());
-                                }		            			
-                            }else if(cmdList.get(1).equalsIgnoreCase("on")){
-                                pauseAction = queuePause(agent.getInterface(), agent.getQueueId(), false);
-                                result = managerEvent.sendAction(pauseAction).getResponse().toString();
-                                if("success".equalsIgnoreCase(result)){
-                                    System.out.println("unPause queue success");	
-                                    mdb_agent.unpauseAction(pauseSession, agent.getAgentId());
-                                    sendToAgent("UNPAUSESUCC");
-                                    uti.writeAgentLog("- AGENT - Unpause success\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId());
-                                }else{
-                                    System.out.println("unPause queue fail");
-                                    sendToAgent("UNPAUSEFAIL");
-                                    uti.writeAgentLog("- AGENT - Unpause fail\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId());
-                                }		            			
-                            }
-                        break;
-                        case 106:  		
-                            //hangup the call from agent request`
-                            try{
-                                if(!"".equals(hangupChannel)){
-                                    result = hangupChannelAction(hangupChannel);
-                                    if("success".equalsIgnoreCase(result)){
-                                        System.out.println("hangup success: "+agent.getInterface());
-                                        sendToAgent("HANGUPSUCCESS");
-                                    }else{
-                                        System.out.println("hangup fail: "+agent.getInterface());
-                                        sendToAgent("HANGUPFAIL");
-                                    }                                    
-                                }else{
-                                    System.out.println("hangup null value: "+agent.getInterface());
-                                    sendToAgent("HANGUPFAIL");
+                                    }else {
+                                        System.out.println("wrong user OR pass");                                
+                                        sendToAgent("LOGINFAIL@Wrong Username or Password");
+                                        uti.writeAgentLog("- AGENT - Wrong user|pass\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
+                                        closeConnect();                                
+                                    }                                
+                                }catch(Exception ex){
+                                    System.out.println("agent login: "+ex);  
                                 }
-                            }catch(Exception e){
-                            }                            
-                        break;
-                        case 108://dial out
-                            try{
-                                dialoutNumber = cmdList.get(1).toString();
-                                result = outGoingCall(dialoutNumber);                                                                                                            
-                                if("success".equalsIgnoreCase(result)){
-                                    beginDialout = true;
-                                    System.out.println("Dial out success: "+dialoutNumber);	
-//                                    uti.writeAgentLog("- AGENT - Dialout success\t"+agent.getAgentId()+"\t"+dialoutNumber);                                    
-                                }else{
-                                    sendToAgent("DIALOUTFAIL");
-                                    System.out.println("Dial out fail");	                          
-//                                    uti.writeAgentLog("- AGENT - DialOut fail\t"+agent.getAgentId()+"\t"+dialoutNumber);
-                                }                                
-                            }catch(Exception e){
-                                sendToAgent("DIALOUTFAIL");
-                            }                                                        
-                        break;
-                        case 110://change password
-                            String newpass = cmdList.get(1);
-                            if(mdb_agent.changePwd(newpass, agent.getAgentId())){
-                                agent.setPass(newpass);
-                                sendToAgent("CHANGEPWD@"+newpass);  
-                                uti.writeAgentLog("- AGENT - Change pass s\t"+ agent.getAgentId() + "\t" + agent.getInterface() + "\t" +agent.getQueueId()+"\t"+addClient);
-                                
-                            }else{
-                                sendToAgent("CHANGEPWDFAIL");
-                                uti.writeAgentLog("- AGENT - Change pass f\t"+ agent.getAgentId() + "\t" + agent.getInterface() + "\t" +agent.getQueueId()+"\t"+addClient);
-                            }
-                        break;
-                        case 112:  //exit & logout                            
-                            if(agent != null){
-                                removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
-                                result = managerEvent.sendAction(removeQueue).getResponse().toString();
-                                if("success".equalsIgnoreCase(result)){
-                                    System.out.println("remove queue success");
-                                    System.out.println("LOGOUTSUCC(exit system)");            
-                                    uti.writeAgentLog("- AGENT - Agent exit system\t"+ agent.getAgentId() + "\t" + agent.getInterface() + "\t" +agent.getQueueId()+"\t"+addClient);
-                                    try {            
-                                        close = false;
-                                        mdb_agent.checkAgentPause(agent.getSesion());                                        
-                                        mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
-                                        mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());                                                                                
-                                        closeConnect();
-                                    } catch (Throwable ex) {
-                                        Logger.getLogger(ManagerAgent.class.getName()).log(Level.SEVERE, null, ex);
+                            break;
+                            case 102://logout
+                                try{
+                                    if(agent != null && clientSocket.isConnected()){
+                                        removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
+                                        result = managerEvent.sendAction(removeQueue, 60000).getResponse().toString();
+                                        if("success".equalsIgnoreCase(result)){
+                                            close = false;
+                                            System.out.println("remove queue success");
+                                            mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
+                                            mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());
+                                            sendToAgent("LOGOUTSUCC");                                                       
+                                            closeConnect();
+                                            mdb_agent.checkAgentPause(agent.getSesion());
+                                            uti.writeAgentLog("- AGENT - Agent logout\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
+                                            System.out.println("agent LOGOUT ok");
+                                        }else{		          
+                                            System.out.println("logout result: "+result);                                    
+                                            sendToAgent("LOGOUTFAIL@Server error");
+                                            uti.writeAgentLog("- AGENT - Agent logout fail\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
+                                        }		            		
+                                    }                                    
+                                }catch(Exception ex){
+                                    System.out.println("agent LOGOUT:  "+ex);
+                                }                                                            			            	
+                            break;
+                            case 104: // pause & unpause
+                                try{
+                                    QueuePauseAction pauseAction = null;
+                                    if(cmdList.get(1).equalsIgnoreCase("off")){
+                                        pauseAction = queuePause(agent.getInterface(), agent.getQueueId(), true);		
+                                        result = managerEvent.sendAction(pauseAction,60000).getResponse().toString();
+                                        if("success".equalsIgnoreCase(result)){
+                                            System.out.println("Pause queue success");
+                                            pauseSession = uti.getSession();
+                                            mdb_agent.pauseAction(pauseSession, agent.getAgentId(),agent.getInterface(),agent.getQueueId(),agent.getSesion());
+                                            sendToAgent("PAUSESUCC");
+                                            uti.writeAgentLog("- AGENT - Pause success\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId());
+                                        }else{
+                                            System.out.println("Pause queue fail");                                        
+                                            sendToAgent("PAUSEFAIL");
+                                            uti.writeAgentLog("- AGENT - Pause fail\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId());
+                                        }		            			
+                                    }else if(cmdList.get(1).equalsIgnoreCase("on")){
+                                        pauseAction = queuePause(agent.getInterface(), agent.getQueueId(), false);
+                                        result = managerEvent.sendAction(pauseAction, 60000).getResponse().toString();
+                                        if("success".equalsIgnoreCase(result)){
+                                            System.out.println("unPause queue success");	
+                                            mdb_agent.unpauseAction(pauseSession, agent.getAgentId());
+                                            sendToAgent("UNPAUSESUCC");
+                                            uti.writeAgentLog("- AGENT - Unpause success\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId());
+                                        }else{
+                                            System.out.println("unPause queue fail");
+                                            sendToAgent("UNPAUSEFAIL");
+                                            uti.writeAgentLog("- AGENT - Unpause fail\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId());
+                                        }		            			
+                                    }                                    
+                                }catch(Exception ex){
+                                    System.out.println("QueuePauseAction: "+ex);
+                                }
+                            break;
+                            case 106:  		
+                                //hangup the call from agent request`
+                                try{
+                                    if(!"".equals(hangupChannel)){
+                                        result = hangupChannelAction(hangupChannel);
+                                        if("success".equalsIgnoreCase(result)){
+                                            System.out.println("hangup success: "+agent.getInterface());
+                                            sendToAgent("HANGUPSUCCESS");
+                                        }else{
+                                            System.out.println("hangup fail: "+agent.getInterface());
+                                            sendToAgent("HANGUPFAIL");
+                                        }                                    
+                                    }else{
+                                        System.out.println("hangup null value: "+agent.getInterface());
+                                        sendToAgent("HANGUPFAIL");
                                     }
-                                }	            		
-                            }                              
-                        break;
-                        case 222:
-                            System.out.println("PING from client...");
-                            keepAlive.COUNT = 0;
-                        break;
-                        default: 
-                            System.out.println("(invalid) " +fromClient);
-                        break;					
-                    }											
+                                }catch(Exception ex){
+                                    System.out.println("hangupChannel: "+ex);
+                                }                            
+                            break;
+                            case 108://dial out
+                                try{
+                                    dialoutNumber = cmdList.get(1).toString();
+                                    result = outGoingCall(dialoutNumber);                                                                                                            
+                                    if("success".equalsIgnoreCase(result)){
+                                        beginDialout = true;
+                                        System.out.println("Dial out success: "+dialoutNumber);	
+    //                                    uti.writeAgentLog("- AGENT - Dialout success\t"+agent.getAgentId()+"\t"+dialoutNumber);                                    
+                                    }else{
+                                        sendToAgent("DIALOUTFAIL");
+                                        System.out.println("Dial out fail");	                          
+    //                                    uti.writeAgentLog("- AGENT - DialOut fail\t"+agent.getAgentId()+"\t"+dialoutNumber);
+                                    }                                
+                                }catch(Exception ex){
+                                    sendToAgent("DIALOUTFAIL");
+                                    System.out.println("DialOUT: "+ex);
+                                }                                                        
+                            break;
+                            case 110://change password
+                                try{
+                                    String newpass = cmdList.get(1);
+                                    if(mdb_agent.changePwd(newpass, agent.getAgentId())){
+                                        agent.setPass(newpass);
+                                        sendToAgent("CHANGEPWD@"+newpass);  
+                                        uti.writeAgentLog("- AGENT - Change pass s\t"+ agent.getAgentId() + "\t" + agent.getInterface() + "\t" +agent.getQueueId()+"\t"+addClient);
+
+                                    }else{
+                                        sendToAgent("CHANGEPWDFAIL");
+                                        uti.writeAgentLog("- AGENT - Change pass f\t"+ agent.getAgentId() + "\t" + agent.getInterface() + "\t" +agent.getQueueId()+"\t"+addClient);
+                                    }                                    
+                                }catch(Exception ex){
+                                    System.out.println("change password: "+ex);
+                                }
+                            break;
+                            case 112:  //exit & logout  
+                                try{
+                                    if(agent != null){
+                                        removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
+                                        result = managerEvent.sendAction(removeQueue, 60000).getResponse().toString();
+                                        if("success".equalsIgnoreCase(result)){
+                                            close = false;
+                                            mdb_agent.checkAgentPause(agent.getSesion());                                        
+                                            mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
+                                            mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());                                                                                
+                                            closeConnect();                                            
+                                            System.out.println("remove queue success");
+                                            System.out.println("LOGOUTSUCC(exit system)");            
+                                            uti.writeAgentLog("- AGENT - Agent exit system\t"+ agent.getAgentId() + "\t" + agent.getInterface() + "\t" +agent.getQueueId()+"\t"+addClient);
+                                        }	            		
+                                    }                                     
+                                }catch(Exception ex){
+                                    System.out.println("EXIT and LOGOUT:  "+ex);
+                                }                             
+                            break;
+                            case 222:
+                                try{
+                                    System.out.println("PING from client...");
+                                    keepAlive.COUNT = 0;
+                                }catch(Exception ex){
+                                    System.out.println("PING:  "+ex);
+                                }                                
+                            break;
+                            default: 
+                                System.out.println("(invalid) " +fromClient);
+                            break;					
+                        }											
+                    }                    
+                }catch(Exception ex){
                 }
             } catch (IllegalArgumentException e) {
                     e.printStackTrace();
@@ -325,30 +345,19 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                 try {                            
                     if(close){   
                         uti.writeAgentLog("- AGENT - Client Interrupt\t"+ agent.getAgentId() + "\t" + agent.getInterface() + "\t" +agent.getQueueId()+"\t"+addClient);
-                        try {
-                            mdb_agent.checkAgentPause(agent.getSesion());
-                            removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
-                            result = managerEvent.sendAction(removeQueue).getResponse().toString();
-                            mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
-                            mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());                            
-                            closeConnect();
-                        } catch (Throwable ex) {
-                            Logger.getLogger(ManagerAgent.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        mdb_agent.checkAgentPause(agent.getSesion());                           
+                        mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
+                        mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());      
+                        removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());                            
+                        result = managerEvent.sendAction(removeQueue, 60000).getResponse().toString();
+                        closeConnect();
                         System.out.println("Interrup connection by client\t"+e);
                     }                           
                 } catch (Exception e1) {e1.printStackTrace();}                                                         
             } 
             catch (TimeoutException e) {
                     e.printStackTrace();
-            } 
-            catch (ClassNotFoundException e) {
-                    e.printStackTrace();
-            } 
-            catch (SQLException e) {
-                    e.printStackTrace();
-            } 
-            catch(IOException e){}
+            }catch(IOException e){}
 	}
         
 	public ArrayList<String> getString(String cmd){
@@ -400,7 +409,7 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
             originateAction.setTimeout(new Long(30000));//thoi gian time out
             String agentid = agent.getAgentId();
             originateAction.setCallerId(agentid);          
-            originateResponse = managerEvent.sendAction(originateAction, 30000);
+            originateResponse = managerEvent.sendAction(originateAction, 60000);
             return originateResponse.getResponse().toString();
         }
         
@@ -409,7 +418,7 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
             hang.setChannel(channel);
             hang.setCause(127);            
             ManagerResponse originateResponse;            
-            originateResponse = managerEvent.sendAction(hang, 30000);            
+            originateResponse = managerEvent.sendAction(hang, 60000);            
             return originateResponse.getResponse().toString();
         }
 	
@@ -429,20 +438,15 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
             try{
                 if(agent != null){
                     removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
-                    result = managerEvent.sendAction(removeQueue).getResponse().toString();
+                    result = managerEvent.sendAction(removeQueue, 60000).getResponse().toString();
                     if("success".equalsIgnoreCase(result)){
-                        close = false;
-                        System.out.println("remove queue success");
+                        close = false;                        
                         mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
-                        mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());
-                        sendToAgent("LOGOUTSUCC");           
-                        uti.writeAgentLog("- AGENT - Agent interrupt(timeout)\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
-                        try {          
-                            mdb_agent.checkAgentPause(agent.getSesion());
-                            closeConnect();
-                        } catch (Throwable ex) {
-                            Logger.getLogger(ManagerAgent.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                        mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());                                 
+                        mdb_agent.checkAgentPause(agent.getSesion());
+                        closeConnect();                        
+                        System.out.println("remove queue success");
+                        uti.writeAgentLog("- AGENT - Agent interrupt(timeout)\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);                        
                     }else{		                        
                         System.out.println("logout result: "+result);                                    
                         sendToAgent("LOGOUTFAIL@Server error");
@@ -456,26 +460,25 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
             return true;
         }
         
-	public synchronized void closeConnect() throws Throwable{
+	public synchronized void closeConnect(){
             try{
-                System.out.println("start close session");
-                if(clientSocket != null){
-                    connected = false;
-                    ringing = false;
-                    beginDialout = false;                    
+                System.out.println("start close session: "+agent.getAgentId());
+                connected = false;
+                ringing = false;
+                beginDialout = false;  
+                managerEvent.removeEventListener(this);
+                if(clientSocket != null){                    
                     inPutStream.close();
                     outPutStream.close();
-                    clientSocket.close();      
-                    managerEvent.removeEventListener(this);
+                    clientSocket.close();                          
                     System.out.println("close socket");                    
                 }
                 if(thread !=  null){
                     thread.interrupt();
-                    this.finalize();
-                    System.out.println("finish interrupt thread");                
+                    System.out.println("finish close thread");                
                 }                                
-                System.out.println("finish close session");                           
-            }catch(IOException e){
+                System.out.println("finish close session: "+agent.getAgentId());                           
+            }catch(Exception e){
                 System.out.println("closeConnect(IOException): "+e);
             }
 

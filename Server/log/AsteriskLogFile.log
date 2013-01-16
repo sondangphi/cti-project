@@ -148,3 +148,60 @@
 2013-01-14 14:54:44	- SYSTE  - Connect to Database Successful
 2013-01-14 14:54:44	- SYSTE  - Check DateTime Agent Pause
 2013-01-14 14:54:45	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-15 16:55:27	- SYSTE  - Connect to Database Successful
+2013-01-15 16:55:27	- SYSTE  - Check DateTime Agent Pause
+2013-01-15 16:55:27	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-15 16:55:37	- SYSTE  - Check DateTime Agent unLogout
+2013-01-15 16:55:37	- SYSTE  - Update datetime agent unlogout(updatetime)	6006	hf7nlG6HZROkQA6
+2013-01-15 16:55:37	- SYSTE  - Already remove queue(remove queue)	6006	hf7nlG6HZROkQA6
+2013-01-15 17:02:58	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 17:16:05	- SYSTE  - Connect to Database Successful
+2013-01-15 17:16:05	- SYSTE  - Check DateTime Agent Pause
+2013-01-15 17:16:05	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-15 17:16:15	- SYSTE  - Check DateTime Agent unLogout
+2013-01-15 17:20:23	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 17:23:36	- SYSTE  - Disconnect to Asterisk Server
+
+2013-01-15 17:24:17	- SYSTE  - Reconnect to Database fail - com.mysql.jdbc.exceptions.jdbc4.CommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+2013-01-15 17:25:32	- SYSTE  - Reconnect to Asterisk Server
+2013-01-15 17:26:21	- SYSTE  - Connect to Database Successful
+2013-01-15 17:26:21	- SYSTE  - Check DateTime Agent Pause
+2013-01-15 17:26:21	- SYSTE  - Update Datetime Agent Pause	6008	cMJho4vrhcBRWLZ
+2013-01-15 17:26:21	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-15 17:26:31	- SYSTE  - Check DateTime Agent unLogout
+2013-01-15 17:26:31	- SYSTE  - Update datetime agent unlogout(updatetime)	6008	C57kjxESrPkA8Bf
+2013-01-15 17:26:31	- SYSTE  - Update datetime agent unlogout(remove queue)	6008	C57kjxESrPkA8Bf
+2013-01-15 17:29:38	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 17:31:44	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 17:33:20	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 22:17:11	- SYSTE  - Connect to Database Successful
+2013-01-15 22:17:11	- SYSTE  - Check DateTime Agent Pause
+2013-01-15 22:17:11	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-15 22:17:21	- SYSTE  - Check DateTime Agent unLogout
+2013-01-15 22:20:05	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 22:21:55	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 22:22:50	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 22:22:54	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 22:37:26	- SYSTE  - Connect to Database Successful
+2013-01-15 22:37:26	- SYSTE  - Check DateTime Agent Pause
+2013-01-15 22:37:27	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-15 22:37:36	- SYSTE  - Check DateTime Agent unLogout
+2013-01-15 22:39:29	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 22:41:35	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 22:43:40	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 22:44:36	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 22:44:44	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 23:54:48	- SYSTE  - Connect to Database Successful
+2013-01-15 23:54:48	- SYSTE  - Check DateTime Agent Pause
+2013-01-15 23:54:49	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-15 23:54:58	- SYSTE  - Check DateTime Agent unLogout
+2013-01-15 23:54:59	- SYSTE  - Update datetime agent unlogout(updatetime)	6006	yLY1xInInBwuqta
+2013-01-15 23:54:59	- SYSTE  - Already remove queue(remove queue)	6006	yLY1xInInBwuqta
+2013-01-15 23:56:53	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 23:58:44	- SYSTE  - Check Agent unPause when interrupt
+2013-01-15 23:59:43	- SYSTE  - Check Agent unPause when interrupt
+2013-01-16 00:01:00	- SYSTE  - Check Agent unPause when interrupt
+2013-01-16 00:01:11	- SYSTE  - Check Agent unPause when interrupt
+2013-01-16 00:01:48	- SYSTE  - Check Agent unPause when interrupt

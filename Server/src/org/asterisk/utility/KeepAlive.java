@@ -11,8 +11,9 @@ package org.asterisk.utility;
 public class KeepAlive implements Runnable{
 
     private ManagerAgent agent;
-    private Thread thread;
+    public Thread thread;
     public int COUNT = 0;
+    public boolean run = true;
     public KeepAlive(ManagerAgent a) {
         agent = a;
         thread = new Thread(this);
@@ -21,21 +22,28 @@ public class KeepAlive implements Runnable{
 
     @Override
     public void run() {
-       try{
-           Thread.sleep(5000);
-           while(true){               
-               Thread.sleep(10000);       
-               if(COUNT >= 3){//logout and stop keepalive
-                   if(agent.agentLogout())
-                       return;
-               }               
-               if(agent.clientSocket.isClosed())//return if socket is closed
-                   return;         
-               agent.sendToAgent("PING");
-               COUNT ++;
-           }
-       }catch(Exception e){
-       }
+        try{
+            Thread.sleep(5000);
+            while(run){  
+                try{
+                    Thread.sleep(10000);       
+                    if(COUNT >2){//logout and stop keepalive
+                        agent.agentLogout();
+                        run = false;
+                    }else if(agent.clientSocket.isClosed()){//return if socket is closed 
+                        run = false;   
+                    }else{
+                        agent.sendToAgent("PING");
+                        COUNT ++; 
+                    }                   
+                }catch(Exception ex){
+                    System.out.println("keepalive  "+ex);
+                }               
+            }    
+            System.out.println("finish keepalive  ");
+        }catch(Exception e){
+            
+        }
     }
     
 }
