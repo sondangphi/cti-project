@@ -1,0 +1,27 @@
+2013-01-16 13:41:44	- SYSTE  - Connect to Database Successful
+2013-01-16 13:41:44	- SYSTE  - Check DateTime Agent Pause
+2013-01-16 13:41:44	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-16 13:41:54	- SYSTE  - Check DateTime Agent unLogout
+2013-01-16 13:43:47	- SYSTE  - Check Agent unPause when interrupt
+2013-01-16 13:44:31	- SYSTE  - Check Agent unPause when interrupt
+2013-01-16 13:48:48	- SYSTE  - Check Agent unPause when interrupt
+2013-01-16 13:49:47	- SYSTE  - Check Agent unPause when interrupt
+2013-01-16 13:50:41	- SYSTE  - Check Agent unPause when interrupt
+2013-01-16 13:51:27	- SYSTE  - Check Agent unPause when interrupt
+2013-01-16 13:54:12	- SYSTE  - Check Agent unPause when interrupt
+2013-01-16 13:54:35	- SYSTE  - Check Agent unPause when interrupt
+2013-01-16 13:55:40	- SYSTE  - Connect to Database Successful
+2013-01-16 13:55:40	- SYSTE  - Check DateTime Agent Pause
+2013-01-16 13:55:40	- SYSTE  - Connect to Asterisk Server Successful
+2013-01-16 13:55:50	- SYSTE  - Check DateTime Agent unLogout
+2013-01-16 13:55:50	- SYSTE  - Update datetime agent unlogout(updatetime)	6002	Sdydv80XJyZUBUs
+2013-01-16 13:55:50	- SYSTE  - Update datetime agent unlogout(remove queue)	6002	Sdydv80XJyZUBUs
+2013-01-16 13:55:50	- SYSTE  - Update datetime agent unlogout(updatetime)	6100	4MiITNzTLznMQWL
+2013-01-16 13:55:50	- SYSTE  - Update datetime agent unlogout(remove queue)	6100	4MiITNzTLznMQWL
+2013-01-16 13:57:37	- SYSTE  - Check Agent unPause when interrupt
+2013-01-16 13:57:37	- SYSTE  - Update Agent unPause when interrupt	6002	naHhsyxjtZkAdCa
+2013-01-16 13:58:00	- SYSTE  - Check Agent unPause when interrupt
+2013-01-16 13:58:00	- SYSTE  - Update Agent unPause when interrupt	6100	BxGYAzJjbLrqOVh
+2013-01-16 14:03:11	- SYSTE  - Connect to Database Successful
+2013-01-16 14:03:11	- SYSTE  - Check DateTime Agent Pause
+2013-01-16 14:03:12	- SYSTE  - Connect to Asterisk Server Successful
