@@ -53,6 +53,8 @@ public class Agent implements Runnable{
         private String com;  
         private boolean dialout = false;
         private KeepAlive keepAlive;
+        private Thread keep_alive; 
+        private Object synObject = new Object();
                 
 //        private int vitualPort = 1234;
         
@@ -79,9 +81,7 @@ public class Agent implements Runnable{
 	public void run() {
             // TODO Auto-generated method stub
             try{
-//                ServerSocket vitualServer = new ServerSocket(vitualPort);
-//                vitualServer.accept();
-                clientSocket.setKeepAlive(true);
+//                clientSocket.setKeepAlive(true);
                 String command = "";
                 CODE code;
                 Mysql_dbname = uti.readInfor(filename, "MySql_database");
@@ -100,20 +100,24 @@ public class Agent implements Runnable{
                     System.out.println("***receive from server: "+command);
                     if(command == null){
                         System.out.println("null value from server");
-                        try {
-                            uti.writelog("DISCONNECT SERVER - Server interrupt\t"+agentObject.getAgentId()+"\r\n");
-                            close = false;
-                            System.out.println("Server interupt! Please wait...");
-                            mainForm.setVisible(false);
-                            mainForm.dispose();  
-                            mainForm = null;
-                            new LoginForm().setVisible(true);
-                            closeConnect();  
-                            break;                            
-                        } catch (Exception ex) {
-                            System.out.println("Server is close! Please wait... " +ex);
-                        } 
+                        agentLogout();
                     }                    
+                    if (keep_alive != null) {
+                        if (keep_alive.isAlive()) {
+                            keep_alive.interrupt();
+                        }
+                    }
+                    keep_alive = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                Thread.sleep(10000);
+                                System.out.println("server interrupt1: " +clientSocket.getRemoteSocketAddress().toString());
+                                agentLogout();
+                            } catch (InterruptedException ex) { }  
+                        }
+                    });
+                    keep_alive.start();                                       
                     ArrayList<String> cmdList = getList(command);							
                     code = CODE.valueOf(cmdList.get(0).toUpperCase());
                     switch(code){
@@ -142,15 +146,19 @@ public class Agent implements Runnable{
                     break;
                     case LOGOUTSUCC: //result LOGOUT SUCCESS              
                         try {
-                            uti.writelog("LOGOUT SUCCESS\t"+agentObject.getAgentId()+"\r\n");
-                            mainForm.setVisible(false);
-                            mainForm.dispose();
-                            mainForm = null;
-                            close = false;
-                            clockWorktime.stop();                            
-                            closeConnect();  
-                            new LoginForm().setVisible(true);
-                            System.out.println("LOGOUT SUCCESS");                            
+                            synchronized(synObject){     
+                                if(close){
+                                    mainForm.setVisible(false);
+                                    mainForm.dispose();
+                                    mainForm = null;
+                                    close = false;
+                                    clockWorktime.stop();                            
+                                    closeConnect();  
+                                    new LoginForm().setVisible(true);
+                                    System.out.println("LOGOUT SUCCESS");                                
+                                    uti.writelog("LOGOUT SUCCESS\t"+agentObject.getAgentId()+"\r\n");
+                                }
+                            }                            
                         } catch (Exception ex) {
                             System.out.println("LOGOUTSUCC " +ex);
                         }
@@ -294,9 +302,6 @@ public class Agent implements Runnable{
                         mainForm.btn_hangup.setEnabled(false);
                     break;                        
                     case HANGUPSUCCESS: //
-//                        mainForm.lb_status.setText("Ready");
-//                        mainForm.btn_pause.setEnabled(true);
-//                        mainForm.setAllEnable(true);
                         System.out.println("HANGUPSUCCESS");
                         mainForm.btn_hangup.setEnabled(false);
                     break;      
@@ -306,7 +311,6 @@ public class Agent implements Runnable{
                     case PING:
                         System.out.println("PING from server...");
                         uti.writelog("PING from server\t"+agentObject.getAgentId());
-                        keepAlive.COUNT = 0;
                     break;                        
                     default: 
                         System.out.println("Default value...");
@@ -315,22 +319,27 @@ public class Agent implements Runnable{
                 }
             }  
             catch(SocketException e){
-                if(close){
-                    try {
-                        System.out.println("Socket exception client: "+e);
-                        uti.writelog("DISCONNECT SERVER(interupt)\t"+agentObject.getAgentId()+"\r\n");
-                        mainForm.setVisible(false);
-                        mainForm.dispose();                        
-                        closeConnect();
-                        new LoginForm().setVisible(true);
-                    } catch (Exception ex) {
-                        Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
+                synchronized(synObject){     
+                    if(close){
+                        try {
+                            System.out.println("Socket exception client: "+e);
+                            uti.writelog("DISCONNECT SERVER(interupt)\t"+agentObject.getAgentId()+"\r\n");
+                            mainForm.setVisible(false);
+                            mainForm.dispose();
+                            mainForm = null;
+                            close = false;
+                            closeConnect();
+                            new LoginForm().setVisible(true);
+                        } catch (Exception ex) {
+                            System.out.println("socket exception2: "+ex);
+                        }                        
                     }
-                }                                                                                                        
+                }                                                                                                       
             }
             catch (IllegalArgumentException e) {
                     e.printStackTrace();
-            } catch (IllegalStateException e) {
+            } 
+            catch (IllegalStateException e) {
                     e.printStackTrace();
             }             
             catch (IOException e){
@@ -345,16 +354,23 @@ public class Agent implements Runnable{
 
 	}
         
-        public boolean  agentLogout(){
-            try{
-                mainForm.setVisible(false);
-                mainForm.dispose();
-                mainForm = null;
-                close = false;
-                clockWorktime.stop();                            
-                closeConnect();  
-                new LoginForm().setVisible(true);                
-            }catch(Exception e){}
+        public boolean agentLogout(){
+            synchronized(synObject){     
+                if(close){
+                    try{
+                        mainForm.setVisible(false);
+                        mainForm.dispose();
+                        mainForm = null;
+                        close = false;
+                        clockWorktime.stop();                            
+                        closeConnect();  
+                        new LoginForm().setVisible(true);                
+                    }catch(Exception e){
+                        System.out.println("agentLogout: "+e);
+                        return false;
+                    }            
+                }
+            }  
             return true;
         }
         
@@ -383,7 +399,7 @@ public class Agent implements Runnable{
 //                System.out.println("Exception(sendtoServer): "+e);
 //            }            
             try{
-                if(clientSocket != null && outtoServer != null && infromServer != null){   
+                if(clientSocket != null){   
                     outtoServer.println(t);
                     outtoServer.flush();
                     System.out.println("send to server: "+t);
@@ -416,25 +432,28 @@ public class Agent implements Runnable{
             
             try{
                 System.out.println("start close session");
-                if(clientSocket != null && infromServer != null && outtoServer!= null){
-                    running = false;
-                    infromServer.close();
-                    outtoServer.close();
+                running = false;
+                if(clientSocket != null){                    
                     clientSocket.close(); 
                     System.out.println("close socket");                    
-                }                  
+                }else
+                    System.out.println("close null");                    
                 if(mainThread !=  null){
                     mainThread.interrupt();
-                    System.out.println("finish interrupt mainThread");                
-                }
+                    System.out.println("close thread");                
+                }else
+                    System.out.println("thread null");                    
                 System.out.println("finish close session"); 
+                keepAlive.interrupt();
+                if (keep_alive != null) {
+                    if (keep_alive.isAlive()) {
+                        keep_alive.interrupt();
+                    }
+                }                
             }catch(Exception e){
                 System.out.println("closeConnect Exception: "+e); 
             } 
-	}
-        
-        
-        
+	}                        
 	public static ArrayList<String> getList(String cmd){
             ArrayList<String> list =  new ArrayList<String>();
             StringTokenizer st = new StringTokenizer(cmd,"@");

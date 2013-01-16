@@ -99,7 +99,7 @@ public class LoginForm extends javax.swing.JFrame {
             queueId = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
             if(queueId == null){
                 lb_notify_queue.setText("(*)");
-                lb_status.setText("Check information or your network!");
+                lb_status.setText("Check network connection");
             }                
             else 
                 lb_notify_queue.setText("");
@@ -462,7 +462,8 @@ public class LoginForm extends javax.swing.JFrame {
                                 agent = new Agent(clientSocket, this, agentObject, cmd);
                             }
                         }else {   
-                            lb_notify_queue.setText("(*)");                            
+                            lb_notify_queue.setText("(*)");  
+                            lb_status.setText("Check network connection");
                         }
                     }else {
                         lb_status.setText("Extension not appropriate");

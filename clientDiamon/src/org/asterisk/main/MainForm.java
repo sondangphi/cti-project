@@ -680,7 +680,7 @@ public class MainForm extends javax.swing.JFrame {
         );
 
         lb_version.setFont(new java.awt.Font("Tahoma", 2, 9)); // NOI18N
-        lb_version.setText("version 1.0.0 (Build 15012013)");
+        lb_version.setText("version 1.0.0 (Build 16012013)");
         lb_version.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jMenu1.setText("File");
@@ -798,10 +798,9 @@ public class MainForm extends javax.swing.JFrame {
         try{
             int option = JOptionPane.showConfirmDialog(this,"Do you realy want to EXIT program?","Comfirm",JOptionPane.YES_NO_OPTION);  
             if(option == 0){
-                agentClient.sendtoServer(EXIT);                
-                agentClient.closeConnect();
+                agentClient.sendtoServer(EXIT);  
+                agentClient.agentLogout();
                 System.out.println("Exit CTI CLIENT: "+option); 
-//                Thread.sleep(2000);
                 System.exit(0);                
             }else if(option == 1){
                 System.out.println("CANCEL: "+option);
