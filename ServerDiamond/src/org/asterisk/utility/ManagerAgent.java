@@ -69,7 +69,9 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
         private TimerClock clock;
         private String uniqueidDialout = "";
         private KeepAlive keepAlive;
+        private Thread keep_alive; 
         private Object synObject = new Object();
+        private Object eventObject = new Object();
         private final String ENTERQUEUE = "3";
         private final String CONNECT = "4";
         private final String COMPLETEAGENT = "5";        
@@ -127,27 +129,31 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                     while(connected && clientSocket != null){ 
                         fromClient = inPutStream.readLine();
                         System.out.println("***Receive from client: "+fromClient);
-                        if(fromClient == null){ 
+                        if(fromClient == null){
                             synchronized(synObject){
-                                if(close){
-                                    if(agent != null){
-                                        removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());
-                                        result = managerEvent.sendAction(removeQueue, 30000).getResponse().toString();
-                                        if("success".equalsIgnoreCase(result)){                                            
-                                            close = false;
-                                            mdb_agent.checkAgentPause(agent.getSesion());
-                                            mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
-                                            mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());                                    
-                                            closeConnect();
-                                            System.out.println("remove queue success"); 
-                                            System.out.println("LOGOUTSUCC(exit system)");            
-                                            uti.writeAgentLog("- AGENT - System interrupt\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);                                                                             
-                                        }else
-                                            uti.writeAgentLog("- AGENT - System interrupt fail(remove queue)\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
-                                    }                                    
-                                }
-                            }                           
+                                if(close){           
+                                    System.out.println("null value from client");
+                                    agentLogout();                                  
+                                    
+                                }                                
+                            }                            
                         }
+                        /*ĐOẠN NÀY ĐƯỢC THÊM VÔ ĐỂ TINH KEEP-ALIVE VỚI CLIENT*/
+                        if (keep_alive != null) {
+                            if (keep_alive.isAlive()) {
+                                keep_alive.interrupt();
+                            }
+                        }                        
+                        keep_alive = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(10000);
+                                    System.out.println("interrupt client: " +clientSocket.getRemoteSocketAddress().toString());                                    
+                                    agentLogout();
+                                } catch (InterruptedException ex) { }  
+                            }
+                        }); keep_alive.start();                        
                         ArrayList<String> cmdList = uti.getList(fromClient);
                         flag = Integer.parseInt(cmdList.get(0));				
                         switch(flag){
@@ -202,7 +208,6 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                                                     mdb_agent.checkAgentPause(agent.getSesion());
                                                     sendToAgent("LOGOUTSUCC");                                                       
                                                     closeConnect();  
-                                                    System.out.println("remove queue success");
                                                     uti.writeAgentLog("- AGENT - Agent logout\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);
                                                     System.out.println("agent LOGOUT ok");
                                                 }else{		          
@@ -319,7 +324,6 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                                                     mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
                                                     mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());                                                                                
                                                     closeConnect();                                            
-                                                    System.out.println("remove queue success");
                                                     System.out.println("LOGOUTSUCC(exit system)");            
                                                     uti.writeAgentLog("- AGENT - Agent exit system\t"+ agent.getAgentId() + "\t" + agent.getInterface() + "\t" +agent.getQueueId()+"\t"+addClient);
                                                 }	            		
@@ -333,8 +337,7 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                             case 222:
                                 try{
                                     System.out.println("PING from client...");
-                                    keepAlive.COUNT = 0;
-                                    sendToAgent("PING");
+//                                    sendToAgent("PING");
                                 }catch(Exception ex){
                                     System.out.println("PING:  "+ex);
                                 }                                
@@ -351,20 +354,13 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
             } catch (IllegalStateException e) {
                     e.printStackTrace();
             } catch (SocketException e) {
-                try {                 
+                try {         
                     synchronized(synObject){
                         if(close){
-                            close = false;                            
-                            mdb_agent.checkAgentPause(agent.getSesion());                           
-                            mdb_agent.updateStatus(agent.getAgentId(), "0", "0");		
-                            mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());      
-                            removeQueue = removeQueue(agent.getInterface(), agent.getQueueId());                            
-                            result = managerEvent.sendAction(removeQueue, 60000).getResponse().toString();
-                            closeConnect();
-                            System.out.println("Interrup connection by client\t"+e);                            
-                            uti.writeAgentLog("- AGENT - Client Interrupt\t"+ agent.getAgentId() + "\t" + agent.getInterface() + "\t" +agent.getQueueId()+"\t"+addClient);
-                        }
-                    }                                              
+                            System.out.println("Interrup connection by client\t"+e); 
+                            agentLogout();                                                       
+                        }                       
+                    }
                 } catch (Exception e1) {e1.printStackTrace();}                                                         
             } 
             catch (TimeoutException e) {
@@ -457,7 +453,7 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                         mdb_agent.logoutAction(agent.getSesion(), agent.getAgentId());                                 
                         mdb_agent.checkAgentPause(agent.getSesion());
                         closeConnect();                        
-                        System.out.println("remove queue success");
+                        System.out.println("remove queue success(agentLogout)");
                         uti.writeAgentLog("- AGENT - Agent interrupt(timeout)\t"+agent.getAgentId()+"\t"+agent.getInterface()+"\t"+agent.getQueueId()+"\t"+addClient);                        
                     }else{		                        
                         System.out.println("logout result: "+result);                                    
@@ -466,7 +462,7 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                         return false;
                     }		            		
                 }else 
-                    return false;
+                    return false;                    
             }catch(Exception e){
             }            
             return true;
@@ -488,9 +484,14 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                     thread.interrupt();
                     System.out.println("close thread");                
                 }else
-                    System.out.println("thread null");
-                
+                    System.out.println("thread null");                
                 System.out.println("finish close session: "+agent.getAgentId());                           
+                keepAlive.interrupt();
+                if (keep_alive != null) {
+                    if (keep_alive.isAlive()) {
+                        keep_alive.interrupt();
+                    }
+                }                
             }catch(Exception e){
                 System.out.println("closeConnect(IOException): "+e);
             }
@@ -545,180 +546,193 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
             try {   
                 //enter queue                
                 if(event instanceof AgentCalledEvent){
-                    AgentCalledEvent callEvent = (AgentCalledEvent)event;
-                    System.out.println("***********************\t AgentCalledEvent\t ***********************");  
-                    iface = agent.getInterface().toString();
-                    String agentCaller = callEvent.getAgentCalled();
-                    if(iface.equalsIgnoreCase(agentCaller) && ringing == true){                        
-                        ringing = false;
-                        connect = true;
-                        ringno = true;
-                        abandonCall = true;
-                        System.out.println("getChannelCalling: "+callEvent.getChannelCalling());
-                        System.out.println("getDestinationChannel: "+callEvent.getDestinationChannel());
-                        String callerName = callEvent.getCallerIdName();
-                        String callerNum = callEvent.getCallerIdNum();
-                        hangupChannel = callEvent.getDestinationChannel();
-                        incomingCall = new IncomingCallObject();                        
-                        incomingCall.setsession(uti.getSession());   
-                        incomingCall.setcallerName(callerName);
-                        incomingCall.setcallerNumber(callerNum);   
-                        incomeTemp = incomingCall.getsession();
-                        mdb_agent.inboundCallLog(incomingCall.getsession(), agent.getSesion(),agent.getAgentId(), iface, agent.getQueueId(), ENTERQUEUE,callerNum);
-                        uti.writeAgentLog("- AGENT - Enter Queue\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ callerNum);
-                        sendToAgent("RINGING@"+callerNum);       
-                    }              
+                    synchronized(eventObject){
+                        AgentCalledEvent callEvent = (AgentCalledEvent)event;
+                        System.out.println("***********************\t AgentCalledEvent\t ***********************");  
+                        iface = agent.getInterface().toString();
+                        String agentCaller = callEvent.getAgentCalled();
+                        if(iface.equalsIgnoreCase(agentCaller) && ringing == true){                        
+                            ringing = false;
+                            connect = true;
+                            ringno = true;
+                            abandonCall = true;
+                            System.out.println("getChannelCalling: "+callEvent.getChannelCalling());
+                            System.out.println("getDestinationChannel: "+callEvent.getDestinationChannel());
+                            String callerName = callEvent.getCallerIdName();
+                            String callerNum = callEvent.getCallerIdNum();
+                            hangupChannel = callEvent.getDestinationChannel();
+                            incomingCall = new IncomingCallObject();                        
+                            incomingCall.setsession(uti.getSession());   
+                            incomingCall.setcallerName(callerName);
+                            incomingCall.setcallerNumber(callerNum);   
+                            incomeTemp = incomingCall.getsession();
+                            mdb_agent.inboundCallLog(incomingCall.getsession(), agent.getSesion(),agent.getAgentId(), iface, agent.getQueueId(), ENTERQUEUE,callerNum);
+                            uti.writeAgentLog("- AGENT - Enter Queue\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ callerNum);
+                            sendToAgent("RINGING@"+callerNum);       
+                        }                         
+                    }             
                 }
                 if(event instanceof AgentConnectEvent){//connect queue
-                    AgentConnectEvent connectEvent= (AgentConnectEvent)event;
-                    System.out.println("***********************\t AgentConnectEvent\t ***********************");
-                    String agentCaller = connectEvent.getMember();
-                    iface = agent.getInterface().toString();
-                    if(iface.equalsIgnoreCase(agentCaller) && connect == true){
-                        connect = false;
-                        abandonCall = false;
-                        ringno = false;
-                        complete = true;                        
-                        String ringtime = connectEvent.getRingtime().toString();                        
-                        mdb_agent.inboundCallLog(incomingCall.getsession(), agent.getSesion(),agent.getAgentId(), iface, agent.getQueueId(), CONNECT,ringtime);
-                        uti.writeAgentLog("- AGENT - Connect Queue\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ incomingCall.getcallerNumber());                             
-                        sendToAgent("CONNECTED");
-                        System.out.println("getChannel: "+connectEvent.getChannel());
-                        System.out.println("getBridgedChannel: "+connectEvent.getBridgedChannel());
+                    synchronized(eventObject){
+                        AgentConnectEvent connectEvent= (AgentConnectEvent)event;
+                        System.out.println("***********************\t AgentConnectEvent\t ***********************");
+                        String agentCaller = connectEvent.getMember();
+                        iface = agent.getInterface().toString();
+                        if(iface.equalsIgnoreCase(agentCaller) && connect == true){
+                            connect = false;
+                            abandonCall = false;
+                            ringno = false;
+                            complete = true;                        
+                            String ringtime = connectEvent.getRingtime().toString();                        
+                            mdb_agent.inboundCallLog(incomingCall.getsession(), agent.getSesion(),agent.getAgentId(), iface, agent.getQueueId(), CONNECT,ringtime);
+                            uti.writeAgentLog("- AGENT - Connect Queue\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ incomingCall.getcallerNumber());                             
+                            sendToAgent("CONNECTED");
+                            System.out.println("getChannel: "+connectEvent.getChannel());
+                            System.out.println("getBridgedChannel: "+connectEvent.getBridgedChannel());
+                        }                        
                     }
                 }
                 if(event instanceof AgentCompleteEvent){//complete call
-                    AgentCompleteEvent comEvent= (AgentCompleteEvent)event;
-                    System.out.println("***********************\t AgentCompleteEvent\t ***********************");  
-                    String channel = comEvent.getMember();  
-                    iface = agent.getInterface().toString();
-                    if(iface.equalsIgnoreCase(channel) && complete == true){
-                        complete = false;
-                        ringing = true;                        
-                        String reason = comEvent.getReason().toString();
-                        String talkTime = comEvent.getTalkTime().toString();
-                        hangupChannel = "";
-                        if("agent".equalsIgnoreCase(reason)){
-                            mdb_agent.inboundCallLog(incomingCall.getsession(), agent.getSesion(),agent.getAgentId(), iface, agent.getQueueId(), COMPLETEAGENT,talkTime);
-                            uti.writeAgentLog("- AGENT - Agent complete\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ incomingCall.getcallerNumber());
-                        }else if("caller".equalsIgnoreCase(reason)){                            
-                            mdb_agent.inboundCallLog(incomingCall.getsession(), agent.getSesion(),agent.getAgentId(), iface, agent.getQueueId(), COMPLETECALLER,talkTime);
-                            uti.writeAgentLog("- AGENT - Caller complete\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ incomingCall.getcallerNumber());                                
-                        }          
-                        System.out.println("reason \t"+reason);
-                        sendToAgent("COMPLETED");                       
-                    }                    
-                }          
-
-                if(event instanceof AgentRingNoAnswerEvent){//ringing but no answer
-                    AgentRingNoAnswerEvent noAnsEvent= (AgentRingNoAnswerEvent)event;
-                    System.out.println("***********************\t AgentRingNoAnswerEvent\t ***********************");  
-                    String channel = noAnsEvent.getMember(); 
-                    iface = agent.getInterface().toString();
-                    if(iface.equalsIgnoreCase(channel) && ringno == true){                            
-                        abandonCall = false;
-                        ringing = true;
-                        ringno = false;                        
-                        hangupChannel = "";
-                        String ringTime = String.valueOf(noAnsEvent.getRingtime()/1000);                        
-                        mdb_agent.inboundCallLog(incomingCall.getsession(), agent.getSesion(),agent.getAgentId(), iface, agent.getQueueId(), RINGNOANSWER,ringTime);
-                        uti.writeAgentLog("- AGENT - Ring noAnswer\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ incomingCall.getcallerNumber());                         
-                        sendToAgent("RINGNOANWSER");                        
-                    }                                                                                    
-                }                                                
-                if(event instanceof DialEvent){
-                    System.out.println("***********************\t DialEvent\t ***********************");
-                    DialEvent dialevent = (DialEvent)event;
-                    if(uti.checkChannel(dialevent.getChannel())){                                                        
-                        String channel = dialevent.getChannel();                    
-                        channel = channel.substring(0, channel.indexOf("-"));
+                    synchronized(eventObject){
+                        AgentCompleteEvent comEvent= (AgentCompleteEvent)event;
+                        System.out.println("***********************\t AgentCompleteEvent\t ***********************");  
+                        String channel = comEvent.getMember();  
                         iface = agent.getInterface().toString();
-                        if(channel.equalsIgnoreCase(iface)){
-                            String subevent = dialevent.getSubEvent().toString();
-                            System.out.println("dialoutNumber: "+dialoutNumber);
-                            //begin dial out(Ringing)
-                            if("begin".equalsIgnoreCase(subevent) && beginDialout){
-                                System.out.println("subevent: "+subevent);                                
-                                if(!dialoutNumber.equals("")){
-                                    System.out.println("begin dial out(channel): "+channel);
-                                    hangupChannel = dialevent.getChannel();                                    
-                                    connectDialout = true;
-                                    beginDialout = false;
-                                    completeDialout = true;
-                                    abandonCall = false;                    
-                                    sendToAgent("DIALOUT");
-                                    uniqueidDialout = dialevent.getDestUniqueId();
-                                    dialoutSession = uti.getSession();
-                                    mdb_agent.startDialout(agent.getAgentId(), agent.getInterface(), agent.getQueueId(), dialoutNumber, agent.getSesion(), dialoutSession);
-                                    uti.writeAgentLog("- AGENT - Begin Dialout\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ dialoutNumber);
-                                }
-                            }else if("end".equalsIgnoreCase(subevent) && completeDialout && !"".equalsIgnoreCase(dialoutSession)){ 
-                            //finish dial out
-                                beginDialout = true;
-                                completeDialout = false;
-                                connectDialout = false;
-                                String status = dialevent.getDialStatus();
-                                hangupChannel = "";
-                                if("ANSWER".equalsIgnoreCase(status)){
-                                    System.out.println("finish dial out(channel): "+channel);                                        
-                                    if(clock != null){
-                                        dialoutTalktime = String.valueOf(clock.secs);
-                                        clock.stop(); 
-                                    }                                                                                                                                                                                                          
-                                }                                 
-                                mdb_agent.finishDialout(dialoutSession, dialoutTalktime,status);
-                                uti.writeAgentLog("- AGENT - Finish Dialout\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ dialoutNumber);
-                                dialoutSession = "";    
-                                dialoutTalktime = "0";
-                                dialoutNumber = "";
-                                sendToAgent("HANGUPDIALOUT");
-                            }
-                        }                             
-                    }else{
-                        System.out.println("dialout fail\t "+dialevent.getChannel());
-                    }  
-                }                
-                if(event instanceof NewStateEvent){                    
-                    System.out.println("***********************\t NewStateEvent\t ***********************");
-                    NewStateEvent stateEvent = (NewStateEvent)event;
-                    String callerIdNum = stateEvent.getCallerIdNum();
-                    String channelState = stateEvent.getChannelStateDesc();                           
-                    //begin talking dial out
-                    if(callerIdNum != null && connectDialout == true && !"".equalsIgnoreCase(dialoutNumber)){
-                        if(callerIdNum.equalsIgnoreCase(dialoutNumber) && channelState.equalsIgnoreCase("UP") && uniqueidDialout.equalsIgnoreCase(stateEvent.getUniqueId())){
-                            System.out.println("callerIdNum: "+callerIdNum+"\tchannelState: "+channelState+"\tdialoutNumber: "+dialoutNumber);       
-                            connectDialout = false;      
+                        if(iface.equalsIgnoreCase(channel) && complete == true){
+                            complete = false;
+                            ringing = true;                        
+                            String reason = comEvent.getReason().toString();
+                            String talkTime = comEvent.getTalkTime().toString();
+                            hangupChannel = "";
+                            if("agent".equalsIgnoreCase(reason)){
+                                mdb_agent.inboundCallLog(incomingCall.getsession(), agent.getSesion(),agent.getAgentId(), iface, agent.getQueueId(), COMPLETEAGENT,talkTime);
+                                uti.writeAgentLog("- AGENT - Agent complete\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ incomingCall.getcallerNumber());
+                            }else if("caller".equalsIgnoreCase(reason)){                            
+                                mdb_agent.inboundCallLog(incomingCall.getsession(), agent.getSesion(),agent.getAgentId(), iface, agent.getQueueId(), COMPLETECALLER,talkTime);
+                                uti.writeAgentLog("- AGENT - Caller complete\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ incomingCall.getcallerNumber());                                
+                            }          
+                            System.out.println("reason \t"+reason);
+                            sendToAgent("COMPLETED");                       
+                        }                         
+                    }                                              
+                }          
+                if(event instanceof AgentRingNoAnswerEvent){//ringing but no answer
+                    synchronized(eventObject){
+                        AgentRingNoAnswerEvent noAnsEvent= (AgentRingNoAnswerEvent)event;
+                        System.out.println("***********************\t AgentRingNoAnswerEvent\t ***********************");  
+                        String channel = noAnsEvent.getMember(); 
+                        iface = agent.getInterface().toString();
+                        if(iface.equalsIgnoreCase(channel) && ringno == true){                            
                             abandonCall = false;
-                            if(clock != null)
-                                clock.stop();                            
-                            clock = new TimerClock();
-                            clock.start();
-                            sendToAgent("CONNECTEDDIALOUT");//CONNECTEDDIALOUT
-                            uti.writeAgentLog("- AGENT - Connect Dialout\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ dialoutNumber);
-                            System.out.println("getChannel: "+stateEvent.getChannel());
-                        }
+                            ringing = true;
+                            ringno = false;                        
+                            hangupChannel = "";
+                            String ringTime = String.valueOf(noAnsEvent.getRingtime()/1000);                        
+                            mdb_agent.inboundCallLog(incomingCall.getsession(), agent.getSesion(),agent.getAgentId(), iface, agent.getQueueId(), RINGNOANSWER,ringTime);
+                            uti.writeAgentLog("- AGENT - Ring noAnswer\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ incomingCall.getcallerNumber());                         
+                            sendToAgent("RINGNOANWSER");                        
+                        }                         
+                    }                                                                                  
+                }                                                                
+                if(event instanceof DialEvent){
+                    synchronized(eventObject){
+                        System.out.println("***********************\t DialEvent\t ***********************");
+                        DialEvent dialevent = (DialEvent)event;
+                        if(uti.checkChannel(dialevent.getChannel())){                                                        
+                            String channel = dialevent.getChannel();                    
+                            channel = channel.substring(0, channel.indexOf("-"));
+                            iface = agent.getInterface().toString();
+                            if(channel.equalsIgnoreCase(iface)){
+                                String subevent = dialevent.getSubEvent().toString();
+                                System.out.println("dialoutNumber: "+dialoutNumber);
+                                //begin dial out(Ringing)
+                                if("begin".equalsIgnoreCase(subevent) && beginDialout){
+                                    System.out.println("subevent: "+subevent);                                
+                                    if(!dialoutNumber.equals("")){
+                                        System.out.println("begin dial out(channel): "+channel);
+                                        hangupChannel = dialevent.getChannel();                                    
+                                        connectDialout = true;
+                                        beginDialout = false;
+                                        completeDialout = true;
+                                        abandonCall = false;                    
+                                        sendToAgent("DIALOUT");
+                                        uniqueidDialout = dialevent.getDestUniqueId();
+                                        dialoutSession = uti.getSession();
+                                        mdb_agent.startDialout(agent.getAgentId(), agent.getInterface(), agent.getQueueId(), dialoutNumber, agent.getSesion(), dialoutSession);
+                                        uti.writeAgentLog("- AGENT - Begin Dialout\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ dialoutNumber);
+                                    }
+                                }else if("end".equalsIgnoreCase(subevent) && completeDialout && !"".equalsIgnoreCase(dialoutSession)){ 
+                                //finish dial out
+                                    beginDialout = true;
+                                    completeDialout = false;
+                                    connectDialout = false;
+                                    String status = dialevent.getDialStatus();
+                                    hangupChannel = "";
+                                    if("ANSWER".equalsIgnoreCase(status)){
+                                        System.out.println("finish dial out(channel): "+channel);                                        
+                                        if(clock != null){
+                                            dialoutTalktime = String.valueOf(clock.secs);
+                                            clock.stop(); 
+                                        }                                                                                                                                                                                                          
+                                    }                                 
+                                    mdb_agent.finishDialout(dialoutSession, dialoutTalktime,status);
+                                    uti.writeAgentLog("- AGENT - Finish Dialout\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ dialoutNumber);
+                                    dialoutSession = "";    
+                                    dialoutTalktime = "0";
+                                    dialoutNumber = "";
+                                    sendToAgent("HANGUPDIALOUT");
+                                }
+                            }                             
+                        }else{
+                            System.out.println("dialout fail\t "+dialevent.getChannel());
+                        }                             
+                    } 
+                }                
+                if(event instanceof NewStateEvent){  
+                    synchronized(eventObject){
+                        System.out.println("***********************\t NewStateEvent\t ***********************");
+                        NewStateEvent stateEvent = (NewStateEvent)event;
+                        String callerIdNum = stateEvent.getCallerIdNum();
+                        String channelState = stateEvent.getChannelStateDesc();                           
+                        //begin talking dial out
+                        if(callerIdNum != null && connectDialout == true && !"".equalsIgnoreCase(dialoutNumber)){
+                            if(callerIdNum.equalsIgnoreCase(dialoutNumber) && channelState.equalsIgnoreCase("UP") && uniqueidDialout.equalsIgnoreCase(stateEvent.getUniqueId())){
+                                System.out.println("callerIdNum: "+callerIdNum+"\tchannelState: "+channelState+"\tdialoutNumber: "+dialoutNumber);       
+                                connectDialout = false;      
+                                abandonCall = false;
+                                if(clock != null)
+                                    clock.stop();                            
+                                clock = new TimerClock();
+                                clock.start();
+                                sendToAgent("CONNECTEDDIALOUT");//CONNECTEDDIALOUT
+                                uti.writeAgentLog("- AGENT - Connect Dialout\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ dialoutNumber);
+                                System.out.println("getChannel: "+stateEvent.getChannel());
+                            }
+                        }                        
                     }
                 }                
                 /* A HangupEvent is triggered when a channel is hung up.*/
                 if(event instanceof HangupEvent){
-                    HangupEvent hangEvent = (HangupEvent)event;
-                    System.out.println("***********************\t HangupEvent\t ***********************");                        
-                    if(abandonCall == true){
-                        if(uti.checkChannel(hangEvent.getChannel())){
-                            String channel = hangEvent.getChannel();                    
-                            channel = channel.substring(0, channel.indexOf("-"));
-                            iface = agent.getInterface().toString();
-                            if(iface.equalsIgnoreCase(channel)){
-                                abandonCall = false; 
-                                ringing = true;
-                                sendToAgent("HANGUPABANDON");
-                                System.out.println("hangup abadon call: "+channel);
-                                mdb_agent.inboundCallLog(incomingCall.getsession(), agent.getSesion(),agent.getAgentId(), iface, agent.getQueueId(), ABANDON,"UNKNOWN");
-                                uti.writeAgentLog("- AGENT - Abandon call\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ incomingCall.getcallerNumber());     
-                                System.out.println("getChannel: "+hangEvent.getChannel());
+                    synchronized(eventObject){
+                        HangupEvent hangEvent = (HangupEvent)event;
+                        System.out.println("***********************\t HangupEvent\t ***********************");                        
+                        if(abandonCall){
+                            if(uti.checkChannel(hangEvent.getChannel())){
+                                String channel = hangEvent.getChannel();                    
+                                channel = channel.substring(0, channel.indexOf("-"));
+                                iface = agent.getInterface().toString();
+                                if(iface.equalsIgnoreCase(channel)){
+                                    abandonCall = false; 
+                                    ringing = true;
+                                    sendToAgent("HANGUPABANDON");
+                                    System.out.println("hangup abadon call: "+channel);
+                                    mdb_agent.inboundCallLog(incomingCall.getsession(), agent.getSesion(),agent.getAgentId(), iface, agent.getQueueId(), ABANDON,"UNKNOWN");
+                                    uti.writeAgentLog("- AGENT - Abandon call\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ incomingCall.getcallerNumber());     
+                                    System.out.println("getChannel: "+hangEvent.getChannel());
+                                }
                             }
-                        }
-                    }                             	
+                        }                        
+                    }                             
                 }                                                                                       
             } 
             catch (IOException e) {
