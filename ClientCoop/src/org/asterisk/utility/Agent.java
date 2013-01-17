@@ -220,12 +220,16 @@ public class Agent implements Runnable{
                                     customer.setEmail(rs.getString("email"));
                                     customer.setGender(rs.getString("gender"));
                                     customer.setPhone1(rs.getString("homephone1"));
-                                    customer.setId(String.valueOf(rs.getObject("id")));                                                                         
+                                    customer.setId(String.valueOf(rs.getObject("id")));   
+                                    customer.setBirth(String.valueOf(rs.getObject("birthday"))); 
+                                    customer.setReg(String.valueOf(rs.getObject("registration"))); 
                                     mainForm.txt_add.setText(customer.getAddress());
                                     mainForm.txt_name.setText(customer.getName());
                                     mainForm.txt_email.setText(customer.getEmail());
                                     mainForm.txt_mobile.setText(customer.getPhone());
                                     mainForm.txt_phone1.setText(customer.getPhone1());
+                                    mainForm.txt_birthday.setText(customer.getBirth());
+                                    mainForm.txt_reg.setText(customer.getReg());
                                     String gender = customer.getGender();
                                     if(gender.equalsIgnoreCase("1"))
                                         mainForm.cb_gender.setSelectedIndex(0);

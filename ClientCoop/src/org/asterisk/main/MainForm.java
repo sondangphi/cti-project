@@ -201,11 +201,11 @@ public class MainForm extends javax.swing.JFrame {
         btn_clear2 = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        txt_email1 = new javax.swing.JTextField();
+        txt_birthday = new javax.swing.JTextField();
         jLabel18 = new javax.swing.JLabel();
         cb_type = new javax.swing.JComboBox();
         jLabel19 = new javax.swing.JLabel();
-        txt_phone2 = new javax.swing.JTextField();
+        txt_reg = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -485,7 +485,7 @@ public class MainForm extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(txt_phone2)
+                        .addComponent(txt_reg)
                         .addGap(170, 170, 170))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -515,7 +515,7 @@ public class MainForm extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(cb_gender, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txt_email1, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)))
+                                            .addComponent(txt_birthday, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)))
                                     .addGroup(jPanel8Layout.createSequentialGroup()
                                         .addComponent(txt_mobile, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
@@ -555,7 +555,7 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txt_add)
                     .addComponent(jLabel17, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txt_email1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -570,7 +570,7 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(cb_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_phone2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txt_reg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
                     .addComponent(btn_new, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -580,7 +580,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jPanel8Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btn_clear2, btn_feedback, btn_new, btn_update, cb_gender, cb_type, jButton3, jLabel10, jLabel11, jLabel14, jLabel18, jLabel19, jLabel4, jLabel9, txt_add, txt_email, txt_email1, txt_makh, txt_mobile, txt_name, txt_phone1, txt_phone2});
+        jPanel8Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btn_clear2, btn_feedback, btn_new, btn_update, cb_gender, cb_type, jButton3, jLabel10, jLabel11, jLabel14, jLabel18, jLabel19, jLabel4, jLabel9, txt_add, txt_birthday, txt_email, txt_makh, txt_mobile, txt_name, txt_phone1, txt_reg});
 
         jPanel10.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "History", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
 
@@ -1810,20 +1810,24 @@ public class MainForm extends javax.swing.JFrame {
                 String mobile = txt_mobile.getText();                
                 String add = txt_add.getText();
                 String homephone1=txt_phone1.getText();
+                String birthday = txt_birthday.getText();
                 String gender = "";
                 if(cb_gender.getSelectedIndex() == 0)
                     gender = "1";
                 else if (cb_gender.getSelectedIndex() == 1)
                     gender = "0";                                
-                String sql = "UPDATE customer SET fullname ='"+name+"',email='"+email+"',mobilephone='"+mobile+"',address='"+add+"',homephone1='"+homephone1+"',gender='"+gender+"'"
+                String sql = "UPDATE customer SET fullname ='"+name+"',email='"+email+"',mobilephone='"+mobile+"',"
+                        + "address='"+add+"',homephone1='"+homephone1+"',gender='"+gender+"',birthday='"+birthday+"'"
                         + " WHERE id = '"+agentClient.customer.getId()+"'" ;
                 con.executeUpdate(sql);                                                
                 System.out.println("update information success.");
                 btn_update.setEnabled(false);
+                JOptionPane.showMessageDialog(this, "Update success");
             }
             con.closeConnect();            
         }catch(Exception e){
             System.out.println(""+e);
+            JOptionPane.showMessageDialog(this, "Update fail");
         }        
         
     }//GEN-LAST:event_btn_updateActionPerformed
@@ -1836,6 +1840,8 @@ public class MainForm extends javax.swing.JFrame {
         txt_mobile.setText("");
         txt_name.setText("");
         txt_phone1.setText("");
+        txt_birthday.setText("");
+        txt_reg.setText("");
         btn_feedback.setEnabled(false);
         btn_update.setEnabled(false);
         btn_new.setEnabled(false);
@@ -3069,13 +3075,13 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtTimeEnd;
     private javax.swing.JTextField txtTimeStart;
     public javax.swing.JTextField txt_add;
+    public javax.swing.JTextField txt_birthday;
     public javax.swing.JTextField txt_email;
-    public javax.swing.JTextField txt_email1;
     public javax.swing.JTextField txt_makh;
     public javax.swing.JTextField txt_mobile;
     public javax.swing.JTextField txt_name;
     public javax.swing.JTextField txt_phone1;
-    public javax.swing.JTextField txt_phone2;
     private javax.swing.JTextField txt_phonenum;
+    public javax.swing.JTextField txt_reg;
     // End of variables declaration//GEN-END:variables
 }
