@@ -2,6 +2,7 @@ package org.asterisk.main;
 
 import java.awt.Color;
 import java.awt.Cursor;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -117,9 +118,11 @@ public class LoginForm extends javax.swing.JFrame {
         tx_iface.setBackground(Khaki1);
         pwd.setBackground(Khaki1);        
         
-        lb_option.setText("<html><u>Option</u></html>");
+        lb_option.setText("Option");
         lb_option.setForeground(Color.BLUE);
-        lb_option.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));        
+        lb_option.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); 
+//        lb_option.setFont(new Font("Tahoma", Font.CENTER_BASELINE, 10));        
+        System.out.println("new form and set label option");
     }
 
     /**

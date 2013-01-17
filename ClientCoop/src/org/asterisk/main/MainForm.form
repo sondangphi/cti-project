@@ -348,7 +348,7 @@
                                   <EmptySpace type="separate" max="-2" attributes="0"/>
                                   <Component id="jLabel19" min="-2" pref="80" max="-2" attributes="0"/>
                                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="txt_phone2" max="32767" attributes="0"/>
+                                  <Component id="txt_reg" max="32767" attributes="0"/>
                                   <EmptySpace min="-2" pref="170" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
@@ -384,7 +384,7 @@
                                                   <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Component id="cb_gender" min="-2" pref="67" max="-2" attributes="0"/>
-                                                      <Component id="txt_email1" pref="159" max="32767" attributes="0"/>
+                                                      <Component id="txt_birthday" pref="159" max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
                                               <Group type="102" alignment="0" attributes="0">
@@ -433,7 +433,7 @@
                               <Component id="jLabel10" linkSize="9" max="32767" attributes="0"/>
                               <Component id="txt_add" linkSize="9" max="32767" attributes="0"/>
                               <Component id="jLabel17" max="32767" attributes="0"/>
-                              <Component id="txt_email1" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txt_birthday" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jButton3" linkSize="9" alignment="3" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -450,7 +450,7 @@
                               <Component id="jLabel18" linkSize="9" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                               <Component id="cb_type" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel19" linkSize="9" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
-                              <Component id="txt_phone2" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txt_reg" linkSize="9" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="37" max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" max="-2" attributes="0">
@@ -659,7 +659,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txt_email1">
+                <Component class="javax.swing.JTextField" name="txt_birthday">
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
                   </AuxValues>
@@ -704,7 +704,7 @@
                     </Property>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txt_phone2">
+                <Component class="javax.swing.JTextField" name="txt_reg">
                   <AuxValues>
                     <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="1"/>
                   </AuxValues>
