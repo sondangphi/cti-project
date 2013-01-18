@@ -121,7 +121,8 @@ public class Agent implements Runnable{
                             } catch (InterruptedException ex) { }  
                         }
                     });
-                    keep_alive.start();                    
+                    keep_alive.start();
+                    
                     ArrayList<String> cmdList = getList(command);							
                     code = CODE.valueOf(cmdList.get(0).toUpperCase());
                     switch(code){
@@ -130,12 +131,12 @@ public class Agent implements Runnable{
                         agentObject.setAgentName(cmdList.get(1));
                         agentObject.setSession(cmdList.get(2));
                         mainForm = new MainForm(this, agentObject);
-                        mainForm.setVisible(true);
+                        mainForm.setVisible(true);                              
                         loginform.setVisible(false);
                         loginform.dispose();
                         worktime = new TimerClock(mainForm, false);
                         worktime.start();
-                        keepAlive = new KeepAlive(this);
+                        keepAlive = new KeepAlive(this);                  
                     break;
                     case LOGINFAIL: //result LOGIN FAIL                                                     
                         try {
@@ -188,12 +189,23 @@ public class Agent implements Runnable{
                     case HOLDFAIL: //result HOLD
                     break;                        
                     case CHANGEPWD: //CHANGEPWD
-                        mainForm.chanpwdform.showDialog("Change Password Success");                        
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mainForm.chanpwdform.showDialog("Change Password Success");                        
+                            }
+                        }).start();
+                        
                         agentObject.setPass(cmdList.get(1));
                         System.out.println("change pass success");
                     break;                        
                     case CHANGEPWDFAIL: //CHANGEPWD
-                        mainForm.chanpwdform.showDialog("Change Password Fail");                        
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                mainForm.chanpwdform.showDialog("Change Password Fail");  
+                            }
+                        }).start();                                                                      
                         System.out.println("change pass fail");
                     break;                        
                     case RINGING: //EVENT RINGING

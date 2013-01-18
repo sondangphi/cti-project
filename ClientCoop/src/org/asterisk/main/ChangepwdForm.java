@@ -226,7 +226,7 @@ public class ChangepwdForm extends javax.swing.JFrame {
         this.dispose(); 
     }
     public void showDialog(String t){
-        int n = JOptionPane.showConfirmDialog(this,t,"Change Password",JOptionPane.CLOSED_OPTION);          
+        JOptionPane.showMessageDialog(this, t);
         this.dispose(); 
     }    
     private void btn_cancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cancelActionPerformed
