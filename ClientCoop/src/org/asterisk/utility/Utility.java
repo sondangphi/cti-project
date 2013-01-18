@@ -1,6 +1,7 @@
 package org.asterisk.utility;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
@@ -16,6 +17,9 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.Random;
 import java.util.StringTokenizer;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 public class Utility {
     
@@ -158,6 +162,35 @@ public class Utility {
             long difference = date2.getTime() + date1.getTime(); 
             System.out.println(difference/1000);
             return difference/1000;    
+        }        
+        
+        public void playSounds(){
+            try{
+                File soundFile = new File("Sounds/snd_keypress.wav");
+                if(soundFile != null && soundFile.canRead()){
+                    AudioInputStream audio = AudioSystem.getAudioInputStream(soundFile);
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audio);
+                    clip.start();                
+                    System.out.println("Play sound");                    
+                }
+            }catch(Exception e){
+                System.out.println("Can't play sound");
+            }
+        }
+        public void playSounds(String path){
+            try{
+                File soundFile = new File(path);
+                if(soundFile != null && soundFile.canRead()){
+                    AudioInputStream audio = AudioSystem.getAudioInputStream(soundFile);
+                    Clip clip = AudioSystem.getClip();
+                    clip.open(audio);
+                    clip.start();                
+                    System.out.println("Play sound");                    
+                }
+            }catch(Exception e){
+                System.out.println("Can't play sound");
+            }            
         }        
 
 }

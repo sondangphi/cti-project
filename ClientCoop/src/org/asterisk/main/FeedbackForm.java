@@ -83,6 +83,7 @@ public class FeedbackForm extends javax.swing.JFrame {
             cb_content_type.setEnabled(false);
             cb_assign.setBackground(white);            
             txt_email.setBackground(white);
+//             buttong
             Image image = Toolkit.getDefaultToolkit().getImage("images/icon_feedback.gif");
             this.setIconImage(image);
         }catch(Exception e){
