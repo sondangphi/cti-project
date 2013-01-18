@@ -291,6 +291,7 @@ public class MainForm extends javax.swing.JFrame {
         MenuItem_exit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         MenuItem_about = new javax.swing.JMenuItem();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -606,7 +607,7 @@ public class MainForm extends javax.swing.JFrame {
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout Panel1Layout = new javax.swing.GroupLayout(Panel1);
@@ -626,13 +627,13 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         main_tab.addTab("Mini CRM", Panel1);
 
         btnShowPro.setText("Show Data");
+        btnShowPro.setEnabled(false);
         btnShowPro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnShowProActionPerformed(evt);
@@ -856,6 +857,8 @@ public class MainForm extends javax.swing.JFrame {
 
         main_tab.addTab("Promotions", jPanel1);
 
+        jPanel3.setEnabled(false);
+
         jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder("Search Field"));
 
         txtResultCoop.setEditable(false);
@@ -968,6 +971,7 @@ public class MainForm extends javax.swing.JFrame {
         );
 
         btnShowCoop.setText("Show Data");
+        btnShowCoop.setEnabled(false);
         btnShowCoop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnShowCoopActionPerformed(evt);
@@ -1554,6 +1558,9 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
         jMenu2.add(MenuItem_about);
+
+        jMenuItem1.setText("Help Content");
+        jMenu2.add(jMenuItem1);
 
         jMenuBar1.add(jMenu2);
 
@@ -3050,6 +3057,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel13;
