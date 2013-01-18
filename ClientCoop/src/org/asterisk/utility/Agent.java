@@ -158,7 +158,7 @@ public class Agent implements Runnable{
                         mainForm.setAllEnable(false);      
                         mainForm.lb_status.setText("Not Ready");
                         mainForm.setPauseIcon(true);
-                        mainForm.btn_pause.setSelected(true);
+                        mainForm.btn_pause.setSelected(true);                        
                         worktime.pause();
                         System.out.println("PAUSESUCC");
                     break;
@@ -172,10 +172,12 @@ public class Agent implements Runnable{
                         mainForm.setPauseIcon(false);
                         mainForm.lb_status.setText("Ready");
                         mainForm.btn_pause.setSelected(false);
+                        mainForm.btn_hangup.setEnabled(false);
                         System.out.println("UNPAUSESUCC");
                     break;
                     case UNPAUSEFAIL: //result UNPAUSE
                         System.out.println("UNPAUSEFAIL");
+                        mainForm.btn_pause.setSelected(true);
                     break;
                     case TRANSSUCC: //result TRANSFER	            			
                     break;
@@ -198,12 +200,12 @@ public class Agent implements Runnable{
                         try{
                             dialout = false;
                             String callerNum = cmdList.get(1);
+                            mainForm.setAllEnable(false);
                             mainForm.lb_status.setText("Ringing...");
                             mainForm.lb_callduration.setText("00:00:00");
                             mainForm.btn_pause.setEnabled(false);       
                             mainForm.btn_feedback.setEnabled(true);
-                            mainForm.btn_hangup.setEnabled(true);
-                            mainForm.setAllEnable(false);
+                            mainForm.btn_hangup.setEnabled(true);                            
                             //open connect to database
                             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
                             if(con.isConnect()){
@@ -277,26 +279,26 @@ public class Agent implements Runnable{
                     break;
                     case COMPLETED://connected incoming call
                         mainForm.lb_status.setText("Ready");
-                        mainForm.btn_pause.setEnabled(true);
-                        mainForm.btn_hangup.setEnabled(false);
                         mainForm.setAllEnable(true); 
+                        mainForm.btn_pause.setEnabled(true);
+                        mainForm.btn_hangup.setEnabled(false);                        
                         if(clockDialin != null){
                             clockDialin.stop(); 
                         }
                     break;
                     case RINGNOANWSER: 
                         mainForm.lb_status.setText("Ready");
-                        mainForm.btn_pause.setEnabled(true);
-                        mainForm.btn_hangup.setEnabled(false);
                         mainForm.setAllEnable(true);
+                        mainForm.btn_pause.setEnabled(true);
+                        mainForm.btn_hangup.setEnabled(false);                        
                     break;                                                
                     case DIALOUT: //result 	
                         System.out.println("DIALOUT");                        
                         mainForm.lb_status.setText("Dialing...");
                         mainForm.lb_callduration.setText("00:00:00");
+                        mainForm.setAllEnable(false);  
                         mainForm.btn_pause.setEnabled(false);    
-                        mainForm.btn_hangup.setEnabled(true);
-                        mainForm.setAllEnable(false);                                
+                        mainForm.btn_hangup.setEnabled(true);                                                      
                         dialout = true;
                     break;
                     case CONNECTEDDIALOUT: 
@@ -307,9 +309,9 @@ public class Agent implements Runnable{
                     break;
                     case HANGUPDIALOUT:                         
                         mainForm.lb_status.setText("Ready");
-                        mainForm.btn_pause.setEnabled(true);
-                        mainForm.btn_hangup.setEnabled(false);
                         mainForm.setAllEnable(true); 
+                        mainForm.btn_pause.setEnabled(true);
+                        mainForm.btn_hangup.setEnabled(false);                        
                         if(clockDialout != null){
                             clockDialout.stop();
                         }
@@ -317,17 +319,20 @@ public class Agent implements Runnable{
                     break;       
                     case HANGUPABANDON: 
                         mainForm.lb_status.setText("Ready");
+                        mainForm.setAllEnable(true); 
                         mainForm.btn_pause.setEnabled(true);
-                        mainForm.btn_hangup.setEnabled(false);
-                        mainForm.setAllEnable(true);          
+                        mainForm.btn_hangup.setEnabled(false);                                 
                     break;       
                     case HANGUPSUCCESS:
                         System.out.println("HANGUPSUCCESS");
                         mainForm.btn_hangup.setEnabled(false);
                     break;
+                    case HANGUPFAIL: 
+                        System.out.println("HANGUPFAIL\t");
+                    break;                          
                     case PING: 
                         System.out.println("PING from server\t");
-                    break;                        
+                    break;                                                            
                     default: 
                         System.out.println("default values from server\t"+command);
                     break;
@@ -508,7 +513,7 @@ public class Agent implements Runnable{
             UNPAUSESUCC, UNPAUSEFAIL,
             AVAIL, BUSY, READY, RESULT, UP,HANGUP,
             CHANGEPWD,CHANGEPWDFAIL,
-            RINGING,RINGNOANWSER,CONNECTED, COMPLETED,HANGUPABANDON,
+            RINGING,RINGNOANWSER,CONNECTED, COMPLETED,HANGUPABANDON,HANGUPFAIL,
             DIALOUT,CONNECTEDDIALOUT,HANGUPDIALOUT,HANGUPSUCCESS,
             PING,
 	}

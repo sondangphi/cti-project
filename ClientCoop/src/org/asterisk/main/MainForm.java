@@ -7,6 +7,7 @@ package org.asterisk.main;
 //import com.jniwrapper.win32.ie.Browser;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -90,7 +91,7 @@ public class MainForm extends javax.swing.JFrame {
         initComponents();   
        
         //tblPromotions.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        //tblCoop.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        //tblCoop.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);        
         uti = new Utility();
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );        
         agentClient = agent;
@@ -1655,62 +1656,71 @@ public class MainForm extends javax.swing.JFrame {
         dialNumber = txt_phonenum.getText();
         dialNumber += "1";
         updateNumber();
+        uti.playSounds();        
     }//GEN-LAST:event_btn_1ActionPerformed
 
     private void btn_2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_2ActionPerformed
         // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "2";
-        updateNumber();        
+        updateNumber();  
+        uti.playSounds();
     }//GEN-LAST:event_btn_2ActionPerformed
 
     private void btn_3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_3ActionPerformed
         // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "3";
-        updateNumber();        
+        updateNumber();  
+        uti.playSounds();
     }//GEN-LAST:event_btn_3ActionPerformed
 
     private void btn_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_4ActionPerformed
         // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "4";
-        updateNumber();        
+        updateNumber();  
+        uti.playSounds();
     }//GEN-LAST:event_btn_4ActionPerformed
 
     private void btn_5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_5ActionPerformed
         // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "5";
-        updateNumber();        
+        updateNumber();  
+        uti.playSounds();
     }//GEN-LAST:event_btn_5ActionPerformed
 
     private void btn_6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_6ActionPerformed
         // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "6";
-        updateNumber();        
+        updateNumber();  
+        uti.playSounds();
     }//GEN-LAST:event_btn_6ActionPerformed
 
     private void btn_7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_7ActionPerformed
         // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "7";
-        updateNumber();        
+        updateNumber();  
+        uti.playSounds();
     }//GEN-LAST:event_btn_7ActionPerformed
 
     private void btn_8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_8ActionPerformed
         // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "8";
-        updateNumber();        
+        updateNumber();  
+        uti.playSounds();
     }//GEN-LAST:event_btn_8ActionPerformed
 
     private void btn_9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_9ActionPerformed
         // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "9";
-        updateNumber();        
+        updateNumber();  
+        uti.playSounds();
     }//GEN-LAST:event_btn_9ActionPerformed
 
     private void btn_0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_0ActionPerformed
@@ -1718,14 +1728,16 @@ public class MainForm extends javax.swing.JFrame {
         System.out.println("press");
         dialNumber = txt_phonenum.getText();
         dialNumber += "0";
-        updateNumber();        
+        updateNumber();  
+        uti.playSounds();
     }//GEN-LAST:event_btn_0ActionPerformed
 
     private void btn_11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_11ActionPerformed
         // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += btn_11.getText();
-        updateNumber();        
+        updateNumber(); 
+        uti.playSounds();
     }//GEN-LAST:event_btn_11ActionPerformed
 
     private void btn_12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_12ActionPerformed
@@ -1733,11 +1745,13 @@ public class MainForm extends javax.swing.JFrame {
         dialNumber = txt_phonenum.getText();
         dialNumber += btn_12.getText();
         updateNumber();        
+        uti.playSounds();
     }//GEN-LAST:event_btn_12ActionPerformed
 
     private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
         // TODO add your handling code here:
         deleteNumber();
+//        uti.playSounds();
     }//GEN-LAST:event_btn_backActionPerformed
 
     private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
@@ -1754,10 +1768,15 @@ public class MainForm extends javax.swing.JFrame {
                 String cmd  = "108@"+dialNumber;
                 agentClient.sendtoServer(cmd);
                 System.out.println("Dial number: "+dialNumber);
-            }else
+                uti.playSounds();
+            }else{
                 System.out.println("not allow: "+dialNumber);
+                JOptionPane.showMessageDialog(this, "Just use number");
+            }
         }catch(Exception e){
         }        
+        
+        
     }//GEN-LAST:event_btn_dialActionPerformed
 
     private void btn_feedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_feedbackActionPerformed
@@ -2469,6 +2488,7 @@ public class MainForm extends javax.swing.JFrame {
         try{
             String command = "106";
             agentClient.sendtoServer(command);
+            uti.playSounds();
         }catch(Exception e){
         
         }          
@@ -2513,24 +2533,28 @@ public class MainForm extends javax.swing.JFrame {
 //    }
     
     public void setAllEnable(boolean flag){
-        btn_0.setEnabled(flag);
-        btn_1.setEnabled(flag);
-        btn_2.setEnabled(flag);
-        btn_3.setEnabled(flag);
-        btn_4.setEnabled(flag);
-        btn_5.setEnabled(flag);
-        btn_6.setEnabled(flag);
-        btn_7.setEnabled(flag);
-        btn_8.setEnabled(flag);
-        btn_9.setEnabled(flag);
-        btn_11.setEnabled(flag);
-        btn_12.setEnabled(flag);
-        btn_back.setEnabled(flag);        
-        btn_dial.setEnabled(flag);
+        Component comNumber [] = panel_number.getComponents();
+        for(Component com : comNumber){
+            com.setEnabled(flag);
+        }
+//        btn_0.setEnabled(flag);
+//        btn_1.setEnabled(flag);
+//        btn_2.setEnabled(flag);
+//        btn_3.setEnabled(flag);
+//        btn_4.setEnabled(flag);
+//        btn_5.setEnabled(flag);
+//        btn_6.setEnabled(flag);
+//        btn_7.setEnabled(flag);
+//        btn_8.setEnabled(flag);
+//        btn_9.setEnabled(flag);
+//        btn_11.setEnabled(flag);
+//        btn_12.setEnabled(flag);
+//        btn_back.setEnabled(flag);        
+//        btn_dial.setEnabled(flag);
 //        btn_hangup.setEnabled(flag);
-        btn_clear.setEnabled(flag);
+//        btn_clear.setEnabled(flag);
         btn_logout.setEnabled(flag);
-        txt_phonenum.setEnabled(flag);        
+//        txt_phonenum.setEnabled(flag);        
         MenuItem_logout.setEnabled(flag);
         MenuItem_changepwd.setEnabled(flag);
     }
@@ -3058,7 +3082,7 @@ public class MainForm extends javax.swing.JFrame {
     public javax.swing.JLabel lb_status;
     private javax.swing.JLabel lb_version;
     public javax.swing.JLabel lb_workTime;
-    private javax.swing.JTabbedPane main_tab;
+    public javax.swing.JTabbedPane main_tab;
     private javax.swing.JPanel panel_dial;
     private javax.swing.JPanel panel_number;
     public javax.swing.JTable table_report;
