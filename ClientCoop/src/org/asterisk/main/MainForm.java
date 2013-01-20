@@ -64,7 +64,11 @@ public class MainForm extends javax.swing.JFrame {
     private  String Mysql_pwd  = "123456"; 
     private ConnectDatabase con;
     private FeedbackForm feedback;
+//<<<<<<< .mine
+   // Browser bro = null;    
+//=======
 //    Browser bro = null;    
+//>>>>>>> .r168
     LocateMap locate = new LocateMap();
     public ChangepwdForm chanpwdform;
     private final String EXIT = "112";
@@ -247,7 +251,7 @@ public class MainForm extends javax.swing.JFrame {
         txtDetail = new javax.swing.JTextArea();
         btnShowCoop = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnDial = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblCamp = new javax.swing.JTable();
         jScrollPane8 = new javax.swing.JScrollPane();
@@ -293,7 +297,6 @@ public class MainForm extends javax.swing.JFrame {
         MenuItem_exit = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
         MenuItem_about = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -609,7 +612,7 @@ public class MainForm extends javax.swing.JFrame {
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 181, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout Panel1Layout = new javax.swing.GroupLayout(Panel1);
@@ -629,13 +632,13 @@ public class MainForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         main_tab.addTab("Mini CRM", Panel1);
 
         btnShowPro.setText("Show Data");
-        btnShowPro.setEnabled(false);
         btnShowPro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnShowProActionPerformed(evt);
@@ -859,8 +862,6 @@ public class MainForm extends javax.swing.JFrame {
 
         main_tab.addTab("Promotions", jPanel1);
 
-        jPanel3.setEnabled(false);
-
         jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder("Search Field"));
 
         txtResultCoop.setEditable(false);
@@ -973,7 +974,6 @@ public class MainForm extends javax.swing.JFrame {
         );
 
         btnShowCoop.setText("Show Data");
-        btnShowCoop.setEnabled(false);
         btnShowCoop.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnShowCoopActionPerformed(evt);
@@ -1015,10 +1015,10 @@ public class MainForm extends javax.swing.JFrame {
 
         main_tab.addTab("Co.op Systems", jPanel3);
 
-        jButton1.setText("dial");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnDial.setText("dial");
+        btnDial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnDialActionPerformed(evt);
             }
         });
 
@@ -1056,6 +1056,16 @@ public class MainForm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblCustom.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCustomMouseClicked(evt);
+            }
+        });
+        tblCustom.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblCustomKeyReleased(evt);
+            }
+        });
         jScrollPane8.setViewportView(tblCustom);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
@@ -1066,7 +1076,7 @@ public class MainForm extends javax.swing.JFrame {
             .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnDial, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(336, 336, 336))
         );
         jPanel5Layout.setVerticalGroup(
@@ -1076,7 +1086,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnDial, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -1561,9 +1571,6 @@ public class MainForm extends javax.swing.JFrame {
         });
         jMenu2.add(MenuItem_about);
 
-        jMenuItem1.setText("Help Content");
-        jMenu2.add(jMenuItem1);
-
         jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
@@ -2012,6 +2019,21 @@ public class MainForm extends javax.swing.JFrame {
             //            bro.navigate(url);
 
             //            locate.setVisible(true);
+//<<<<<<< .mine
+         //   bro = new Browser();
+          //  bro.navigate(url);
+            Image image = Toolkit.getDefaultToolkit().getImage("map_magnify.png");                        
+            JPanel contentPane;
+            contentPane = new JPanel(new GridLayout(1,9));
+          //  contentPane.add(bro);
+            JFrame frame = new JFrame("Locate Maps");
+            frame.setSize(700, 500);
+            frame.setIconImage(image);
+            frame.setLocationRelativeTo(null);
+            frame.getContentPane().add(contentPane, BorderLayout.CENTER);       
+            frame.setVisible(true);
+            frame.add(contentPane);
+//=======
 //            bro = new Browser();
 //            bro.navigate(url);
 //            Image image = Toolkit.getDefaultToolkit().getImage("map_magnify.png");                        
@@ -2025,6 +2047,7 @@ public class MainForm extends javax.swing.JFrame {
 //            frame.getContentPane().add(contentPane, BorderLayout.CENTER);       
 //            frame.setVisible(true);
 //            frame.add(contentPane);
+//>>>>>>> .r168
             
             
             
@@ -2511,9 +2534,9 @@ public class MainForm extends javax.swing.JFrame {
         ShowCoopAction();
     }//GEN-LAST:event_btnClearCoopActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:       
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnDialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDialActionPerformed
+       Dial();
+    }//GEN-LAST:event_btnDialActionPerformed
 
     private void btn_hangupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hangupActionPerformed
         // TODO add your handling code here:
@@ -2552,18 +2575,21 @@ public class MainForm extends javax.swing.JFrame {
     }    
     
     private void tblCampMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCampMouseClicked
-        // TODO add your handling code here:
-        showCustomer();
+       showCustomer();
     }//GEN-LAST:event_tblCampMouseClicked
 
     private void tblCampKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCampKeyReleased
-        // TODO add your handling code here:
         showCustomer();
     }//GEN-LAST:event_tblCampKeyReleased
 
-//    private void callCustomer(String List<String>() list){
-//    }
-    
+    private void tblCustomMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomMouseClicked
+        ShowButtonDial();
+    }//GEN-LAST:event_tblCustomMouseClicked
+
+    private void tblCustomKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCustomKeyReleased
+       ShowButtonDial();
+    }//GEN-LAST:event_tblCustomKeyReleased
+   
     public void setAllEnable(boolean flag){
         Component comNumber [] = panel_number.getComponents();
         for(Component com : comNumber){
@@ -2625,45 +2651,9 @@ public class MainForm extends javax.swing.JFrame {
                           +"Time End : "+col3+"\n"
                           +"Content : \n"+col4);
      
-    }
-   /**/  
-  /**
-   private void ResizeTablePromotion()
-  {
-       tblPromotions.getTableHeader().setReorderingAllowed(false);
-       TableColumn column = null;
-        for (int i = 0; i < tblPromotions.getColumnCount(); i++) {
-            column = tblPromotions.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(50);
-            } 
-
-            else {
-                column.setPreferredWidth(100);
-             
-            }
-        }
-  
-  }/**/
-   /**
-      private void ResizeTableCoop()
-  {
-       tblCoop.getTableHeader().setReorderingAllowed(false);
-       TableColumn column = null;
-        for (int i = 0; i < tblCoop.getColumnCount(); i++) {
-            column = tblCoop.getColumnModel().getColumn(i);
-            if (i == 0) {
-                column.setPreferredWidth(50);
-            } 
-
-            else {
-                column.setPreferredWidth(100);
-             
-            }
-        }
-  
-  }/**/
-      private void ShowProAction()
+    }   
+    
+    private void ShowProAction()
       {
            try {
               con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
@@ -2735,7 +2725,7 @@ public class MainForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
         }
       }
-      private void ShowCoopAction()
+    private void ShowCoopAction()
       {
          try {
                 con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
@@ -2752,8 +2742,7 @@ public class MainForm extends javax.swing.JFrame {
                  // tblCoop.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
                   ResultSet result = con.executeQuery("SELECT * FROM coopmart_name");
-                  //loadDataCoopName();
-                   String strHeader[]={"Number","Name","Address","Phone","Fax","Date of Establishment"};
+                  String strHeader[]={"Number","Name","Address","Phone","Fax","Date of Establishment"};
                         DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
                           {
 
@@ -2808,7 +2797,7 @@ public class MainForm extends javax.swing.JFrame {
               }
 
       }
-      private void showCampaign()
+    private void showCampaign()
     {
          try {
                 con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
@@ -2816,7 +2805,10 @@ public class MainForm extends javax.swing.JFrame {
                 if(con.isConnect()){
 
                   String sql="SELECT * FROM ("
-                           + "SELECT c.id as campaign_id,c.create_day as create_day,c.start_day as start_day,c.end_day as end_day, a.agent_id as agent_id, a.agentName as agent_name"
+                           + "SELECT c.id as campaign_id,c.create_day as create_day,"
+                          + "c.start_day as start_day,c.end_day as end_day, "
+                          + " k.id as call_id "
+                          + "a.agent_id as agent_id, a.agentName as agent_name"
                            + " FROM ((_campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
                            + "INNER JOIN _call k ON k.camp_detail_id = d.id)"
                            + "INNER JOIN agent_login a ON k.agent_id = a.agent_id) "
@@ -2885,27 +2877,22 @@ public class MainForm extends javax.swing.JFrame {
                 con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
             
                 if(con.isConnect()){
+                    String sql="SELECT customer_id, name, gender, address, birthday,"
+                                     + "GROUP_CONCAT(number)as number,status,id_status,detail_id,call_id "
+                                     + " FROM ( "
+                                     + " SELECT c.id AS campaign_id,c.create_day as create_day,c.start_day as start_day,c.end_day as end_day,"
+                                     + " a.agent_id AS agent_id, a.agentname AS agent_name, "
+                                     + " k.camp_detail_id AS detail_id,k.id as call_id, "
+                                     + " i.id AS customer_id, i.name AS name, i.gender AS gender, i.address AS address, i.birthday AS birthday,"
+                                     + " p.number AS number,s.desc AS status, s.id AS id_status"
+                                     + " FROM (((((("
+                                     + " _campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
+                                     + " INNER JOIN _call k ON k.camp_detail_id = d.id) "
+                                     + " INNER JOIN agent_login a ON k.agent_id = a.id)"
+                                     + " INNER JOIN _customer_info i ON d.cus_id = i.id)"
+                                     + " INNER JOIN _phone p ON i.id = p.cus_id)"
+                                     + " INNER JOIN _call_status s ON s.id=k.status_id)) AS asd ";
 
-                    
-                  
-                 
-
-                 String sql="SELECT customer_id, name, gender, address, birthday,GROUP_CONCAT(number)as number,status"
-                         + " FROM ( "
-                         + " SELECT c.id AS campaign_id,c.create_day as create_day,c.start_day as start_day,c.end_day as end_day,"
-                         + " a.agent_id AS agent_id, a.agentname AS agent_name, "
-                         + " i.id AS customer_id, i.name AS name, i.gender AS gender, i.address AS address, i.birthday AS birthday,"
-                         + " p.number AS number,s.desc AS status"
-                         + " FROM (((((("
-                         + " _campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
-                         + " INNER JOIN _call k ON k.camp_detail_id = d.id) "
-                         + " INNER JOIN agent_login a ON k.agent_id = a.agent_id)"
-                         + " INNER JOIN _customer_info i ON d.cus_id = i.id)"
-                         + " INNER JOIN _phone p ON i.id = p.cus_id)"
-                         + " INNER JOIN _call_status s ON s.id=k.status_id)) AS asd ";
-                 
-      
-                  
                     
                     int row=tblCamp.getSelectedRow();
         
@@ -2915,8 +2902,9 @@ public class MainForm extends javax.swing.JFrame {
                               + " GROUP BY customer_id, name, gender, address, birthday ";
                    ResultSet result = con.executeQuery(sql);
                  
-                   String strHeader[]={"Number","Customer id","Name","Gender","Address","Birthday","Number","Status"};
-                        DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
+                   String strHeader[]={"Number","Customer id","Name","Gender","Address",
+                       "Birthday","Number","Status","id_s","detail_id","call id"};
+                             DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
                           {
 
                         @Override
@@ -2951,10 +2939,11 @@ public class MainForm extends javax.swing.JFrame {
                                 rowdata.add(a1);
                                 rowdata.add(result.getString("address"));
                                 rowdata.add(result.getString("birthday"));
-                                rowdata.add(result.getString("number"));
+                                rowdata.add(result.getString("number"));                              
                                 rowdata.add(result.getString("status"));
-                                
-
+                                rowdata.add(result.getString("id_status"));
+                                rowdata.add(result.getString("detail_id"));
+                                rowdata.add(result.getString("call_id"));
                                 dt.addRow(rowdata);
                             }
                      tblCustom.setModel(dt);
@@ -2968,7 +2957,30 @@ public class MainForm extends javax.swing.JFrame {
                             column.setPreferredWidth(50);
 
                         } 
+                        else if(k==8)
+                        {
+                            //column.setPreferredWidth(0);
+                            column.setWidth(0);
+                            column.setMinWidth(0);
+                            column.setMaxWidth(0);
 
+                        }
+                        else if(k==9)
+                        {
+                            //column.setPreferredWidth(0);
+                            column.setWidth(0);
+                            column.setMinWidth(0);
+                            column.setMaxWidth(0);
+
+                        }
+                        else if(k==10)
+                        {
+                            //column.setPreferredWidth(0);
+                            column.setWidth(0);
+                            column.setMinWidth(0);
+                            column.setMaxWidth(0);
+
+                        }
                         else {
                             column.setPreferredWidth(100);
 
@@ -2983,6 +2995,60 @@ public class MainForm extends javax.swing.JFrame {
                   JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
               }
     }
+    private void ShowButtonDial()
+    {
+        int row=tblCustom.getSelectedRow();
+        String SStatus_id=""+this.tblCustom.getValueAt(row, 8);
+        int status_id=Integer.parseInt(SStatus_id);
+        if(status_id==3)//complete
+        {
+            //row=blue
+            btnDial.setEnabled(false);
+        }
+        else if(status_id==2)//not complete
+        {
+            //row=red
+            btnDial.setEnabled(true);
+        }
+        else
+        {
+            //row=none
+              btnDial.setEnabled(true);
+        }
+    }
+     
+    private void Dial()
+   {
+         int row=tblCustom.getSelectedRow();
+        
+        String Scus_name=""+this.tblCustom.getValueAt(row,2);
+        String SStatus=""+this.tblCustom.getValueAt(row, 7);
+        String SStatus_id=""+this.tblCustom.getValueAt(row, 8);
+        String SDetail_id=""+this.tblCustom.getValueAt(row, 9);
+        String SCall_id=""+this.tblCustom.getValueAt(row, 10);
+       
+        int row1=tblCamp.getSelectedRow();
+        String Scam_id=""+this.tblCamp.getValueAt(row1, 1);
+        String Sagent_id=""+this.tblCamp.getValueAt(row1, 5);
+        int status_id=Integer.parseInt(SStatus_id);
+        System.out.println(SStatus_id);
+        
+        if(status_id==3)
+        {
+            
+        }
+        
+        else
+        {
+            Question_Camp quesF=new Question_Camp();
+            quesF.setVisible(true);
+            quesF.getlblAgent_id().setText(Sagent_id);
+            quesF.getlblCus_id().setText(Scus_name);
+            quesF.getlblCam_id().setText(Scam_id);
+            quesF.getlblDetail().setText(SDetail_id);
+            quesF.getlblCall().setText(SCall_id);
+        }
+   }
     
     /**
      * @param args the command line arguments
@@ -3030,6 +3096,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btnChooseStart;
     private javax.swing.JButton btnClearCoop;
     private javax.swing.JButton btnClearPro;
+    private javax.swing.JButton btnDial;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnShowCoop;
     private javax.swing.JButton btnShowPro;
@@ -3058,7 +3125,6 @@ public class MainForm extends javax.swing.JFrame {
     public javax.swing.JComboBox cb_gender;
     public javax.swing.JComboBox cb_type;
     private javax.swing.JCheckBox chkTime;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -3082,7 +3148,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel13;
@@ -3115,7 +3180,7 @@ public class MainForm extends javax.swing.JFrame {
     public javax.swing.JLabel lb_status;
     private javax.swing.JLabel lb_version;
     public javax.swing.JLabel lb_workTime;
-    public javax.swing.JTabbedPane main_tab;
+    private javax.swing.JTabbedPane main_tab;
     private javax.swing.JPanel panel_dial;
     private javax.swing.JPanel panel_number;
     public javax.swing.JTable table_report;

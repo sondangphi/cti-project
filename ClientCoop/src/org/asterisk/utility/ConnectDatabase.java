@@ -21,7 +21,7 @@ public class ConnectDatabase {
 	private  String database = "ast_callcenter";
 	private  String driverName = "com.mysql.jdbc.Driver";
 	private  String serverName = "172.168.10.202:3306/";
-	
+    	
 	public ConnectDatabase() throws ClassNotFoundException, SQLException{
 		Class.forName(driverName);
 		connection = DriverManager.getConnection("jdbc:mysql://"+serverName+database+"?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true",user,pwd);
@@ -95,5 +95,5 @@ public class ConnectDatabase {
                 System.out.println("ClassNotFoundException\t"+e);
             }             
             return list;            
-        }        
+        }   
 }
