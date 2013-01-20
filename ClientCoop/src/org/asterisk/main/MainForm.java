@@ -24,6 +24,8 @@ import java.net.URI;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -1635,17 +1637,27 @@ public class MainForm extends javax.swing.JFrame {
     private void MenuItem_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_exitActionPerformed
         // TODO add your handling code here:
         try{
-            int option = JOptionPane.showConfirmDialog(this,"Do you realy want to EXIT program?","Comfirm",JOptionPane.YES_NO_OPTION);  
-            if(option == 0){
-                agentClient.sendtoServer(EXIT);
-                agentClient.agentLogout();
-                System.exit(0);
-                System.out.println("Exit CTI CLIENT: "+option);                                 
-            }else if(option == 1){
-                System.out.println("CANCEL: "+option);
-            }else{
-                System.out.println("CLOSE: "+option);
-            }           
+            new Thread(new Runnable() {
+
+                @Override
+                public void run() {                    
+                    int option = showDialog("Comfirm", "Do you realy want to EXIT program?");
+                    if(option == 0){
+                        try {
+                            agentClient.sendtoServer(EXIT);
+                        } catch (IOException ex) {
+                            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                        agentClient.agentLogout();
+                        System.exit(0);
+                        System.out.println("Exit CTI CLIENT: "+option);                                 
+                    }else if(option == 1){
+                        System.out.println("CANCEL: "+option);
+                    }else{
+                        System.out.println("CLOSE: "+option);
+                    }                    
+                }
+            }).start();          
         }catch(Exception e){
         }        
     }//GEN-LAST:event_MenuItem_exitActionPerformed
@@ -1778,14 +1790,26 @@ public class MainForm extends javax.swing.JFrame {
                 uti.playSounds();
             }else{
                 System.out.println("not allow: "+dialNumber);
-                JOptionPane.showMessageDialog(this, "Just use number");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {   
+                        showDialog("Just use number.");
+                    }
+                }).start();                
             }
         }catch(Exception e){
-        }        
-        
-        
+        }                       
     }//GEN-LAST:event_btn_dialActionPerformed
-
+    
+    public void showDialog(String t){
+        JOptionPane.showMessageDialog(this, t);
+    }
+    
+    public int showDialog(String name, String data){
+        int option = JOptionPane.showConfirmDialog(this,data,name,JOptionPane.YES_NO_OPTION);     
+        return option;
+    }    
+    
     private void btn_feedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_feedbackActionPerformed
         // TODO add your handling code here:
         System.out.println("txt_name: "+this.txt_name.getText());
@@ -1818,6 +1842,7 @@ public class MainForm extends javax.swing.JFrame {
                 con.executeUpdate(sql);                                                
                 System.out.println("new customer information success.");
                 btn_new.setEnabled(false);
+                JOptionPane.showMessageDialog(this, "New Customer successful");
             }
             con.closeConnect();
         }catch(Exception e){
