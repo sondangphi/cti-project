@@ -2860,6 +2860,18 @@ public class MainForm extends javax.swing.JFrame {
 
                         } 
 
+                         else if(k==5)
+                        {
+                            column.setWidth(0);
+                            column.setMinWidth(0);
+                            column.setMaxWidth(0);
+                        }
+                        else if(k==6)
+                        {
+                            column.setWidth(0);
+                            column.setMinWidth(0);
+                            column.setMaxWidth(0);
+                        }
                         else {
                             column.setPreferredWidth(100);
 
