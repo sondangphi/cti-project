@@ -2807,11 +2807,11 @@ public class MainForm extends javax.swing.JFrame {
                   String sql="SELECT * FROM ("
                            + "SELECT c.id as campaign_id,c.create_day as create_day,"
                           + "c.start_day as start_day,c.end_day as end_day, "
-                          + " k.id as call_id "
+                          + " k.id as call_id, "
                           + "a.agent_id as agent_id, a.agentName as agent_name"
                            + " FROM ((_campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
                            + "INNER JOIN _call k ON k.camp_detail_id = d.id)"
-                           + "INNER JOIN agent_login a ON k.agent_id = a.agent_id) "
+                           + "INNER JOIN agent_login a ON k.agent_id = a.id) "
                            + "AS asd ";
                   
                  sql+=" where agent_id= '"+lb_agentid.getText()+"' and end_day > '"+lb_logintime.getText()+"' "
@@ -3029,7 +3029,7 @@ public class MainForm extends javax.swing.JFrame {
        
         int row1=tblCamp.getSelectedRow();
         String Scam_id=""+this.tblCamp.getValueAt(row1, 1);
-        String Sagent_id=""+this.tblCamp.getValueAt(row1, 5);
+     //   String Sagent_id=""+this.tblCamp.getValueAt(row1, 5);
         int status_id=Integer.parseInt(SStatus_id);
         System.out.println(SStatus_id);
         
@@ -3042,7 +3042,7 @@ public class MainForm extends javax.swing.JFrame {
         {
             Question_Camp quesF=new Question_Camp();
             quesF.setVisible(true);
-            quesF.getlblAgent_id().setText(Sagent_id);
+            quesF.getlblAgent_id().setText(lb_agentid.getText());
             quesF.getlblCus_id().setText(Scus_name);
             quesF.getlblCam_id().setText(Scam_id);
             quesF.getlblDetail().setText(SDetail_id);
