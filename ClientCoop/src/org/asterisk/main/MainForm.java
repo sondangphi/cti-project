@@ -58,10 +58,10 @@ public class MainForm extends javax.swing.JFrame {
     public String callDuration = "00:00:00";
 
     private  String filename = "infor.properties";
-    private  String Mysql_server = "172.168.10.208";      
-    private  String Mysql_dbname = "cti_database";
-    private  String Mysql_user = "cti";
-    private  String Mysql_pwd  = "123456"; 
+    private  String Mysql_server = "172.168.10.5";      
+    private  String Mysql_dbname = "ast_callcenter";
+    private  String Mysql_user = "callcenter";
+    private  String Mysql_pwd  = "callcenter"; 
     private ConnectDatabase con;
     private FeedbackForm feedback;
     private String CallPhone;
@@ -2167,6 +2167,7 @@ public class MainForm extends javax.swing.JFrame {
         try{
              tblPromotions.getTableHeader().setReorderingAllowed(false);
              con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+             System.out.println("Mysql_server: "+Mysql_server);
              if(con.isConnect()){
                 if(ChkName.isSelected())
                 {
@@ -2539,6 +2540,11 @@ public class MainForm extends javax.swing.JFrame {
 
     private void btnDialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDialActionPerformed
        Dial();
+        try {
+            agentClient.sendtoServer("108@"+CallPhone);
+        } catch (IOException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnDialActionPerformed
 
     private void btn_hangupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hangupActionPerformed
