@@ -12,9 +12,12 @@ import java.awt.Desktop;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.MenuItem;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -23,16 +26,31 @@ import java.io.IOException;
 import java.net.URI;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.EventObject;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.Action;
+import javax.swing.CellEditor;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultCellEditor;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.event.CellEditorListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.StyledEditorKit;
 import org.asterisk.model.AgentObject;
@@ -613,7 +631,9 @@ public class MainForm extends javax.swing.JFrame {
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout Panel1Layout = new javax.swing.GroupLayout(Panel1);
@@ -2666,9 +2686,9 @@ public class MainForm extends javax.swing.JFrame {
       {
            try {
               con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-            if(con.isConnect()){
+            if(con.isConnect())
+            {
                 String sql="SELECT * FROM promotions";
-               // btnClearPro.setEnabled(true);
                 ChkName.setEnabled(true);
                 chkTime.setEnabled(true);
                 txtAutoSearchPro.setEnabled(true);
@@ -2681,218 +2701,210 @@ public class MainForm extends javax.swing.JFrame {
               
                 String strHeader[]={"Number","Name","Time Start","Time End","Content","Location"};
                 DefaultTableModel dt =new DefaultTableModel(strHeader,0)
-                    {
+                {
 
-                     @Override
-                     public boolean isCellEditable(int i, int i1) {
+                    @Override
+                    public boolean isCellEditable(int i, int i1) {
                          return false;
-                     }
+                    }
 
-                    };
+                };
 
-                   int i=0;
-                   while (result.next()) {
-                       i++;
-                       Vector rowdata = new Vector();
-                       rowdata.add(Integer.toString(i));
-                       rowdata.add(result.getString("name"));
-                       rowdata.add(result.getString("time_start"));
-                       rowdata.add(result.getString("time_end"));
-                       rowdata.add(result.getString("content"));
-                       rowdata.add(result.getString("location"));
+                int i=0;
+                while (result.next()) {
+                    i++;
+                    Vector rowdata = new Vector();
+                    rowdata.add(Integer.toString(i));
+                    rowdata.add(result.getString("name"));
+                    rowdata.add(result.getString("time_start"));
+                    rowdata.add(result.getString("time_end"));
+                    rowdata.add(result.getString("content"));
+                    rowdata.add(result.getString("location"));
 
-                       dt.addRow(rowdata);
-                   }
-
-             
-                
-
+                    dt.addRow(rowdata);
+                }
                 tblPromotions.setModel(dt);
                 TableColumn column = null;
-                for (int k = 0;k < tblPromotions.getColumnCount(); k++) {
-                        column = tblPromotions.getColumnModel().getColumn(k);
+                for (int k = 0;k < tblPromotions.getColumnCount(); k++) 
+                {
+                    column = tblPromotions.getColumnModel().getColumn(k);
 
-                        if (k == 0) {
-                            column.setPreferredWidth(50);
+                    if (k == 0) {
+                        column.setPreferredWidth(50);
 
-                        } 
+                    } 
 
-                        else {
-                            column.setPreferredWidth(100);
+                    else {
+                        column.setPreferredWidth(100);
 
-                        }
                     }
+                }
                 
                 int j=dt.getRowCount();
 
                 txtResultPro.setText(Integer.toString(j));
                 result.close();
             }
-             con.closeConnect();
+            con.closeConnect();
         }
         catch (IOException | SQLException | ClassNotFoundException ex) {
             JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
         }
-      }
+    }
     private void ShowCoopAction()
-      {
-         try {
-                con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+    {
+        try {
             
-                if(con.isConnect()){
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
 
-                  txtAutoSearchCoop.setEnabled(true);
-                  txtResultCoop.setEnabled(true);
-                  txtDetail.setEnabled(true);
-                  tblCoop.setEnabled(true);
-                  btnClearCoop.setEnabled(true);
-                  tblCoop.getTableHeader().setReorderingAllowed(false);
+            if(con.isConnect())
+            {
+                txtAutoSearchCoop.setEnabled(true);
+                txtResultCoop.setEnabled(true);
+                txtDetail.setEnabled(true);
+                tblCoop.setEnabled(true);
+                btnClearCoop.setEnabled(true);
+                tblCoop.getTableHeader().setReorderingAllowed(false);
+                ResultSet result = con.executeQuery("SELECT * FROM coopmart_name");
+                String strHeader[]={"Number","Name","Address","Phone","Fax","Date of Establishment"};
+                DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
+                {
 
-                 // tblCoop.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-
-                  ResultSet result = con.executeQuery("SELECT * FROM coopmart_name");
-                  String strHeader[]={"Number","Name","Address","Phone","Fax","Date of Establishment"};
-                        DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
-                          {
-
-                        @Override
-                        public boolean isCellEditable(int i, int i1) {
-                            return false;
-                        }
-
-                          };
-
-                          int i=0;
-                          while (result.next()) {
-                              i++;
-                                Vector rowdata = new Vector();
-
-                                rowdata.add(Integer.toString(i));
-
-                                rowdata.add(result.getString("name"));
-                                rowdata.add(result.getString("address"));
-                                rowdata.add(result.getString("phone"));
-                                rowdata.add(result.getString("fax"));
-                                rowdata.add(result.getString("date_establishment"));
-
-                                dt.addRow(rowdata);
-                            }
-                    tblCoop.setModel(dt);
-                    
-                     
-                     TableColumn column = null;
-                     for (int k = 0;k < tblCoop.getColumnCount(); k++) {
-                        column = tblCoop.getColumnModel().getColumn(k);
-
-                        if (k == 0) {
-                            column.setPreferredWidth(50);
-
-                        } 
-
-                        else {
-                            column.setPreferredWidth(100);
-
-                        }
+                    @Override
+                    public boolean isCellEditable(int i, int i1) {
+                        return false;
                     }
-                      int j=dt.getRowCount();
+                };
+                int i=0;
+                while (result.next())
+                {
+                    i++;
+                    Vector rowdata = new Vector();
+
+                    rowdata.add(Integer.toString(i));
+
+                    rowdata.add(result.getString("name"));
+                    rowdata.add(result.getString("address"));
+                    rowdata.add(result.getString("phone"));
+                    rowdata.add(result.getString("fax"));
+                    rowdata.add(result.getString("date_establishment"));
+
+                    dt.addRow(rowdata);
+                }
+                tblCoop.setModel(dt);
+
+
+                TableColumn column = null;
+                for (int k = 0;k < tblCoop.getColumnCount(); k++)
+                {
+                    column = tblCoop.getColumnModel().getColumn(k);
+
+                    if (k == 0)
+                    {
+                        column.setPreferredWidth(50);
+
+                    } 
+
+                    else 
+                    {
+                        column.setPreferredWidth(100);
+
+                    }
+                }
+                int j=dt.getRowCount();
 
                 txtResultCoop.setText(Integer.toString(j));
-               
-                }
-                con.closeConnect();
-              }
-              catch (IOException | SQLException | ClassNotFoundException ex) {
-                  JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
-              }
+
+            }
+            con.closeConnect();
+        }
+        catch (Exception ex)
+        {
+            JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
+        }
 
       }
     private void showCampaign()
     {
-         try {
+        try {
                 con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
             
-                if(con.isConnect()){
+                if(con.isConnect())
+                {
 
-                  String sql="SELECT * FROM ("
-                           + "SELECT c.id as campaign_id,c.create_day as create_day,"
-                          + "c.start_day as start_day,c.end_day as end_day, "
-                          + " k.id as call_id, "
-                          + "a.agent_id as agent_id, a.agentName as agent_name"
-                           + " FROM ((_campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
-                           + "INNER JOIN _call k ON k.camp_detail_id = d.id)"
-                           + "INNER JOIN agent_login a ON k.agent_id = a.id) "
-                           + "AS asd ";
-                  
-                 sql+=" where agent_id= '"+lb_agentid.getText()+"' and end_day > '"+lb_logintime.getText()+"' "
-                         + " group by campaign_id,create_day,start_day,end_day,agent_id";
-                  ResultSet result = con.executeQuery(sql);
-                         String strHeader[]={"Number","Campaign id","Day Create","Start Day","End Day"};
-                        DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
-                          {
+                    String sql="SELECT * FROM ("
+                                        + "SELECT c.id as campaign_id,c.create_day as create_day,"
+                                        + "c.start_day as start_day,c.end_day as end_day, "
+                                        + " k.id as call_id, "
+                                        + "a.agent_id as agent_id, a.agentName as agent_name"
+                                        + " FROM ((_campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
+                                        + "INNER JOIN _call k ON k.camp_detail_id = d.id)"
+                                        + "INNER JOIN agent_login a ON k.agent_id = a.id) "
+                                        + "AS asd ";
+
+                    sql+=" where agent_id= '"+lb_agentid.getText()+"' and end_day > '"+lb_logintime.getText()+"' "
+                                        + " group by campaign_id,create_day,start_day,end_day,agent_id";
+                    ResultSet result = con.executeQuery(sql);
+                    tblCamp.getTableHeader().setReorderingAllowed(false);
+                    String strHeader[]={"Number","Campaign id","Day Create","Start Day","End Day"};
+                    DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
+                    {
 
                         @Override
                         public boolean isCellEditable(int i, int i1) {
                             return false;
                         }
 
-                          };
+                    };
 
-                          int i=0;
-                          while (result.next()) {
-                              i++;
-                                Vector rowdata = new Vector();
+                    int i=0;
+                    while (result.next()) {
+                        i++;
+                        Vector rowdata = new Vector();
 
-                                rowdata.add(Integer.toString(i));
+                        rowdata.add(Integer.toString(i));
 
-                                 
-                                rowdata.add(result.getString("campaign_id"));
-                                rowdata.add(result.getString("create_day"));
-                                rowdata.add(result.getString("start_day"));
-                                rowdata.add(result.getString("end_day"));
-                               // rowdata.add(result.getString("agent_id"));
-                                
 
-                                dt.addRow(rowdata);
-                            }
-                     tblCamp.setModel(dt);
-                    
-                     
-                     TableColumn column = null;
-                     for (int k = 0;k < tblCamp.getColumnCount(); k++) {
-                        column = tblCamp.getColumnModel().getColumn(k);
-
-                        if (k == 0) {
-                            column.setPreferredWidth(50);
-
-                        } 
-
-                         else if(k==5)
-                        {
-                            column.setWidth(0);
-                            column.setMinWidth(0);
-                            column.setMaxWidth(0);
-                        }
-                        else if(k==6)
-                        {
-                            column.setWidth(0);
-                            column.setMinWidth(0);
-                            column.setMaxWidth(0);
-                        }
-                        else {
-                            column.setPreferredWidth(100);
-
-                        }
+                        rowdata.add(result.getString("campaign_id"));
+                        rowdata.add(result.getString("create_day"));
+                        rowdata.add(result.getString("start_day"));
+                        rowdata.add(result.getString("end_day"));
+                        dt.addRow(rowdata);
                     }
-                      
-               
-                }
-                con.closeConnect();
-              }
-              catch (IOException | SQLException | ClassNotFoundException ex) {
-                  JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
-              }
+                    tblCamp.setModel(dt);
+                    TableColumn column = null;
+                    for (int k = 0;k < tblCamp.getColumnCount(); k++) {
+                    column = tblCamp.getColumnModel().getColumn(k);
+
+                    if (k == 0) {
+                        column.setPreferredWidth(50);
+
+                    } 
+                    else if(k==5)
+                    {
+                        column.setWidth(0);
+                        column.setMinWidth(0);
+                        column.setMaxWidth(0);
+                    }
+                    else if(k==6)
+                    {
+                        column.setWidth(0);
+                        column.setMinWidth(0);
+                        column.setMaxWidth(0);
+                    }
+                    else {
+                        column.setPreferredWidth(100);
+
+                    }
+               }
+            }
+            con.closeConnect();
+        }
+        catch (IOException | SQLException | ClassNotFoundException ex) {
+            JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
+        }
     }
-    private void showCustomer()
+    public void showCustomer()
     {
          try {
                 con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
@@ -2923,52 +2935,141 @@ public class MainForm extends javax.swing.JFrame {
                               + " GROUP BY customer_id, name, gender, address, birthday ";
                    ResultSet result = con.executeQuery(sql);
                  
+                   tblCustom.getTableHeader().setReorderingAllowed(false);
                    String strHeader[]={"Number","Customer id","Name","Gender","Address",
                        "Birthday","Number","Status","id_s","detail_id","call id"};
-                             DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
-                          {
+                    final DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
+                    {
 
                         @Override
-                        public boolean isCellEditable(int i, int i1) {
+                        public boolean isCellEditable(int row, int col) {
+                            if (col==6) {
+                                return true;
+                            }
                             return false;
                         }
+                    };
 
-                          };
-
-                          int i=0;
-                          while (result.next()) {
-                              i++;
-                                Vector rowdata = new Vector();
-
-                                rowdata.add(Integer.toString(i));
-
-                                 
-                                rowdata.add(result.getString("customer_id"));
-                                rowdata.add(result.getString("name"));
-                                int a=Integer.parseInt(result.getString("gender"));
-
-                                String a1="";
-                                if(a==1)
-                                {
-                                    a1="nữ";
-                                    System.out.println(a1);
-                                }
-                                else if(a==0)
-                                {
-                                    a1="nam";
-                                }
-                                rowdata.add(a1);
-                                rowdata.add(result.getString("address"));
-                                rowdata.add(result.getString("birthday"));
-                                rowdata.add(result.getString("number"));                              
-                                rowdata.add(result.getString("status"));
-                                rowdata.add(result.getString("id_status"));
-                                rowdata.add(result.getString("detail_id"));
-                                rowdata.add(result.getString("call_id"));
-                                dt.addRow(rowdata);
-                            }
-                     tblCustom.setModel(dt);
+                    ArrayList<Vector> st_init = new ArrayList<>();
+                    ArrayList<Vector> st_com = new ArrayList<>();
                     
+                    int i=0;
+                    while (result.next()) {
+                        i++;
+                        Vector rowdata = new Vector();
+                        
+                        rowdata.add("");
+                        rowdata.add(result.getString("customer_id"));
+                        rowdata.add(result.getString("name"));
+                        int a=Integer.parseInt(result.getString("gender"));
+
+                        String a1="";
+                        if(a==1)
+                        {
+                            a1="male";
+                            System.out.println(a1);
+                        }
+                        else 
+                        {
+                            a1="female";
+                        }
+                        rowdata.add(a1);
+                        rowdata.add(result.getString("address"));
+                        rowdata.add(result.getString("birthday"));
+                        rowdata.add(result.getString("number"));                              
+                        rowdata.add(result.getString("status"));
+                        rowdata.add(result.getString("id_status"));
+                        rowdata.add(result.getString("detail_id"));
+                        rowdata.add(result.getString("call_id"));
+
+                        if(Integer.parseInt((String)rowdata.get(8)) == 1) {
+                            st_init.add(rowdata);
+                        } else {
+                            st_com.add(rowdata);
+                        }
+                    }
+                    
+                    for (int j=0; j<st_init.size(); j++) {
+                        dt.addRow(st_init.get(j));
+                    }
+                    for (int j=0; j<st_com.size(); j++) {
+                        dt.addRow(st_com.get(j));
+                    }
+                    
+                     tblCustom.setModel(dt);
+                     tblCustom.setDefaultRenderer(Object.class, new TableCellRenderer() {
+                        @Override
+                        public Component getTableCellRendererComponent(JTable table, 
+                                                                        Object value, 
+                                                                        boolean isSelected, 
+                                                                        boolean hasFocus, 
+                                                                        int row, int column) {
+                            
+                            if (column ==6) {
+                                String[] phones = value.toString().split(",");
+                                JComboBox out = new JComboBox();
+                                out.setModel(new DefaultComboBoxModel(phones));
+                                
+                                return out;
+                            }
+                            
+                            JLabel out=new JLabel();
+                            
+                            if (column == 0) {
+                                out.setText(Integer.toString(row+1));
+                            } else {
+                                out.setText((String)value);
+                            }
+                            
+                            if (Integer.parseInt((String)dt.getValueAt(row, 8)) != 1) {
+                                out.setForeground(new Color(0x88, 0x88, 0x88, 0xff));
+                            } else {
+                                out.setForeground(Color.black);
+                                if (isSelected) {
+                                    out.setBackground(new Color(0xff, 0xff, 0x88, 0xff));
+                                    out.setOpaque(true);
+                                }
+                            }
+                            
+                            return out;
+                        }
+                    });
+                     
+                     tblCustom.setDefaultEditor(Object.class, new TableCellEditor() {
+                         
+                        @Override
+                        public Component getTableCellEditorComponent(JTable jtable, 
+                                                                    Object value, boolean bln, 
+                                                                    int row, int col) {
+                            String[] phones = value.toString().split(",");
+                            JComboBox out = new JComboBox();
+                            out.setModel(new DefaultComboBoxModel(phones));
+                            
+                            return out;
+                        }
+
+                        @Override
+                        public Object getCellEditorValue() { return ""; }
+
+                        @Override
+                        public boolean isCellEditable(EventObject eo) { return true; }
+
+                        @Override
+                        public boolean shouldSelectCell(EventObject eo) { return true; }
+
+                        @Override
+                        public boolean stopCellEditing() { return true; }
+
+                        @Override
+                        public void cancelCellEditing() {}
+
+                        @Override
+                        public void addCellEditorListener(CellEditorListener cl) {}
+
+                        @Override
+                        public void removeCellEditorListener(CellEditorListener cl) {}
+                    });
+                   
                      
                      TableColumn column = null;
                      for (int k = 0;k < tblCustom.getColumnCount(); k++) {
@@ -2988,7 +3089,7 @@ public class MainForm extends javax.swing.JFrame {
                         }
                         else if(k==9)
                         {
-                            //column.setPreferredWidth(0);
+                            
                             column.setWidth(0);
                             column.setMinWidth(0);
                             column.setMaxWidth(0);
@@ -2996,7 +3097,7 @@ public class MainForm extends javax.swing.JFrame {
                         }
                         else if(k==10)
                         {
-                            //column.setPreferredWidth(0);
+                           
                             column.setWidth(0);
                             column.setMinWidth(0);
                             column.setMaxWidth(0);
@@ -3007,8 +3108,8 @@ public class MainForm extends javax.swing.JFrame {
 
                         }
                     }
-                      
-               
+                     
+                  
                 }
                 con.closeConnect();
               }
@@ -3039,44 +3140,50 @@ public class MainForm extends javax.swing.JFrame {
         }
     }
      
-    private void Dial()
+   private void Dial()
    {
-         int row=tblCustom.getSelectedRow();
-        String callList=""+this.tblCustom.getValueAt(row, 6);
-        String s[]=callList.split(",");
-        for(int j=0;j<s.length;j++)
+        int row=tblCustom.getSelectedRow();
+        if(row>=0)
         {
-            CallPhone="num : "+j+" "+s[j];
-            System.out.println(CallPhone);
-        }
-        String Scus_name=""+this.tblCustom.getValueAt(row,2);
-        //String SStatus=""+this.tblCustom.getValueAt(row, 7);
-        String SStatus_id=""+this.tblCustom.getValueAt(row, 8);
-        String SDetail_id=""+this.tblCustom.getValueAt(row, 9);
-        String SCall_id=""+this.tblCustom.getValueAt(row, 10);
-       
-        int row1=tblCamp.getSelectedRow();
-        String Scam_id=""+this.tblCamp.getValueAt(row1, 1);
-     //   String Sagent_id=""+this.tblCamp.getValueAt(row1, 5);
-        int status_id=Integer.parseInt(SStatus_id);
-        System.out.println(SStatus_id);
+            String callList=""+this.tblCustom.getValueAt(row, 6);
+            String s[]=callList.split(",");
+            for(int j=0;j<s.length;j++)
+            {
+                CallPhone="num : "+j+" "+s[j];
+                System.out.println(callList);
+                System.out.println(CallPhone);
+            }
+            final String Scus_name=""+this.tblCustom.getValueAt(row,2);
+
+            final String SStatus_id=""+this.tblCustom.getValueAt(row, 8);
+            final String SDetail_id=""+this.tblCustom.getValueAt(row, 9);
+            final String SCall_id=""+this.tblCustom.getValueAt(row, 10);
         
-        if(status_id==3)
-        {
-            
-        }
-        
-        else
-        {
-            Question_Camp quesF=new Question_Camp();
+            int row1=tblCamp.getSelectedRow();
+            if(row1 <0)
+            {
+                return;
+            }
+            final String Scam_id=""+this.tblCamp.getValueAt(row1, 1);
+            //final String Sagent_id=""+this.tblCamp.getValueAt(row1, 5);
+
+            System.out.println(SStatus_id);
+
+
+            Question_Camp quesF = new Question_Camp(MainForm.this);
             quesF.setVisible(true);
-            quesF.getlblAgent_id().setText(lb_agentid.getText());
+
+            quesF.getlblAgent_id().setText(lb_agentid.getText()); 
             quesF.getlblCus_id().setText(Scus_name);
             quesF.getlblCam_id().setText(Scam_id);
             quesF.getlblDetail().setText(SDetail_id);
             quesF.getlblCall().setText(SCall_id);
         }
    }
+    public String GetStatus(String t)
+    {
+        return t;
+    }
     
     /**
      * @param args the command line arguments
