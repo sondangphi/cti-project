@@ -100,7 +100,7 @@ public class Agent implements Runnable{
                 while(running){                    
                     command = infromServer.readLine();  
 //                    command = in.readUTF();
-                    System.out.println("***listen from server***");
+//                    System.out.println("***listen from server***");
                     System.out.println("***receive from server: "+command);
                     if(command == null){
                         agentLogout(); 

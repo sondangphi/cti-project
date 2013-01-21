@@ -1839,21 +1839,23 @@ public class MainForm extends javax.swing.JFrame {
                 String mobile =txt_mobile.getText();                
                 String add = txt_add.getText();
                 String homephone1=txt_phone1.getText();
+                String birthday = txt_birthday.getText();
                 String gender = "";
                 if(cb_gender.getSelectedIndex() == 0)
                     gender = "1";
                 else if (cb_gender.getSelectedIndex() == 1)
                     gender = "0";                                
-                String sql = "INSERT INTO customer (fullname,email,address,mobilephone,gender,homephone1) "
-                        + "VALUES ('"+name+"','"+email+"','"+add+"','"+mobile+"','"+gender+"','"+homephone1+"')";
+                String sql = "INSERT INTO customer (fullname,email,address,mobilephone,gender,homephone1,birthday) "
+                        + "VALUES ('"+name+"','"+email+"','"+add+"','"+mobile+"','"+gender+"','"+homephone1+"','"+birthday+"')";
                 con.executeUpdate(sql);                                                
                 System.out.println("new customer information success.");
                 btn_new.setEnabled(false);
-                JOptionPane.showMessageDialog(this, "New Customer successful");
+                JOptionPane.showMessageDialog(this, "Create Customer successful");
             }
             con.closeConnect();
         }catch(Exception e){
             System.out.println(""+e);
+            JOptionPane.showMessageDialog(this, "Create Customer fail");
         }
         
     }//GEN-LAST:event_btn_newActionPerformed
