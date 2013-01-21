@@ -72,10 +72,7 @@ public class Question_Camp extends javax.swing.JFrame {
        
         ShowContentComponent();
          
-        lblAgent_id.setText(agentObject.getAgentId());
-        
-      //  showInfo();
-        
+     
         
     }//
 
@@ -143,6 +140,7 @@ public class Question_Camp extends javax.swing.JFrame {
         setTitle("QUESTION");
 
         btnfinish.setText("FINISH");
+        btnfinish.setEnabled(false);
         btnfinish.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnfinishActionPerformed(evt);
@@ -248,13 +246,13 @@ public class Question_Camp extends javax.swing.JFrame {
                         .addComponent(jLabel2)
                         .addComponent(lblCall))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
+                        .addComponent(lblAgent_id))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel1)
-                        .addComponent(lblCam_id)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(lblAgent_id))))
+                        .addComponent(lblCam_id)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel4)
                         .addComponent(lblDetail))
