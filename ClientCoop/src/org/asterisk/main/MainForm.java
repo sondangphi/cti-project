@@ -64,6 +64,7 @@ public class MainForm extends javax.swing.JFrame {
     private  String Mysql_pwd  = "123456"; 
     private ConnectDatabase con;
     private FeedbackForm feedback;
+    private String CallPhone;
 //<<<<<<< .mine
    // Browser bro = null;    
 //=======
@@ -2880,21 +2881,21 @@ public class MainForm extends javax.swing.JFrame {
             
                 if(con.isConnect()){
                     String sql="SELECT customer_id, name, gender, address, birthday,"
-                                     + "GROUP_CONCAT(number)as number,status,id_status,detail_id,call_id "
-                                     + " FROM ( "
-                                     + " SELECT c.id AS campaign_id,c.create_day as create_day,c.start_day as start_day,c.end_day as end_day,"
-                                     + " a.agent_id AS agent_id, a.agentname AS agent_name, "
-                                     + " k.camp_detail_id AS detail_id,k.id as call_id, "
-                                     + " i.id AS customer_id, i.name AS name, i.gender AS gender, i.address AS address, i.birthday AS birthday,"
-                                     + " p.number AS number,s.desc AS status, s.id AS id_status"
-                                     + " FROM (((((("
-                                     + " _campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
-                                     + " INNER JOIN _call k ON k.camp_detail_id = d.id) "
-                                     + " INNER JOIN agent_login a ON k.agent_id = a.id)"
-                                     + " INNER JOIN _customer_info i ON d.cus_id = i.id)"
-                                     + " INNER JOIN _phone p ON i.id = p.cus_id)"
-                                     + " INNER JOIN _call_status s ON s.id=k.status_id)) AS asd ";
-
+                    + "GROUP_CONCAT(number)as number,status,id_status,detail_id,call_id "
+                    + " FROM ( "
+                    + " SELECT c.id AS campaign_id,c.create_day as create_day,c.start_day as start_day,c.end_day as end_day,"
+                    + " a.agent_id AS agent_id, a.agentname AS agent_name, "
+                    + " k.camp_detail_id AS detail_id,k.id as call_id, "
+                    + " i.id AS customer_id, i.name AS name, i.gender AS gender, i.address AS address, i.birthday AS birthday,"
+                    + " p.number AS number,s.desc AS status, s.id AS id_status"
+                    + " FROM (((((("
+                    + " _campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
+                    + " INNER JOIN _call k ON k.camp_detail_id = d.id) "
+                    + " INNER JOIN agent_login a ON k.agent_id = a.id)"
+                    + " INNER JOIN _customer_info i ON d.cus_id = i.id)"
+                    + " INNER JOIN _phone p ON i.id = p.cus_id)"
+                    + " INNER JOIN _call_status s ON s.id=k.status_id)) AS asd ";
+                 
                     
                     int row=tblCamp.getSelectedRow();
         
@@ -3001,6 +3002,7 @@ public class MainForm extends javax.swing.JFrame {
     {
         int row=tblCustom.getSelectedRow();
         String SStatus_id=""+this.tblCustom.getValueAt(row, 8);
+       
         int status_id=Integer.parseInt(SStatus_id);
         if(status_id==3)//complete
         {
@@ -3022,9 +3024,15 @@ public class MainForm extends javax.swing.JFrame {
     private void Dial()
    {
          int row=tblCustom.getSelectedRow();
-        
+        String callList=""+this.tblCustom.getValueAt(row, 6);
+        String s[]=callList.split(",");
+        for(int j=0;j<s.length;j++)
+        {
+            CallPhone="num : "+j+" "+s[j];
+            System.out.println(CallPhone);
+        }
         String Scus_name=""+this.tblCustom.getValueAt(row,2);
-        String SStatus=""+this.tblCustom.getValueAt(row, 7);
+        //String SStatus=""+this.tblCustom.getValueAt(row, 7);
         String SStatus_id=""+this.tblCustom.getValueAt(row, 8);
         String SDetail_id=""+this.tblCustom.getValueAt(row, 9);
         String SCall_id=""+this.tblCustom.getValueAt(row, 10);
