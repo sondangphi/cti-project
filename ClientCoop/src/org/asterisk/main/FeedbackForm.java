@@ -387,10 +387,10 @@ public class FeedbackForm extends javax.swing.JFrame {
                 System.out.println("finish write feedback!");
             }
             con.closeConnect();
+            this.dispose();
+            this.setVisible(false);            
         }catch(Exception e){
         }
-        this.dispose();
-        this.setVisible(false);
     }//GEN-LAST:event_btn_saveActionPerformed
 
     private void cb_feedback_typeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_feedback_typeItemStateChanged
