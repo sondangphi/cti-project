@@ -138,6 +138,11 @@ public class question extends javax.swing.JPanel {
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(new javax.swing.border.LineBorder(new java.awt.Color(153, 153, 153), 1, true));
+        addMouseWheelListener(new java.awt.event.MouseWheelListener() {
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
+                formMouseWheelMoved(evt);
+            }
+        });
         setLayout(null);
         add(scroll);
         scroll.setBounds(360, 70, 17, 48);
@@ -156,6 +161,12 @@ public class question extends javax.swing.JPanel {
         add(ques);
         ques.setBounds(30, 50, 100, 100);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_formMouseWheelMoved
+        scroll.setValue(scroll.getValue() + 
+                (int)evt.getPreciseWheelRotation() * evt.getScrollAmount());
+    }//GEN-LAST:event_formMouseWheelMoved
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private nttnetworks.com.controls.questions.questionPage ques;
     private javax.swing.JScrollBar scroll;
