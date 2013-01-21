@@ -20,7 +20,7 @@ public class ConnectDatabase {
 	private  String pwd = "callcenter";
 	private  String database = "ast_callcenter";
 	private  String driverName = "com.mysql.jdbc.Driver";
-	private  String serverName = "172.168.10.202:3306/";
+	private  String serverName = "172.168.10.5:3306/";
     	
 	public ConnectDatabase() throws ClassNotFoundException, SQLException{
 		Class.forName(driverName);

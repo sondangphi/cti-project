@@ -100,254 +100,252 @@ public class Agent implements Runnable{
                 while(running){                    
                     command = infromServer.readLine();  
 //                    command = in.readUTF();
-//                    System.out.println("***listen from server***");
-                    System.out.println("***receive from server: "+command);
+                    System.out.println("Receive from server: "+command);
                     if(command == null){
-                        agentLogout(); 
-                        System.out.println("null value from server");                        
-                    }
-                    if (keep_alive != null) {
-                        if (keep_alive.isAlive()) {
-                            keep_alive.interrupt();
+                        System.out.println("null value from server");  
+                        if(agentLogout()){
+                            System.out.println("null value: logout and exit success");
+                        }else{
+                            System.out.println("null value: logout and exit fail");
                         }
                     }
-                    keep_alive = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(10000);
-                                System.out.println("server interrupt1: " +clientSocket.getRemoteSocketAddress().toString());
-                                agentLogout();
-                            } catch (InterruptedException ex) { }  
-                        }
-                    });
-                    keep_alive.start();
-                    
                     ArrayList<String> cmdList = getList(command);							
                     code = CODE.valueOf(cmdList.get(0).toUpperCase());
                     switch(code){
-                    case LOGINSUCC: //result LOGIN SUCCESS
-                        System.out.println("LOGIN SUCCESS");
-                        agentObject.setAgentName(cmdList.get(1));
-                        agentObject.setSession(cmdList.get(2));
-                        mainForm = new MainForm(this, agentObject);
-                        mainForm.setVisible(true);                              
-                        loginform.setVisible(false);
-                        loginform.dispose();
-                        worktime = new TimerClock(mainForm, false);
-                        worktime.start();
-                        keepAlive = new KeepAlive(this);                  
-                    break;
-                    case LOGINFAIL: //result LOGIN FAIL                                                     
-                        try {
+                        case LOGINSUCC: //result LOGIN SUCCESS
+                            System.out.println("LOGIN SUCCESS");
+                            agentObject.setAgentName(cmdList.get(1));
+                            agentObject.setSession(cmdList.get(2));
+                            mainForm = new MainForm(this, agentObject);
+                            mainForm.setVisible(true);                              
+                            loginform.setVisible(false);
+                            loginform.dispose();
+                            worktime = new TimerClock(mainForm, false);
+                            worktime.start();
+                            keepAlive = new KeepAlive(this);                  
+                        break;
+                        case LOGINFAIL: //result LOGIN FAIL                                                     
                             System.out.println("LOGIN FAIL");
                             loginform.lb_status.setText(cmdList.get(1));
                             closeConnect();
-                        } catch (Throwable ex) {
-                            Logger.getLogger(Agent.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    break;
-                    case LOGOUTSUCC: //result LOGOUT SUCCESS      
-                        agentLogout();
-                        System.out.println("LOGOUT SUCCESS");                       
-                    break;
-                    case LOGOUTFAIL: //result LOGOUT FAIL
-                        System.out.println("LOGOUT FAIL");
-                    break;	            	
-                    case PAUSESUCC: //result PAUSE
-                        mainForm.btn_logout.setEnabled(false);
-                        mainForm.setAllEnable(false);      
-                        mainForm.lb_status.setText("Not Ready");
-                        mainForm.setPauseIcon(true);
-                        mainForm.btn_pause.setSelected(true);                        
-                        worktime.pause();
-                        System.out.println("PAUSESUCC");
-                    break;
-                    case PAUSEFAIL: //result PAUSE
-                        System.out.println("PAUSEFAIL");
-                    break;
-                    case UNPAUSESUCC: //result UNPAUSESUCC
-                        worktime.resume();
-                        mainForm.btn_logout.setEnabled(true);
-                        mainForm.setAllEnable(true);      
-                        mainForm.setPauseIcon(false);
-                        mainForm.lb_status.setText("Ready");
-                        mainForm.btn_pause.setSelected(false);
-                        mainForm.btn_hangup.setEnabled(false);
-                        System.out.println("UNPAUSESUCC");
-                    break;
-                    case UNPAUSEFAIL: //result UNPAUSE
-                        System.out.println("UNPAUSEFAIL");
-                        mainForm.btn_pause.setSelected(true);
-                    break;
-                    case TRANSSUCC: //result TRANSFER	            			
-                    break;
-                    case TRANSFAIL: //result TRANSFER	            			
-                    break;
-                    case HOLDSUCC: //result HOLD
-                    break;
-                    case HOLDFAIL: //result HOLD
-                    break;                        
-                    case CHANGEPWD: //CHANGEPWD
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mainForm.chanpwdform.showDialog("Change Password Success");                        
+                        break;
+                        case LOGOUTSUCC: //result LOGOUT SUCCESS      
+                            agentLogout();
+                            System.out.println("LOGOUT SUCCESS");                       
+                        break;
+                        case LOGOUTFAIL: //result LOGOUT FAIL
+                            System.out.println("LOGOUT FAIL");
+                        break;	            	
+                        case PAUSESUCC: //result PAUSE
+                            mainForm.btn_logout.setEnabled(false);
+                            mainForm.setAllEnable(false);      
+                            mainForm.lb_status.setText("Not Ready");
+                            mainForm.setPauseIcon(true);
+                            mainForm.btn_pause.setSelected(true);                        
+                            worktime.pause();
+                            System.out.println("PAUSESUCC");
+                        break;
+                        case PAUSEFAIL: //result PAUSE
+                            System.out.println("PAUSEFAIL");
+                        break;
+                        case UNPAUSESUCC: //result UNPAUSESUCC
+                            worktime.resume();
+                            mainForm.btn_logout.setEnabled(true);
+                            mainForm.setAllEnable(true);      
+                            mainForm.setPauseIcon(false);
+                            mainForm.lb_status.setText("Ready");
+                            mainForm.btn_pause.setSelected(false);
+                            mainForm.btn_hangup.setEnabled(false);
+                            System.out.println("UNPAUSESUCC");
+                        break;
+                        case UNPAUSEFAIL: //result UNPAUSE
+                            System.out.println("UNPAUSEFAIL");
+                            mainForm.btn_pause.setSelected(true);
+                        break;
+                        case TRANSSUCC: //result TRANSFER	            			
+                        break;
+                        case TRANSFAIL: //result TRANSFER	            			
+                        break;
+                        case HOLDSUCC: //result HOLD
+                        break;
+                        case HOLDFAIL: //result HOLD
+                        break;                        
+                        case CHANGEPWD: //CHANGEPWD
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mainForm.chanpwdform.showDialog("Change Password Success");                        
+                                }
+                            }).start();
+                            agentObject.setPass(cmdList.get(1));
+                            System.out.println("change pass success");
+                        break;                        
+                        case CHANGEPWDFAIL: //CHANGEPWD
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    mainForm.chanpwdform.showDialog("Change Password Fail");  
+                                }
+                            }).start();                                                                      
+                            System.out.println("change pass fail");
+                        break;                        
+                        case RINGING: //EVENT RINGING
+                            try{
+                                dialout = false;
+                                String callerNum = cmdList.get(1);
+                                mainForm.setAllEnable(false);
+                                mainForm.lb_status.setText("Ringing...");
+                                mainForm.lb_callduration.setText("00:00:00");
+                                mainForm.btn_pause.setEnabled(false);       
+                                mainForm.btn_feedback.setEnabled(true);
+                                mainForm.btn_hangup.setEnabled(true);                            
+                                //open connect to database
+                                con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+                                if(con.isConnect()){
+                                    System.out.println("get information of customer"); 
+                                    String sql = "SELECT * FROM customer WHERE mobilephone ='"+callerNum+"'";
+                                    ResultSet rs = con.executeQuery(sql);
+                                    if(rs.next()){
+                                        //get information of already custom and fill in data   
+                                        System.out.println("callerNum: "+callerNum);
+                                        System.out.println("already information");
+                                        customer = new CustomerObject(callerNum);
+                                        customer.setName(rs.getString("fullname"));                                    
+                                        customer.setAddress(rs.getString("address"));
+                                        customer.setEmail(rs.getString("email"));
+                                        customer.setGender(rs.getString("gender"));
+                                        customer.setPhone1(rs.getString("homephone1"));
+                                        customer.setId(String.valueOf(rs.getObject("id")));   
+                                        customer.setBirth(String.valueOf(rs.getObject("birthday"))); 
+                                        customer.setReg(String.valueOf(rs.getObject("registration"))); 
+                                        mainForm.txt_add.setText(customer.getAddress());
+                                        mainForm.txt_name.setText(customer.getName());
+                                        mainForm.txt_email.setText(customer.getEmail());
+                                        mainForm.txt_mobile.setText(customer.getPhone());
+                                        mainForm.txt_phone1.setText(customer.getPhone1());
+                                        mainForm.txt_birthday.setText(customer.getBirth());
+                                        mainForm.txt_reg.setText(customer.getReg());
+                                        String gender = customer.getGender();
+                                        if(gender.equalsIgnoreCase("1"))
+                                            mainForm.cb_gender.setSelectedIndex(0);
+                                        else
+                                            mainForm.cb_gender.setSelectedIndex(1);
+                                        mainForm.btn_new.setEnabled(false);
+                                        mainForm.btn_update.setEnabled(true);
+                                        mainForm.btn_feedback.setEnabled(true);
+                                        sql = "SELECT * FROM feedback_history WHERE mobile = '"+callerNum+"'";
+                                        rs = con.executeQuery(sql);
+                                        if(rs != null)
+                                            displayHistory(rs);                                                                                                                        
+                                    }else{
+                                        //new customer information, insert into database
+                                        System.out.println("callerNum: "+callerNum);
+                                        System.out.println("not ready information");  
+                                        mainForm.txt_mobile.setText(callerNum);
+                                        mainForm.btn_new.setEnabled(true);
+                                        mainForm.btn_update.setEnabled(false);
+                                        mainForm.btn_feedback.setEnabled(true);
+                                        mainForm.txt_add.setText("");                                    
+                                        mainForm.txt_name.setText("");
+                                        mainForm.txt_email.setText("");                                    
+                                        mainForm.txt_phone1.setText("");  
+                                        String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
+                                        int count = colname.length;
+                                        Vector col = new Vector(count);
+                                        Vector row = new  Vector();
+                                        for (int i = 0; i <count; i++) 
+                                            col.addElement(colname[i].toString());
+                                        mainForm.table_report.setModel(new TableModel(col, row));
+                                    }
+                                }
+                                //close connect database
+                                con.closeConnect();                                                       
+                            }catch(Exception e){
+                                con.closeConnect();  
                             }
-                        }).start();
-                        
-                        agentObject.setPass(cmdList.get(1));
-                        System.out.println("change pass success");
-                    break;                        
-                    case CHANGEPWDFAIL: //CHANGEPWD
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                mainForm.chanpwdform.showDialog("Change Password Fail");  
+                        break;
+                        case CONNECTED://connected incoming call
+                            System.out.println("CONNECTED incoming call");
+                            mainForm.lb_status.setText("Busy"); 
+                            clockDialin = new TimerClock(mainForm, true);
+                            clockDialin.start();
+                        break;
+                        case COMPLETED://connected incoming call
+                            mainForm.lb_status.setText("Ready");
+                            mainForm.setAllEnable(true); 
+                            mainForm.btn_pause.setEnabled(true);
+                            mainForm.btn_hangup.setEnabled(false);                        
+                            if(clockDialin != null){
+                                clockDialin.stop(); 
                             }
-                        }).start();                                                                      
-                        System.out.println("change pass fail");
-                    break;                        
-                    case RINGING: //EVENT RINGING
-                        try{
-                            dialout = false;
-                            String callerNum = cmdList.get(1);
-                            mainForm.setAllEnable(false);
-                            mainForm.lb_status.setText("Ringing...");
+                        break;
+                        case RINGNOANWSER: 
+                            mainForm.lb_status.setText("Ready");
+                            mainForm.setAllEnable(true);
+                            mainForm.btn_pause.setEnabled(true);
+                            mainForm.btn_hangup.setEnabled(false);                        
+                        break;                                                
+                        case DIALOUT: //result 	
+                            System.out.println("DIALOUT");                        
+                            mainForm.lb_status.setText("Dialing...");
                             mainForm.lb_callduration.setText("00:00:00");
-                            mainForm.btn_pause.setEnabled(false);       
-                            mainForm.btn_feedback.setEnabled(true);
-                            mainForm.btn_hangup.setEnabled(true);                            
-                            //open connect to database
-                            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-                            if(con.isConnect()){
-                                System.out.println("get information of customer"); 
-                                String sql = "SELECT * FROM customer WHERE mobilephone ='"+callerNum+"'";
-                                ResultSet rs = con.executeQuery(sql);
-                                if(rs.next()){
-                                    //get information of already custom and fill in data   
-                                    System.out.println("callerNum: "+callerNum);
-                                    System.out.println("already information");
-                                    customer = new CustomerObject(callerNum);
-                                    customer.setName(rs.getString("fullname"));                                    
-                                    customer.setAddress(rs.getString("address"));
-                                    customer.setEmail(rs.getString("email"));
-                                    customer.setGender(rs.getString("gender"));
-                                    customer.setPhone1(rs.getString("homephone1"));
-                                    customer.setId(String.valueOf(rs.getObject("id")));   
-                                    customer.setBirth(String.valueOf(rs.getObject("birthday"))); 
-                                    customer.setReg(String.valueOf(rs.getObject("registration"))); 
-                                    mainForm.txt_add.setText(customer.getAddress());
-                                    mainForm.txt_name.setText(customer.getName());
-                                    mainForm.txt_email.setText(customer.getEmail());
-                                    mainForm.txt_mobile.setText(customer.getPhone());
-                                    mainForm.txt_phone1.setText(customer.getPhone1());
-                                    mainForm.txt_birthday.setText(customer.getBirth());
-                                    mainForm.txt_reg.setText(customer.getReg());
-                                    String gender = customer.getGender();
-                                    if(gender.equalsIgnoreCase("1"))
-                                        mainForm.cb_gender.setSelectedIndex(0);
-                                    else
-                                        mainForm.cb_gender.setSelectedIndex(1);
-                                    mainForm.btn_new.setEnabled(false);
-                                    mainForm.btn_update.setEnabled(true);
-                                    mainForm.btn_feedback.setEnabled(true);
-                                    sql = "SELECT * FROM feedback_history WHERE mobile = '"+callerNum+"'";
-                                    rs = con.executeQuery(sql);
-                                    if(rs != null)
-                                        displayHistory(rs);                                                                                                                        
-                                }else{
-                                    //new customer information, insert into database
-                                    System.out.println("callerNum: "+callerNum);
-                                    System.out.println("not ready information");  
-                                    mainForm.txt_mobile.setText(callerNum);
-                                    mainForm.btn_new.setEnabled(true);
-                                    mainForm.btn_update.setEnabled(false);
-                                    mainForm.btn_feedback.setEnabled(true);
-                                    mainForm.txt_add.setText("");                                    
-                                    mainForm.txt_name.setText("");
-                                    mainForm.txt_email.setText("");                                    
-                                    mainForm.txt_phone1.setText("");  
-                                    String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
-                                    int count = colname.length;
-                                    Vector col = new Vector(count);
-                                    Vector row = new  Vector();
-                                    for (int i = 0; i <count; i++) 
-                                        col.addElement(colname[i].toString());
-                                    mainForm.table_report.setModel(new TableModel(col, row));
+                            mainForm.setAllEnable(false);  
+                            mainForm.btn_pause.setEnabled(false);    
+                            mainForm.btn_hangup.setEnabled(true);                                                      
+                            dialout = true;
+                        break;
+                        case CONNECTEDDIALOUT: 
+                            clockDialout = new TimerClock(mainForm, true);
+                            clockDialout.start();                        
+                            mainForm.lb_status.setText("Busy");
+                            System.out.println("Connected dialout");
+                        break;
+                        case HANGUPDIALOUT:                         
+                            mainForm.lb_status.setText("Ready");
+                            mainForm.setAllEnable(true); 
+                            mainForm.btn_pause.setEnabled(true);
+                            mainForm.btn_hangup.setEnabled(false);                        
+                            if(clockDialout != null){
+                                clockDialout.stop();
+                            }
+                            System.out.println("hangup dialout");
+                        break;       
+                        case HANGUPABANDON: 
+                            mainForm.lb_status.setText("Ready");
+                            mainForm.setAllEnable(true); 
+                            mainForm.btn_pause.setEnabled(true);
+                            mainForm.btn_hangup.setEnabled(false);                                 
+                        break;       
+                        case HANGUPSUCCESS:
+                            System.out.println("HANGUPSUCCESS");
+                            mainForm.btn_hangup.setEnabled(false);
+                        break;
+                        case HANGUPFAIL: 
+                            System.out.println("HANGUPFAIL\t");
+                        break;                          
+                        case PING: 
+                            System.out.println("PING from server");
+                            if (keep_alive != null) {
+                                if (keep_alive.isAlive()) {
+                                    keep_alive.interrupt();
                                 }
                             }
-                            //close connect database
-                            con.closeConnect();                                                       
-                        }catch(Exception e){
-                            con.closeConnect();  
-                        }
-                    break;
-                    case CONNECTED://connected incoming call
-                        System.out.println("CONNECTED incoming call");
-                        mainForm.lb_status.setText("Busy"); 
-                        clockDialin = new TimerClock(mainForm, true);
-                        clockDialin.start();
-                    break;
-                    case COMPLETED://connected incoming call
-                        mainForm.lb_status.setText("Ready");
-                        mainForm.setAllEnable(true); 
-                        mainForm.btn_pause.setEnabled(true);
-                        mainForm.btn_hangup.setEnabled(false);                        
-                        if(clockDialin != null){
-                            clockDialin.stop(); 
-                        }
-                    break;
-                    case RINGNOANWSER: 
-                        mainForm.lb_status.setText("Ready");
-                        mainForm.setAllEnable(true);
-                        mainForm.btn_pause.setEnabled(true);
-                        mainForm.btn_hangup.setEnabled(false);                        
-                    break;                                                
-                    case DIALOUT: //result 	
-                        System.out.println("DIALOUT");                        
-                        mainForm.lb_status.setText("Dialing...");
-                        mainForm.lb_callduration.setText("00:00:00");
-                        mainForm.setAllEnable(false);  
-                        mainForm.btn_pause.setEnabled(false);    
-                        mainForm.btn_hangup.setEnabled(true);                                                      
-                        dialout = true;
-                    break;
-                    case CONNECTEDDIALOUT: 
-                        clockDialout = new TimerClock(mainForm, true);
-                        clockDialout.start();                        
-                        mainForm.lb_status.setText("Busy");
-                        System.out.println("Connected dialout");
-                    break;
-                    case HANGUPDIALOUT:                         
-                        mainForm.lb_status.setText("Ready");
-                        mainForm.setAllEnable(true); 
-                        mainForm.btn_pause.setEnabled(true);
-                        mainForm.btn_hangup.setEnabled(false);                        
-                        if(clockDialout != null){
-                            clockDialout.stop();
-                        }
-                        System.out.println("hangup dialout");
-                    break;       
-                    case HANGUPABANDON: 
-                        mainForm.lb_status.setText("Ready");
-                        mainForm.setAllEnable(true); 
-                        mainForm.btn_pause.setEnabled(true);
-                        mainForm.btn_hangup.setEnabled(false);                                 
-                    break;       
-                    case HANGUPSUCCESS:
-                        System.out.println("HANGUPSUCCESS");
-                        mainForm.btn_hangup.setEnabled(false);
-                    break;
-                    case HANGUPFAIL: 
-                        System.out.println("HANGUPFAIL\t");
-                    break;                          
-                    case PING: 
-                        System.out.println("PING from server\t");
-                    break;                                                            
-                    default: 
-                        System.out.println("default values from server\t"+command);
-                    break;
+                            keep_alive = new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep(10000);                                   
+                                        if(agentLogout()){
+                                        }else{
+                                        }
+                                    } catch (Exception ex) { }  
+                                }
+                            });
+                            keep_alive.start();                        
+                        break;                                                            
+                        default: 
+                            System.out.println("default values from server\t"+command);
+                        break;
                     }
                 }
             }  
@@ -479,8 +477,10 @@ public class Agent implements Runnable{
                     clientSocket.close(); 
                     System.out.println("close socket");                    
                 }                      
-                if(mainThread != null)
+                if(mainThread != null){
                     mainThread.interrupt();
+                    System.out.println("close thread"); 
+                }
                 System.out.println("finish close session"); 
                 keepAlive.interrupt();
                 if (keep_alive != null) {

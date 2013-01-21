@@ -25,6 +25,9 @@ public class Utility {
     
         Properties prop = new Properties();    
         String filename = "infor.properties"; 
+//        String filename = "callcenter.conf"; 
+        String logFolder = "log";  
+        String logFile = "client.log"; 
         
 	public String getDatetimeNow(){		
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -39,9 +42,13 @@ public class Utility {
             return datetime;
 	}
 	public void writeLog(String log) throws IOException{
+            File root = new File(logFolder);
+            root.mkdirs();
+            File child = new File(root, logFile);
+            child.createNewFile();            
             Writer output;
-            output = new BufferedWriter(new FileWriter("logfile.log",true));
-            output.append(getDatetimeNow()+"\t"+log);
+            output = new BufferedWriter(new FileWriter(child,true));
+            output.append(getDatetimeNow() + "\t" +log+ "\r\n");
             output.close();
 	}
 	
