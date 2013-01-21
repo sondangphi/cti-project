@@ -14,35 +14,41 @@ import javax.swing.Timer;
  *
  * @author leehoa
  */
-public class TimerClock implements ActionListener{
+public class TimerClock implements ActionListener {
+
     private Timer clock;
     public int secs = 0;
     private int tempsec = 0;
+
     public TimerClock() {
         clock = new Timer(1000, this);
-    }   
+    }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == clock)
-            secs++;             
-    }    
-    public void start(){
+        if (e.getSource() == clock) {
+            secs++;
+        }
+    }
+
+    public void start() {
         secs = 0;
         clock.start();
     }
-    public void stop(){
+
+    public void stop() {
         clock.stop();
-    }    
-    
-     public void pause(){
+    }
+
+    public void pause() {
         tempsec = secs;
         clock.stop();
-    }       
-     public void resume(){
-         if(secs != 0){
+    }
+
+    public void resume() {
+        if (secs != 0) {
             secs = tempsec;
             clock.start();
-         }         
+        }
     }
 }
