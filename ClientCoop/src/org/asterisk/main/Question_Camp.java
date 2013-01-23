@@ -17,6 +17,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import org.asterisk.model.AgentObject;
 import org.asterisk.utility.ConnectDatabase;
@@ -44,25 +46,25 @@ public class Question_Camp extends javax.swing.JDialog {
     /**
      * Creates new form gggg
      */
-    public Question_Camp(MainForm own)  
+    public Question_Camp(MainForm own, String agent)  
     {
         super(own);
         this.own = own;
+        this.own.setEnabled(false);
         
         initComponents1();
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         setLocation(new Point((screenSize.width -this.getWidth()) / 2,
                               (screenSize.height-this.getHeight()) / 2));
 
-        ShowContentComponent();
-         
-     
-        
+        ShowContentComponent(agent); 
     }//
 
+    
    
-    private void ShowContentComponent()
+    private void ShowContentComponent(String agent)
     {
         try {
             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
@@ -75,9 +77,10 @@ public class Question_Camp extends javax.swing.JDialog {
                    "LEFT OUTER JOIN `_question` AS ques ON cam.`id`=ques.`camp_id`"+"\r\n";
 
 
-                sql+="WHERE ag.`agent_id`='6005'"+"\r\n"+
+                sql+="WHERE ag.`agent_id`='"+agent+"'"+"\r\n"+
                     "GROUP BY ques.id"+"\r\n";
 
+              
                 result = con.executeQuery(sql);
 
                 while (result.next()) 
@@ -116,8 +119,15 @@ public class Question_Camp extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         lblDetail = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("QUESTION");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                onClosing(evt);
+            }
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                onClosing(evt);
+            }
+        });
 
         btnfinish.setText("FINISH");
         btnfinish.setEnabled(false);
@@ -464,6 +474,8 @@ public class Question_Camp extends javax.swing.JDialog {
         } catch (Exception ex) {}
         
         this.own.showCustomer();
+        own.setEnabled(true);
+        own.setVisible(true);
         dispose();
     }//GEN-LAST:event_btnfinishActionPerformed
 
@@ -485,7 +497,13 @@ public class Question_Camp extends javax.swing.JDialog {
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
         dispose();
+        own.setEnabled(true);
+        own.setVisible(true);
     }//GEN-LAST:event_btnCancelActionPerformed
+
+    private void onClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_onClosing
+
+    }//GEN-LAST:event_onClosing
  
     
    public JLabel getlblAgent_id()
@@ -509,6 +527,10 @@ public class Question_Camp extends javax.swing.JDialog {
       return lblDetail;
   }
    
+      public JTextArea gettxtNote() {
+          return txtNote;
+      }
+      
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnfinish;

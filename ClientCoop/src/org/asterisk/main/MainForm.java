@@ -18,6 +18,10 @@ import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -28,6 +32,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.EventObject;
+import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,7 +52,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.CellEditorListener;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
@@ -83,17 +92,16 @@ public class MainForm extends javax.swing.JFrame {
     private ConnectDatabase con;
     private FeedbackForm feedback;
     private String CallPhone;
-//<<<<<<< .mine
+    private JComboBox out;
+
    // Browser bro = null;    
-//=======
-//    Browser bro = null;    
-//>>>>>>> .r168
+
     LocateMap locate = new LocateMap();
     public ChangepwdForm chanpwdform;
     private final String EXIT = "112";
     private final String PAUSE = "104@off";
     private final String UNPAUSE = "104@on";
-    
+   
     //ResultSet result;
     //DefaultTableModel dt;
     //Vector rowdata;
@@ -113,8 +121,9 @@ public class MainForm extends javax.swing.JFrame {
     
     public MainForm(Agent agent, AgentObject aOb) {
 //        jPanel9.set
-        initComponents();   
-       
+        initComponents(); 
+         tblCustom.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
+         
         //tblPromotions.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         //tblCoop.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);        
         uti = new Utility();
@@ -169,7 +178,11 @@ public class MainForm extends javax.swing.JFrame {
         
         this.setTitle("Desktop Agent _ "+agentObject.getAgentId()+" _ "+agentObject.getAgentName());
         setLocationRelativeTo(null);
+//        quesF = new Question_Camp(MainForm.this);
+        
         showCampaign();
+        
+        
     }    
 
     public void updateNumber(){
@@ -1036,7 +1049,8 @@ public class MainForm extends javax.swing.JFrame {
 
         main_tab.addTab("Co.op Systems", jPanel3);
 
-        btnDial.setText("dial");
+        btnDial.setText("Dial");
+        btnDial.setEnabled(false);
         btnDial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnDialActionPerformed(evt);
@@ -1045,15 +1059,16 @@ public class MainForm extends javax.swing.JFrame {
 
         tblCamp.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
+        tblCamp.setRowHeight(20);
         tblCamp.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblCampMouseClicked(evt);
@@ -1068,15 +1083,16 @@ public class MainForm extends javax.swing.JFrame {
 
         tblCustom.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {},
+                {},
+                {},
+                {}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+
             }
         ));
+        tblCustom.setRowHeight(20);
         tblCustom.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tblCustomMouseClicked(evt);
@@ -1103,8 +1119,8 @@ public class MainForm extends javax.swing.JFrame {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnDial, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2605,10 +2621,12 @@ public class MainForm extends javax.swing.JFrame {
     
     private void tblCampMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCampMouseClicked
        showCustomer();
+       btnDial.setEnabled(false);
     }//GEN-LAST:event_tblCampMouseClicked
 
     private void tblCampKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCampKeyReleased
         showCustomer();
+        btnDial.setEnabled(false);
     }//GEN-LAST:event_tblCampKeyReleased
 
     private void tblCustomMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomMouseClicked
@@ -2904,11 +2922,19 @@ public class MainForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
         }
     }
+    
+    private Hashtable<Integer, String> selPhone = new Hashtable<>();
     public void showCustomer()
     {
          try {
-                con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-            
+            try { 
+                tblCustom.getCellEditor().stopCellEditing();
+            } catch(Exception e) {}
+
+            comboBox();
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+            selPhone.clear();
+                
                 if(con.isConnect()){
                     String sql="SELECT customer_id, name, gender, address, birthday,"
                     + "GROUP_CONCAT(number)as number,status,id_status,detail_id,call_id "
@@ -2955,13 +2981,12 @@ public class MainForm extends javax.swing.JFrame {
                     
                     int i=0;
                     while (result.next()) {
-                        i++;
                         Vector rowdata = new Vector();
                         
-                        rowdata.add("");
-                        rowdata.add(result.getString("customer_id"));
+                        rowdata.add("");                                            //0
+                        rowdata.add(result.getString("customer_id"));               //1
                         rowdata.add(result.getString("name"));
-                        int a=Integer.parseInt(result.getString("gender"));
+                        int a=Integer.parseInt(result.getString("gender"));         //3
 
                         String a1="";
                         if(a==1)
@@ -2975,11 +3000,11 @@ public class MainForm extends javax.swing.JFrame {
                         }
                         rowdata.add(a1);
                         rowdata.add(result.getString("address"));
-                        rowdata.add(result.getString("birthday"));
+                        rowdata.add(result.getString("birthday"));                  //5
                         rowdata.add(result.getString("number"));                              
-                        rowdata.add(result.getString("status"));
+                        rowdata.add(result.getString("status"));                    //7
                         rowdata.add(result.getString("id_status"));
-                        rowdata.add(result.getString("detail_id"));
+                        rowdata.add(result.getString("detail_id"));                 //9
                         rowdata.add(result.getString("call_id"));
 
                         if(Integer.parseInt((String)rowdata.get(8)) == 1) {
@@ -2996,7 +3021,13 @@ public class MainForm extends javax.swing.JFrame {
                         dt.addRow(st_com.get(j));
                     }
                     
-                     tblCustom.setModel(dt);
+                    tblCustom.setModel(dt);
+
+                    // <editor-fold defaultstate="collapsed" desc="older code">
+
+
+
+                    /**/
                      tblCustom.setDefaultRenderer(Object.class, new TableCellRenderer() {
                         @Override
                         public Component getTableCellRendererComponent(JTable table, 
@@ -3005,10 +3036,11 @@ public class MainForm extends javax.swing.JFrame {
                                                                         boolean hasFocus, 
                                                                         int row, int column) {
                             
-                            if (column ==6) {
+                            if (column == 6) {
                                 String[] phones = value.toString().split(",");
-                                JComboBox out = new JComboBox();
+                                out = new JComboBox();
                                 out.setModel(new DefaultComboBoxModel(phones));
+                                out.setBackground(new Color(0xFFFFFFFF));
                                 
                                 return out;
                             }
@@ -3035,43 +3067,8 @@ public class MainForm extends javax.swing.JFrame {
                         }
                     });
                      
-                     tblCustom.setDefaultEditor(Object.class, new TableCellEditor() {
-                         
-                        @Override
-                        public Component getTableCellEditorComponent(JTable jtable, 
-                                                                    Object value, boolean bln, 
-                                                                    int row, int col) {
-                            String[] phones = value.toString().split(",");
-                            JComboBox out = new JComboBox();
-                            out.setModel(new DefaultComboBoxModel(phones));
-                            
-                            return out;
-                        }
 
-                        @Override
-                        public Object getCellEditorValue() { return ""; }
-
-                        @Override
-                        public boolean isCellEditable(EventObject eo) { return true; }
-
-                        @Override
-                        public boolean shouldSelectCell(EventObject eo) { return true; }
-
-                        @Override
-                        public boolean stopCellEditing() { return true; }
-
-                        @Override
-                        public void cancelCellEditing() {}
-
-                        @Override
-                        public void addCellEditorListener(CellEditorListener cl) {}
-
-                        @Override
-                        public void removeCellEditorListener(CellEditorListener cl) {}
-                    });
-                   
-                     
-                     TableColumn column = null;
+                    TableColumn column = null;
                      for (int k = 0;k < tblCustom.getColumnCount(); k++) {
                         column = tblCustom.getColumnModel().getColumn(k);
 
@@ -3108,9 +3105,10 @@ public class MainForm extends javax.swing.JFrame {
 
                         }
                     }
-                     
-                  
+                     // </editor-fold>
+
                 }
+                
                 con.closeConnect();
               }
               catch (IOException | SQLException | ClassNotFoundException ex) {
@@ -3145,14 +3143,15 @@ public class MainForm extends javax.swing.JFrame {
         int row=tblCustom.getSelectedRow();
         if(row>=0)
         {
-            String callList=""+this.tblCustom.getValueAt(row, 6);
-            String s[]=callList.split(",");
-            for(int j=0;j<s.length;j++)
-            {
-                CallPhone="num : "+j+" "+s[j];
-                System.out.println(callList);
-                System.out.println(CallPhone);
+            int cus_id = Integer.parseInt((String)this.tblCustom.getValueAt(row, 1));
+            if (selPhone.containsKey(cus_id)) {
+                CallPhone = selPhone.get(cus_id);
+            } else {
+                CallPhone = this.tblCustom.getValueAt(row, 6).toString().split(",")[0];
             }
+            
+            this.setTitle(CallPhone);
+            
             final String Scus_name=""+this.tblCustom.getValueAt(row,2);
 
             final String SStatus_id=""+this.tblCustom.getValueAt(row, 8);
@@ -3170,19 +3169,77 @@ public class MainForm extends javax.swing.JFrame {
             System.out.println(SStatus_id);
 
 
-            Question_Camp quesF = new Question_Camp(MainForm.this);
-            quesF.setVisible(true);
+            Question_Camp quesF = new Question_Camp(this,lb_agentid.getText());
+            
 
             quesF.getlblAgent_id().setText(lb_agentid.getText()); 
             quesF.getlblCus_id().setText(Scus_name);
             quesF.getlblCam_id().setText(Scam_id);
             quesF.getlblDetail().setText(SDetail_id);
             quesF.getlblCall().setText(SCall_id);
+            quesF.setVisible(true);
         }
    }
     public String GetStatus(String t)
     {
         return t;
+    }
+    
+    int cus_id;
+    private void comboBox()
+    {
+        tblCustom.setDefaultEditor(Object.class, new TableCellEditor() {
+            JComboBox jcom = new JComboBox();
+            
+            @Override
+            public Component getTableCellEditorComponent(JTable jtable, Object va, boolean haf, 
+                                                        int row, int col) {
+                
+                cus_id = Integer.parseInt((String)tblCustom.getValueAt(row, 1));
+                String[] phones = tblCustom.getValueAt(row, col).toString().split(",");
+                jcom.setModel(new DefaultComboBoxModel(phones));
+                jcom.addItemListener(new ItemListener() {
+
+                    @Override
+                    public void itemStateChanged(ItemEvent e) {
+                        if (e.getStateChange() == ItemEvent.SELECTED) {
+                            if (selPhone.containsKey(cus_id)) {
+                                selPhone.remove(cus_id);
+                            }
+                            selPhone.put(cus_id, (String)e.getItem());
+                        }
+                    }
+                });
+
+                return jcom;
+            }
+
+            @Override
+            public Object getCellEditorValue() { return null; }
+
+            @Override
+            public boolean isCellEditable(EventObject eo) { return true; }
+
+            @Override
+            public boolean shouldSelectCell(EventObject eo) { return true; }
+
+            @Override
+            public boolean stopCellEditing() { 
+                jcom.setEditable(false);
+                jcom.setEnabled(false);
+                jcom.setEnabled(true);
+                return true;
+            }
+
+            @Override
+            public void cancelCellEditing() {}
+
+            @Override
+            public void addCellEditorListener(CellEditorListener cl) {}
+
+            @Override
+            public void removeCellEditorListener(CellEditorListener cl) {}
+        });
     }
     
     /**
