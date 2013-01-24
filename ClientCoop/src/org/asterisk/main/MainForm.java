@@ -2919,9 +2919,9 @@ public class MainForm extends javax.swing.JFrame {
                 {
 
                     String sql="SELECT * FROM ("
-                                        + "SELECT c.id as campaign_id,c.create_day as create_day,"
-                                        + "c.start_day as start_day,c.end_day as end_day, "
-                                        + " k.id as call_id, "
+                                        + "SELECT c.id as campaign_id,c.name as name_camp,c.create_day as create_day,"
+                                        + "c.start_day as start_day,c.end_day as end_day,c.desc as descript, "
+                                        + "k.id as call_id, "
                                         + "a.agent_id as agent_id, a.agentName as agent_name"
                                         + " FROM ((_campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
                                         + "INNER JOIN _call k ON k.camp_detail_id = d.id)"
@@ -2932,7 +2932,7 @@ public class MainForm extends javax.swing.JFrame {
                                         + " group by campaign_id,create_day,start_day,end_day,agent_id";
                     ResultSet result = con.executeQuery(sql);
                     tblCamp.getTableHeader().setReorderingAllowed(false);
-                    String strHeader[]={"Number","Campaign id","Day Create","Start Day","End Day"};
+                    String strHeader[]={"Number","Campaign name","Day Create","Start Day","End Day","Camp_id","Description"};
                     DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
                     {
 
@@ -2951,10 +2951,13 @@ public class MainForm extends javax.swing.JFrame {
                         rowdata.add(Integer.toString(i));
 
 
-                        rowdata.add(result.getString("campaign_id"));
+                        rowdata.add(result.getString("name_camp"));
                         rowdata.add(result.getString("create_day"));
                         rowdata.add(result.getString("start_day"));
                         rowdata.add(result.getString("end_day"));
+                        rowdata.add(result.getString("campaign_id"));
+                        rowdata.add(result.getString("descript"));
+                        
                         dt.addRow(rowdata);
                     }
                     tblCamp.setModel(dt);
@@ -2972,12 +2975,7 @@ public class MainForm extends javax.swing.JFrame {
                         column.setMinWidth(0);
                         column.setMaxWidth(0);
                     }
-                    else if(k==6)
-                    {
-                        column.setWidth(0);
-                        column.setMinWidth(0);
-                        column.setMaxWidth(0);
-                    }
+                   
                     else {
                         column.setPreferredWidth(100);
 
@@ -2992,6 +2990,7 @@ public class MainForm extends javax.swing.JFrame {
     }
     
     private Hashtable<Integer, String> selPhone = new Hashtable<>();
+    
     public void showCustomer()
     {
          try {
@@ -3007,7 +3006,7 @@ public class MainForm extends javax.swing.JFrame {
                     String sql="SELECT customer_id, name, gender, address, birthday,"
                     + "GROUP_CONCAT(number)as number,status,id_status,detail_id,call_id "
                     + " FROM ( "
-                    + " SELECT c.id AS campaign_id,c.create_day as create_day,c.start_day as start_day,c.end_day as end_day,"
+                    + " SELECT c.id AS campaign_id,"
                     + " a.agent_id AS agent_id, a.agentname AS agent_name, "
                     + " k.camp_detail_id AS detail_id,k.id as call_id, "
                     + " i.id AS customer_id, i.name AS name, i.gender AS gender, i.address AS address, i.birthday AS birthday,"
@@ -3023,9 +3022,9 @@ public class MainForm extends javax.swing.JFrame {
                     
                     int row=tblCamp.getSelectedRow();
         
-                    String col1=""+this.tblCamp.getValueAt(row,1);
+                    String col5=""+this.tblCamp.getValueAt(row,5);
                    // String col2=""+this.tblCamp.getValueAt(row,2);
-                      sql+=" WHERE agent_id = '"+lb_agentid.getText()+"' and campaign_id = '"+col1+"'"
+                      sql+=" WHERE agent_id = '"+lb_agentid.getText()+"' and campaign_id = '"+col5+"'"
                               + " GROUP BY customer_id, name, gender, address, birthday ";
                    ResultSet result = con.executeQuery(sql);
                  
@@ -3144,6 +3143,14 @@ public class MainForm extends javax.swing.JFrame {
                             column.setPreferredWidth(50);
 
                         } 
+                         else if(k==1)
+                        {
+                            //column.setPreferredWidth(0);
+                            column.setWidth(0);
+                            column.setMinWidth(0);
+                            column.setMaxWidth(0);
+
+                        }
                         else if(k==8)
                         {
                             //column.setPreferredWidth(0);
@@ -3206,7 +3213,8 @@ public class MainForm extends javax.swing.JFrame {
         }
     }
      
-   private void Dial()
+     
+  private void Dial()
    {
         int row=tblCustom.getSelectedRow();
         if(row>=0)
@@ -3218,12 +3226,14 @@ public class MainForm extends javax.swing.JFrame {
                 CallPhone = this.tblCustom.getValueAt(row, 6).toString().split(",")[0];
             }
             
-            this.setTitle(CallPhone);
+           
             
             final String Scus_name=""+this.tblCustom.getValueAt(row,2);
 
-            final String SStatus_id=""+this.tblCustom.getValueAt(row, 8);
-            final String SDetail_id=""+this.tblCustom.getValueAt(row, 9);
+            final String SGender=""+this.tblCustom.getValueAt(row,3);
+            final String SAddr=""+this.tblCustom.getValueAt(row, 4);
+            final String SBirth=""+this.tblCustom.getValueAt(row, 5);
+            
             final String SCall_id=""+this.tblCustom.getValueAt(row, 10);
         
             int row1=tblCamp.getSelectedRow();
@@ -3231,20 +3241,21 @@ public class MainForm extends javax.swing.JFrame {
             {
                 return;
             }
-            final String Scam_id=""+this.tblCamp.getValueAt(row1, 1);
-            //final String Sagent_id=""+this.tblCamp.getValueAt(row1, 5);
+            final String Scam_name=""+this.tblCamp.getValueAt(row1, 1);
+            final String Sdesc=""+this.tblCamp.getValueAt(row1, 6);
 
-            System.out.println(SStatus_id);
+           
 
 
-            Question_Camp quesF = new Question_Camp(this,lb_agentid.getText());
-            
+            Question_Camp quesF = new Question_Camp(this,lb_agentid.getText(),SCall_id,Scam_name);
+            quesF.getTextCamp_Desc().setText(Sdesc);
 
-            quesF.getlblAgent_id().setText(lb_agentid.getText()); 
+            quesF.getlblGender().setText(SGender); 
             quesF.getlblCus_id().setText(Scus_name);
-            quesF.getlblCam_id().setText(Scam_id);
-            quesF.getlblDetail().setText(SDetail_id);
-            quesF.getlblCall().setText(SCall_id);
+            quesF.getlblAddr().setText(SAddr);
+            quesF.getlblBirth().setText(SBirth);
+          
+            
             quesF.setVisible(true);
         }
    }
