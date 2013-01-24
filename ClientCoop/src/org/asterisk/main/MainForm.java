@@ -218,6 +218,8 @@ public class MainForm extends javax.swing.JFrame {
         jLabel12 = new javax.swing.JLabel();
         lb_logintime = new javax.swing.JLabel();
         btn_pause = new javax.swing.JToggleButton();
+        btn_transfer = new javax.swing.JButton();
+        cb_transfer = new javax.swing.JComboBox();
         main_tab = new javax.swing.JTabbedPane();
         Panel1 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -380,6 +382,25 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        btn_transfer.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btn_transfer.setText("Transfer");
+        btn_transfer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_transferActionPerformed(evt);
+            }
+        });
+
+        cb_transfer.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cb_transferMouseClicked(evt);
+            }
+        });
+        cb_transfer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cb_transferActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -388,7 +409,11 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(btn_logout, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50)
                 .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 470, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(btn_transfer)
+                .addGap(18, 18, 18)
+                .addComponent(cb_transfer, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 274, Short.MAX_VALUE)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lb_logintime, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -415,6 +440,12 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(btn_logout, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_transfer)
+                    .addComponent(cb_transfer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel13, lb_workTime});
@@ -554,7 +585,7 @@ public class MainForm extends javax.swing.JFrame {
                                         .addGap(18, 18, 18)
                                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(cb_gender, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txt_birthday, javax.swing.GroupLayout.DEFAULT_SIZE, 159, Short.MAX_VALUE)))
+                                            .addComponent(txt_birthday, javax.swing.GroupLayout.DEFAULT_SIZE, 167, Short.MAX_VALUE)))
                                     .addGroup(jPanel8Layout.createSequentialGroup()
                                         .addComponent(txt_mobile, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
@@ -640,7 +671,7 @@ public class MainForm extends javax.swing.JFrame {
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 748, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -874,7 +905,7 @@ public class MainForm extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(txtResultPro, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -979,7 +1010,7 @@ public class MainForm extends javax.swing.JFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 748, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 756, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1000,7 +1031,7 @@ public class MainForm extends javax.swing.JFrame {
         jPanel16.setLayout(jPanel16Layout);
         jPanel16Layout.setHorizontalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1109,7 +1140,7 @@ public class MainForm extends javax.swing.JFrame {
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
             .addComponent(jScrollPane8, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -2636,6 +2667,43 @@ public class MainForm extends javax.swing.JFrame {
     private void tblCustomKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCustomKeyReleased
        ShowButtonDial();
     }//GEN-LAST:event_tblCustomKeyReleased
+
+    private void btn_transferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_transferActionPerformed
+        try{
+            String desTransfer = "";
+            if(cb_transfer.getItemCount()>0)
+                desTransfer = (String)cb_transfer.getSelectedItem();
+            agentClient.sendtoServer("114@"+desTransfer);
+            System.out.println("transfer");
+        }catch(Exception e){
+            System.out.println("btn_transferActionPerformed: "+e);
+        }                
+    }//GEN-LAST:event_btn_transferActionPerformed
+
+    private void cb_transferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_transferActionPerformed
+            
+    }//GEN-LAST:event_cb_transferActionPerformed
+
+    private void cb_transferMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cb_transferMouseClicked
+        // TODO add your handling code here:
+        try{
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+            if(con.isConnect()){                              
+                String sql = "SELECT interface FROM agent_status WHERE interface !='0'";
+                ResultSet rs = con.executeQuery(sql);
+                while(rs.next()){
+                    String item = String.valueOf(rs.getObject("interface"));
+//                    if(!item.equalsIgnoreCase(agentObject.getInterface()))
+                        cb_transfer.addItem(item);
+                        System.out.println("add item: "+item);
+                }
+                System.out.println("add item in combo transfer");
+            }
+            con.closeConnect();
+        }catch(Exception e){
+            System.out.println(""+e);            
+        }           
+    }//GEN-LAST:event_cb_transferMouseClicked
    
     public void setAllEnable(boolean flag){
         Component comNumber [] = panel_number.getComponents();
@@ -3313,8 +3381,10 @@ public class MainForm extends javax.swing.JFrame {
     public javax.swing.JButton btn_logout;
     public javax.swing.JButton btn_new;
     public javax.swing.JToggleButton btn_pause;
+    private javax.swing.JButton btn_transfer;
     public javax.swing.JButton btn_update;
     public javax.swing.JComboBox cb_gender;
+    private javax.swing.JComboBox cb_transfer;
     public javax.swing.JComboBox cb_type;
     private javax.swing.JCheckBox chkTime;
     private javax.swing.JButton jButton3;
