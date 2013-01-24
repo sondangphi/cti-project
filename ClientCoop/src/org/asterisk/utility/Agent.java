@@ -162,9 +162,11 @@ public class Agent implements Runnable{
                             System.out.println("UNPAUSEFAIL");
                             mainForm.btn_pause.setSelected(true);
                         break;
-                        case TRANSSUCC: //result TRANSFER	            			
+                        case TRANSFERSUCCESS: //result transfer success   
+                            System.out.println("TRANSFERSUCCESS");                            
                         break;
-                        case TRANSFAIL: //result TRANSFER	            			
+                        case TRANSFERFAIL: //result TRANSFER fail	   
+                            System.out.println("TRANSFERFAIL");  
                         break;
                         case HOLDSUCC: //result HOLD
                         break;
@@ -521,7 +523,7 @@ public class Agent implements Runnable{
             LOGINSUCC, LOGINFAIL, LOGOUTSUCC, LOGOUTFAIL,		
             PAUSESUCC, PAUSEFAIL,
             HOLDSUCC, HOLDFAIL,
-            TRANSSUCC, TRANSFAIL,
+            TRANSFERSUCCESS, TRANSFERFAIL,
             UNPAUSESUCC, UNPAUSEFAIL,
             AVAIL, BUSY, READY, RESULT, UP,HANGUP,
             CHANGEPWD,CHANGEPWDFAIL,
