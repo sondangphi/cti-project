@@ -29,7 +29,7 @@ import org.asterisk.utility.ConnectDatabase;
  */
 public class Question_Camp extends javax.swing.JDialog {
     
-    static AgentObject agentObject;
+    //static AgentObject agentObject;
    private MainForm own;
                        		
     private static String Mysql_server = "172.168.10.5";      
@@ -43,22 +43,32 @@ public class Question_Camp extends javax.swing.JDialog {
     Vector rowdata;
     String sql;
     
+    String title_call;
+    String Camp_name;
     /**
      * Creates new form gggg
      */
-    public Question_Camp(MainForm own, String agent)  
+    public Question_Camp(MainForm own, String agent,String title_call, String Camp_name)  
     {
         super(own);
         this.own = own;
         this.own.setEnabled(false);
+        this.title_call=title_call;
+        this.Camp_name=Camp_name;
+        initComponents();
+      
+        lbl_Addr.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         
-        initComponents1();
-        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("QUESTION - CALL : " +title_call);
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Campaign name : "+ Camp_name));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Question : "));
+       // setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
         setLocation(new Point((screenSize.width -this.getWidth()) / 2,
                               (screenSize.height-this.getHeight()) / 2));
 
+       
         ShowContentComponent(agent); 
     }//
 
@@ -89,6 +99,7 @@ public class Question_Camp extends javax.swing.JDialog {
                     int type=Integer.parseInt(result.getString("question_type_id")) ;
 
                     ques.add(type, content);
+                    System.err.println("hgshagdja");
 
                 }   
             }
@@ -102,55 +113,137 @@ public class Question_Camp extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         ques = new nttnetworks.com.controls.question();
-        btnfinish = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        lblCam_id = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        lblAgent_id = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         lblCus_id = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        lbl_gender = new javax.swing.JLabel();
+        lbl_birth = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        lbl_Addr = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtCamp_desc = new javax.swing.JTextArea();
+        jPanel4 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtNote = new javax.swing.JTextArea();
         cbxStatus = new javax.swing.JComboBox();
+        btnfinish = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        lblCall = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        lblDetail = new javax.swing.JLabel();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("QUESTION");
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowClosing(java.awt.event.WindowEvent evt) {
-                onClosing(evt);
-            }
-            public void windowClosed(java.awt.event.WindowEvent evt) {
-                onClosing(evt);
-            }
-        });
 
-        btnfinish.setText("FINISH");
-        btnfinish.setEnabled(false);
-        btnfinish.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnfinishActionPerformed(evt);
-            }
-        });
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
 
-        jLabel1.setText("CAMPAIGN : ");
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(ques, javax.swing.GroupLayout.DEFAULT_SIZE, 774, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(ques, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
-        lblCam_id.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblCam_id.setText("Camp_id");
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Customer Infomation"));
 
-        jLabel3.setText("AGENT : ");
+        jLabel5.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel5.setText("Customer : ");
 
-        lblAgent_id.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblAgent_id.setText("agent_id");
+        lblCus_id.setText("Cus_Name");
 
-        jLabel5.setText("CUSTOMER : ");
+        jLabel3.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel3.setText("Gender : ");
 
-        lblCus_id.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblCus_id.setText("Cus_id");
+        lbl_gender.setText("gender");
+
+        lbl_birth.setText("1990");
+
+        jLabel7.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel7.setText("Birthday : ");
+
+        jLabel6.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jLabel6.setText("Address : ");
+
+        lbl_Addr.setText("Hồ Chí Minh");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(42, 42, 42)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblCus_id))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel3))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(lbl_gender)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                                .addComponent(jLabel7))
+                            .addComponent(lbl_Addr))))
+                .addGap(18, 18, 18)
+                .addComponent(lbl_birth)
+                .addGap(52, 52, 52))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(lblCus_id))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(lbl_gender)
+                    .addComponent(jLabel7)
+                    .addComponent(lbl_birth))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(lbl_Addr)))
+        );
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Campaign_name"));
+
+        txtCamp_desc.setEditable(false);
+        txtCamp_desc.setColumns(20);
+        txtCamp_desc.setLineWrap(true);
+        txtCamp_desc.setRows(5);
+        txtCamp_desc.setWrapStyleWord(true);
+        jScrollPane3.setViewportView(txtCamp_desc);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 373, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
 
         txtNote.setColumns(20);
         txtNote.setRows(5);
@@ -163,6 +256,14 @@ public class Question_Camp extends javax.swing.JDialog {
             }
         });
 
+        btnfinish.setText("FINISH");
+        btnfinish.setEnabled(false);
+        btnfinish.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnfinishActionPerformed(evt);
+            }
+        });
+
         btnCancel.setText("Cancel");
         btnCancel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -170,255 +271,73 @@ public class Question_Camp extends javax.swing.JDialog {
             }
         });
 
-        jLabel2.setText("CALL : ");
-
-        lblCall.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblCall.setText("1");
-
-        jLabel4.setText("CAMP DETAIL : ");
-
-        lblDetail.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblDetail.setText("DETAIL");
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(cbxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnfinish)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnCancel)
+                .addGap(20, 20, 20))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(13, 13, 13)
+                        .addComponent(cbxStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnCancel, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                            .addComponent(btnfinish, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(ques, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cbxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnfinish)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCancel)
-                        .addGap(0, 30, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblCam_id))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblDetail)))
-                        .addGap(74, 74, 74)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel3))
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblAgent_id)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblCall)
-                                .addGap(54, 54, 54))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblCus_id)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                        .addGap(10, 10, 10)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(lblCall))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3)
-                        .addComponent(lblAgent_id))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(lblCam_id)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel4)
-                        .addComponent(lblDetail))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel5)
-                        .addComponent(lblCus_id)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addComponent(ques, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cbxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnCancel)
-                        .addComponent(btnfinish)))
-                .addGap(13, 13, 13))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(7, 7, 7))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    private void initComponents1() {
-
-        ques = new nttnetworks.com.controls.question();
-        btnfinish = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        lblCam_id = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        lblAgent_id = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        lblCus_id = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtNote = new javax.swing.JTextArea();
-        cbxStatus = new javax.swing.JComboBox();
-        btnCancel = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        lblCall = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        lblDetail = new javax.swing.JLabel();
-
-       // setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("QUESTION");
-
-        btnfinish.setText("FINISH");
-        btnfinish.setEnabled(false);
-        btnfinish.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnfinishActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setText("CAMPAIGN : ");
-
-        lblCam_id.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblCam_id.setText("Camp_id");
-
-        jLabel3.setText("AGENT : ");
-
-        lblAgent_id.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblAgent_id.setText("agent_id");
-
-        jLabel5.setText("CUSTOMER : ");
-
-        lblCus_id.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblCus_id.setText("Cus_id");
-
-        txtNote.setColumns(20);
-        txtNote.setRows(5);
-        jScrollPane1.setViewportView(txtNote);
-
-        cbxStatus.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Calling", "Complete" }));
-        cbxStatus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbxStatusActionPerformed(evt);
-            }
-        });
-
-        btnCancel.setText("Cancel");
-        btnCancel.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelActionPerformed(evt);
-            }
-        });
-
-        jLabel2.setText("CALL : ");
-
-        lblCall.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblCall.setText("1");
-
-        jLabel4.setText("CAMP DETAIL : ");
-
-        lblDetail.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        lblDetail.setText("DETAIL");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(ques, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(cbxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnfinish)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCancel)
-                        .addGap(0, 30, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblCam_id))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblDetail)))
-                        .addGap(74, 74, 74)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel3))
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblAgent_id)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblCall)
-                                .addGap(54, 54, 54))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblCus_id)
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(lblCall))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel3)
-                        .addComponent(lblAgent_id))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel1)
-                        .addComponent(lblCam_id)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel4)
-                        .addComponent(lblDetail))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel5)
-                        .addComponent(lblCus_id)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addComponent(ques, javax.swing.GroupLayout.PREFERRED_SIZE, 451, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(cbxStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btnCancel)
-                        .addComponent(btnfinish)))
-                .addGap(13, 13, 13))
-        );
-
-        pack();
-    }
+   
     private static String injectSql(String str) {
        return str.replace("'", "\\'")
             .replace("\"", "\\\\\"");
@@ -430,7 +349,7 @@ public class Question_Camp extends javax.swing.JDialog {
              if(con.isConnect()){
            
             ResultSet result=null;
-            String sql1="SELECT * FROM _question_result where call_id='"+lblCall.getText()+"'";
+            String sql1="SELECT * FROM _question_result where call_id='"+ title_call+"'";
              result=con.executeQuery(sql1);
             if (result.next()) {
                    JOptionPane.showMessageDialog(null, "data is exist");
@@ -451,7 +370,7 @@ public class Question_Camp extends javax.swing.JDialog {
                             answerArray += ",\""+ injectSql(t) +"\"";
                         }   
 
-                        String sql = "INSERT INTO _question_result VALUES( '"+i+"','"+lblCall.getText()+"','"
+                        String sql = "INSERT INTO _question_result VALUES( '"+i+"','"+title_call+"','"
                                      + "[" + answerArray.substring(1) + "]')";
 
                         con.executeUpdate(sql);
@@ -461,7 +380,7 @@ public class Question_Camp extends javax.swing.JDialog {
                     }
                   String query_update =
                         "UPDATE  `_call` SET  `note` =  '"+injectSql(txtNote.getText()) + "', `status_id`='3'"
-                      + "WHERE  `id` ='"+lblCall.getText()+"'";
+                      + "WHERE  `id` ='"+title_call+"'";
                 con.executeUpdate(query_update);
                 JOptionPane.showMessageDialog(null,"Update Note successful");
                 
@@ -500,53 +419,57 @@ public class Question_Camp extends javax.swing.JDialog {
         own.setEnabled(true);
         own.setVisible(true);
     }//GEN-LAST:event_btnCancelActionPerformed
-
-    private void onClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_onClosing
-
-    }//GEN-LAST:event_onClosing
  
-    
-   public JLabel getlblAgent_id()
+   
+   public JLabel getlblGender()
   {
-      return lblAgent_id;
+      return lbl_gender;
   }
-   public JLabel getlblCall()
+ 
+    public JTextArea getTextCamp_Desc()
   {
-      return lblCall;
-  }
-    public JLabel getlblCam_id()
-  {
-      return lblCam_id;
+      return txtCamp_desc;
   }
       public JLabel getlblCus_id()
   {
       return lblCus_id;
   }
-      public JLabel getlblDetail()
+  
+     public JLabel getlblAddr()
   {
-      return lblDetail;
+      return lbl_Addr;
+  }
+     public JLabel getlblBirth()
+  {
+      return lbl_birth;
   }
    
-      public JTextArea gettxtNote() {
-          return txtNote;
-      }
+      
+//      public JTextArea gettxtNote() {
+//          return txtNote;
+//      }
+//     
       
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnfinish;
     private javax.swing.JComboBox cbxStatus;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblAgent_id;
-    private javax.swing.JLabel lblCall;
-    private javax.swing.JLabel lblCam_id;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblCus_id;
-    private javax.swing.JLabel lblDetail;
+    private javax.swing.JLabel lbl_Addr;
+    private javax.swing.JLabel lbl_birth;
+    private javax.swing.JLabel lbl_gender;
     private nttnetworks.com.controls.question ques;
+    private javax.swing.JTextArea txtCamp_desc;
     private javax.swing.JTextArea txtNote;
     // End of variables declaration//GEN-END:variables
 }
