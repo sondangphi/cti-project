@@ -72,7 +72,7 @@ public class Managerdb {
 
     private void checkConnect() throws IOException {
         try {
-            System.out.println("Check database connection");
+//            System.out.println("Check database connection");
             if (connection.isClosed()) {
                 System.out.println("Database is close! Try to connect.");
                 while (true) {
@@ -110,7 +110,7 @@ public class Managerdb {
             rs = stm.executeQuery(sqlCom);
             //thi hanh lenh select va tra ve ket qua ResultSet                
         } catch (Exception e) {
-            checkConnect();
+//            checkConnect();
         }
         return rs;
     }
@@ -125,7 +125,7 @@ public class Managerdb {
              * neu that bai tra ve 0
              */
         } catch (Exception e) {
-            checkConnect();
+//            checkConnect();
         }
         return result;
     }
