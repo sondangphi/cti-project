@@ -361,6 +361,12 @@ public class Managerdb {
             }
         }        
         
+        public boolean checkOutboundPermission(String exten)throws Exception{
+            String sql = "SELECT * FROM outbound_permission WHERE extension ='"+exten+"'";
+            ResultSet rs = sqlQuery(sql);
+            return rs.next()? true:false;
+        }
+        
         public ArrayList<QueueObject> listQueue() throws IOException{
             checkConnect();
             ArrayList<QueueObject> list = new ArrayList<QueueObject>();

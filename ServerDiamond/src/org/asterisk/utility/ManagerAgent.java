@@ -51,6 +51,7 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
         private String dialoutSession;
         private String dialoutTalktime = "0";
         private boolean beginDialout = true;
+        private String context_dialout = "queuedial";
         private boolean connectDialout;
         private boolean completeDialout;
         private String hangupChannel = "";
@@ -78,6 +79,8 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
         private final String COMPLETECALLER = "6";
         private final String ABANDON = "7";
         private final String RINGNOANSWER = "21";
+        
+        private String filename = "infor.properties";
         
 	public ManagerAgent(){
 
@@ -115,7 +118,7 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
 	public void run() {
             // TODO Auto-generated method stub		
             try {                
-                String fromClient = "";                
+                String fromClient = "";                           
                 managerEvent.addEventListener(this);
                 managerEvent.sendAction(new StatusAction());
                 addClient = clientSocket.getInetAddress().toString();
@@ -137,23 +140,7 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                                     
                                 }                                
                             }                            
-                        }
-                        /*ĐOẠN NÀY ĐƯỢC THÊM VÔ ĐỂ TINH KEEP-ALIVE VỚI CLIENT*/
-                        if (keep_alive != null) {
-                            if (keep_alive.isAlive()) {
-                                keep_alive.interrupt();
-                            }
-                        }                        
-                        keep_alive = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    Thread.sleep(10000);
-                                    System.out.println("interrupt client: " +clientSocket.getRemoteSocketAddress().toString());                                    
-                                    agentLogout();
-                                } catch (InterruptedException ex) { }  
-                            }
-                        }); keep_alive.start();                        
+                        }                      
                         ArrayList<String> cmdList = uti.getList(fromClient);
                         flag = Integer.parseInt(cmdList.get(0));				
                         switch(flag){
@@ -336,8 +323,22 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                             break;
                             case 222:
                                 try{
-                                    System.out.println("PING from client...");
-//                                    sendToAgent("PING");
+                                    /*ĐOẠN NÀY ĐƯỢC THÊM VÔ ĐỂ TINH KEEP-ALIVE VỚI CLIENT*/
+                                    if (keep_alive != null) {
+                                        if (keep_alive.isAlive()) {
+                                            keep_alive.interrupt();
+                                        }
+                                    }                        
+                                    keep_alive = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                Thread.sleep(10000);
+                                                System.out.println("interrupt client: " +clientSocket.getRemoteSocketAddress().toString());                                    
+                                                agentLogout();
+                                            } catch (InterruptedException ex) { }  
+                                        }
+                                    }); keep_alive.start(); 
                                 }catch(Exception ex){
                                     System.out.println("PING:  "+ex);
                                 }                                
@@ -409,8 +410,9 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
         public String outGoingCall(String phoneNumber)throws Exception{
             OriginateAction originateAction = new OriginateAction();
             ManagerResponse originateResponse;
+            context_dialout = uti.readInfor(filename, "context_dialout");
             originateAction.setChannel(agent.getInterface());// so extension can su dung de goi di "SIP/number"
-            originateAction.setContext("from-internal");
+            originateAction.setContext(context_dialout);
             originateAction.setAsync(true);
             originateAction.setExten(phoneNumber);// so dien thoai can goi "number"        
             originateAction.setPriority(new Integer(1));
@@ -418,6 +420,7 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
             String agentid = agent.getAgentId();
             originateAction.setCallerId(agentid);          
             originateResponse = managerEvent.sendAction(originateAction, 60000);
+            System.out.println("context_dialout: "+context_dialout);
             return originateResponse.getResponse().toString();
         }
         
@@ -713,7 +716,7 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                 }                
                 /* A HangupEvent is triggered when a channel is hung up.*/
                 if(event instanceof HangupEvent){
-                    synchronized(eventObject){
+//                    synchronized(eventObject){
                         HangupEvent hangEvent = (HangupEvent)event;
                         System.out.println("***********************\t HangupEvent\t ***********************");                        
                         if(abandonCall){
@@ -722,17 +725,19 @@ public class ManagerAgent implements Runnable, ManagerEventListener {
                                 channel = channel.substring(0, channel.indexOf("-"));
                                 iface = agent.getInterface().toString();
                                 if(iface.equalsIgnoreCase(channel)){
-                                    abandonCall = false; 
-                                    ringing = true;
-                                    sendToAgent("HANGUPABANDON");
-                                    System.out.println("hangup abadon call: "+channel);
-                                    mdb_agent.inboundCallLog(incomingCall.getsession(), agent.getSesion(),agent.getAgentId(), iface, agent.getQueueId(), ABANDON,"UNKNOWN");
-                                    uti.writeAgentLog("- AGENT - Abandon call\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ incomingCall.getcallerNumber());     
-                                    System.out.println("getChannel: "+hangEvent.getChannel());
+                                    if(incomingCall != null){
+                                        abandonCall = false; 
+                                        ringing = true;
+                                        sendToAgent("HANGUPABANDON");
+                                        System.out.println("hangup abadon call: "+channel);
+                                        mdb_agent.inboundCallLog(incomingCall.getsession(), agent.getSesion(),agent.getAgentId(), iface, agent.getQueueId(), ABANDON,"UNKNOWN");
+                                        uti.writeAgentLog("- AGENT - Abandon call\t" + agent.getAgentId() + "\t" + iface + "\t" +agent.getQueueId()+"\t"+ incomingCall.getcallerNumber());     
+                                        System.out.println("getChannel: "+hangEvent.getChannel());                                        
+                                    }
                                 }
                             }
                         }                        
-                    }                             
+//                    }                             
                 }                                                                                       
             } 
             catch (IOException e) {
