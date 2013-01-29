@@ -28,6 +28,7 @@ public class Server{
         private static String astUserEvent = "manager";
         private static String astPwdEvent = "123456";        
 	private static Managerdb mdb_agent;
+        private static String context_dialout = "queuedial";
 //        private static QueueListen qlisten;  
         private static AgentListen alisten; 
         private static ManagerConnection manager;
@@ -57,6 +58,7 @@ public class Server{
                 uti.writeInfor(filename, "astUserSystem", astUserSystem);                
                 uti.writeInfor(filename, "astUserEvent", astUserEvent);
                 uti.writeInfor(filename, "astPwdEvent", astPwdEvent);                
+                uti.writeInfor(filename, "context_dialout", context_dialout);                
             }
             //Read configuration file
             System.out.println("Read configuration file!"); 
@@ -65,7 +67,7 @@ public class Server{
             Mysql_user = uti.readInfor(filename, "MySql_user");
             Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
             Port_agent = Integer.parseInt(uti.readInfor(filename, "Port_agent"));
-            Port_queue = Integer.parseInt(uti.readInfor(filename, "Port_queue"));      
+            Port_queue = Integer.parseInt(uti.readInfor(filename, "Port_queue"));                
             //connect to Database server - MYSQL
             mdb_agent = new Managerdb(Mysql_dbname,Mysql_user,Mysql_pwd,Mysql_server);
             if(mdb_agent.isConnect()){
