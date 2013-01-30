@@ -107,17 +107,22 @@ public class LoginForm extends javax.swing.JFrame {
         Color LightSkyBlue2 = new Color(164, 211, 238);
         Color white = new Color(255,255,255);    
         Color yellow2 = new Color(238, 238, 0);        
-        Color Khaki1 = new Color( 255, 246, 143);  
+        Color khaki1 = new Color( 255, 246, 143);  
         Color LightGoldenrod1 = new Color(255, 236, 139);
         Color PaleGoldenrod = new Color(238, 232, 170);
-        this.getContentPane().setBackground(white);
-        panel_1.setBackground(white);
-        mn_main.setBackground(white);
-        cb_queue.setBackground(Khaki1);
-        tx_agent.setBackground(Khaki1);
-        tx_iface.setBackground(Khaki1);
-        pwd.setBackground(Khaki1);        
+        Color blue1 = new Color(0, 0, 255);
+        Color dodgerBlue3 = new Color(24, 116, 205);
         
+        this.getContentPane().setBackground(white);
+        panel_1.setBackground(white);        
+        cb_queue.setBackground(khaki1);
+        tx_agent.setBackground(khaki1);
+        pwd.setBackground(khaki1);
+        tx_iface.setBackground(khaki1);                
+        btn_login.setForeground(white);
+//        btn_login.setBackground(dodgerBlue3);
+        btn_clear.setForeground(white);
+        btn_clear.setBackground(dodgerBlue3);        
         lb_option.setText("Option");
         lb_option.setForeground(Color.BLUE);
         lb_option.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); 
@@ -155,7 +160,6 @@ public class LoginForm extends javax.swing.JFrame {
         lb_option = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         lb_pic = new javax.swing.JLabel();
-        mn_main = new javax.swing.JMenuBar();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -185,7 +189,9 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
+        btn_login.setBackground(new java.awt.Color(0, 0, 255));
         btn_login.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
+        btn_login.setForeground(new java.awt.Color(255, 255, 255));
         btn_login.setText("Login");
         btn_login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -228,6 +234,7 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
+        cb_queue.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         cb_queue.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 cb_queueKeyPressed(evt);
@@ -288,7 +295,7 @@ public class LoginForm extends javax.swing.JFrame {
                             .addComponent(pwd, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(panel_1Layout.createSequentialGroup()
                         .addComponent(btn_login)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -302,6 +309,8 @@ public class LoginForm extends javax.swing.JFrame {
         panel_1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {lb_agent, lb_iface, lb_pwd, lb_queue});
 
         panel_1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {cb_queue, pwd, tx_agent, tx_iface});
+
+        panel_1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {btn_clear, btn_login});
 
         panel_1Layout.setVerticalGroup(
             panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -334,12 +343,14 @@ public class LoginForm extends javax.swing.JFrame {
 
         panel_1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {lb_agent, lb_iface, lb_pwd, lb_queue});
 
-        panel_1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cb_queue, pwd, tx_agent, tx_iface});
+        panel_1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {cb_queue, lb_notify_agent, lb_notify_iface, lb_notify_pwd, lb_notify_queue, pwd, tx_agent, tx_iface});
 
+        lb_status.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lb_status.setForeground(new java.awt.Color(255, 0, 0));
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/xcs_logo_r1-90x30.png"))); // NOI18N
 
+        lb_option.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         lb_option.setText("Option");
         lb_option.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mousePressed(java.awt.event.MouseEvent evt) {
@@ -388,8 +399,6 @@ public class LoginForm extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        setJMenuBar(mn_main);
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -416,9 +425,9 @@ public class LoginForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lb_status, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(lb_status, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
@@ -436,7 +445,12 @@ public class LoginForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         tx_agent.setText("");
         tx_iface.setText("");
-        pwd.setText("");                
+        pwd.setText("");              
+        lb_status.setText("");
+        lb_notify_agent.setText("");
+        lb_notify_iface.setText("");
+        lb_notify_pwd.setText("");
+        lb_notify_queue.setText("");
     }//GEN-LAST:event_btn_clearActionPerformed
 
     void printinfor(){
@@ -591,6 +605,29 @@ public class LoginForm extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static  void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                System.out.println("is: "+info.getName());
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>         
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -641,7 +678,6 @@ public class LoginForm extends javax.swing.JFrame {
     private javax.swing.JLabel lb_pwd;
     private javax.swing.JLabel lb_queue;
     public static javax.swing.JLabel lb_status;
-    private javax.swing.JMenuBar mn_main;
     private javax.swing.JPanel panel_1;
     private javax.swing.JPasswordField pwd;
     private javax.swing.JTextField tx_agent;
