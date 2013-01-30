@@ -55,15 +55,15 @@ public class Agent implements Runnable{
         private TimerClock worktime;
         private boolean campaign = false;
         private boolean dialout = false;
-        private BufferedReader infromServer;
-        private PrintWriter outtoServer;        
+//        private BufferedReader infromServer;
+//        private PrintWriter outtoServer;        
         private String com;          
         private KeepAlive keepAlive;
         private Thread keep_alive; 
         private Object synObject = new Object();        
         
-//        DataInputStream in;
-//        DataOutputStream out;
+        private DataInputStream in;
+        private DataOutputStream out;
         
 	public Agent(){
 		
@@ -92,14 +92,14 @@ public class Agent implements Runnable{
                 Mysql_server = uti.readInfor(filename, "MySql_server");
                 Mysql_user = uti.readInfor(filename, "MySql_user");
                 Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
-                outtoServer = new PrintWriter(clientSocket.getOutputStream());
-                infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));  
-//                in = new DataInputStream(clientSocket.getInputStream());
-//                out = new DataOutputStream(clientSocket.getOutputStream());                 
+//                outtoServer = new PrintWriter(clientSocket.getOutputStream());
+//                infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));  
+                in = new DataInputStream(clientSocket.getInputStream());
+                out = new DataOutputStream(clientSocket.getOutputStream());                 
                 sendtoServer(com);
                 while(running){                    
-                    command = infromServer.readLine();  
-//                    command = in.readUTF();
+//                    command = infromServer.readLine();  
+                    command = in.readUTF();
                     System.out.println("Receive from server: "+command);
                     if(command == null){
                         System.out.println("null value from server");  
@@ -446,35 +446,35 @@ public class Agent implements Runnable{
         
         //send request to server - string
 	public void sendtoServer(String t) throws IOException{
-            try{
-                if(clientSocket != null){   
-                    outtoServer.println(t);
-                    outtoServer.flush();
-                    System.out.println("send to server: "+t);
-                }else{
-                    System.out.println("socket is close: "+t);
-                }
-            }catch(Exception e){
-                System.out.println("Exception(sendtoServer): "+e);
-            }   
-            
 //            try{
-//                if(clientSocket != null && out != null && in != null){   
-//                    out.writeUTF(t);
-//                    out.flush();
+//                if(clientSocket != null){   
+//                    outtoServer.println(t);
+//                    outtoServer.flush();
 //                    System.out.println("send to server: "+t);
 //                }else{
 //                    System.out.println("socket is close: "+t);
 //                }
 //            }catch(Exception e){
 //                System.out.println("Exception(sendtoServer): "+e);
-//            }            
+//            }   
+            
+            try{
+                if(clientSocket != null && out != null && in != null){   
+                    out.writeUTF(t);
+                    out.flush();
+                    System.out.println("send to server: "+t);
+                }else{
+                    System.out.println("socket is close: "+t);
+                }
+            }catch(Exception e){
+                System.out.println("Exception(sendtoServer): "+e);
+            }            
 	}        
         //close Socket & Thread for client
 	public void closeConnect()throws Exception{
             try{
                 System.out.println("start close session");
-                if(clientSocket != null && infromServer != null && outtoServer!= null){
+                if(clientSocket != null){
                     running = false;
                     clientSocket.close(); 
                     System.out.println("close socket");                    
@@ -492,21 +492,7 @@ public class Agent implements Runnable{
                 }                 
             }catch(Exception e){
                 System.out.println("closeConnect Exception: "+e); 
-            } 
-            
-//            try{
-//                System.out.println("start close session");
-//                if(clientSocket != null && in != null && out!= null){
-//                    running = false;
-//                    in.close();
-//                    out.close();
-//                    clientSocket.close(); 
-//                    System.out.println("close socket");                    
-//                }                      
-//                System.out.println("finish close session"); 
-//            }catch(Exception e){
-//                System.out.println("closeConnect Exception: "+e); 
-//            }            
+            }            
 	}
         
         

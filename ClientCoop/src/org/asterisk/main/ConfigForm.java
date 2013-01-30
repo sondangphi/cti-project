@@ -4,6 +4,7 @@
  */
 package org.asterisk.main;
 
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.Toolkit;
 import org.asterisk.utility.Utility;
@@ -54,6 +55,20 @@ public class ConfigForm extends javax.swing.JFrame {
             loginform = m;
             this.setIconImage(image); 
             this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );
+            Color LightSkyBlue2 = new Color(164, 211, 238);
+            Color white = new Color(255,255,255);    
+            Color yellow2 = new Color(238, 238, 0);        
+            Color khaki1 = new Color( 255, 246, 143);  
+            Color LightGoldenrod1 = new Color(255, 236, 139);
+            Color PaleGoldenrod = new Color(238, 232, 170);
+            Color blue1 = new Color(0, 0, 255);
+            Color dodgerBlue3 = new Color(24, 116, 205); 
+            this.getContentPane().setBackground(white);
+            btn_finish.setBackground(dodgerBlue3);
+            btn_finish.setForeground(white);
+            
+            
+            
         }catch(Exception e){
         }        
     }    
@@ -86,6 +101,7 @@ public class ConfigForm extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
+        jPanel1.setOpaque(false);
         jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPanel1MouseClicked(evt);
@@ -115,6 +131,7 @@ public class ConfigForm extends javax.swing.JFrame {
         jLabel8.setText("Port 2");
 
         tx_server.setEnabled(false);
+        tx_server.setOpaque(false);
         tx_server.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tx_serverMouseClicked(evt);
@@ -127,6 +144,7 @@ public class ConfigForm extends javax.swing.JFrame {
         });
 
         tx_aport.setEnabled(false);
+        tx_aport.setOpaque(false);
         tx_aport.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tx_aportMouseClicked(evt);
@@ -134,6 +152,7 @@ public class ConfigForm extends javax.swing.JFrame {
         });
 
         tx_qport.setEnabled(false);
+        tx_qport.setOpaque(false);
         tx_qport.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tx_qportMouseClicked(evt);

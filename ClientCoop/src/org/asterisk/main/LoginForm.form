@@ -17,8 +17,6 @@
         </DimensionLayout>
       </Layout>
     </Container>
-    <Menu class="javax.swing.JMenuBar" name="mn_main">
-    </Menu>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
@@ -33,7 +31,6 @@
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
-    <SyntheticProperty name="menuBar" type="java.lang.String" value="mn_main"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
   </SyntheticProperties>
   <Events>
@@ -85,9 +82,9 @@
           <Group type="102" attributes="0">
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="lb_status" max="32767" attributes="0"/>
-                          <Component id="jLabel1" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
+                          <Component id="lb_status" min="-2" pref="21" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel1" max="32767" attributes="0"/>
@@ -129,9 +126,9 @@
                           </Group>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="btn_login" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="btn_clear" min="-2" pref="71" max="-2" attributes="0"/>
+                          <Component id="btn_login" linkSize="8" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="btn_clear" linkSize="8" min="-2" pref="71" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -152,25 +149,25 @@
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lb_agent" linkSize="2" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                       <Component id="tx_agent" linkSize="4" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lb_notify_agent" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                      <Component id="lb_notify_agent" linkSize="4" alignment="0" min="-2" pref="22" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lb_pwd" linkSize="2" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                       <Component id="pwd" linkSize="4" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lb_notify_pwd" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                      <Component id="lb_notify_pwd" linkSize="4" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="tx_iface" linkSize="4" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="lb_iface" linkSize="2" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
-                      <Component id="lb_notify_iface" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                      <Component id="lb_notify_iface" linkSize="4" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lb_queue" linkSize="2" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                       <Component id="cb_queue" linkSize="4" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lb_notify_queue" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                      <Component id="lb_notify_queue" linkSize="4" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="17" max="32767" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -184,8 +181,14 @@
       <SubComponents>
         <Component class="javax.swing.JButton" name="btn_login">
           <Properties>
+            <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="0" red="0" type="rgb"/>
+            </Property>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Tahoma" size="13" style="1"/>
+            </Property>
+            <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+              <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Login"/>
           </Properties>
@@ -260,6 +263,9 @@
         </Component>
         <Component class="javax.swing.JComboBox" name="cb_queue">
           <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Tahoma" size="11" style="1"/>
+            </Property>
             <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
               <StringArray count="0"/>
             </Property>
@@ -343,6 +349,9 @@
     </Container>
     <Component class="javax.swing.JLabel" name="lb_status">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="0" green="0" red="ff" type="rgb"/>
         </Property>
@@ -360,6 +369,9 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lb_option">
       <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="11" style="1"/>
+        </Property>
         <Property name="text" type="java.lang.String" value="Option"/>
       </Properties>
       <Events>
