@@ -5,6 +5,13 @@
 package org.asterisk.main;
 
 //import com.jniwrapper.win32.ie.Browser;
+import chrriis.common.UIUtils;
+import chrriis.dj.nativeswing.swtimpl.NativeInterface;
+import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
+import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
+import chrriis.dj.nativeswing.swtimpl.components.WebBrowserWindowOpeningEvent;
+import chrriis.dj.nativeswing.swtimpl.components.WebBrowserWindowWillOpenEvent;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -45,12 +52,14 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
@@ -293,6 +302,7 @@ public class MainForm extends javax.swing.JFrame {
         tblCamp = new javax.swing.JTable();
         jScrollPane8 = new javax.swing.JScrollPane();
         tblCustom = new javax.swing.JTable();
+        btnRefresh = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -1153,6 +1163,13 @@ public class MainForm extends javax.swing.JFrame {
         });
         jScrollPane8.setViewportView(tblCustom);
 
+        btnRefresh.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/view-refresh.png"))); // NOI18N
+        btnRefresh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefreshActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
@@ -1162,7 +1179,8 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnDial, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(336, 336, 336))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1171,7 +1189,9 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnDial, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btnDial, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -2100,56 +2120,11 @@ public class MainForm extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        try{            
-            if(txt_add.getText().equalsIgnoreCase("")){
-                System.out.println("null data");
-            }else{
-                String add =txt_add.getText();
-                String link = "http://maps.google.com/maps?q="+add;
-                link = link.replaceAll(" ", "%20");
-                System.out.println("ulr: "+link);                      
-                URI url = new URI(link);
-                Desktop.getDesktop().browse(url);     
-                            
-//            String url = "http://maps.google.com/maps?q="+add;
-            //            bro.navigate(url);
+     
+        
+        NativeInterface.open();
+        createContent();
 
-            //            locate.setVisible(true);
-//<<<<<<< .mine
-         //   bro = new Browser();
-          //  bro.navigate(url);
-            Image image = Toolkit.getDefaultToolkit().getImage("map_magnify.png");                        
-            JPanel contentPane;
-            contentPane = new JPanel(new GridLayout(1,9));
-          //  contentPane.add(bro);
-            JFrame frame = new JFrame("Locate Maps");
-            frame.setSize(700, 500);
-            frame.setIconImage(image);
-            frame.setLocationRelativeTo(null);
-            frame.getContentPane().add(contentPane, BorderLayout.CENTER);       
-            frame.setVisible(true);
-            frame.add(contentPane);
-//=======
-//            bro = new Browser();
-//            bro.navigate(url);
-//            Image image = Toolkit.getDefaultToolkit().getImage("map_magnify.png");                        
-//            JPanel contentPane;
-//            contentPane = new JPanel(new GridLayout(1,9));
-//            contentPane.add(bro);
-//            JFrame frame = new JFrame("Locate Maps");
-//            frame.setSize(700, 500);
-//            frame.setIconImage(image);
-//            frame.setLocationRelativeTo(null);
-//            frame.getContentPane().add(contentPane, BorderLayout.CENTER);       
-//            frame.setVisible(true);
-//            frame.add(contentPane);
-//>>>>>>> .r168
-            
-            
-            
-            }
-        }catch(Exception e){
-        }         
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void txtAutoSearchCoopKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAutoSearchCoopKeyTyped
@@ -2740,6 +2715,13 @@ public class MainForm extends javax.swing.JFrame {
             agentClient.sendtoServer("116");
         }catch(Exception ex){}
     }//GEN-LAST:event_btn_holdCallActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        showCampaign();
+        DefaultTableModel dt=new DefaultTableModel();
+        tblCustom.setModel(dt);
+
+    }//GEN-LAST:event_btnRefreshActionPerformed
    
     public void setAllEnable(boolean flag){
         Component comNumber [] = panel_number.getComponents();
@@ -3356,7 +3338,187 @@ public class MainForm extends javax.swing.JFrame {
             public void removeCellEditorListener(CellEditorListener cl) {}
         });
     }
-    
+    public JComponent createContent() {
+      
+  
+    main_tab.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+    JWebBrowser webBrowser = new JWebBrowser();
+    webBrowser.setBarsVisible(false);
+    webBrowser.setStatusBarVisible(true);
+  
+    webBrowser.setHTMLContent(
+            //<editor-fold defaultstate="collapsed" desc=" set HTML ">
+            "<html>"+
+    "<head> "+
+        "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">"+
+        "<title>Our first Google Map</title>"+
+ "<style type=\"text/css\">"+
+   "html, body {"+
+  "height: 100%;"+
+  "margin: 0;"+
+  "padding: 0;"+
+"}"+
+
+"#map_canvas {"+
+  "height: 100%;"+
+"}"+
+
+"@media print {"+
+  "html, body {"+
+    "height: auto;"+
+  "}"+
+
+  "#map_canvas {"+
+    "height: 650px;"+
+  "}"+
+"}"+
+"#directions-panel {"+
+        "height: 100%;"+
+        "float: right;"+
+        "width: 390px;"+
+        "overflow: auto;"+
+      "}"+
+
+      "#map-canvas {"+
+        "margin-right: 400px;"+
+      "}"+
+
+      "#control {"+
+        "background: #fff;"+
+        "padding: 5px;"+
+        "font-size: 14px;"+
+        "font-family: Arial;"+
+        "border: 1px solid #ccc;"+
+        "box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);"+
+        "display: none;"+
+      "}"+
+
+      "@media print {"+
+        "#map-canvas {"+
+          "height: 500px;"+
+          "margin: 0;"+
+        "}"+
+
+        "#directions-panel {"+
+          "float: none;"+
+          "width: auto;"+
+        "}"+
+    "</style>"+
+ "<script type=\"text/javascript\""+
+      "src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyA-l9OJmmKlUWS2ipiFppoVYZGfUahcEN0&sensor=false\">"+
+    "</script>"+
+       
+      "<script>"+
+      "var directionDisplay;"+
+      "var directionsService = new google.maps.DirectionsService();"+
+
+      "function initialize() {"+
+        "directionsDisplay = new google.maps.DirectionsRenderer();"+
+        "var mapOptions = {"+
+          "zoom: 7,"+
+          "mapTypeId: google.maps.MapTypeId.ROADMAP,"+
+          "center: new google.maps.LatLng(41.850033, -87.6500523)"+
+        "};"+
+        "var map = new google.maps.Map(document.getElementById('map_canvas'),"+
+            "mapOptions);"+
+        "directionsDisplay.setMap(map);"+
+        "directionsDisplay.setPanel(document.getElementById('directions-panel'));"+
+
+        "var control = document.getElementById('control');"+
+        "control.style.display = 'block';"+
+        "map.controls[google.maps.ControlPosition.TOP].push(control);"+
+      "}"+
+
+      "function calcRoute() {"+
+        "var start = document.getElementById('start').value;"+
+        "var end = document.getElementById('end').value;"+
+        "var request = {"+
+          "origin: start,"+
+          "destination: end,"+
+          "travelMode: google.maps.DirectionsTravelMode.DRIVING"+
+        "};"+
+        "directionsService.route(request, function(response, status) {"+
+          "if (status == google.maps.DirectionsStatus.OK) {"+
+            "directionsDisplay.setDirections(response);"+
+          "}"+
+        "});"+
+      "}"+
+
+      "google.maps.event.addDomListener(window, 'load', initialize);"+
+    "</script>"+
+    "</head>   "+
+     "<body >"+
+     "<div id=\"control\">"+
+      "<strong>Start:</strong>"+
+      "<select id=\"start\" onchange=\"calcRoute();\">"+
+        "<option value=\"chicago, il\">Chicago</option>"+
+        "<option value=\"st louis, mo\">St Louis</option>"+
+        "<option value=\"joplin, mo\">Joplin, MO</option>"+
+        "<option value=\"oklahoma city, ok\">Oklahoma City</option>"+
+        "<option value=\"amarillo, tx\">Amarillo</option>"+
+        "<option value=\"gallup, nm\">Gallup, NM</option>"+
+        "<option value=\"flagstaff, az\">Flagstaff, AZ</option>"+
+        "<option value=\"winona, az\">Winona</option>"+
+        "<option value=\"kingman, az\">Kingman</option>"+
+        "<option value=\"barstow, ca\">Barstow</option>"+
+        "<option value=\"san bernardino, ca\">San Bernardino</option>"+
+        "<option value=\"los angeles, ca\">Los Angeles</option>"+
+      "</select>"+
+      "<strong>End:</strong>"+
+      "<select id=\"end\" onchange=\"calcRoute();\">"+
+        "<option value=\"chicago, il\">Chicago</option>"+
+        "<option value=\"st louis, mo\">St Louis</option>"+
+        "<option value=\"joplin, mo\">Joplin, MO</option>"+
+        "<option value=\"oklahoma city, ok\">Oklahoma City</option>"+
+        "<option value=\"amarillo, tx\">Amarillo</option>"+
+        "<option value=\"gallup, nm\">Gallup, NM</option>"+
+        "<option value=\"flagstaff, az\">Flagstaff, AZ</option>"+
+        "<option value=\"winona, az\">Winona</option>"+
+        "<option value=\"kingman, az\">Kingman</option>"+
+        "<option value=\"barstow, ca\">Barstow</option>"+
+        "<option value=\"san bernardino, ca\">San Bernardino</option>"+
+        "<option value=\"los angeles, ca\">Los Angeles</option>"+
+      "</select>"+
+    "</div>"+
+    "<div id=\"directions-panel\"></div>"+
+    "<div id=\"map_canvas\"></div>"+
+  "</body>"+
+"</html>");
+     //</editor-fold>
+    addWebBrowserListener(main_tab, webBrowser);
+    main_tab.addTab(null, webBrowser);
+   
+    return main_tab;
+  }
+   private static void addWebBrowserListener(final JTabbedPane tabbedPane, final JWebBrowser webBrowser) {
+    webBrowser.addWebBrowserListener(new WebBrowserAdapter() {
+      @Override
+      public void titleChanged(WebBrowserEvent e) {
+        for(int i=0; i<tabbedPane.getTabCount(); i++) {
+            
+          if(tabbedPane.getComponentAt(i) == webBrowser) {
+            if(i == 0) {
+              return;
+            }
+            tabbedPane.setTitleAt(i, webBrowser.getPageTitle());
+            break;
+          }
+        }
+      }
+      @Override
+      public void windowWillOpen(WebBrowserWindowWillOpenEvent e) {
+        JWebBrowser newWebBrowser = new JWebBrowser();
+        addWebBrowserListener(tabbedPane, newWebBrowser);
+        tabbedPane.addTab("", newWebBrowser);
+        e.setNewWebBrowser(newWebBrowser);
+      }
+      @Override
+      public void windowOpening(WebBrowserWindowOpeningEvent e) {
+        e.getWebBrowser().setMenuBarVisible(false);
+      }
+    });
+  }
+
     /**
      * @param args the command line arguments
      */
@@ -3383,7 +3545,7 @@ public class MainForm extends javax.swing.JFrame {
 //            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -3404,6 +3566,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btnClearCoop;
     private javax.swing.JButton btnClearPro;
     private javax.swing.JButton btnDial;
+    private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnShowCoop;
     private javax.swing.JButton btnShowPro;
