@@ -3364,7 +3364,7 @@ public class MainForm extends javax.swing.JFrame {
         if(main_tab.getTabCount()==4)
         {
             main_tab.addTab(null, webBrowser);
-            main_tab.setSelectedIndex(1);
+            main_tab.setSelectedIndex(4);
         }
         
         return main_tab;
@@ -3403,7 +3403,7 @@ public class MainForm extends javax.swing.JFrame {
      */
     public static void main(String args[]) {
 //        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    //        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
 //        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
 //         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
 //         */
@@ -3433,6 +3433,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
     }
+    //<editor-fold defaultstate="collapsed" desc=" Variables declaration - do not modify       ">
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox ChkName;
     private javax.swing.JMenuItem MenuItem_about;
@@ -3560,4 +3561,5 @@ public class MainForm extends javax.swing.JFrame {
     public javax.swing.JTextField txt_reg;
     private javax.swing.JTextField txt_transfer;
     // End of variables declaration//GEN-END:variables
+ //</editor-fold>
 }
