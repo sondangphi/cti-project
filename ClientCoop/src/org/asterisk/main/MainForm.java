@@ -3364,6 +3364,7 @@ public class MainForm extends javax.swing.JFrame {
         if(main_tab.getTabCount()==4)
         {
             main_tab.addTab(null, webBrowser);
+            main_tab.setSelectedIndex(1);
         }
         
         return main_tab;
