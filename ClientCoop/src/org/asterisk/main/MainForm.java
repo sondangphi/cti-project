@@ -33,8 +33,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
+import java.net.URLEncoder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -2119,12 +2121,9 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_MenuItem_aboutActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
-     
-        
-        NativeInterface.open();
+         NativeInterface.open();  
         createContent();
-
+      
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void txtAutoSearchCoopKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAutoSearchCoopKeyTyped
@@ -3341,154 +3340,33 @@ public class MainForm extends javax.swing.JFrame {
     public JComponent createContent() {
       
   
-    main_tab.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-    JWebBrowser webBrowser = new JWebBrowser();
-    webBrowser.setBarsVisible(false);
-    webBrowser.setStatusBarVisible(true);
-  
-    webBrowser.setHTMLContent(
-            //<editor-fold defaultstate="collapsed" desc=" set HTML ">
-            "<html>"+
-    "<head> "+
-        "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">"+
-        "<title>Our first Google Map</title>"+
- "<style type=\"text/css\">"+
-   "html, body {"+
-  "height: 100%;"+
-  "margin: 0;"+
-  "padding: 0;"+
-"}"+
-
-"#map_canvas {"+
-  "height: 100%;"+
-"}"+
-
-"@media print {"+
-  "html, body {"+
-    "height: auto;"+
-  "}"+
-
-  "#map_canvas {"+
-    "height: 650px;"+
-  "}"+
-"}"+
-"#directions-panel {"+
-        "height: 100%;"+
-        "float: right;"+
-        "width: 390px;"+
-        "overflow: auto;"+
-      "}"+
-
-      "#map-canvas {"+
-        "margin-right: 400px;"+
-      "}"+
-
-      "#control {"+
-        "background: #fff;"+
-        "padding: 5px;"+
-        "font-size: 14px;"+
-        "font-family: Arial;"+
-        "border: 1px solid #ccc;"+
-        "box-shadow: 0 2px 2px rgba(33, 33, 33, 0.4);"+
-        "display: none;"+
-      "}"+
-
-      "@media print {"+
-        "#map-canvas {"+
-          "height: 500px;"+
-          "margin: 0;"+
-        "}"+
-
-        "#directions-panel {"+
-          "float: none;"+
-          "width: auto;"+
-        "}"+
-    "</style>"+
- "<script type=\"text/javascript\""+
-      "src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyA-l9OJmmKlUWS2ipiFppoVYZGfUahcEN0&sensor=false\">"+
-    "</script>"+
-       
-      "<script>"+
-      "var directionDisplay;"+
-      "var directionsService = new google.maps.DirectionsService();"+
-
-      "function initialize() {"+
-        "directionsDisplay = new google.maps.DirectionsRenderer();"+
-        "var mapOptions = {"+
-          "zoom: 7,"+
-          "mapTypeId: google.maps.MapTypeId.ROADMAP,"+
-          "center: new google.maps.LatLng(41.850033, -87.6500523)"+
-        "};"+
-        "var map = new google.maps.Map(document.getElementById('map_canvas'),"+
-            "mapOptions);"+
-        "directionsDisplay.setMap(map);"+
-        "directionsDisplay.setPanel(document.getElementById('directions-panel'));"+
-
-        "var control = document.getElementById('control');"+
-        "control.style.display = 'block';"+
-        "map.controls[google.maps.ControlPosition.TOP].push(control);"+
-      "}"+
-
-      "function calcRoute() {"+
-        "var start = document.getElementById('start').value;"+
-        "var end = document.getElementById('end').value;"+
-        "var request = {"+
-          "origin: start,"+
-          "destination: end,"+
-          "travelMode: google.maps.DirectionsTravelMode.DRIVING"+
-        "};"+
-        "directionsService.route(request, function(response, status) {"+
-          "if (status == google.maps.DirectionsStatus.OK) {"+
-            "directionsDisplay.setDirections(response);"+
-          "}"+
-        "});"+
-      "}"+
-
-      "google.maps.event.addDomListener(window, 'load', initialize);"+
-    "</script>"+
-    "</head>   "+
-     "<body >"+
-     "<div id=\"control\">"+
-      "<strong>Start:</strong>"+
-      "<select id=\"start\" onchange=\"calcRoute();\">"+
-        "<option value=\"chicago, il\">Chicago</option>"+
-        "<option value=\"st louis, mo\">St Louis</option>"+
-        "<option value=\"joplin, mo\">Joplin, MO</option>"+
-        "<option value=\"oklahoma city, ok\">Oklahoma City</option>"+
-        "<option value=\"amarillo, tx\">Amarillo</option>"+
-        "<option value=\"gallup, nm\">Gallup, NM</option>"+
-        "<option value=\"flagstaff, az\">Flagstaff, AZ</option>"+
-        "<option value=\"winona, az\">Winona</option>"+
-        "<option value=\"kingman, az\">Kingman</option>"+
-        "<option value=\"barstow, ca\">Barstow</option>"+
-        "<option value=\"san bernardino, ca\">San Bernardino</option>"+
-        "<option value=\"los angeles, ca\">Los Angeles</option>"+
-      "</select>"+
-      "<strong>End:</strong>"+
-      "<select id=\"end\" onchange=\"calcRoute();\">"+
-        "<option value=\"chicago, il\">Chicago</option>"+
-        "<option value=\"st louis, mo\">St Louis</option>"+
-        "<option value=\"joplin, mo\">Joplin, MO</option>"+
-        "<option value=\"oklahoma city, ok\">Oklahoma City</option>"+
-        "<option value=\"amarillo, tx\">Amarillo</option>"+
-        "<option value=\"gallup, nm\">Gallup, NM</option>"+
-        "<option value=\"flagstaff, az\">Flagstaff, AZ</option>"+
-        "<option value=\"winona, az\">Winona</option>"+
-        "<option value=\"kingman, az\">Kingman</option>"+
-        "<option value=\"barstow, ca\">Barstow</option>"+
-        "<option value=\"san bernardino, ca\">San Bernardino</option>"+
-        "<option value=\"los angeles, ca\">Los Angeles</option>"+
-      "</select>"+
-    "</div>"+
-    "<div id=\"directions-panel\"></div>"+
-    "<div id=\"map_canvas\"></div>"+
-  "</body>"+
-"</html>");
-     //</editor-fold>
-    addWebBrowserListener(main_tab, webBrowser);
-    main_tab.addTab(null, webBrowser);
-   
-    return main_tab;
+        main_tab.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        JWebBrowser webBrowser = new JWebBrowser();
+        webBrowser.setBarsVisible(false);
+        webBrowser.setStatusBarVisible(true);
+        try {
+            webBrowser.setHTMLContent("<body onload='autoload()'>"
+                    + "<a id='autoload' href='file:///"+new File(".").getCanonicalPath()+"/src/org/asterisk/main/index3.html?diadiem="+ URLEncoder.encode(txt_add.getText()) +"'></a>"
+                    + "</body>"
+                    + "<script>function autoload() {"
+                    + " var auto = document.getElementById('autoload');"
+                    + " auto.click();"
+                    + "}</script>");
+        } catch (IOException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         
+        addWebBrowserListener(main_tab, webBrowser);
+        try { 
+            main_tab.removeTabAt(4); 
+        } catch (Exception e) {}
+        
+        if(main_tab.getTabCount()==4)
+        {
+            main_tab.addTab(null, webBrowser);
+        }
+        
+        return main_tab;
   }
    private static void addWebBrowserListener(final JTabbedPane tabbedPane, final JWebBrowser webBrowser) {
     webBrowser.addWebBrowserListener(new WebBrowserAdapter() {
@@ -3545,6 +3423,7 @@ public class MainForm extends javax.swing.JFrame {
 //            java.util.logging.Logger.getLogger(MainForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
 //        }
 //        //</editor-fold>
+       
         
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
