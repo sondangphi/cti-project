@@ -3,6 +3,7 @@ package org.asterisk.main;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.IIOException;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import org.asterisk.model.AgentObject;
 import org.asterisk.model.QueueObject;
@@ -120,7 +122,7 @@ public class LoginForm extends javax.swing.JFrame {
         pwd.setBackground(khaki1);
         tx_iface.setBackground(khaki1);                
         btn_login.setForeground(white);
-//        btn_login.setBackground(dodgerBlue3);
+        btn_login.setBackground(dodgerBlue3);
         btn_clear.setForeground(white);
         btn_clear.setBackground(dodgerBlue3);        
         lb_option.setText("Option");
@@ -128,6 +130,14 @@ public class LoginForm extends javax.swing.JFrame {
         lb_option.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); 
 //        lb_option.setFont(new Font("Tahoma", Font.CENTER_BASELINE, 10));        
         System.out.println("new form and set label option");
+        cb_queue.setRenderer(new DefaultListCellRenderer() {
+            @Override
+            public void paint(Graphics g) {
+//                setBackground(new Color( 255, 246, 143));
+//                setForeground(new Color(0,0,0));
+                super.paint(g);
+            }               
+        });          
     }
 
     /**
@@ -189,7 +199,6 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
 
-        btn_login.setBackground(new java.awt.Color(0, 0, 255));
         btn_login.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
         btn_login.setForeground(new java.awt.Color(255, 255, 255));
         btn_login.setText("Login");
@@ -316,10 +325,11 @@ public class LoginForm extends javax.swing.JFrame {
             panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lb_agent, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tx_agent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lb_notify_agent, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lb_notify_agent, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(lb_agent, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tx_agent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(panel_1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lb_pwd, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -637,7 +647,7 @@ public class LoginForm extends javax.swing.JFrame {
                         
     }
     
-    private void getListQueue(){
+    public void getListQueue(){
         try{            
             Socket soc = new Socket(host, qport);            
             if(soc != null){                    		
