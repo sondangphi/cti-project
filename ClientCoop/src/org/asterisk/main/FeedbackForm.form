@@ -267,9 +267,6 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txt_code">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="KH-001"/>
-          </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txt_name">
         </Component>

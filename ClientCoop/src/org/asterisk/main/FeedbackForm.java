@@ -157,8 +157,6 @@ public class FeedbackForm extends javax.swing.JFrame {
         jLabel15.setText("Solution");
         jLabel15.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        txt_code.setText("KH-001");
-
         cb_catlogies.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Tiêu Dùng", "Văn Phòng Phẩm", "Nội Thất", "Điện Máy", "May Mặc" }));
 
         cb_feedback_type.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Phàn nàn", "Khen", "Khiếu nại" }));
