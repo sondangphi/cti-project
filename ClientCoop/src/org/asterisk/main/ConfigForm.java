@@ -244,6 +244,7 @@ public class ConfigForm extends javax.swing.JFrame {
             uti.writeInfor(filename, "qport", qport);
             uti.writeInfor(filename, "MySql_Server", host);
             this.dispose();
+            loginform.getListQueue();
             loginform.setEnabled(true);
             loginform.setVisible(true);
         }catch(Exception e ){
