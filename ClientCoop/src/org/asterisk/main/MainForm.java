@@ -46,6 +46,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.Action;
+import javax.swing.BorderFactory;
 import javax.swing.CellEditor;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultCellEditor;
@@ -63,6 +64,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.CellEditorListener;
@@ -127,7 +129,8 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm() {
         initComponents();
-        txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);    
+        txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);   
+        
     }
     
     public MainForm(Agent agent, AgentObject aOb) {
@@ -190,10 +193,13 @@ public class MainForm extends javax.swing.JFrame {
         this.setTitle("Desktop Agent _ "+agentObject.getAgentId()+" _ "+agentObject.getAgentName());
         setLocationRelativeTo(null);
         this.getContentPane().setBackground(Color.white);
-//        quesF = new Question_Camp(MainForm.this);
+
         
         showCampaign();
         
+      
+          
+     
         
     }    
 
@@ -1933,96 +1939,6 @@ public class MainForm extends javax.swing.JFrame {
         return option;
     }    
     
-    private void btn_feedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_feedbackActionPerformed
-        // TODO add your handling code here:
-        System.out.println("txt_name: "+this.txt_name.getText());
-        System.out.println("txt_add: "+this.txt_add.getText());
-        System.out.println("txt_mobile: "+this.txt_mobile.getText());
-        System.out.println("txt_phone1: "+this.txt_phone1.getText());
-        System.out.println("txt_email: "+this.txt_email.getText());
-        System.out.println("txt_add: "+this.txt_add.getText());
-        feedback = new FeedbackForm(agentObject,agentClient);
-        feedback.setVisible(true);     
-    }//GEN-LAST:event_btn_feedbackActionPerformed
-
-    private void btn_newActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_newActionPerformed
-        // TODO add your handling code here:
-        try{
-            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-            if(con.isConnect()){
-                String name = txt_name.getText();
-                String email = txt_email.getText();
-                String mobile =txt_mobile.getText();                
-                String add = txt_add.getText();
-                String homephone1=txt_phone1.getText();
-                String birthday = txt_birthday.getText();
-                String gender = "";
-                if(cb_gender.getSelectedIndex() == 0)
-                    gender = "1";
-                else if (cb_gender.getSelectedIndex() == 1)
-                    gender = "0";                                
-                String sql = "INSERT INTO customer (fullname,email,address,mobilephone,gender,homephone1,birthday) "
-                        + "VALUES ('"+name+"','"+email+"','"+add+"','"+mobile+"','"+gender+"','"+homephone1+"','"+birthday+"')";
-                con.executeUpdate(sql);                                                
-                System.out.println("new customer information success.");
-                btn_new.setEnabled(false);
-                JOptionPane.showMessageDialog(this, "Create Customer successful");
-            }
-            con.closeConnect();
-        }catch(Exception e){
-            System.out.println(""+e);
-            JOptionPane.showMessageDialog(this, "Create Customer fail");
-        }
-        
-    }//GEN-LAST:event_btn_newActionPerformed
-
-    private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
-        // TODO add your handling code here:
-        try{
-            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-            if(con.isConnect()){
-                String name = txt_name.getText();
-                String email = txt_email.getText();
-                String mobile = txt_mobile.getText();                
-                String add = txt_add.getText();
-                String homephone1=txt_phone1.getText();
-                String birthday = txt_birthday.getText();
-                String gender = "";
-                if(cb_gender.getSelectedIndex() == 0)
-                    gender = "1";
-                else if (cb_gender.getSelectedIndex() == 1)
-                    gender = "0";                                
-                String sql = "UPDATE customer SET fullname ='"+name+"',email='"+email+"',mobilephone='"+mobile+"',"
-                        + "address='"+add+"',homephone1='"+homephone1+"',gender='"+gender+"',birthday='"+birthday+"'"
-                        + " WHERE id = '"+agentClient.customer.getId()+"'" ;
-                con.executeUpdate(sql);                                                
-                System.out.println("update information success.");
-                btn_update.setEnabled(false);
-                JOptionPane.showMessageDialog(this, "Update success");
-            }
-            con.closeConnect();            
-        }catch(Exception e){
-            System.out.println(""+e);
-            JOptionPane.showMessageDialog(this, "Update fail");
-        }        
-        
-    }//GEN-LAST:event_btn_updateActionPerformed
-
-    private void btn_clear2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clear2ActionPerformed
-        // TODO add your handling code here:
-        txt_add.setText("");
-        txt_email.setText("");
-        txt_makh.setText("");
-        txt_mobile.setText("");
-        txt_name.setText("");
-        txt_phone1.setText("");
-        txt_birthday.setText("");
-        txt_reg.setText("");
-        btn_feedback.setEnabled(false);
-        btn_update.setEnabled(false);
-        btn_new.setEnabled(false);
-    }//GEN-LAST:event_btn_clear2ActionPerformed
-
     private void txt_phonenumKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_phonenumKeyPressed
         // TODO add your handling code here:
          if(evt.getKeyCode() == 10){
@@ -2104,10 +2020,6 @@ public class MainForm extends javax.swing.JFrame {
          }        
     }//GEN-LAST:event_panel_numberKeyPressed
 
-    private void txt_emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_emailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_emailActionPerformed
-
     private void MenuItem_changepwdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_changepwdActionPerformed
         // TODO add your handling code here:        
         chanpwdform = new ChangepwdForm(agentClient, agentObject);
@@ -2119,500 +2031,6 @@ public class MainForm extends javax.swing.JFrame {
         AboutForm about = new AboutForm();
         about.setVisible(true);
     }//GEN-LAST:event_MenuItem_aboutActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-         NativeInterface.open();  
-        createContent();
-      
-    }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void txtAutoSearchCoopKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAutoSearchCoopKeyTyped
-        // TODO add your handling code here:
-        try{
-            
-
-            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-             if(con.isConnect()){
-                 
-             
-            String sql="SELECT * FROM coopmart_name WHERE name LIKE '%"+txtAutoSearchCoop.getText()+"%'";
-            ResultSet result=con.executeQuery(sql);
-          
-            tblCoop.getTableHeader().setReorderingAllowed(false);
-             String strHeader[]={"Number","Name","Address","Phone","Fax","Date of Establishment"};
-                   DefaultTableModel dt=new DefaultTableModel(strHeader,0)
-                    {
-
-                     @Override
-                     public boolean isCellEditable(int i, int i1) {
-                         return false;
-                     }
-                        
-                    };
-
-                    int i=0;
-                    while (result.next()) {
-                        i++;
-                        Vector rowdata = new Vector();
-
-                        rowdata.add(Integer.toString(i));
-                        
-                        rowdata.add(result.getString("name"));
-                        rowdata.add(result.getString("address"));
-                        rowdata.add(result.getString("phone"));
-                        rowdata.add(result.getString("fax"));
-                        rowdata.add(result.getString("date_establishment"));
-
-                        dt.addRow(rowdata);
-                        
-                    }
-                        
-
-            tblCoop.setModel(dt);
-            TableColumn column = null;
-                     for (int k = 0;k < tblCoop.getColumnCount(); k++) {
-                        column = tblCoop.getColumnModel().getColumn(k);
-
-                        if (k == 0) {
-                            column.setPreferredWidth(50);
-
-                        } 
-
-                        else {
-                            column.setPreferredWidth(100);
-
-                        }
-                    }
-                int j=dt.getRowCount();
-         
-                if(j==0)
-                {
-                    txtResultCoop.setForeground(Color.RED);
-                    txtResultCoop.setText("no record found");
-                  
-
-                }
-                else
-                {
-                    txtResultCoop.setForeground(Color.BLACK);
-                    txtResultCoop.setText(Integer.toString(j));
-                   
-                }
-                    
-            result.close();
-            
-             }
-             con.closeConnect();
-             
-        }
-        catch(IOException | SQLException | ClassNotFoundException e)
-        {
-            JOptionPane.showMessageDialog(null,"Error:"+ e.toString());
-        }
-
-    }//GEN-LAST:event_txtAutoSearchCoopKeyTyped
-
-    private void btnShowCoopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowCoopActionPerformed
-        // TODO add your handling code here:
-        ShowCoopAction();
-
-    }//GEN-LAST:event_btnShowCoopActionPerformed
-
-    private void tblCoopMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCoopMouseClicked
-        // TODO add your handling code here:
-        ClickTableCoop();
-
-    }//GEN-LAST:event_tblCoopMouseClicked
-
-    private void tblCoopKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCoopKeyReleased
-        // TODO add your handling code here:
-        ClickTableCoop();
-    }//GEN-LAST:event_tblCoopKeyReleased
-
-    private void txtAutoSearchProKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAutoSearchProKeyTyped
-        // TODO add your handling code here:
-        try{
-             tblPromotions.getTableHeader().setReorderingAllowed(false);
-             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-             System.out.println("Mysql_server: "+Mysql_server);
-             if(con.isConnect()){
-                if(ChkName.isSelected())
-                {
-                    String sql="SELECT * FROM promotions WHERE name LIKE'%"+txtAutoSearchPro.getText()+"%'";
-                
-                ResultSet result=con.executeQuery(sql);
-                //loadDataPro();
-                String strHeader[]={"Number","Name","Time Start","Time End","Content","Location"};
-                DefaultTableModel dt =new DefaultTableModel(strHeader,0)
-                {
-
-                 @Override
-                 public boolean isCellEditable(int i, int i1) {
-                     return false;
-                 }
-
-                };
-
-                   int i=0;
-                   while (result.next()) {
-                       i++;
-                       Vector rowdata = new Vector();
-                       rowdata.add(Integer.toString(i));
-                       rowdata.add(result.getString("name"));
-                       rowdata.add(result.getString("time_start"));
-                       rowdata.add(result.getString("time_end"));
-                       rowdata.add(result.getString("content"));
-                       rowdata.add(result.getString("location"));
-
-                       dt.addRow(rowdata);
-                   }
-                tblPromotions.setModel(dt);
-                TableColumn column = null;
-                for (int k = 0;k < tblPromotions.getColumnCount(); k++) {
-                        column = tblPromotions.getColumnModel().getColumn(k);
-
-                        if (k == 0) {
-                            column.setPreferredWidth(50);
-
-                        } 
-
-                        else {
-                            column.setPreferredWidth(100);
-
-                        }
-                    }
-                
-                int j=dt.getRowCount();
-         
-                if(j==0)
-                {
-                    txtResultPro.setForeground(Color.RED);
-                    txtResultPro.setText("no record found");
-                  
-
-                }
-                else
-                {
-                    txtResultPro.setForeground(Color.BLACK);
-                    txtResultPro.setText(Integer.toString(j));
-                   
-                }
-
-                
-                result.close();
-                }
-             }
-             con.closeConnect();
-
-        }
-        catch(IOException | SQLException | ClassNotFoundException e)
-        {
-            JOptionPane.showMessageDialog(null,"Error:"+ e.toString());
-        }
-
-    }//GEN-LAST:event_txtAutoSearchProKeyTyped
-
-    private void ChkNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ChkNameMouseClicked
-        // TODO add your handling code here:
-       
-       if(ChkName.isSelected())
-       {
-         
-            btnClearPro.setEnabled(true);
-            txtAutoSearchPro.setEnabled(true);   
-              
-       } 
-       else
-       {
-                txtAutoSearchPro.setEnabled(false);
-                if(chkTime.isSelected())
-                {
-                    
-               
-                }
-                else
-                {
-                   
-                    btnClearPro.setEnabled(false);
-                }
-    
-       } 
-             
-       
-
-    }//GEN-LAST:event_ChkNameMouseClicked
-
-    private void chkTimeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkTimeMouseClicked
-        // TODO add your handling code here:
-        
-            if(chkTime.isSelected())
-            {
-                txtTimeStart.setEnabled(true);
-                txtTimeEnd.setEnabled(true);
-                btnChooseStart.setEnabled(true);
-                btnChooseEnd.setEnabled(true);
-                btnSearch.setEnabled(true);
-                if(ChkName.isSelected())
-                {
-                
-                //btnClearPro.setEnabled(true);
-                }
-                else
-                {
-                    btnClearPro.setEnabled(true);
-                }
-            }
-            else
-            {
-                
-               txtTimeStart.setEnabled(false);
-               txtTimeEnd.setEnabled(false);
-               btnChooseStart.setEnabled(false);
-               btnChooseEnd.setEnabled(false);
-               btnSearch.setEnabled(false);
-               if(ChkName.isSelected())
-               {
-                   btnClearPro.setEnabled(true);
-               }
-               else
-               {
-               
-                   btnClearPro.setEnabled(false);
-                }
-              
-            } 
-        
-       
-        
-
-    }//GEN-LAST:event_chkTimeMouseClicked
-
-    private void btnChooseStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseStartActionPerformed
-        // TODO add your handling code here:
-       
-       
-        
-         JFrame f = new JFrame();
-        String s=new DatePicker(f).setPickedDate();
-         if("".equals(s)) {
-            JOptionPane.showMessageDialog(null,"Please Choose True Day");
-        }
-        else
-        {
-              txtTimeStart.setText(s);
-                
-        }
-    }//GEN-LAST:event_btnChooseStartActionPerformed
-
-    private void btnChooseEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseEndActionPerformed
-        // TODO add your handling code here:
-       
-       
-        
-         String s=txtTimeStart.getText();
-
-        if(s.length()==0)
-        {
-                JOptionPane.showMessageDialog(null,"No Start Day");
-        }
-
-        else{
-                
-            JFrame f = new JFrame();
-            String e=new DatePicker(f).setPickedDate();
-            if("".equals(e)) {
-                JOptionPane.showMessageDialog(null,"Please Choose True Day");
-            }
-            else
-            {
-                String sStr[]=s.split("-");
-                String eStr[]=e.split("-");
-
-
-                String s1=sStr[0]+sStr[1]+sStr[2];
-                String e1=eStr[0]+eStr[1]+eStr[2];
-
-                int s2=Integer.parseInt(s1);
-                int e2=Integer.parseInt(e1);
-                if(s2>=e2)
-                {
-                    JOptionPane.showMessageDialog(null,"End Day must be larger Start Day");
-                    txtTimeEnd.setText("");
-                }
-                else{
-                    txtTimeEnd.setText(e);
-                }
-            }
-        }
-  
-    }//GEN-LAST:event_btnChooseEndActionPerformed
-
-    private void btnShowProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowProActionPerformed
-        // TODO add your handling code here:
-            ShowProAction();
-       
-       
-    }//GEN-LAST:event_btnShowProActionPerformed
-
-    private void tblPromotionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPromotionsMouseClicked
-        // TODO add your handling code here:
-        ClickTablePro();
-
-    }//GEN-LAST:event_tblPromotionsMouseClicked
-
-    private void tblPromotionsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblPromotionsKeyReleased
-        // TODO add your handling code here:
-        ClickTablePro();
-    }//GEN-LAST:event_tblPromotionsKeyReleased
-
-    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
-      try{
-           con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-           if(con.isConnect()){
-                String sql="SELECT * FROM promotions ";
-                String kt=""; 
-                
-                        try{
-                             if(ChkName.isSelected()&&chkTime.isSelected())
-                              {
-                                    if(txtAutoSearchPro.getText().equals(kt)||txtTimeStart.getText().equals(kt)
-                                            ||txtTimeStart.getText().equals(kt)
-                                            ||txtTimeEnd.getText().equals(kt)
-                                            ||txtTimeEnd.getText().equals("Time End Field"))
-                                    {
-                                     JOptionPane.showMessageDialog(null, "Please insert full data");
-
-                                    }
-                                    else
-                                    {
-                                        sql+="WHERE name LIKE '%"+txtAutoSearchPro.getText()
-                                          +"%' AND time_start >= '"+txtTimeStart.getText()
-                                          +"' AND time_start <= '"+txtTimeEnd.getText()
-                                          +"' AND time_end >= '"+txtTimeStart.getText()
-                                          +"' AND time_end <= '"+txtTimeEnd.getText()+"'"; 
-                                    }
-                              }
-                             else if(chkTime.isSelected())
-                              {
-                                  if(txtTimeStart.getText().equals(kt)||txtTimeEnd.getText().equals(kt))
-                                    {
-                                     JOptionPane.showMessageDialog(null, "Please insert full data");
-
-                                    }
-                                    else
-                                    {
-                                        sql+="WHERE time_start >= '"+txtTimeStart.getText()
-                                          +"' AND time_start <= '"+txtTimeEnd.getText()
-                                          +"' AND time_end >= '"+txtTimeStart.getText()
-                                          +"' AND time_end <= '"+txtTimeEnd.getText()+"'";
-                                    }
-                              }
-                            ResultSet result=con.executeQuery(sql);
-
-                            tblPromotions.getTableHeader().setReorderingAllowed(false);
-                             String strHeader[]={"Number","Name","Time Start","Time End","Content","Location"};
-                             DefaultTableModel dt =new DefaultTableModel(strHeader,0)
-                            {
-
-                             @Override
-                             public boolean isCellEditable(int i, int i1) {
-                                 return false;
-                             }
-
-                            };
-
-                                   int i=0;
-                                   while (result.next()) {
-                                       i++;
-                                       Vector rowdata = new Vector();
-                                       rowdata.add(Integer.toString(i));
-                                       rowdata.add(result.getString("name"));
-                                       rowdata.add(result.getString("time_start"));
-                                       rowdata.add(result.getString("time_end"));
-                                       rowdata.add(result.getString("content"));
-                                       rowdata.add(result.getString("location"));
-
-                                       dt.addRow(rowdata);
-                                   }
-
-
-                                 tblPromotions.setModel(dt);
-
-
-                             TableColumn column = null;
-                                for (int k = 0;k < tblPromotions.getColumnCount(); k++) {
-                                        column = tblPromotions.getColumnModel().getColumn(k);
-
-                                        if (k == 0) {
-                                            column.setPreferredWidth(50);
-
-                                        } 
-
-                                        else {
-                                            column.setPreferredWidth(100);
-
-                                        }
-                                    }
-
-                             int j=dt.getRowCount();
-
-                             if(j==0)
-                             {
-                                 txtResultPro.setForeground(Color.RED);
-                                 txtResultPro.setText("no record found");
-                             }
-                             else
-                             {
-                                 txtResultPro.setForeground(Color.BLACK);
-                                 txtResultPro.setText(Integer.toString(j));
-                             }
-                            result.close();
-                        
-             
-                        }
-                        catch(Exception ex)
-                        {
-                            JOptionPane.showMessageDialog(null,"Error:"+ ex.toString());
-                        }
-                    
-               
-     
-            }
-            con.closeConnect();
-
-         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,"Error:"+ ex.toString());
-         } 
-        
-    }//GEN-LAST:event_btnSearchActionPerformed
-
-    private void btnClearProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearProActionPerformed
-        // TODO add your handling code here:
-       txtContent.setText("");
-       txtAutoSearchPro.setText("");
-       txtTimeStart.setText("");
-       txtTimeEnd.setText("");
-       ShowProAction();
-          
-    }//GEN-LAST:event_btnClearProActionPerformed
-
-    private void btnClearCoopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearCoopActionPerformed
-        // TODO add your handling code here:
-        txtAutoSearchCoop.setText("");
-        txtResultCoop.setText("");
-        txtDetail.setText("");
-        ShowCoopAction();
-    }//GEN-LAST:event_btnClearCoopActionPerformed
-
-    private void btnDialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDialActionPerformed
-       Dial();
-        try {
-            agentClient.sendtoServer("108@"+CallPhone);
-        } catch (IOException ex) {
-            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_btnDialActionPerformed
 
     private void btn_hangupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hangupActionPerformed
         // TODO add your handling code here:
@@ -2650,24 +2068,6 @@ public class MainForm extends javax.swing.JFrame {
         }
     }    
     
-    private void tblCampMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCampMouseClicked
-       showCustomer();
-       btnDial.setEnabled(false);
-    }//GEN-LAST:event_tblCampMouseClicked
-
-    private void tblCampKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCampKeyReleased
-        showCustomer();
-        btnDial.setEnabled(false);
-    }//GEN-LAST:event_tblCampKeyReleased
-
-    private void tblCustomMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomMouseClicked
-        ShowButtonDial();
-    }//GEN-LAST:event_tblCustomMouseClicked
-
-    private void tblCustomKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCustomKeyReleased
-       ShowButtonDial();
-    }//GEN-LAST:event_tblCustomKeyReleased
-
     private void btn_transferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_transferActionPerformed
         try{
             String desTransfer = "";
@@ -2719,8 +2119,592 @@ public class MainForm extends javax.swing.JFrame {
         showCampaign();
         DefaultTableModel dt=new DefaultTableModel();
         tblCustom.setModel(dt);
-
     }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void tblCustomKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCustomKeyReleased
+        ShowButtonDial();
+    }//GEN-LAST:event_tblCustomKeyReleased
+
+    private void tblCustomMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomMouseClicked
+        ShowButtonDial();
+    }//GEN-LAST:event_tblCustomMouseClicked
+
+    private void tblCampKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCampKeyReleased
+        showCustomer();
+        btnDial.setEnabled(false);
+    }//GEN-LAST:event_tblCampKeyReleased
+
+    private void tblCampMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCampMouseClicked
+        showCustomer();
+        btnDial.setEnabled(false);
+    }//GEN-LAST:event_tblCampMouseClicked
+
+    private void btnDialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDialActionPerformed
+        Dial();
+        try {
+            agentClient.sendtoServer("108@"+CallPhone);
+        } catch (IOException ex) {
+            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnDialActionPerformed
+
+    private void btnShowCoopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowCoopActionPerformed
+        // TODO add your handling code here:
+        ShowCoopAction();
+    }//GEN-LAST:event_btnShowCoopActionPerformed
+
+    private void tblCoopKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCoopKeyReleased
+        // TODO add your handling code here:
+        ClickTableCoop();
+    }//GEN-LAST:event_tblCoopKeyReleased
+
+    private void tblCoopMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCoopMouseClicked
+        // TODO add your handling code here:
+        ClickTableCoop();
+    }//GEN-LAST:event_tblCoopMouseClicked
+
+    private void btnClearCoopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearCoopActionPerformed
+        // TODO add your handling code here:
+        txtAutoSearchCoop.setText("");
+        txtResultCoop.setText("");
+        txtDetail.setText("");
+        ShowCoopAction();
+    }//GEN-LAST:event_btnClearCoopActionPerformed
+
+    private void txtAutoSearchCoopKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAutoSearchCoopKeyTyped
+        // TODO add your handling code here:
+        try{
+
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+            if(con.isConnect()){
+
+                String sql="SELECT * FROM coopmart_name WHERE name LIKE '%"+txtAutoSearchCoop.getText()+"%'";
+                ResultSet result=con.executeQuery(sql);
+
+                tblCoop.getTableHeader().setReorderingAllowed(false);
+                String strHeader[]={"Number","Name","Address","Phone","Fax","Date of Establishment"};
+                DefaultTableModel dt=new DefaultTableModel(strHeader,0)
+                {
+
+                    @Override
+                    public boolean isCellEditable(int i, int i1) {
+                        return false;
+                    }
+
+                };
+
+                int i=0;
+                while (result.next()) {
+                    i++;
+                    Vector rowdata = new Vector();
+
+                    rowdata.add(Integer.toString(i));
+
+                    rowdata.add(result.getString("name"));
+                    rowdata.add(result.getString("address"));
+                    rowdata.add(result.getString("phone"));
+                    rowdata.add(result.getString("fax"));
+                    rowdata.add(result.getString("date_establishment"));
+
+                    dt.addRow(rowdata);
+
+                }
+
+                tblCoop.setModel(dt);
+                TableColumn column = null;
+                for (int k = 0;k < tblCoop.getColumnCount(); k++) {
+                    column = tblCoop.getColumnModel().getColumn(k);
+
+                    if (k == 0) {
+                        column.setPreferredWidth(50);
+
+                    }
+
+                    else {
+                        column.setPreferredWidth(100);
+
+                    }
+                }
+                int j=dt.getRowCount();
+
+                if(j==0)
+                {
+                    txtResultCoop.setForeground(Color.RED);
+                    txtResultCoop.setText("no record found");
+
+                }
+                else
+                {
+                    txtResultCoop.setForeground(Color.BLACK);
+                    txtResultCoop.setText(Integer.toString(j));
+
+                }
+
+                result.close();
+
+            }
+            con.closeConnect();
+
+        }
+        catch(IOException | SQLException | ClassNotFoundException e)
+        {
+            JOptionPane.showMessageDialog(null,"Error:"+ e.toString());
+        }
+    }//GEN-LAST:event_txtAutoSearchCoopKeyTyped
+
+    private void btnClearProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearProActionPerformed
+        // TODO add your handling code here:
+        txtContent.setText("");
+        txtAutoSearchPro.setText("");
+        txtTimeStart.setText("");
+        txtTimeEnd.setText("");
+        ShowProAction();
+
+    }//GEN-LAST:event_btnClearProActionPerformed
+
+    private void ChkNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ChkNameMouseClicked
+        // TODO add your handling code here:
+
+        if(ChkName.isSelected())
+        {
+
+            btnClearPro.setEnabled(true);
+            txtAutoSearchPro.setEnabled(true);
+
+        }
+        else
+        {
+            txtAutoSearchPro.setEnabled(false);
+            if(chkTime.isSelected())
+            {
+
+            }
+            else
+            {
+
+                btnClearPro.setEnabled(false);
+            }
+
+        }
+
+    }//GEN-LAST:event_ChkNameMouseClicked
+
+    private void chkTimeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkTimeMouseClicked
+        // TODO add your handling code here:
+
+        if(chkTime.isSelected())
+        {
+            txtTimeStart.setEnabled(true);
+            txtTimeEnd.setEnabled(true);
+            btnChooseStart.setEnabled(true);
+            btnChooseEnd.setEnabled(true);
+            btnSearch.setEnabled(true);
+            if(ChkName.isSelected())
+            {
+
+                //btnClearPro.setEnabled(true);
+            }
+            else
+            {
+                btnClearPro.setEnabled(true);
+            }
+        }
+        else
+        {
+
+            txtTimeStart.setEnabled(false);
+            txtTimeEnd.setEnabled(false);
+            btnChooseStart.setEnabled(false);
+            btnChooseEnd.setEnabled(false);
+            btnSearch.setEnabled(false);
+            if(ChkName.isSelected())
+            {
+                btnClearPro.setEnabled(true);
+            }
+            else
+            {
+
+                btnClearPro.setEnabled(false);
+            }
+
+        }
+
+    }//GEN-LAST:event_chkTimeMouseClicked
+
+    private void txtAutoSearchProKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAutoSearchProKeyTyped
+        // TODO add your handling code here:
+        try{
+            tblPromotions.getTableHeader().setReorderingAllowed(false);
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+            System.out.println("Mysql_server: "+Mysql_server);
+            if(con.isConnect()){
+                if(ChkName.isSelected())
+                {
+                    String sql="SELECT * FROM promotions WHERE name LIKE'%"+txtAutoSearchPro.getText()+"%'";
+
+                    ResultSet result=con.executeQuery(sql);
+                    //loadDataPro();
+                    String strHeader[]={"Number","Name","Time Start","Time End","Content","Location"};
+                    DefaultTableModel dt =new DefaultTableModel(strHeader,0)
+                    {
+
+                        @Override
+                        public boolean isCellEditable(int i, int i1) {
+                            return false;
+                        }
+
+                    };
+
+                    int i=0;
+                    while (result.next()) {
+                        i++;
+                        Vector rowdata = new Vector();
+                        rowdata.add(Integer.toString(i));
+                        rowdata.add(result.getString("name"));
+                        rowdata.add(result.getString("time_start"));
+                        rowdata.add(result.getString("time_end"));
+                        rowdata.add(result.getString("content"));
+                        rowdata.add(result.getString("location"));
+
+                        dt.addRow(rowdata);
+                    }
+                    tblPromotions.setModel(dt);
+                    TableColumn column = null;
+                    for (int k = 0;k < tblPromotions.getColumnCount(); k++) {
+                        column = tblPromotions.getColumnModel().getColumn(k);
+
+                        if (k == 0) {
+                            column.setPreferredWidth(50);
+
+                        }
+
+                        else {
+                            column.setPreferredWidth(100);
+
+                        }
+                    }
+
+                    int j=dt.getRowCount();
+
+                    if(j==0)
+                    {
+                        txtResultPro.setForeground(Color.RED);
+                        txtResultPro.setText("no record found");
+
+                    }
+                    else
+                    {
+                        txtResultPro.setForeground(Color.BLACK);
+                        txtResultPro.setText(Integer.toString(j));
+
+                    }
+
+                    result.close();
+                }
+            }
+            con.closeConnect();
+
+        }
+        catch(IOException | SQLException | ClassNotFoundException e)
+        {
+            JOptionPane.showMessageDialog(null,"Error:"+ e.toString());
+        }
+    }//GEN-LAST:event_txtAutoSearchProKeyTyped
+
+    private void btnChooseEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseEndActionPerformed
+        // TODO add your handling code here:
+
+        String s=txtTimeStart.getText();
+
+        if(s.length()==0)
+        {
+            JOptionPane.showMessageDialog(null,"No Start Day");
+        }
+
+        else{
+
+            JFrame f = new JFrame();
+            String e=new DatePicker(f).setPickedDate();
+            if("".equals(e)) {
+                JOptionPane.showMessageDialog(null,"Please Choose True Day");
+            }
+            else
+            {
+                String sStr[]=s.split("-");
+                String eStr[]=e.split("-");
+
+                String s1=sStr[0]+sStr[1]+sStr[2];
+                String e1=eStr[0]+eStr[1]+eStr[2];
+
+                int s2=Integer.parseInt(s1);
+                int e2=Integer.parseInt(e1);
+                if(s2>=e2)
+                {
+                    JOptionPane.showMessageDialog(null,"End Day must be larger Start Day");
+                    txtTimeEnd.setText("");
+                }
+                else{
+                    txtTimeEnd.setText(e);
+                }
+            }
+        }
+
+    }//GEN-LAST:event_btnChooseEndActionPerformed
+
+    private void btnChooseStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseStartActionPerformed
+        // TODO add your handling code here:
+
+        JFrame f = new JFrame();
+        String s=new DatePicker(f).setPickedDate();
+        if("".equals(s)) {
+            JOptionPane.showMessageDialog(null,"Please Choose True Day");
+        }
+        else
+        {
+            txtTimeStart.setText(s);
+
+        }
+    }//GEN-LAST:event_btnChooseStartActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        try{
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+            if(con.isConnect()){
+                String sql="SELECT * FROM promotions ";
+                String kt="";
+
+                try{
+                    if(ChkName.isSelected()&&chkTime.isSelected())
+                    {
+                        if(txtAutoSearchPro.getText().equals(kt)||txtTimeStart.getText().equals(kt)
+                            ||txtTimeStart.getText().equals(kt)
+                            ||txtTimeEnd.getText().equals(kt)
+                            ||txtTimeEnd.getText().equals("Time End Field"))
+                        {
+                            JOptionPane.showMessageDialog(null, "Please insert full data");
+
+                        }
+                        else
+                        {
+                            sql+="WHERE name LIKE '%"+txtAutoSearchPro.getText()
+                            +"%' AND time_start >= '"+txtTimeStart.getText()
+                            +"' AND time_start <= '"+txtTimeEnd.getText()
+                            +"' AND time_end >= '"+txtTimeStart.getText()
+                            +"' AND time_end <= '"+txtTimeEnd.getText()+"'";
+                        }
+                    }
+                    else if(chkTime.isSelected())
+                    {
+                        if(txtTimeStart.getText().equals(kt)||txtTimeEnd.getText().equals(kt))
+                        {
+                            JOptionPane.showMessageDialog(null, "Please insert full data");
+
+                        }
+                        else
+                        {
+                            sql+="WHERE time_start >= '"+txtTimeStart.getText()
+                            +"' AND time_start <= '"+txtTimeEnd.getText()
+                            +"' AND time_end >= '"+txtTimeStart.getText()
+                            +"' AND time_end <= '"+txtTimeEnd.getText()+"'";
+                        }
+                    }
+                    ResultSet result=con.executeQuery(sql);
+
+                    tblPromotions.getTableHeader().setReorderingAllowed(false);
+                    String strHeader[]={"Number","Name","Time Start","Time End","Content","Location"};
+                    DefaultTableModel dt =new DefaultTableModel(strHeader,0)
+                    {
+
+                        @Override
+                        public boolean isCellEditable(int i, int i1) {
+                            return false;
+                        }
+
+                    };
+
+                    int i=0;
+                    while (result.next()) {
+                        i++;
+                        Vector rowdata = new Vector();
+                        rowdata.add(Integer.toString(i));
+                        rowdata.add(result.getString("name"));
+                        rowdata.add(result.getString("time_start"));
+                        rowdata.add(result.getString("time_end"));
+                        rowdata.add(result.getString("content"));
+                        rowdata.add(result.getString("location"));
+
+                        dt.addRow(rowdata);
+                    }
+
+                    tblPromotions.setModel(dt);
+
+                    TableColumn column = null;
+                    for (int k = 0;k < tblPromotions.getColumnCount(); k++) {
+                        column = tblPromotions.getColumnModel().getColumn(k);
+
+                        if (k == 0) {
+                            column.setPreferredWidth(50);
+
+                        }
+
+                        else {
+                            column.setPreferredWidth(100);
+
+                        }
+                    }
+
+                    int j=dt.getRowCount();
+
+                    if(j==0)
+                    {
+                        txtResultPro.setForeground(Color.RED);
+                        txtResultPro.setText("no record found");
+                    }
+                    else
+                    {
+                        txtResultPro.setForeground(Color.BLACK);
+                        txtResultPro.setText(Integer.toString(j));
+                    }
+                    result.close();
+
+                }
+                catch(Exception ex)
+                {
+                    JOptionPane.showMessageDialog(null,"Error:"+ ex.toString());
+                }
+
+            }
+            con.closeConnect();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,"Error:"+ ex.toString());
+        }
+
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void tblPromotionsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblPromotionsKeyReleased
+        // TODO add your handling code here:
+        ClickTablePro();
+    }//GEN-LAST:event_tblPromotionsKeyReleased
+
+    private void tblPromotionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPromotionsMouseClicked
+        // TODO add your handling code here:
+        ClickTablePro();
+    }//GEN-LAST:event_tblPromotionsMouseClicked
+
+    private void btnShowProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowProActionPerformed
+        // TODO add your handling code here:
+        ShowProAction();
+
+    }//GEN-LAST:event_btnShowProActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        NativeInterface.open();
+        if("".equals(txt_add.getText()))
+        {
+            JOptionPane.showMessageDialog(null,"No Address Input");
+
+        }
+        else{
+            createContent();
+        }
+
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void btn_clear2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clear2ActionPerformed
+        // TODO add your handling code here:
+        txt_add.setText("");
+        txt_email.setText("");
+        txt_makh.setText("");
+        txt_mobile.setText("");
+        txt_name.setText("");
+        txt_phone1.setText("");
+        txt_birthday.setText("");
+        txt_reg.setText("");
+        btn_feedback.setEnabled(false);
+        btn_update.setEnabled(false);
+        btn_new.setEnabled(false);
+    }//GEN-LAST:event_btn_clear2ActionPerformed
+
+    private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
+        // TODO add your handling code here:
+        try{
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+            if(con.isConnect()){
+                String name = txt_name.getText();
+                String email = txt_email.getText();
+                String mobile = txt_mobile.getText();
+                String add = txt_add.getText();
+                String homephone1=txt_phone1.getText();
+                String birthday = txt_birthday.getText();
+                String gender = "";
+                if(cb_gender.getSelectedIndex() == 0)
+                gender = "1";
+                else if (cb_gender.getSelectedIndex() == 1)
+                gender = "0";
+                String sql = "UPDATE customer SET fullname ='"+name+"',email='"+email+"',mobilephone='"+mobile+"',"
+                + "address='"+add+"',homephone1='"+homephone1+"',gender='"+gender+"',birthday='"+birthday+"'"
+                + " WHERE id = '"+agentClient.customer.getId()+"'" ;
+                con.executeUpdate(sql);
+                System.out.println("update information success.");
+                btn_update.setEnabled(false);
+                JOptionPane.showMessageDialog(this, "Update success");
+            }
+            con.closeConnect();
+        }catch(Exception e){
+            System.out.println(""+e);
+            JOptionPane.showMessageDialog(this, "Update fail");
+        }
+
+    }//GEN-LAST:event_btn_updateActionPerformed
+
+    private void btn_feedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_feedbackActionPerformed
+        // TODO add your handling code here:
+        System.out.println("txt_name: "+this.txt_name.getText());
+        System.out.println("txt_add: "+this.txt_add.getText());
+        System.out.println("txt_mobile: "+this.txt_mobile.getText());
+        System.out.println("txt_phone1: "+this.txt_phone1.getText());
+        System.out.println("txt_email: "+this.txt_email.getText());
+        System.out.println("txt_add: "+this.txt_add.getText());
+        feedback = new FeedbackForm(agentObject,agentClient);
+        feedback.setVisible(true);
+    }//GEN-LAST:event_btn_feedbackActionPerformed
+
+    private void btn_newActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_newActionPerformed
+        // TODO add your handling code here:
+        try{
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+            if(con.isConnect()){
+                String name = txt_name.getText();
+                String email = txt_email.getText();
+                String mobile =txt_mobile.getText();
+                String add = txt_add.getText();
+                String homephone1=txt_phone1.getText();
+                String birthday = txt_birthday.getText();
+                String gender = "";
+                if(cb_gender.getSelectedIndex() == 0)
+                gender = "1";
+                else if (cb_gender.getSelectedIndex() == 1)
+                gender = "0";
+                String sql = "INSERT INTO customer (fullname,email,address,mobilephone,gender,homephone1,birthday) "
+                + "VALUES ('"+name+"','"+email+"','"+add+"','"+mobile+"','"+gender+"','"+homephone1+"','"+birthday+"')";
+                con.executeUpdate(sql);
+                System.out.println("new customer information success.");
+                btn_new.setEnabled(false);
+                JOptionPane.showMessageDialog(this, "Create Customer successful");
+            }
+            con.closeConnect();
+        }catch(Exception e){
+            System.out.println(""+e);
+            JOptionPane.showMessageDialog(this, "Create Customer fail");
+        }
+
+    }//GEN-LAST:event_btn_newActionPerformed
+
+    private void txt_emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_emailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_emailActionPerformed
    
     public void setAllEnable(boolean flag){
         Component comNumber [] = panel_number.getComponents();
@@ -3215,17 +3199,17 @@ public class MainForm extends javax.swing.JFrame {
         int status_id=Integer.parseInt(SStatus_id);
         if(status_id==3)//complete
         {
-            //row=blue
+            
             btnDial.setEnabled(false);
         }
-        else if(status_id==2)//not complete
+        else if(status_id==2)
         {
-            //row=red
+           
             btnDial.setEnabled(true);
         }
         else
         {
-            //row=none
+           
               btnDial.setEnabled(true);
         }
     }
@@ -3337,6 +3321,7 @@ public class MainForm extends javax.swing.JFrame {
             public void removeCellEditorListener(CellEditorListener cl) {}
         });
     }
+  
     public JComponent createContent() {
       
   
@@ -3397,7 +3382,7 @@ public class MainForm extends javax.swing.JFrame {
       }
     });
   }
-
+ 
     /**
      * @param args the command line arguments
      */
