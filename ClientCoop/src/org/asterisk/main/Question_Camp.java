@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 import org.asterisk.utility.ConnectDatabase;
+import org.asterisk.utility.Utility;
 
 /**
  *
@@ -26,9 +27,12 @@ public class Question_Camp extends javax.swing.JDialog {
     
     
    private MainForm own;
-                       		
+
+   
+    private  String filename = "infor.properties";       
+    private Utility uti;
     private static String Mysql_server = "172.168.10.202";      
-    private static String Mysql_dbname = "ast_callcenter";
+     private static String Mysql_dbname = "ast_callcenter";
     private static String Mysql_user = "callcenter";
     private static String Mysql_pwd  = "callcenter";   
     private ConnectDatabase con;
@@ -54,7 +58,13 @@ public class Question_Camp extends javax.swing.JDialog {
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 11));
         jLabel7.setFont(new java.awt.Font("Tahoma", 0, 11));
         
-        
+        try{
+            Mysql_dbname = uti.readInfor(filename, "MySql_database");
+            Mysql_server = uti.readInfor(filename, "MySql_server");
+            Mysql_user = uti.readInfor(filename, "MySql_user");
+            Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
+        }catch(Exception e){
+        }
         setTitle("CALL : " +title_call);
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Campaign name : "+ Camp_name));
         
