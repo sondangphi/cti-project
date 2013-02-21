@@ -45,6 +45,7 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.sound.midi.Transmitter;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.CellEditor;
@@ -172,7 +173,7 @@ public class MainForm extends javax.swing.JFrame {
         lb_logintime.setText(uti.getDatetimeNow());         
         lb_version.setHorizontalAlignment(javax.swing.JLabel.RIGHT);
         lb_version.setVerticalAlignment(javax.swing.JLabel.CENTER);
-        txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);  
+        txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);          
         try{
             Mysql_dbname = uti.readInfor(filename, "MySql_database");
             Mysql_server = uti.readInfor(filename, "MySql_server");
@@ -224,9 +225,6 @@ public class MainForm extends javax.swing.JFrame {
         lb_logintime = new javax.swing.JLabel();
         btn_pause = new javax.swing.JToggleButton();
         btn_transfer = new javax.swing.JButton();
-        cb_transfer = new javax.swing.JComboBox();
-        btn_holdCall = new javax.swing.JButton();
-        txt_transfer = new javax.swing.JTextField();
         main_tab = new javax.swing.JTabbedPane();
         Panel1 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -395,27 +393,10 @@ public class MainForm extends javax.swing.JFrame {
 
         btn_transfer.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btn_transfer.setText("Transfer");
+        btn_transfer.setEnabled(false);
         btn_transfer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_transferActionPerformed(evt);
-            }
-        });
-
-        cb_transfer.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                cb_transferMouseClicked(evt);
-            }
-        });
-        cb_transfer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_transferActionPerformed(evt);
-            }
-        });
-
-        btn_holdCall.setText("Hold");
-        btn_holdCall.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_holdCallActionPerformed(evt);
             }
         });
 
@@ -427,15 +408,9 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(btn_logout, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50)
                 .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btn_transfer, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(cb_transfer, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txt_transfer, javax.swing.GroupLayout.DEFAULT_SIZE, 87, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addComponent(btn_holdCall, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(72, 72, 72)
+                .addGap(49, 49, 49)
+                .addComponent(btn_transfer, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 301, Short.MAX_VALUE)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lb_logintime, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -450,26 +425,19 @@ public class MainForm extends javax.swing.JFrame {
 
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGap(0, 11, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lb_logintime, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lb_workTime)))
-                    .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(btn_logout, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(btn_pause, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(btn_logout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(btn_transfer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_transfer)
-                    .addComponent(cb_transfer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_holdCall)
-                    .addComponent(txt_transfer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel13, lb_workTime});
@@ -2057,50 +2025,18 @@ public class MainForm extends javax.swing.JFrame {
     
     private void btn_transferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_transferActionPerformed
         try{
-            String desTransfer = "";
-//            if(cb_transfer.getItemCount()>0)
-//                desTransfer = "SIP/"+(String)cb_transfer.getSelectedItem();
-            desTransfer = "SIP/"+txt_transfer.getText();
-            agentClient.sendtoServer("114@"+desTransfer);
-            System.out.println("transfer");
+//            String desTransfer = "";
+////            if(cb_transfer.getItemCount()>0)
+////                desTransfer = "SIP/"+(String)cb_transfer.getSelectedItem();
+//            desTransfer = "SIP/"+txt_transfer.getText();
+//            agentClient.sendtoServer("114@"+desTransfer);
+//            System.out.println("transfer");
+            btn_transfer.setEnabled(false);
+            new TransferForm(agentClient, agentObject, this).setVisible(true);
         }catch(Exception e){
             System.out.println("btn_transferActionPerformed: "+e);
         }                
     }//GEN-LAST:event_btn_transferActionPerformed
-
-    private void cb_transferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_transferActionPerformed
-            
-    }//GEN-LAST:event_cb_transferActionPerformed
-
-    private void cb_transferMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cb_transferMouseClicked
-        // TODO add your handling code here:
-        try{
-            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-            if(con.isConnect()){                              
-                String sql = "SELECT * FROM agent_status WHERE interface !='0'";
-                ResultSet rs = con.executeQuery(sql);
-                cb_transfer.removeAllItems();
-                while(rs.next()){
-                    String item = String.valueOf(rs.getObject("interface"));
-                    item = item.substring(item.indexOf("/")+1);
-                    System.out.println("item: "+item);
-                    System.out.println("interface: "+agentObject.getInterface());
-                    if(!item.equals(agentObject.getInterface()))
-                        cb_transfer.addItem(item);
-                }
-                System.out.println("add item in combo transfer");
-            }
-            con.closeConnect();
-        }catch(Exception e){
-            System.out.println(""+e);            
-        }           
-    }//GEN-LAST:event_cb_transferMouseClicked
-
-    private void btn_holdCallActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_holdCallActionPerformed
-        try{
-            agentClient.sendtoServer("116");
-        }catch(Exception ex){}
-    }//GEN-LAST:event_btn_holdCallActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         showCampaign();
@@ -2717,7 +2653,7 @@ public class MainForm extends javax.swing.JFrame {
         btn_logout.setEnabled(flag);
 //        txt_phonenum.setEnabled(flag);        
         MenuItem_logout.setEnabled(flag);
-        MenuItem_changepwd.setEnabled(flag);
+        MenuItem_changepwd.setEnabled(flag);        
     }
     
      public void ClickTableCoop()
@@ -3414,14 +3350,12 @@ public class MainForm extends javax.swing.JFrame {
     public javax.swing.JButton btn_dial;
     public javax.swing.JButton btn_feedback;
     public javax.swing.JButton btn_hangup;
-    private javax.swing.JButton btn_holdCall;
     public javax.swing.JButton btn_logout;
     public javax.swing.JButton btn_new;
     public javax.swing.JToggleButton btn_pause;
-    private javax.swing.JButton btn_transfer;
+    public javax.swing.JButton btn_transfer;
     public javax.swing.JButton btn_update;
     public javax.swing.JComboBox cb_gender;
-    private javax.swing.JComboBox cb_transfer;
     public javax.swing.JComboBox cb_type;
     private javax.swing.JCheckBox chkTime;
     private javax.swing.JButton jButton3;
@@ -3504,7 +3438,6 @@ public class MainForm extends javax.swing.JFrame {
     public javax.swing.JTextField txt_phone1;
     private javax.swing.JTextField txt_phonenum;
     public javax.swing.JTextField txt_reg;
-    private javax.swing.JTextField txt_transfer;
     // End of variables declaration//GEN-END:variables
  //</editor-fold>
 }
