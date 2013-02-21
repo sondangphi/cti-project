@@ -582,10 +582,10 @@ public class LoginForm extends javax.swing.JFrame {
 
     private void btn_loginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_loginKeyPressed
         // TODO add your handling code here:
-         if(evt.getKeyCode() == 10){
-             System.out.println("tx_iface\t"+evt.getKeyCode());
-             btn_loginActionPerformed(null);
-         }        
+//         if(evt.getKeyCode() == 10){
+//             System.out.println("tx_iface\t"+evt.getKeyCode());
+//             btn_loginActionPerformed(null);
+//         }        
     }//GEN-LAST:event_btn_loginKeyPressed
 
     private void btn_clearKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_clearKeyPressed

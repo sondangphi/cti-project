@@ -27,7 +27,7 @@ public class Question_Camp extends javax.swing.JDialog {
     
    private MainForm own;
                        		
-    private static String Mysql_server = "172.168.10.5";      
+    private static String Mysql_server = "172.168.10.202";      
     private static String Mysql_dbname = "ast_callcenter";
     private static String Mysql_user = "callcenter";
     private static String Mysql_pwd  = "callcenter";   
