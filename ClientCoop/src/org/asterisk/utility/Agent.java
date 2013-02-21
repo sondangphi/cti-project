@@ -206,7 +206,7 @@ public class Agent implements Runnable{
                                 con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
                                 if(con.isConnect()){
                                     System.out.println("get information of customer"); 
-                                    String sql = "SELECT * FROM customer WHERE mobilephone ='"+callerNum+"'";
+                                    String sql = "SELECT * FROM customer WHERE phone1 ='"+callerNum+"'";
                                     ResultSet rs = con.executeQuery(sql);
                                     if(rs.next()){
                                         //get information of already custom and fill in data   
@@ -217,7 +217,7 @@ public class Agent implements Runnable{
                                         customer.setAddress(rs.getString("address"));
                                         customer.setEmail(rs.getString("email"));
                                         customer.setGender(rs.getString("gender"));
-                                        customer.setPhone1(rs.getString("homephone1"));
+                                       
                                         customer.setId(String.valueOf(rs.getObject("id")));   
                                         customer.setBirth(String.valueOf(rs.getObject("birthday"))); 
                                         customer.setReg(String.valueOf(rs.getObject("registration"))); 
@@ -225,7 +225,7 @@ public class Agent implements Runnable{
                                         mainForm.txt_name.setText(customer.getName());
                                         mainForm.txt_email.setText(customer.getEmail());
                                         mainForm.txt_mobile.setText(customer.getPhone());
-                                        mainForm.txt_phone1.setText(customer.getPhone1());
+                                      
                                         mainForm.txt_birthday.setText(customer.getBirth());
                                         mainForm.txt_reg.setText(customer.getReg());
                                         String gender = customer.getGender();
@@ -251,7 +251,7 @@ public class Agent implements Runnable{
                                         mainForm.txt_add.setText("");                                    
                                         mainForm.txt_name.setText("");
                                         mainForm.txt_email.setText("");                                    
-                                        mainForm.txt_phone1.setText("");  
+                                        mainForm.txt_birthday.setText("");
                                         String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
                                         int count = colname.length;
                                         Vector col = new Vector(count);
@@ -379,7 +379,8 @@ public class Agent implements Runnable{
         
         //xem lai doan nay, bi outofmemmory
         public void displayHistory(ResultSet rs)throws Exception{
-            String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
+           // String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
+             String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Result","Detail"};
 //            mainForm.table_report = null;
             int count = colname.length;
             Vector col = new Vector(count);
@@ -396,8 +397,9 @@ public class Agent implements Runnable{
                 temp[ j++ ] = String.valueOf(rs.getObject("mobile"));//rs.getString("mobile");
                 temp[ j++ ] = String.valueOf(rs.getObject("agentid"));//rs.getString("agentid");
                 temp[ j++ ] = String.valueOf(rs.getObject("type"));//rs.getString("type");
-                temp[ j++ ] = String.valueOf(rs.getObject("content"));//rs.getString("content");
+                //temp[ j++ ] = String.valueOf(rs.getObject("content"));//rs.getString("content");
                 temp[ j++ ] = String.valueOf(rs.getObject("results"));//rs.getString("result");
+                 temp[ j++ ] = String.valueOf(rs.getObject("detail"));//rs.getString("detail");
                 data.add(temp);
             }
             for(int i = 0;i<data.size();i++){                
