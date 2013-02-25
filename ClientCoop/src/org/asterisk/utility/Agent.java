@@ -20,6 +20,7 @@ import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 
 import org.asterisk.main.*;
 import org.asterisk.model.AgentObject;
@@ -199,13 +200,27 @@ public class Agent implements Runnable{
                                 mainForm.lb_status.setText("Ringing...");
                                 mainForm.lb_callduration.setText("00:00:00");
                                 mainForm.btn_pause.setEnabled(false);       
-                                mainForm.btn_feedback.setEnabled(true);
+                                mainForm.btn_feedback.setEnabled(false);
+                                mainForm.btn_update.setEnabled(false);
                                 mainForm.btn_hangup.setEnabled(true);     
                                 mainForm.btn_transfer.setEnabled(true);
+                                mainForm.btnViewFB.setEnabled(false);
                                 //open connect to database
                                 con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
                                 if(con.isConnect()){
                                     System.out.println("get information of customer"); 
+                                    String query="SELECT * FROM cus_type";
+                                    ResultSet rs2 = con.executeQuery(query);
+                                    
+                                    ArrayList<String> cb_list = new ArrayList<>();
+                                    while(rs2.next())
+                                    {
+                                        cb_list.add(rs2.getString("desc"));
+                                        
+                                    }
+                                    
+                                    mainForm.cb_type.setModel(new DefaultComboBoxModel(cb_list.toArray()));
+                                    
                                     String sql = "SELECT * FROM customer WHERE phone1 ='"+callerNum+"'";
                                     ResultSet rs = con.executeQuery(sql);
                                     if(rs.next()){
@@ -225,7 +240,7 @@ public class Agent implements Runnable{
                                         mainForm.txt_name.setText(customer.getName());
                                         mainForm.txt_email.setText(customer.getEmail());
                                         mainForm.txt_mobile.setText(customer.getPhone());
-                                      
+                                        mainForm.txt_makh.setText(customer.getId());
                                         mainForm.txt_birthday.setText(customer.getBirth());
                                         mainForm.txt_reg.setText(customer.getReg());
                                         String gender = customer.getGender();
@@ -234,9 +249,9 @@ public class Agent implements Runnable{
                                         else
                                             mainForm.cb_gender.setSelectedIndex(1);
                                         mainForm.btn_new.setEnabled(false);
-                                        mainForm.btn_update.setEnabled(true);
-                                        mainForm.btn_feedback.setEnabled(true);
-                                        sql = "SELECT * FROM feedback_history WHERE mobile = '"+callerNum+"'";
+                                       
+                                        sql = "SELECT f.*,a.name as `a_name`,a.email FROM feedback_history f LEFT OUTER JOIN feedback_assign a ON f.assign=a.id"
+                                                + " WHERE mobile = '"+callerNum+"'";
                                         rs = con.executeQuery(sql);
                                         if(rs != null)
                                             displayHistory(rs);                                                                                                                        
@@ -246,13 +261,11 @@ public class Agent implements Runnable{
                                         System.out.println("not ready information");  
                                         mainForm.txt_mobile.setText(callerNum);
                                         mainForm.btn_new.setEnabled(true);
-                                        mainForm.btn_update.setEnabled(false);
-                                        mainForm.btn_feedback.setEnabled(true);
                                         mainForm.txt_add.setText("");                                    
                                         mainForm.txt_name.setText("");
                                         mainForm.txt_email.setText("");                                    
                                         mainForm.txt_birthday.setText("");
-                                        String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
+                                        String colname[] = {"No","Date", "Agent","Type","Content","Result","Assign "};
                                         int count = colname.length;
                                         Vector col = new Vector(count);
                                         Vector row = new  Vector();
@@ -269,7 +282,9 @@ public class Agent implements Runnable{
                         break;
                         case CONNECTED://connected incoming call
                             System.out.println("CONNECTED incoming call");
-                            mainForm.lb_status.setText("Busy"); 
+                            mainForm.lb_status.setText("Busy");
+                            mainForm.btn_feedback.setEnabled(true);
+                            mainForm.btn_update.setEnabled(true);
                             clockDialin = new TimerClock(mainForm, true);
                             clockDialin.start();
                         break;
@@ -283,14 +298,14 @@ public class Agent implements Runnable{
                                 clockDialin.stop(); 
                             }
                         break;
-                        case RINGNOANWSER: 
+                        case RINGNOANWSER: //ko ai nghe 
                             mainForm.lb_status.setText("Ready");
                             mainForm.setAllEnable(true);
                             mainForm.btn_pause.setEnabled(true);
                             mainForm.btn_hangup.setEnabled(false);    
                             mainForm.btn_transfer.setEnabled(false);
                         break;                                                
-                        case DIALOUT: //result 	
+                        case DIALOUT: //result 	//goi ra
                             System.out.println("DIALOUT");                        
                             mainForm.lb_status.setText("Dialing...");
                             mainForm.lb_callduration.setText("00:00:00");
@@ -299,30 +314,32 @@ public class Agent implements Runnable{
                             mainForm.btn_hangup.setEnabled(true);                                                      
                             dialout = true;
                         break;
-                        case CONNECTEDDIALOUT: 
+                        case CONNECTEDDIALOUT: //talking outbou
                             clockDialout = new TimerClock(mainForm, true);
                             clockDialout.start();                        
                             mainForm.lb_status.setText("Busy");
+                            mainForm.btn_feedback.setEnabled(true);
                             System.out.println("Connected dialout");
                         break;
-                        case HANGUPDIALOUT:                         
+                        case HANGUPDIALOUT:         //kt                
                             mainForm.lb_status.setText("Ready");
                             mainForm.setAllEnable(true); 
                             mainForm.btn_pause.setEnabled(true);
-                            mainForm.btn_hangup.setEnabled(false);                        
+                            mainForm.btn_hangup.setEnabled(false);   
+                            mainForm.btn_feedback.setEnabled(false);
                             if(clockDialout != null){
                                 clockDialout.stop();
                             }
                             System.out.println("hangup dialout");
                         break;       
-                        case HANGUPABANDON: 
+                        case HANGUPABANDON: //rot cuoc  goi
                             mainForm.lb_status.setText("Ready");
                             mainForm.setAllEnable(true); 
                             mainForm.btn_pause.setEnabled(true);
                             mainForm.btn_hangup.setEnabled(false);
                             mainForm.btn_transfer.setEnabled(false);
                         break;       
-                        case HANGUPSUCCESS:
+                        case HANGUPSUCCESS://
                             System.out.println("HANGUPSUCCESS");
                             mainForm.btn_hangup.setEnabled(false);
                             mainForm.btn_transfer.setEnabled(false);
@@ -380,8 +397,9 @@ public class Agent implements Runnable{
         //xem lai doan nay, bi outofmemmory
         public void displayHistory(ResultSet rs)throws Exception{
            // String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
-             String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Result","Detail"};
+             String colname[] = {"No","Date","Agent","Type","Categories","Content_type","Content","Solution","Result","Assign"};
 //            mainForm.table_report = null;
+             mainForm.table_report.getTableHeader().setReorderingAllowed(false);
             int count = colname.length;
             Vector col = new Vector(count);
             Vector row = new  Vector();
@@ -393,13 +411,16 @@ public class Agent implements Runnable{
                 temp  = new String[count];
                 temp[ j++ ] = String.valueOf(t++);
                 temp[ j++ ] = String.valueOf(rs.getObject("datetime"));//rs.getString("datetime");
-                temp[ j++ ] = String.valueOf(rs.getObject("name"));//rs.getString("name");
-                temp[ j++ ] = String.valueOf(rs.getObject("mobile"));//rs.getString("mobile");
+               // temp[ j++ ] = String.valueOf(rs.getObject("name"));//rs.getString("name");
+               // temp[ j++ ] = String.valueOf(rs.getObject("mobile"));//rs.getString("mobile");
                 temp[ j++ ] = String.valueOf(rs.getObject("agentid"));//rs.getString("agentid");
                 temp[ j++ ] = String.valueOf(rs.getObject("type"));//rs.getString("type");
-                //temp[ j++ ] = String.valueOf(rs.getObject("content"));//rs.getString("content");
-                temp[ j++ ] = String.valueOf(rs.getObject("results"));//rs.getString("result");
-                 temp[ j++ ] = String.valueOf(rs.getObject("detail"));//rs.getString("detail");
+                temp[ j++ ] = String.valueOf(rs.getObject("categories"));//rs.getString("categories");
+                temp[ j++ ] = String.valueOf(rs.getObject("content_type"));//rs.getString("content_type");
+                temp[ j++ ] = String.valueOf(rs.getObject("content"));//rs.getString("content");
+                temp[ j++ ] = String.valueOf(rs.getObject("solution"));//rs.getString("solution");
+                temp[ j++ ] = String.valueOf(rs.getObject("results"));//rs.getString("results");
+                temp[ j++ ] = String.valueOf(rs.getString("a_name"));//rs.getString("assign");
                 data.add(temp);
             }
             for(int i = 0;i<data.size();i++){                

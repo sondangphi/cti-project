@@ -22,9 +22,10 @@ public class autoHLabel extends JPanel {
         textArea.setBorder(BorderFactory.createLineBorder(Color.white));
         textArea.setWrapStyleWord(true);                                                          
 
-        textArea.setBackground(Color.lightGray);
+        textArea.setBackground(new Color(0xf8,0xf8,0xf8));
         textArea.setLocation(0, 0);
         textArea.setSize(this.getWidth(), this.getHeight());
+        textArea.setFont(new Font(textArea.getFont().getName(), Font.BOLD, textArea.getFont().getSize() + 5));
         this.add(textArea);       
         fixHeight();
     }
@@ -36,7 +37,7 @@ public class autoHLabel extends JPanel {
     }
     
     public void setText(String text) {
-        textArea.setText(text);
+        textArea.setText("Question: "+ text);
         fixHeight();
     }
     
