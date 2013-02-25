@@ -1,6 +1,8 @@
 
 package nttnetworks.com.controls.questions;
 
+import com.sun.java.swing.plaf.windows.WindowsBorders;
+import java.awt.Color;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.util.ArrayList;
@@ -11,6 +13,8 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JRadioButton;
 import javax.swing.JTextArea;
+import javax.swing.border.BevelBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -137,6 +141,7 @@ public class answer extends javax.swing.JPanel {
                 if (answ.length > 4) {                          //combo
                     JComboBox com = new JComboBox();
                     com.setModel(new javax.swing.DefaultComboBoxModel(answ));
+                    com.setBackground(Color.white);
                     com.setLocation(5, 5);
                     com.setSize(this.getWidth() - 10, 23);
                     com.setVisible(true);
@@ -145,6 +150,7 @@ public class answer extends javax.swing.JPanel {
                 } else {                                        //radio
                     for (int i=0; i<answ.length; i++) {
                         JRadioButton com = new JRadioButton();
+                        com.setBackground(Color.white);
                         com.setText(answ[i]);
                         com.setLocation(5, 5 + 23*i);
                         com.setSize(this.getWidth()-10, 23);
@@ -159,6 +165,7 @@ public class answer extends javax.swing.JPanel {
             } else {                                            //checkbox
                 for (int i=0; i<answ.length; i++) {
                     final JCheckBox com = new JCheckBox();
+                    
                     com.addChangeListener(new ChangeListener() {
                         @Override
                         public void stateChanged(ChangeEvent ce) {
@@ -180,7 +187,7 @@ public class answer extends javax.swing.JPanel {
                             }
                         }
                     });
-                    
+                    com.setBackground(Color.white);
                     com.setText(answ[i]);
                     com.setLocation(5, 5 + 23*i);
                     com.setSize(this.getWidth()-10, 23);
@@ -191,6 +198,8 @@ public class answer extends javax.swing.JPanel {
             }
         } else {        //textbox
             JTextArea com = new JTextArea();
+            com.setBackground(Color.white);
+            com.setBorder(new LineBorder(Color.black));
             com.setLocation(5, 5);
             com.setSize(this.getWidth() - 10, 50);
             com.setVisible(true);

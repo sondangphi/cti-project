@@ -255,7 +255,7 @@ public class MainForm extends javax.swing.JFrame {
         jScrollPane3 = new javax.swing.JScrollPane();
         table_report = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
+        btnViewFB = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         btnShowPro = new javax.swing.JButton();
         jPanel15 = new javax.swing.JPanel();
@@ -548,8 +548,6 @@ public class MainForm extends javax.swing.JFrame {
         jLabel18.setText("Type");
         jLabel18.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        cb_type.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "type1", "type2", "type3" }));
-
         jLabel19.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel19.setText("Registration");
         jLabel19.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -679,14 +677,20 @@ public class MainForm extends javax.swing.JFrame {
             }
         ));
         table_report.setOpaque(false);
+        table_report.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                table_reportMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(table_report);
 
         jLabel1.setText("Call History");
 
-        jButton2.setText("View");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnViewFB.setText("View");
+        btnViewFB.setEnabled(false);
+        btnViewFB.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnViewFBActionPerformed(evt);
             }
         });
 
@@ -704,7 +708,7 @@ public class MainForm extends javax.swing.JFrame {
                             .addGroup(Panel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton2)))
+                                .addComponent(btnViewFB)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -716,7 +720,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2))
+                    .addComponent(btnViewFB))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
                 .addContainerGap())
@@ -2599,12 +2603,14 @@ public class MainForm extends javax.swing.JFrame {
                 String birthday = txt_birthday.getText();
                 String gender = "";
                 if(cb_gender.getSelectedIndex() == 0)
-                gender = "1";
+                    gender = "1";
                 else if (cb_gender.getSelectedIndex() == 1)
-                gender = "0";
-                String sql = "UPDATE customer SET fullname ='"+name+"',email='"+email+"',mobilephone='"+mobile+"',"
-                + "address='"+add+" ,gender='"+gender+"',birthday='"+birthday+"'"
-                + " WHERE id = '"+agentClient.customer.getId()+"'" ;
+                    gender = "0";
+                
+               
+                String sql = "UPDATE customer SET fullname ='"+name +"',email='"+email+"',phone1='"+mobile+"',"
+                                                                    + "address='"+add+"' ,gender='"+gender+"',birthday='"+birthday+"'"
+                                                                    + " WHERE id = '"+agentClient.customer.getId()+"'" ;
                 con.executeUpdate(sql);
                 System.out.println("update information success.");
                 btn_update.setEnabled(false);
@@ -2612,7 +2618,7 @@ public class MainForm extends javax.swing.JFrame {
             }
             con.closeConnect();
         }catch(Exception e){
-            System.out.println(""+e);
+            System.out.println(""+e.toString());
             JOptionPane.showMessageDialog(this, "Update fail");
         }
 
@@ -2626,8 +2632,9 @@ public class MainForm extends javax.swing.JFrame {
        
         System.out.println("txt_email: "+this.txt_email.getText());
         System.out.println("txt_add: "+this.txt_add.getText());
-        feedback = new FeedbackForm(agentObject,agentClient);
+        feedback = new FeedbackForm(this, agentObject,agentClient);
         feedback.setVisible(true);
+        feedback.txt_email.setVisible(false);
     }//GEN-LAST:event_btn_feedbackActionPerformed
 
     private void btn_newActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_newActionPerformed
@@ -2643,9 +2650,9 @@ public class MainForm extends javax.swing.JFrame {
                 String birthday = txt_birthday.getText();
                 String gender = "";
                 if(cb_gender.getSelectedIndex() == 0)
-                gender = "1";
+                    gender = "1";
                 else if (cb_gender.getSelectedIndex() == 1)
-                gender = "0";
+                    gender = "0";
                 String sql = "INSERT INTO customer (fullname,email,address,phone1,gender,birthday) "
                 + "VALUES ('"+name+"','"+email+"','"+add+"','"+mobile+"','"+gender+"','"+birthday+"')";
                 con.executeUpdate(sql);
@@ -2711,25 +2718,111 @@ public class MainForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        feedback = new FeedbackForm(agentObject,agentClient);
+    private void btnViewFBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewFBActionPerformed
+        feedback = new FeedbackForm(this,agentObject,agentClient);
+        feedback.setVisible(true);
         int row=table_report.getSelectedRow();
         
-        String col1=""+this.table_report.getValueAt(row,1);
-        String col2=""+this.table_report.getValueAt(row,2);
         String col3=""+this.table_report.getValueAt(row,3);
+        String col4=""+this.table_report.getValueAt(row,4);
         String col5=""+this.table_report.getValueAt(row,5);
-        System.out.println(col5);
-        feedback.text_content.setText(col2);  
+        String col6=""+this.table_report.getValueAt(row,6);
+        String col7=""+this.table_report.getValueAt(row,7);
+        String col8=""+this.table_report.getValueAt(row,8);
+        String col9=""+this.table_report.getValueAt(row,9);
+       
         for (int i=0; i<feedback.cb_feedback_type.getItemCount(); i++) {
-             if (col5.toLowerCase().equals(feedback.cb_feedback_type.getItemAt(i).toString().toLowerCase())) {
-                 feedback.cb_feedback_type.setSelectedIndex(i);
+             if (col3.toLowerCase().equals(feedback.cb_feedback_type.getItemAt(i).toString().toLowerCase())) {
+                 feedback.cb_feedback_type.setSelectedIndex(i); 
+                 int index = feedback.cb_feedback_type.getItemCount() - 1;
+       
+                 if(feedback.cb_feedback_type.getSelectedIndex() == index){
+                 }
+                 else
+                 {
+                    feedback.cb_content_type.setVisible(false);
+                    feedback.jLabel17.setVisible(false);
+                 }
+                 
                  break;
              }
         }
+         for (int j=0; j<feedback.cb_catlogies.getItemCount(); j++) {
+             if (col4.toLowerCase().equals(feedback.cb_catlogies.getItemAt(j).toString().toLowerCase())) {
+                 feedback.cb_catlogies.setSelectedIndex(j);
+                
+                 break;
+             }
+        }
+      
+        
+        for (int j=0; j<feedback.cb_content_type.getItemCount(); j++) {
+          if (col5.toLowerCase().equals(feedback.cb_content_type.getItemAt(j).toString().toLowerCase())) {
+              feedback.cb_content_type.setSelectedIndex(j);
+
+              break;
+          }
+       }
+        feedback.text_content.setText(col6);  
+        feedback.text_solution.setText(col7);  
+           for (int i=0; i<feedback.cb_result.getItemCount(); i++) {
+             if (col8.toLowerCase().equals(feedback.cb_result.getItemAt(i).toString().toLowerCase())) {
+                System.out.println(feedback.cb_result.getItemAt(i).toString().toLowerCase());
+                feedback.cb_result.setSelectedIndex(i);
+                int index = feedback.cb_result.getItemCount() - 1;
        
-        feedback.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+                if(feedback.cb_result.getSelectedIndex() == index)
+                {
+                    feedback.jPanel2.setVisible(true);
+                    feedback.txt_email.setEditable(false);
+                }
+                else
+                {
+                    feedback.jPanel2.setVisible(false);
+                }
+                
+                 break;
+             }
+        }    
+        for (int j=0; j<feedback.cb_assign.getItemCount(); j++) {
+             if (col9.toLowerCase().equals(feedback.cb_assign.getItemAt(j).toString().toLowerCase())) {
+                 feedback.cb_assign.setSelectedIndex(j);
+                 feedback.txt_email.setText(feedback.getEmail(col9));
+                 break;
+             }
+        }
+        
+        
+        //setEnable
+       feedback.cb_catlogies.setEnabled(false);
+       feedback.cb_content_type.setEnabled(false);
+       feedback.cb_feedback_type.setEnabled(false);
+       feedback.cb_result.setEnabled(false);
+       feedback.cb_assign.setEnabled(false);
+       feedback.text_content.setEnabled(false);
+       feedback.text_solution.setEnabled(false);
+      // feedback.txt_email.setVisible(true);
+       
+       //set visible
+       feedback.check_assign.setVisible(false);
+       feedback.btn_save.setVisible(false);
+       //setbackground
+       feedback.cb_catlogies.setBackground(Color.white);
+       feedback.cb_content_type.setBackground(Color.white);
+       feedback.cb_feedback_type.setBackground(Color.white);
+       feedback.cb_result.setBackground(Color.white);
+       feedback.text_content.setBackground(Color.white);
+       feedback.text_solution.setBackground(Color.white);
+      
+       if(!feedback.cb_assign.isVisible()) {
+           feedback.setSize(feedback.getWidth(), feedback.jPanel2.getY()+feedback.jPanel2.getHeight()+10);
+       }
+       
+    }//GEN-LAST:event_btnViewFBActionPerformed
+
+    private void table_reportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_reportMouseClicked
+       btnViewFB.setEnabled(true);
+    }//GEN-LAST:event_table_reportMouseClicked
    
     public void setAllEnable(boolean flag){
         Component comNumber [] = panel_number.getComponents();
@@ -3434,6 +3527,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnShowCoop;
     private javax.swing.JButton btnShowPro;
+    public javax.swing.JButton btnViewFB;
     private javax.swing.JButton btn_0;
     private javax.swing.JButton btn_1;
     private javax.swing.JButton btn_11;
@@ -3461,7 +3555,6 @@ public class MainForm extends javax.swing.JFrame {
     public javax.swing.JComboBox cb_type;
     private javax.swing.JCheckBox chkTime;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

@@ -9,6 +9,13 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
 import org.asterisk.model.AgentObject;
 import org.asterisk.utility.Agent;
 import org.asterisk.utility.ConnectDatabase;
@@ -27,7 +34,7 @@ public class FeedbackForm extends javax.swing.JFrame {
 	private static String Mysql_pwd  = "callcenter";   
         private static ConnectDatabase con;
         private static Utility uti;
-        private MainForm mainform2 = null ;
+        public static MainForm mainform2 = null ;
         private Agent agentclient;
         
         private static AgentObject agentObject = null;
@@ -51,21 +58,22 @@ public class FeedbackForm extends javax.swing.JFrame {
             cb_result.setBackground(white);
             cb_feedback_type.setBackground(white);
             cb_catlogies.setBackground(white);
-            cb_content_type.setEnabled(false);
+            cb_content_type.setEnabled(true);
+            txt_email.setText("");
             Image image = Toolkit.getDefaultToolkit().getImage("images/icon_feedback.gif");
             this.setIconImage(image);            
         }catch(Exception e){
         }                
     }
     
-    public FeedbackForm(AgentObject agent, Agent agentc) {
+    public FeedbackForm(MainForm m, AgentObject agent, Agent agentc) {
         initComponents();        
         try{
             this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );
             uti = new Utility();
             agentObject = agent;
             agentclient = agentc;
-          
+            mainform2 = m;
             lbl_Name.setText(agentclient.customer.getName());
             lb_mobile.setText(agentclient.customer.getPhone());
             Mysql_dbname = uti.readInfor(filename, "MySql_database");
@@ -77,16 +85,21 @@ public class FeedbackForm extends javax.swing.JFrame {
             Color white = new Color(255,255,255);
             this.getContentPane().setBackground(LightSkyBlue2);
             jPanel8.setBackground(LightSkyBlue2);
+            jPanel2.setBackground(LightSkyBlue2);
             cb_result.setBackground(white);
             cb_feedback_type.setBackground(white);
             cb_catlogies.setBackground(white);
             cb_content_type.setBackground(white);
             cb_content_type.setEnabled(false);
-            cb_assign.setBackground(white);            
+            cb_assign.setBackground(white);  
             txt_email.setBackground(white);
+            jPanel2.setVisible(false);
 //             buttong
             Image image = Toolkit.getDefaultToolkit().getImage("images/icon_feedback.gif");
             this.setIconImage(image);
+            showComboBox();
+         
+             
         }catch(Exception e){
         }
         
@@ -109,48 +122,47 @@ public class FeedbackForm extends javax.swing.JFrame {
         jLabel15 = new javax.swing.JLabel();
         cb_catlogies = new javax.swing.JComboBox();
         cb_feedback_type = new javax.swing.JComboBox();
-        btn_save = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         text_content = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         text_solution = new javax.swing.JTextArea();
         lb_mobile = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        cb_result = new javax.swing.JComboBox();
-        btn_close = new javax.swing.JButton();
         jLabel17 = new javax.swing.JLabel();
-        cb_assign = new javax.swing.JComboBox();
-        jLabel18 = new javax.swing.JLabel();
-        txt_email = new javax.swing.JTextField();
-        jLabel19 = new javax.swing.JLabel();
         cb_content_type = new javax.swing.JComboBox();
-        check_assign = new javax.swing.JCheckBox();
         lbl_Name = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
+        cb_result = new javax.swing.JComboBox();
+        btn_save = new javax.swing.JButton();
+        btn_close = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        cb_assign = new javax.swing.JComboBox();
+        txt_email = new javax.swing.JTextField();
+        check_assign = new javax.swing.JCheckBox();
+        txtAsTo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("FeedbackForm");
         setResizable(false);
 
-        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Feeback", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION));
-
         jLabel9.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel9.setText("Name");
+        jLabel9.setText("Name  :");
         jLabel9.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jLabel10.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel10.setText("Feeback Type");
+        jLabel10.setText("Feeback Type  : ");
         jLabel10.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel11.setText("Catelogies");
+        jLabel11.setText("Catelogies : ");
         jLabel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jLabel14.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel14.setText("Content");
+        jLabel14.setText("Content :");
         jLabel14.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         jLabel15.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel15.setText("Solution");
+        jLabel15.setText("Solution :");
         jLabel15.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         cb_catlogies.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Tiêu Dùng", "Văn Phòng Phẩm", "Nội Thất", "Điện Máy", "May Mặc" }));
@@ -159,13 +171,6 @@ public class FeedbackForm extends javax.swing.JFrame {
         cb_feedback_type.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cb_feedback_typeItemStateChanged(evt);
-            }
-        });
-
-        btn_save.setText("Save");
-        btn_save.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_saveActionPerformed(evt);
             }
         });
 
@@ -181,13 +186,36 @@ public class FeedbackForm extends javax.swing.JFrame {
         jScrollPane2.setViewportView(text_solution);
 
         lb_mobile.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        lb_mobile.setText("0873098989");
+        lb_mobile.setText("01234");
+
+        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel17.setText("Content Type  : ");
+        jLabel17.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+
+        cb_content_type.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Dịch vụ", "Hàng hóa", "Khuyến mãi sự kiện", "Khác" }));
+
+        lbl_Name.setText("Nguyen A");
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabel1.setText("Phone : ");
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel16.setText("Result");
+        jLabel16.setText("Result     :");
         jLabel16.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         cb_result.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Đồng Ý", "Không Đồng Ý", "Hoàn Toàn Đồng Ý", "Chuyển Tiếp" }));
+        cb_result.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cb_resultItemStateChanged(evt);
+            }
+        });
+
+        btn_save.setText("Save");
+        btn_save.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_saveActionPerformed(evt);
+            }
+        });
 
         btn_close.setText("Close");
         btn_close.addActionListener(new java.awt.event.ActionListener() {
@@ -196,106 +224,50 @@ public class FeedbackForm extends javax.swing.JFrame {
             }
         });
 
-        jLabel17.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel17.setText("Content Type");
-        jLabel17.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-
-        cb_assign.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1 CSKH", "2 Manager1", "3 Manager 2" }));
-        cb_assign.setEnabled(false);
-
-        jLabel18.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel18.setText("Email");
-        jLabel18.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-
-        txt_email.setText("bnguyenvan@yahoo.com");
-        txt_email.setEnabled(false);
-
-        jLabel19.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabel19.setText("Assign To");
-        jLabel19.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-
-        cb_content_type.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Dịch vụ", "Hàng hóa", "Khuyến mãi sự kiện", "Khác" }));
-        cb_content_type.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cb_content_typeActionPerformed(evt);
-            }
-        });
-
-        check_assign.setOpaque(false);
-        check_assign.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                check_assignActionPerformed(evt);
-            }
-        });
-
-        lbl_Name.setText("Nguyen A");
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jLabel1.setText("Phone : ");
-
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btn_close, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(66, 66, 66))
-            .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel15)
-                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(215, 215, 215))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel8Layout.createSequentialGroup()
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel8Layout.createSequentialGroup()
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel10)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel8Layout.createSequentialGroup()
-                                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(2, 2, 2)))
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lbl_Name)
+                            .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPanel8Layout.createSequentialGroup()
-                                            .addGap(30, 30, 30)
-                                            .addComponent(lbl_Name))
-                                        .addGroup(jPanel8Layout.createSequentialGroup()
-                                            .addGap(228, 228, 228)
-                                            .addComponent(jLabel1)
-                                            .addGap(69, 69, 69)
-                                            .addComponent(lb_mobile, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGroup(jPanel8Layout.createSequentialGroup()
-                                        .addGap(30, 30, 30)
-                                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGroup(jPanel8Layout.createSequentialGroup()
-                                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(cb_feedback_type, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(cb_catlogies, 0, 134, Short.MAX_VALUE))
-                                                .addGap(64, 64, 64)
-                                                .addComponent(jLabel17))
-                                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 441, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(cb_result, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(cb_assign, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(cb_content_type, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel8Layout.createSequentialGroup()
-                                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(260, 260, 260)
-                                    .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(check_assign)
-                                    .addGap(2, 2, 2))))
-                        .addGap(0, 16, Short.MAX_VALUE))))
+                                    .addComponent(lb_mobile)
+                                    .addComponent(cb_catlogies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(26, 26, 26)
+                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel10)
+                                    .addComponent(jLabel17))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cb_content_type, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(cb_feedback_type, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel15)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(28, 28, 28)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(cb_result, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_close, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -303,49 +275,83 @@ public class FeedbackForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbl_Name)
-                    .addComponent(jLabel1)
-                    .addComponent(lb_mobile, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(lbl_Name))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(lb_mobile, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_feedback_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_content_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cb_feedback_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cb_content_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cb_catlogies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_catlogies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_result, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cb_assign, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(44, 44, 44)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btn_close)
-                            .addComponent(btn_save)))
-                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(check_assign)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                    .addComponent(cb_result, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_save)
+                    .addComponent(btn_close))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel2.setOpaque(false);
+
+        cb_assign.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cb_assignItemStateChanged(evt);
+            }
+        });
+
+        txt_email.setText("bnguyenvan@yahoo.com");
+
+        check_assign.setFocusable(false);
+        check_assign.setOpaque(false);
+        check_assign.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                check_assignItemStateChanged(evt);
+            }
+        });
+
+        txtAsTo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        txtAsTo.setText("Assign To :");
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addComponent(txtAsTo)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(cb_assign, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41)
+                        .addComponent(check_assign))
+                    .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(cb_assign, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtAsTo)
+                    .addComponent(check_assign, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
+                .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -353,16 +359,20 @@ public class FeedbackForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -374,8 +384,44 @@ public class FeedbackForm extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btn_closeActionPerformed
 
-    private void btn_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveActionPerformed
+    private void cb_feedback_typeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_feedback_typeItemStateChanged
         // TODO add your handling code here:
+        int index = cb_feedback_type.getItemCount() - 1;
+       
+        if(cb_feedback_type.getSelectedIndex() == index){
+            cb_content_type.setEnabled(true);
+        }else
+            cb_content_type.setEnabled(false);
+        
+    }//GEN-LAST:event_cb_feedback_typeItemStateChanged
+
+    private void cb_resultItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_resultItemStateChanged
+        int index = cb_result.getItemCount() - 1;
+       
+        if(cb_result.getSelectedIndex() == index){
+            jPanel2.setVisible(true);
+            btn_save.setEnabled(false);
+        }else
+        {
+            jPanel2.setVisible(false);
+            btn_save.setEnabled(true);
+        }
+    }//GEN-LAST:event_cb_resultItemStateChanged
+
+    private void check_assignItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_check_assignItemStateChanged
+        if(check_assign.isSelected())
+            btn_save.setEnabled(true);
+        else
+            btn_save.setEnabled(false);
+    }//GEN-LAST:event_check_assignItemStateChanged
+
+    private void cb_assignItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_assignItemStateChanged
+        String name=cb_assign.getSelectedItem().toString();
+        txt_email.setText(getEmail(name));
+        
+    }//GEN-LAST:event_cb_assignItemStateChanged
+
+    private void btn_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveActionPerformed
         try{
             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
             if(con.isConnect()){
@@ -384,16 +430,42 @@ public class FeedbackForm extends javax.swing.JFrame {
                 String mobile = lb_mobile.getText();
                 String type = (String)cb_feedback_type.getItemAt(cb_feedback_type.getSelectedIndex());
                 String categories= (String)cb_catlogies.getItemAt(cb_catlogies.getSelectedIndex());
+                String content_type= (String)cb_content_type.getItemAt(cb_content_type.getSelectedIndex());
                 String content = text_content.getText();
                 String solution = text_solution.getText();
                 String result = (String)cb_result.getItemAt(cb_result.getSelectedIndex());
                 String feedbackid = uti.getFeedbackId();
+                String assign = "";
+                if(cb_result.getSelectedIndex() == 3)
+                {
+                    
+                    for(int i=0;i<cb_assign.getItemCount();i++)
+                    {
+                        if(cb_assign.getSelectedIndex()==i)
+                        {
+                            assign = Integer.toString(i+1);
+                        }
+                        
+                    }
+                }
+                else{  assign = "";}
+                
+                System.out.println("assign: "+assign);
                 System.out.println("content: "+content);
                 System.out.println("solution: "+solution);
-                String sql = "INSERT INTO feedback_history (feedbackid, name, mobile, agentid,type,categories,content,solution,results) "
-                + "VALUES ('"+feedbackid+"','"+name+"','"+mobile+"','"+agentObject.getAgentId()+"','"+type+"','"+categories+"','"+content+"','"+solution+"','"+result+"')";
+                String sql = "INSERT INTO feedback_history "
+                        + "(feedbackid, name, mobile, agentid,type,categories,content_type,content,solution,results,assign) "
+                        + "VALUES ('"+feedbackid+"','"+name+"','"+mobile+"','"
+                                     +agentObject.getAgentId()+"','"+type+"','"
+                                     +categories+"','"+content_type+"','"+content+"','"+solution+"','"+result+"', '"+assign+"')";
                 con.executeUpdate(sql);
-                System.out.println("finish write feedback!");
+               //mainform2.btn_feedback.setEnabled(false);
+                JOptionPane.showMessageDialog(null,"finish write feedback!");
+                  String query = "SELECT f.*,a.name as `a_name`,a.email FROM feedback_history f LEFT OUTER JOIN feedback_assign a ON f.assign=a.id"
+                                                + " WHERE mobile = '"+mobile+"'";
+                ResultSet rs = con.executeQuery(query);
+                 if(rs != null)
+                     agentclient.displayHistory(rs); 
             }
             con.closeConnect();
             this.dispose();
@@ -401,33 +473,102 @@ public class FeedbackForm extends javax.swing.JFrame {
         }catch(Exception e){
         }
     }//GEN-LAST:event_btn_saveActionPerformed
+    
+    public String getEmail(String name)
+    {
+        try {
+           con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+            if(con.isConnect()){
+               String query="SELECT * FROM feedback_assign where name='"+name+"'";
+               ResultSet rs2 = con.executeQuery(query);
 
-    private void cb_feedback_typeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_feedback_typeItemStateChanged
-        // TODO add your handling code here:
-        int index = cb_feedback_type.getItemCount() - 1;
-        if(cb_feedback_type.getSelectedIndex() == index){
-            cb_content_type.setEnabled(true);
-        }else
-            cb_content_type.setEnabled(false);
-        
-    }//GEN-LAST:event_cb_feedback_typeItemStateChanged
+               if(rs2.next())
+               {
+                  System.out.println(rs2.getString("email"));
+                  String out=rs2.getString("email");
+                  con.closeConnect();
+                  return out;
+               }
+            }
+            con.closeConnect();
+        } catch (Exception ex) {
+           Logger.getLogger(FeedbackForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-    private void check_assignActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_check_assignActionPerformed
-        // TODO add your handling code here:
-            cb_assign.setEnabled(check_assign.isSelected());
-            txt_email.setEnabled(check_assign.isSelected());
-//        if(check_assign.isSelected()){
-//            cb_assign.setEnabled(true);
-//            txt_email.setEnabled(true);
-//        }else{
-//            
-//        }
-    }//GEN-LAST:event_check_assignActionPerformed
+        return null;
+    }
+    
+    public void showComboBox()
+    {
+        try {
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+             if(con.isConnect()){
+                 //////////
+                 String query1="SELECT * FROM feedback_assign";
+                 ResultSet rs1 = con.executeQuery(query1);
 
-    private void cb_content_typeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cb_content_typeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cb_content_typeActionPerformed
+                 ArrayList<String> cb_assin = new ArrayList<>();
+                 while(rs1.next())
+                 {
+                     cb_assin.add(rs1.getString("name"));
 
+                 }
+
+                 cb_assign.setModel(new DefaultComboBoxModel(cb_assin.toArray()));
+                 ///////
+                 String query2="SELECT * FROM feedback_catelogies";
+                 ResultSet rs2 = con.executeQuery(query2);
+
+                 ArrayList<String> cb_catelories = new ArrayList<>();
+                 while(rs2.next())
+                 {
+                     cb_catelories.add(rs2.getString("desc"));
+
+                 }
+
+                 cb_catlogies.setModel(new DefaultComboBoxModel(cb_catelories.toArray()));
+                 //////////
+                   String query3="SELECT * FROM feedback_results";
+                 ResultSet rs3 = con.executeQuery(query3);
+
+                 ArrayList<String> cb_rsult = new ArrayList<>();
+                 while(rs3.next())
+                 {
+                     cb_rsult.add(rs3.getString("desc"));
+
+                 }
+
+                 cb_result.setModel(new DefaultComboBoxModel(cb_rsult.toArray()));
+                 //////////
+                 String query4="SELECT * FROM feedback_content_type";
+                 ResultSet rs4 = con.executeQuery(query4);
+
+                 ArrayList<String> cb_con_type = new ArrayList<>();
+                 while(rs4.next())
+                 {
+                     cb_con_type.add(rs4.getString("desc"));
+
+                 }
+
+                 cb_content_type.setModel(new DefaultComboBoxModel(cb_con_type.toArray()));
+                 ////////
+                  String query5="SELECT * FROM feedback_type";
+                 ResultSet rs5 = con.executeQuery(query5);
+
+                 ArrayList<String> cb_type = new ArrayList<>();
+                 while(rs5.next())
+                 {
+                     cb_type.add(rs5.getString("desc"));
+
+                 }
+
+                 cb_feedback_type.setModel(new DefaultComboBoxModel(cb_type.toArray()));
+             }
+             con.closeConnect();
+        } catch (Exception ex) {
+            Logger.getLogger(FeedbackForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     /**
      * @param args the command line arguments
      */
@@ -464,23 +605,22 @@ public class FeedbackForm extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_close;
-    private javax.swing.JButton btn_save;
-    private javax.swing.JComboBox cb_assign;
+    public javax.swing.JButton btn_save;
+    public javax.swing.JComboBox cb_assign;
     public javax.swing.JComboBox cb_catlogies;
     public javax.swing.JComboBox cb_content_type;
     public javax.swing.JComboBox cb_feedback_type;
     public javax.swing.JComboBox cb_result;
-    private javax.swing.JCheckBox check_assign;
+    public javax.swing.JCheckBox check_assign;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
+    public javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel9;
+    public javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
@@ -488,6 +628,7 @@ public class FeedbackForm extends javax.swing.JFrame {
     public javax.swing.JLabel lbl_Name;
     public javax.swing.JTextArea text_content;
     public javax.swing.JTextArea text_solution;
-    private javax.swing.JTextField txt_email;
+    public javax.swing.JLabel txtAsTo;
+    public javax.swing.JTextField txt_email;
     // End of variables declaration//GEN-END:variables
 }
