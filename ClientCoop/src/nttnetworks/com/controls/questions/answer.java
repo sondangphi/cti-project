@@ -199,7 +199,7 @@ public class answer extends javax.swing.JPanel {
         } else {        //textbox
             JTextArea com = new JTextArea();
             com.setBackground(Color.white);
-            com.setBorder(new LineBorder(Color.black));
+            com.setBorder(new LineBorder(new Color(0xe0, 0xe0, 0xe0)));
             com.setLocation(5, 5);
             com.setSize(this.getWidth() - 10, 50);
             com.setVisible(true);
