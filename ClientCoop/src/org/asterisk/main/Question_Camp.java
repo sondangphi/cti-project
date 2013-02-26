@@ -8,6 +8,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.ResultSet;
 import java.util.Vector;
 import java.util.logging.Level;
@@ -45,7 +49,7 @@ public class Question_Camp extends javax.swing.JDialog {
     String title_call;
     String Camp_name;
    
-    public Question_Camp(MainForm own, String agent,String title_call, String Camp_name)  
+    public Question_Camp(int camp_id, MainForm own, String agent,String title_call, String Camp_name)  
     {
         super(own);
         this.own = own;
@@ -66,7 +70,7 @@ public class Question_Camp extends javax.swing.JDialog {
         }catch(Exception e){
         }
         setTitle("CALL : " +title_call);
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Campaign name : "+ Camp_name));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Campaign name :  "+ Camp_name));
         
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -74,12 +78,20 @@ public class Question_Camp extends javax.swing.JDialog {
                               (screenSize.height-this.getHeight()) / 2));
 
        
-        ShowContentComponent(agent); 
+        ShowContentComponent(camp_id, agent); 
+        this.addComponentListener(new ComponentAdapter() {
+
+            @Override
+            public void componentShown(ComponentEvent ce) {
+                ques.autoSize();
+                super.componentShown(ce);
+            }
+        });
     }
 
     
    
-    private void ShowContentComponent(String agent)
+    private void ShowContentComponent(int camp_id, String agent)
     {
         try 
         {
@@ -96,6 +108,7 @@ public class Question_Camp extends javax.swing.JDialog {
 
 
                 sql+="WHERE ag.`agent_id`='"+agent+"'"+"\r\n"+
+                    "AND cam.id='"+ camp_id +"'" + "\r\n" +
                     "GROUP BY ques.id"+"\r\n";
 
               

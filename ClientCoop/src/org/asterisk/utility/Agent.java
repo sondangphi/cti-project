@@ -21,6 +21,8 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.table.TableColumn;
 
 import org.asterisk.main.*;
 import org.asterisk.model.AgentObject;
@@ -117,17 +119,41 @@ public class Agent implements Runnable{
                             System.out.println("LOGIN SUCCESS");
                             agentObject.setAgentName(cmdList.get(1));
                             agentObject.setSession(cmdList.get(2));
-                            mainForm = new MainForm(this, agentObject);
-                            mainForm.setVisible(true);                              
-                            loginform.setVisible(false);
-                            loginform.dispose();
-                            worktime = new TimerClock(mainForm, false);
-                            worktime.start();
-                            keepAlive = new KeepAlive(this);                  
+                            mainForm = new MainForm(Agent.this, agentObject);
+                            loginform.txt_img_wait.setText("Login success");
+                            loginform.txt_img_wait.setIcon(null);
+                            new Thread(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    try {
+                                        Thread.sleep(2000);
+                                        mainForm.setVisible(true);                              
+                                        loginform.setVisible(false);
+                                        loginform.dispose();
+                                        worktime = new TimerClock(mainForm, false);
+                                        worktime.start();
+
+                                        keepAlive = new KeepAlive(Agent.this);   
+
+                                    } catch (InterruptedException ex) {
+                                        Logger.getLogger(FeedbackForm.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                }
+                            }).start();
+                                           
                         break;
                         case LOGINFAIL: //result LOGIN FAIL                                                     
                             System.out.println("LOGIN FAIL");
                             loginform.lb_status.setText(cmdList.get(1));
+                            loginform.tx_agent.setEnabled(true);
+                            loginform.btn_login.setEnabled(true);
+                            loginform.btn_clear.setEnabled(true);
+                            loginform.tx_iface.setEnabled(true);
+                            loginform.cb_queue.setEnabled(true);
+                            loginform.lb_option.setEnabled(true);
+                            loginform.txt_img_wait.setVisible(false);   
+                            loginform.pwd.setEnabled(true);   
                             closeConnect();
                         break;
                         case LOGOUTSUCC: //result LOGOUT SUCCESS      
@@ -435,9 +461,25 @@ public class Agent implements Runnable{
                 }
                 row.addElement(dataRow);
             }
+            
             for (int i = 0; i <count; i++) 
                 col.addElement(colname[i].toString());
-            mainForm.table_report.setModel(new TableModel(col, row));                         
+            mainForm.table_report.setModel(new TableModel(col, row));   
+             TableColumn column = null;
+                for (int k = 0;k <  mainForm.table_report.getColumnCount(); k++) 
+                {
+                    column =  mainForm.table_report.getColumnModel().getColumn(k);
+
+                    if (k == 0) {
+                        column.setPreferredWidth(50);
+
+                    } 
+
+                    else {
+                        column.setPreferredWidth(100);
+
+                    }
+                }
         }
         
         public boolean agentTimeout(){

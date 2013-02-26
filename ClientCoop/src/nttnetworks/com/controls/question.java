@@ -8,6 +8,8 @@ import java.awt.event.ComponentEvent;
 import java.io.UnsupportedEncodingException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
@@ -17,6 +19,11 @@ public class question extends javax.swing.JPanel {
 
     public void scr() {
         ques.setLocation(5, -scroll.getValue()*10+5);
+    }
+    
+    public void autoSize() {
+        this.ques.fixHeight();
+        this.fixScroll();
     }
     
     private void fixScroll() {
@@ -65,18 +72,33 @@ public class question extends javax.swing.JPanel {
         return output;
     }
     
+    private static String html2Str(String html) {
+        Pattern pttr = Pattern.compile("&#(?<uni>\\d+);");
+        Matcher match = pttr.matcher(html);
+        while (match.find()) {
+            int uni = Integer.parseInt(match.group("uni"));
+            html = html.replace("&#"+uni+";", new String(new char[] { ((char)uni) }));
+            match = pttr.matcher(html);
+        }
+        
+        return html;
+    }
+    
     public void add(String question, int quetion_type, String[] answers, int numOfValidAnswers) {
-        try {
-            question = new String(stringToBytes(question), "UTF-8");
+//        try {
+//            question = new String(stringToBytes(question), "UTF-8");
+            question = html2Str(question);
+            
             for(int i=0; i<answers.length; i++) {
-                answers[i] = new String(stringToBytes(answers[i]), "UTF-8");
+//                answers[i] = new String(stringToBytes(answers[i]), "UTF-8");
+                answers[i] = html2Str(answers[i]);
             }
             
             ques.addQuestion(question, answers, quetion_type, numOfValidAnswers);
             fixScroll();
-        } catch (UnsupportedEncodingException ex) {
-            Logger.getLogger(question.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        } catch (UnsupportedEncodingException ex) {
+//            Logger.getLogger(question.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     public void add(int type, String question_json) {

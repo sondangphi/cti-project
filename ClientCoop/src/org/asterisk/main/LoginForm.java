@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import javax.imageio.IIOException;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import org.asterisk.model.AgentObject;
 import org.asterisk.model.QueueObject;
 import org.asterisk.utility.Agent;
@@ -66,6 +67,7 @@ public class LoginForm extends javax.swing.JFrame {
     public LoginForm() {
         listQueue = null;
         initComponents();
+        txt_img_wait.setVisible(false);
         Image image = Toolkit.getDefaultToolkit().getImage("images/icon_login.png");
         try{            
             uti = new Utility();		
@@ -170,6 +172,7 @@ public class LoginForm extends javax.swing.JFrame {
         lb_option = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         lb_pic = new javax.swing.JLabel();
+        txt_img_wait = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -409,6 +412,9 @@ public class LoginForm extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        txt_img_wait.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/wait20.gif"))); // NOI18N
+        txt_img_wait.setText("loading ...");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -419,14 +425,16 @@ public class LoginForm extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 55, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(lb_status, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(panel_1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addContainerGap()
+                        .addComponent(txt_img_wait)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lb_option, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -444,7 +452,9 @@ public class LoginForm extends javax.swing.JFrame {
                         .addGap(28, 28, 28)
                         .addComponent(panel_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lb_option)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lb_option)
+                    .addComponent(txt_img_wait))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -527,8 +537,19 @@ public class LoginForm extends javax.swing.JFrame {
             }else {
                 lb_notify_agent.setText("(*)");
                 lb_status.setText("Check AgentID again");
-            }       
+            }
             
+            txt_img_wait.setVisible(true);
+            tx_agent.setEnabled(false);
+            pwd.setEnabled(false);
+            tx_iface.setEnabled(false);
+            cb_queue.setEnabled(false);
+            btn_login.setEnabled(false);
+            btn_clear.setEnabled(false);
+            lb_option.setEnabled(false);
+            
+            
+        
         }catch(Exception e){
             System.out.println("btn_loginActionPerformed\t"+e); 
         }
@@ -671,9 +692,9 @@ public class LoginForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btn_clear;
-    private javax.swing.JButton btn_login;
-    private static javax.swing.JComboBox cb_queue;
+    public javax.swing.JButton btn_clear;
+    public javax.swing.JButton btn_login;
+    public javax.swing.JComboBox cb_queue;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
@@ -683,14 +704,15 @@ public class LoginForm extends javax.swing.JFrame {
     private javax.swing.JLabel lb_notify_iface;
     private javax.swing.JLabel lb_notify_pwd;
     public static javax.swing.JLabel lb_notify_queue;
-    private javax.swing.JLabel lb_option;
+    public javax.swing.JLabel lb_option;
     private javax.swing.JLabel lb_pic;
     private javax.swing.JLabel lb_pwd;
     private javax.swing.JLabel lb_queue;
     public static javax.swing.JLabel lb_status;
     private javax.swing.JPanel panel_1;
-    private javax.swing.JPasswordField pwd;
-    private javax.swing.JTextField tx_agent;
-    private javax.swing.JTextField tx_iface;
+    public javax.swing.JPasswordField pwd;
+    public javax.swing.JTextField tx_agent;
+    public javax.swing.JTextField tx_iface;
+    public javax.swing.JLabel txt_img_wait;
     // End of variables declaration//GEN-END:variables
 }

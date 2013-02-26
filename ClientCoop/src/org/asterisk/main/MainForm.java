@@ -45,6 +45,8 @@ import java.util.Hashtable;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.sound.midi.Transmitter;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -123,6 +125,7 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm() {
         initComponents();
         txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);   
+        
         
     }
     
@@ -680,6 +683,11 @@ public class MainForm extends javax.swing.JFrame {
         table_report.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 table_reportMouseClicked(evt);
+            }
+        });
+        table_report.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                table_reportKeyReleased(evt);
             }
         });
         jScrollPane3.setViewportView(table_report);
@@ -2634,7 +2642,7 @@ public class MainForm extends javax.swing.JFrame {
         System.out.println("txt_add: "+this.txt_add.getText());
         feedback = new FeedbackForm(this, agentObject,agentClient);
         feedback.setVisible(true);
-        feedback.txt_email.setVisible(false);
+       
     }//GEN-LAST:event_btn_feedbackActionPerformed
 
     private void btn_newActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_newActionPerformed
@@ -2729,7 +2737,7 @@ public class MainForm extends javax.swing.JFrame {
         String col6=""+this.table_report.getValueAt(row,6);
         String col7=""+this.table_report.getValueAt(row,7);
         String col8=""+this.table_report.getValueAt(row,8);
-        String col9=""+this.table_report.getValueAt(row,9);
+       
        
         for (int i=0; i<feedback.cb_feedback_type.getItemCount(); i++) {
              if (col3.toLowerCase().equals(feedback.cb_feedback_type.getItemAt(i).toString().toLowerCase())) {
@@ -2773,24 +2781,19 @@ public class MainForm extends javax.swing.JFrame {
        
                 if(feedback.cb_result.getSelectedIndex() == index)
                 {
-                    feedback.jPanel2.setVisible(true);
-                    feedback.txt_email.setEditable(false);
+                    feedback.txtAsTo.setVisible(true);
+                    feedback.cb_assign.setEditable(false);
                 }
                 else
                 {
-                    feedback.jPanel2.setVisible(false);
+                    feedback.txtAsTo.setVisible(false);
+                    feedback.cb_assign.setVisible(false);
                 }
                 
                  break;
              }
         }    
-        for (int j=0; j<feedback.cb_assign.getItemCount(); j++) {
-             if (col9.toLowerCase().equals(feedback.cb_assign.getItemAt(j).toString().toLowerCase())) {
-                 feedback.cb_assign.setSelectedIndex(j);
-                 feedback.txt_email.setText(feedback.getEmail(col9));
-                 break;
-             }
-        }
+     
         
         
         //setEnable
@@ -2804,7 +2807,7 @@ public class MainForm extends javax.swing.JFrame {
       // feedback.txt_email.setVisible(true);
        
        //set visible
-       feedback.check_assign.setVisible(false);
+     
        feedback.btn_save.setVisible(false);
        //setbackground
        feedback.cb_catlogies.setBackground(Color.white);
@@ -2814,15 +2817,19 @@ public class MainForm extends javax.swing.JFrame {
        feedback.text_content.setBackground(Color.white);
        feedback.text_solution.setBackground(Color.white);
       
-       if(!feedback.cb_assign.isVisible()) {
-           feedback.setSize(feedback.getWidth(), feedback.jPanel2.getY()+feedback.jPanel2.getHeight()+10);
-       }
-       
+//       if(!feedback.cb_assign.isVisible()) {
+//           feedback.setSize(feedback.getWidth(), feedback.jPanel2.getY()+feedback.jPanel2.getHeight()+10);
+//       }
+//       
     }//GEN-LAST:event_btnViewFBActionPerformed
 
     private void table_reportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_reportMouseClicked
        btnViewFB.setEnabled(true);
     }//GEN-LAST:event_table_reportMouseClicked
+
+    private void table_reportKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_table_reportKeyReleased
+       btnViewFB.setEnabled(true);
+    }//GEN-LAST:event_table_reportKeyReleased
    
     public void setAllEnable(boolean flag){
         Component comNumber [] = panel_number.getComponents();
@@ -3335,6 +3342,9 @@ public class MainForm extends javax.swing.JFrame {
      
   private void Dial()
    {
+       int rw=tblCamp.getSelectedRow();
+       int camp_id= Integer.parseInt(tblCamp.getValueAt(rw, 5).toString());
+       
         int row=tblCustom.getSelectedRow();
         if(row>=0)
         {
@@ -3366,7 +3376,7 @@ public class MainForm extends javax.swing.JFrame {
            
 
 
-            Question_Camp quesF = new Question_Camp(this,lb_agentid.getText(),SCall_id,Scam_name);
+            Question_Camp quesF = new Question_Camp(camp_id,this,lb_agentid.getText(),SCall_id,Scam_name);
             quesF.getTextCamp_Desc().setText(Sdesc);
 
             quesF.getlblGender().setText(SGender); 
