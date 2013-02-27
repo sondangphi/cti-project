@@ -489,7 +489,6 @@ public class LoginForm extends javax.swing.JFrame {
         // TODO add your handling code here:   
         agentObject = new AgentObject();
         char [] p = pwd.getPassword();
-//        Agent agentClient = null;
         pass     = new String(p);
         agentId = tx_agent.getText();        
         iface  = tx_iface.getText();
