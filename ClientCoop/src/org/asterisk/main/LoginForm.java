@@ -492,10 +492,10 @@ public class LoginForm extends javax.swing.JFrame {
         pass     = new String(p);
         agentId = tx_agent.getText();        
         iface  = tx_iface.getText();
-//        if(listQueue != null && cb_queue.getSize()!=0){
+        if(cb_queue.getItemCount() != 0){
             queueId = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();
             queueName = listQueue.get(cb_queue.getSelectedIndex()).getQueueName();
-//        }
+        }
         agentObject.setAgentId(agentId);
         agentObject.setPass(pass);
         agentObject.setInterface(iface);        

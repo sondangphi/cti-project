@@ -31,7 +31,7 @@ public class KeepAlive implements Runnable{
     @Override
     public void run() {
        try{
-           while(true){
+           while(agent.clientSocket.isConnected()){
                Thread.sleep(5000);
                agent.sendtoServer("222");
            }

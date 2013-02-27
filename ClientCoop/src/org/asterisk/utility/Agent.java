@@ -87,8 +87,7 @@ public class Agent implements Runnable{
             }                
 	}      	
 	@Override
-	public void run() {
-            // TODO Auto-generated method stub
+	public void run() {            
             try{
                 String command = "";
                 CODE code;
@@ -127,7 +126,6 @@ public class Agent implements Runnable{
                             loginform.txt_img_wait.setText("Login success");
                             loginform.txt_img_wait.setIcon(null);
                             new Thread(new Runnable() {
-
                                 @Override
                                 public void run() {
                                     try {
@@ -533,15 +531,13 @@ public class Agent implements Runnable{
 //            }   
             
             try{
-                if(clientSocket != null && out != null && in != null){  
+                if(clientSocket != null){  
 //                    t = aes.encryptData(t);
                     out.writeUTF(t);
                     out.flush();
-                    System.out.println("ip1: "+clientSocket.getLocalAddress().toString().substring(1));
-                    System.out.println("ip2: "+clientSocket.getInetAddress().toString().substring(1));
+//                    System.out.println("ip1: "+clientSocket.getLocalAddress().toString().substring(1));
+//                    System.out.println("ip2: "+clientSocket.getInetAddress().toString().substring(1));
                     System.out.println("send to server: "+t);
-                }else{
-                    System.out.println("socket is close: "+t);
                 }
             }catch(Exception e){
                 System.out.println("Exception(sendtoServer): "+e);
