@@ -396,7 +396,7 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         btn_transfer.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btn_transfer.setText("Transfer");
+        btn_transfer.setText("TRANSFER");
         btn_transfer.setEnabled(false);
         btn_transfer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

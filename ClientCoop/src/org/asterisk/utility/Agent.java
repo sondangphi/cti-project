@@ -68,6 +68,8 @@ public class Agent implements Runnable{
         private DataInputStream in;
         private DataOutputStream out;
         
+        public AESControl aes = null;
+        
 	public Agent(){
 		
 	}
@@ -98,11 +100,13 @@ public class Agent implements Runnable{
 //                outtoServer = new PrintWriter(clientSocket.getOutputStream());
 //                infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));  
                 in = new DataInputStream(clientSocket.getInputStream());
-                out = new DataOutputStream(clientSocket.getOutputStream());                 
+                out = new DataOutputStream(clientSocket.getOutputStream());  
+                aes = new AESControl(clientSocket.getLocalAddress().toString());
                 sendtoServer(com);
                 while(running){                    
 //                    command = infromServer.readLine();  
                     command = in.readUTF();
+//                    command  = aes.decryptData(command);
                     System.out.println("Receive from server: "+command);
                     if(command == null){
                         System.out.println("null value from server");  
@@ -529,9 +533,12 @@ public class Agent implements Runnable{
 //            }   
             
             try{
-                if(clientSocket != null && out != null && in != null){   
+                if(clientSocket != null && out != null && in != null){  
+//                    t = aes.encryptData(t);
                     out.writeUTF(t);
                     out.flush();
+                    System.out.println("ip1: "+clientSocket.getLocalAddress().toString().substring(1));
+                    System.out.println("ip2: "+clientSocket.getInetAddress().toString().substring(1));
                     System.out.println("send to server: "+t);
                 }else{
                     System.out.println("socket is close: "+t);
