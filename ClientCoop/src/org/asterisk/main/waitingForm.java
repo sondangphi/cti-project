@@ -11,6 +11,7 @@ import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.BorderFactory;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.border.Border;
 
@@ -24,12 +25,27 @@ public class waitingForm extends javax.swing.JFrame {
      * Creates new form waitingForm
      */
     public waitingForm(final Component f) {
+        final Thread thr = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(((JDialog)f).isVisible()) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) { break; }
+                }
+                
+                waitingForm.this.dispose();
+            }
+        });
+        thr.start();
+        
         f.setEnabled(false);
         this.addWindowListener(new WindowAdapter() {
 
             @Override
             public void windowClosed(WindowEvent we) {
                 f.setEnabled(true);
+                thr.interrupt();
                 super.windowClosed(we);
             }
         });

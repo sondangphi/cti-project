@@ -237,12 +237,18 @@ public class LoginForm extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tx_agentKeyPressed(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tx_agentKeyReleased(evt);
+            }
         });
 
         tx_iface.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tx_iface.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tx_ifaceKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tx_ifaceKeyTyped(evt);
             }
         });
 
@@ -258,6 +264,9 @@ public class LoginForm extends javax.swing.JFrame {
         pwd.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 pwdKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                pwdKeyReleased(evt);
             }
         });
 
@@ -484,7 +493,7 @@ public class LoginForm extends javax.swing.JFrame {
         System.out.println("getSesion "+agentObject.getSesion());
         System.out.println("getPenalty "+agentObject.getPenalty());            
     }
-    
+   
     private void btn_loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_loginActionPerformed
         // TODO add your handling code here:   
         agentObject = new AgentObject();
@@ -630,6 +639,18 @@ public class LoginForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.out.println("focus");
     }//GEN-LAST:event_lb_optionFocusGained
+
+    private void tx_ifaceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_ifaceKeyTyped
+      tx_iface.setText(tx_agent.getText().replaceAll("[^\\d]", ""));
+    }//GEN-LAST:event_tx_ifaceKeyTyped
+
+    private void tx_agentKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_agentKeyReleased
+        tx_agent.setText(tx_agent.getText().replaceAll("[^\\w_./\\\\-]", ""));
+    }//GEN-LAST:event_tx_agentKeyReleased
+
+    private void pwdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pwdKeyReleased
+       pwd.setText(pwd.getText().replaceAll("[^\\w]", ""));
+    }//GEN-LAST:event_pwdKeyReleased
 
     /**
      * @param args the command line arguments

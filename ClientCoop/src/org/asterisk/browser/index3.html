@@ -113,9 +113,11 @@
 		$(document).ready(function() {
 			$("#bounded").height($("body").height() - $("#addressBar").height() -20);
 			$("#FindAddress").val(_REQUEST['diadiem']);
+                        $("#start").val(_REQUEST['diadiem']);
 			setTimeout(function() {
 				codeAddress();
 			}, 200);
+                        
 			document.getElementById("btnShow_Direction_Bar").title="Display Control Panel";
 			document.getElementById("btnHide").title="Hide Control Panel";
 			document.getElementById("start").title="Start Point";

@@ -39,7 +39,9 @@ import java.net.URI;
 import java.net.URLEncoder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.EventObject;
 import java.util.Hashtable;
 import java.util.Vector;
@@ -90,7 +92,7 @@ import org.asterisk.utility.Utility;
  * @author leehoa
  */
 public class MainForm extends javax.swing.JFrame {
-    
+     
     private LoginForm loginform;
     private Agent agentClient;
     private TrayIcon trayIcon;
@@ -109,7 +111,7 @@ public class MainForm extends javax.swing.JFrame {
     public static FeedbackForm feedback;
     private String CallPhone;
     private JComboBox out;
-
+   
   
     LocateMap locate = new LocateMap();
     public ChangepwdForm chanpwdform;
@@ -2092,7 +2094,21 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_tblCustomKeyReleased
 
     private void tblCustomMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomMouseClicked
-        ShowButtonDial();
+        try{ 
+            int row=tblCustom.getSelectedRow();
+            String phone=(String)this.tblCustom.getValueAt(row, 6);
+            System.out.println(phone);
+            if(phone==null)
+            {
+                System.out.println("null 1");
+                 btnDial.setEnabled(false);
+                 
+            }
+            else{
+                ShowButtonDial();
+            }
+        }catch(Exception e){}
+        
     }//GEN-LAST:event_tblCustomMouseClicked
 
     private void tblCampKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCampKeyReleased
@@ -2634,15 +2650,17 @@ public class MainForm extends javax.swing.JFrame {
 
     private void btn_feedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_feedbackActionPerformed
         // TODO add your handling code here:
-        System.out.println("txt_name: "+this.txt_name.getText());
-        System.out.println("txt_add: "+this.txt_add.getText());
-        System.out.println("txt_mobile: "+this.txt_mobile.getText());
-       
-        System.out.println("txt_email: "+this.txt_email.getText());
-        System.out.println("txt_add: "+this.txt_add.getText());
-        feedback = new FeedbackForm(this, agentObject,agentClient);
-        feedback.setVisible(true);
-       
+        
+                System.out.println("txt_name: "+this.txt_name.getText());
+                System.out.println("txt_add: "+this.txt_add.getText());
+                System.out.println("txt_mobile: "+this.txt_mobile.getText());
+
+                System.out.println("txt_email: "+this.txt_email.getText());
+                System.out.println("txt_add: "+this.txt_add.getText());
+                feedback = new FeedbackForm(this, agentObject,agentClient);
+                feedback.setVisible(true);
+                
+            
     }//GEN-LAST:event_btn_feedbackActionPerformed
 
     private void btn_newActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_newActionPerformed
@@ -3036,6 +3054,15 @@ public class MainForm extends javax.swing.JFrame {
         }
 
       }
+    
+    private static byte[] stringToBytes(String str) {
+        byte[] output = new byte[str.length()];
+        for (int i=0; i<output.length; i++) {
+            output[i] = (byte)((int)str.charAt(i) & 0xFF);
+        }
+        
+        return output;
+    }
     private void showCampaign()
     {
         try {
@@ -3048,9 +3075,9 @@ public class MainForm extends javax.swing.JFrame {
                                         + "SELECT c.id as campaign_id,c.name as name_camp,c.create_day as create_day,"
                                         + "c.start_day as start_day,c.end_day as end_day,c.desc as descript, "
                                         + "k.id as call_id, "
-                                        + "a.agent_id as agent_id, a.agentName as agent_name"
-                                        + " FROM ((_campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
-                                        + "INNER JOIN _call k ON k.camp_detail_id = d.id)"
+                                        + "a.agent_id as agent_id, a.agentName as agent_name "
+                                        + "FROM ((_campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id) "
+                                        + "INNER JOIN _call k ON k.camp_detail_id = d.id) "
                                         + "INNER JOIN agent_login a ON k.agent_id = a.id) "
                                         + "AS asd ";
 
@@ -3072,17 +3099,38 @@ public class MainForm extends javax.swing.JFrame {
                     int i=0;
                     while (result.next()) {
                         i++;
+                        String name_camp= new String(stringToBytes(result.getString("name_camp")), "utf-8");
+                        String create_day=result.getString("create_day");
+                        String startday=result.getString("start_day");
+                        String end_day=result.getString("end_day");
+                        String camp_id=result.getString("campaign_id");
+                        String desc=result.getString("descript");
+                        
+                        SimpleDateFormat spdt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        Date c_day = spdt.parse(create_day);
+                        Date s_day=spdt.parse(startday);
+                        Date e_day=spdt.parse(end_day);
+                        // *** same for the format String below
+                        SimpleDateFormat spdt1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                        String cr_day=spdt1.format(c_day);
+                        SimpleDateFormat spdt2 = new SimpleDateFormat("yyyy-MM-dd");
+                        String st_day=spdt2.format(s_day);
+                        String en_day=spdt2.format(e_day);
+                        
+                        
+                       
                         Vector rowdata = new Vector();
 
+                        
                         rowdata.add(Integer.toString(i));
 
 
-                        rowdata.add(result.getString("name_camp"));
-                        rowdata.add(result.getString("create_day"));
-                        rowdata.add(result.getString("start_day"));
-                        rowdata.add(result.getString("end_day"));
-                        rowdata.add(result.getString("campaign_id"));
-                        rowdata.add(result.getString("descript"));
+                        rowdata.add(name_camp);
+                        rowdata.add(cr_day);
+                        rowdata.add(st_day);
+                        rowdata.add(en_day);
+                        rowdata.add(camp_id);
+                        rowdata.add(desc);
                         
                         dt.addRow(rowdata);
                     }
@@ -3110,7 +3158,7 @@ public class MainForm extends javax.swing.JFrame {
             }
             con.closeConnect();
         }
-        catch (IOException | SQLException | ClassNotFoundException ex) {
+        catch (Exception ex) {
             JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
         }
     }
@@ -3129,7 +3177,7 @@ public class MainForm extends javax.swing.JFrame {
             selPhone.clear();
                 
                 if(con.isConnect()){
-                    String sql="SELECT customer_id, name, gender, address, birthday,"
+                    String sql="SELECT customer_id, name, gender, address, birthday, "
                     + "GROUP_CONCAT(number)as number,status,id_status,detail_id,call_id "
                     + " FROM ( "
                     + " SELECT c.id AS campaign_id,"
@@ -3139,11 +3187,11 @@ public class MainForm extends javax.swing.JFrame {
                     + " p.number AS number,s.desc AS status, s.id AS id_status"
                     + " FROM (((((("
                     + " _campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
-                    + " INNER JOIN _call k ON k.camp_detail_id = d.id) "
-                    + " INNER JOIN agent_login a ON k.agent_id = a.id)"
-                    + " INNER JOIN _customer_info i ON d.cus_id = i.id)"
-                    + " INNER JOIN _phone p ON i.id = p.cus_id)"
-                    + " INNER JOIN _call_status s ON s.id=k.status_id)) AS asd ";
+                    + " LEFT JOIN _call k ON k.camp_detail_id = d.id) "
+                    + " LEFT JOIN agent_login a ON k.agent_id = a.id)"
+                    + " LEFT JOIN _customer_info i ON d.cus_id = i.id)"
+                    + " LEFT JOIN _phone p ON i.id = p.cus_id)"
+                    + " LEFT JOIN _call_status s ON s.id=k.status_id)) AS asd ";
                  
                     
                     int row=tblCamp.getSelectedRow();
@@ -3156,7 +3204,7 @@ public class MainForm extends javax.swing.JFrame {
                  
                    tblCustom.getTableHeader().setReorderingAllowed(false);
                    String strHeader[]={"Number","Customer id","Name","Gender","Address",
-                       "Birthday","Number","Status","id_s","detail_id","call id"};
+                       "Birthday","Phone","Status","id_s","detail_id","call id"};
                     final DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
                     {
 
@@ -3199,11 +3247,14 @@ public class MainForm extends javax.swing.JFrame {
                         rowdata.add(result.getString("id_status"));
                         rowdata.add(result.getString("detail_id"));                 //9
                         rowdata.add(result.getString("call_id"));
-
-                        if(Integer.parseInt((String)rowdata.get(8)) == 1) {
-                            st_init.add(rowdata);
-                        } else {
+                       
+                        if(Integer.parseInt((String)rowdata.get(8)) == 6)       //hoan thanh
+                        {
                             st_com.add(rowdata);
+                           
+                        } else          // khong hoan thanh
+                        {
+                             st_init.add(rowdata);
                         }
                     }
                     
@@ -3230,12 +3281,14 @@ public class MainForm extends javax.swing.JFrame {
                                                                         int row, int column) {
                             
                             if (column == 6) {
-                                String[] phones = value.toString().split(",");
-                                out = new JComboBox();
-                                out.setModel(new DefaultComboBoxModel(phones));
-                                out.setBackground(new Color(0xFFFFFFFF));
-                                
-                                return out;
+                               if(value!=null){
+                                    String[] phones = value.toString().split(",");
+                                    out = new JComboBox();
+                                    out.setModel(new DefaultComboBoxModel(phones));
+                                    out.setBackground(new Color(0xFFFFFFFF));
+
+                                    return out;
+                               }
                             }
                             
                             JLabel out=new JLabel();
@@ -3245,15 +3298,16 @@ public class MainForm extends javax.swing.JFrame {
                             } else {
                                 out.setText((String)value);
                             }
-                            
-                            if (Integer.parseInt((String)dt.getValueAt(row, 8)) != 1) {
-                                out.setForeground(new Color(0x88, 0x88, 0x88, 0xff));
-                            } else {
+                             System.out.println("value : "+Integer.parseInt((String)dt.getValueAt(row, 8)));
+                            if (Integer.parseInt((String)dt.getValueAt(row, 8)) != 6) {
                                 out.setForeground(Color.black);
                                 if (isSelected) {
                                     out.setBackground(new Color(0xff, 0xff, 0x88, 0xff));
                                     out.setOpaque(true);
                                 }
+                                
+                            } else {
+                                out.setForeground(new Color(0x88, 0x88, 0x88, 0xff));
                             }
                             
                             return out;
@@ -3312,7 +3366,7 @@ public class MainForm extends javax.swing.JFrame {
                 
                 con.closeConnect();
               }
-              catch (IOException | SQLException | ClassNotFoundException ex) {
+              catch (Exception ex) {
                   JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
               }
     }
@@ -3320,73 +3374,109 @@ public class MainForm extends javax.swing.JFrame {
     {
         int row=tblCustom.getSelectedRow();
         String SStatus_id=""+this.tblCustom.getValueAt(row, 8);
-       
+        
         int status_id=Integer.parseInt(SStatus_id);
-        if(status_id==3)//complete
+        if(status_id==6)//complete
         {
-            
+
             btnDial.setEnabled(false);
         }
-        else if(status_id==2)
-        {
-           
-            btnDial.setEnabled(true);
-        }
+      
         else
         {
-           
+
               btnDial.setEnabled(true);
         }
+        
     }
      
      
   private void Dial()
    {
-       int rw=tblCamp.getSelectedRow();
-       int camp_id= Integer.parseInt(tblCamp.getValueAt(rw, 5).toString());
-       
-        int row=tblCustom.getSelectedRow();
-        if(row>=0)
-        {
-            int cus_id = Integer.parseInt((String)this.tblCustom.getValueAt(row, 1));
-            if (selPhone.containsKey(cus_id)) {
-                CallPhone = selPhone.get(cus_id);
-            } else {
-                CallPhone = this.tblCustom.getValueAt(row, 6).toString().split(",")[0];
-            }
-            
-           
-            
-            final String Scus_name=""+this.tblCustom.getValueAt(row,2);
+    try {
+           con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
 
-            final String SGender=""+this.tblCustom.getValueAt(row,3);
-            final String SAddr=""+this.tblCustom.getValueAt(row, 4);
-            final String SBirth=""+this.tblCustom.getValueAt(row, 5);
-            
-            final String SCall_id=""+this.tblCustom.getValueAt(row, 10);
-        
-            int row1=tblCamp.getSelectedRow();
-            if(row1 <0)
-            {
-                return;
-            }
-            final String Scam_name=""+this.tblCamp.getValueAt(row1, 1);
-            final String Sdesc=""+this.tblCamp.getValueAt(row1, 6);
+           if(con.isConnect())
+           {
+                
+                int rw=tblCamp.getSelectedRow();
+                int camp_id= Integer.parseInt(tblCamp.getValueAt(rw, 5).toString());
 
-           
+                int row=tblCustom.getSelectedRow();
+                
+                if(row>=0)
+                {
+                    int cus_id = Integer.parseInt((String)this.tblCustom.getValueAt(row, 1));
+                    if (selPhone.containsKey(cus_id)) {
+                        CallPhone = selPhone.get(cus_id);
+                    } else {
+
+                        CallPhone = this.tblCustom.getValueAt(row, 6).toString().split(",")[0];
 
 
-            Question_Camp quesF = new Question_Camp(camp_id,this,lb_agentid.getText(),SCall_id,Scam_name);
-            quesF.getTextCamp_Desc().setText(Sdesc);
+                    }
 
-            quesF.getlblGender().setText(SGender); 
-            quesF.getlblCus_id().setText(Scus_name);
-            quesF.getlblAddr().setText(SAddr);
-            quesF.getlblBirth().setText(SBirth);
-          
-            
-            quesF.setVisible(true);
-        }
+
+
+                    final String Scus_name=""+this.tblCustom.getValueAt(row,2);
+
+                    final String SGender=""+this.tblCustom.getValueAt(row,3);
+                    final String SAddr=""+this.tblCustom.getValueAt(row, 4);
+                    final String SBirth=""+this.tblCustom.getValueAt(row, 5);
+
+                    final String SCall_id=""+this.tblCustom.getValueAt(row, 10);
+
+                    int row1=tblCamp.getSelectedRow();
+                    if(row1 <0)
+                    {
+                        return;
+                    }
+                    final String Scam_name=""+this.tblCamp.getValueAt(row1, 1);
+                    final String Sdesc=""+this.tblCamp.getValueAt(row1, 6);
+
+
+                    
+
+                    Question_Camp quesF = new Question_Camp(camp_id,this,lb_agentid.getText(),SCall_id,Scam_name);
+                    quesF.getTextCamp_Desc().setText(Sdesc);
+                   // quesF.getTextCamp_Desc().setText(quesF.injectSql(Sdesc));
+                    quesF.getlblGender().setText(SGender); 
+                    quesF.getlblCus_id().setText(Scus_name);
+                    quesF.getlblAddr().setText(SAddr);
+                    quesF.getlblBirth().setText(SBirth);
+
+
+                    quesF.setVisible(true);
+                    
+                    /////
+                    
+
+                    String col6=""+this.tblCustom.getValueAt(row,6);
+                  
+                   
+
+
+                    for (int i=0; i<quesF.cbxStatus.getItemCount(); i++) {
+                         if (col6.toLowerCase().equals(quesF.cbxStatus.getItemAt(i).toString().toLowerCase())) {
+                             quesF.cbxStatus.setSelectedIndex(i); 
+                             int index = quesF.cbxStatus.getItemCount() - 1;
+                             JOptionPane.showMessageDialog(null , "jkasndk");
+                             if(quesF.cbxStatus.getSelectedIndex() == index){
+                             }
+                             else
+                             {
+                                quesF.cbxStatus.setVisible(false);
+                               
+                             }
+
+                             break;
+                         }
+                    }
+                }
+                  
+           }
+           con.closeConnect();
+    }catch(Exception e){}
    }
     public String GetStatus(String t)
     {
@@ -3396,58 +3486,67 @@ public class MainForm extends javax.swing.JFrame {
     int cus_id;
     private void comboBox()
     {
-        tblCustom.setDefaultEditor(Object.class, new TableCellEditor() {
-            JComboBox jcom = new JComboBox();
-            
-            @Override
-            public Component getTableCellEditorComponent(JTable jtable, Object va, boolean haf, 
-                                                        int row, int col) {
-                
-                cus_id = Integer.parseInt((String)tblCustom.getValueAt(row, 1));
-                String[] phones = tblCustom.getValueAt(row, col).toString().split(",");
-                jcom.setModel(new DefaultComboBoxModel(phones));
-                jcom.addItemListener(new ItemListener() {
+        try{
+            tblCustom.setDefaultEditor(Object.class, new TableCellEditor() {
+                JComboBox jcom = new JComboBox();
 
-                    @Override
-                    public void itemStateChanged(ItemEvent e) {
-                        if (e.getStateChange() == ItemEvent.SELECTED) {
-                            if (selPhone.containsKey(cus_id)) {
-                                selPhone.remove(cus_id);
+                @Override
+                public Component getTableCellEditorComponent(JTable jtable, Object va, boolean haf, 
+                                                            int row, int col) {
+
+                    cus_id = Integer.parseInt((String)tblCustom.getValueAt(row, 1));
+                    String d=(String)tblCustom.getValueAt(row, col);
+                    System.out.println("null 4 :"+ d);
+                    if(d!=null)
+                    {
+                        System.out.println("null 5 :"+ d);
+                        
+                        String[] phones = tblCustom.getValueAt(row, col).toString().split(",");
+                        jcom.setModel(new DefaultComboBoxModel(phones));
+                        jcom.addItemListener(new ItemListener() {
+
+                            @Override
+                            public void itemStateChanged(ItemEvent e) {
+                                if (e.getStateChange() == ItemEvent.SELECTED) {
+                                    if (selPhone.containsKey(cus_id)) {
+                                        selPhone.remove(cus_id);
+                                    }
+                                    selPhone.put(cus_id, (String)e.getItem());
+                                }
                             }
-                            selPhone.put(cus_id, (String)e.getItem());
-                        }
+                        });
                     }
-                });
+                    return jcom;
+                }
 
-                return jcom;
-            }
+                @Override
+                public Object getCellEditorValue() { return null; }
 
-            @Override
-            public Object getCellEditorValue() { return null; }
+                @Override
+                public boolean isCellEditable(EventObject eo) { return true; }
 
-            @Override
-            public boolean isCellEditable(EventObject eo) { return true; }
+                @Override
+                public boolean shouldSelectCell(EventObject eo) { return true; }
 
-            @Override
-            public boolean shouldSelectCell(EventObject eo) { return true; }
+                @Override
+                public boolean stopCellEditing() { 
+                    jcom.setEditable(false);
+                    jcom.setEnabled(false);
+                    jcom.setEnabled(true);
+                    return true;
+                }
 
-            @Override
-            public boolean stopCellEditing() { 
-                jcom.setEditable(false);
-                jcom.setEnabled(false);
-                jcom.setEnabled(true);
-                return true;
-            }
+                @Override
+                public void cancelCellEditing() {}
 
-            @Override
-            public void cancelCellEditing() {}
+                @Override
+                public void addCellEditorListener(CellEditorListener cl) {}
 
-            @Override
-            public void addCellEditorListener(CellEditorListener cl) {}
-
-            @Override
-            public void removeCellEditorListener(CellEditorListener cl) {}
-        });
+                @Override
+                public void removeCellEditorListener(CellEditorListener cl) {}
+            });
+        }catch(Exception e)
+        {}
     }
     
 
@@ -3460,13 +3559,15 @@ public class MainForm extends javax.swing.JFrame {
         webBrowser.setStatusBarVisible(true);
         try {
             webBrowser.setHTMLContent("<body onload='autoload()'>"
-                    + "<a id='autoload' href='file:///"+new File(".").getCanonicalPath()+"/src/org/asterisk/main/index3.html?diadiem="+ URLEncoder.encode(txt_add.getText()) +"'></a>"
+                    + "<a id='autoload' href='file:///"+new File(".").getCanonicalPath()+"/src/org/asterisk/browser/mycontext.html?diadiem="+ URLEncoder.encode(txt_add.getText()) +"'></a>"
+                 
+                   
                     + "</body>"
                     + "<script>function autoload() {"
                     + " var auto = document.getElementById('autoload');"
                     + " auto.click();"
                     + "}</script>");
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
         }
          

@@ -228,7 +228,7 @@ public class Agent implements Runnable{
                                 mainForm.lb_status.setText("Ringing...");
                                 mainForm.lb_callduration.setText("00:00:00");
                                 mainForm.btn_pause.setEnabled(false);       
-                                mainForm.btn_feedback.setEnabled(false);
+                               // mainForm.btn_feedback.setEnabled(false);
                                 mainForm.btn_update.setEnabled(false);
                                 mainForm.btn_hangup.setEnabled(true);     
                                 mainForm.btn_transfer.setEnabled(true);
@@ -288,6 +288,7 @@ public class Agent implements Runnable{
                                         System.out.println("callerNum: "+callerNum);
                                         System.out.println("not ready information");  
                                         mainForm.txt_mobile.setText(callerNum);
+                                       // mainForm.btn_feedback.setEnabled(false);
                                         mainForm.btn_new.setEnabled(true);
                                         mainForm.txt_add.setText("");                                    
                                         mainForm.txt_name.setText("");
@@ -311,7 +312,7 @@ public class Agent implements Runnable{
                         case CONNECTED://connected incoming call
                             System.out.println("CONNECTED incoming call");
                             mainForm.lb_status.setText("Busy");
-                            mainForm.btn_feedback.setEnabled(true);
+                            //mainForm.btn_feedback.setEnabled(true);
                             mainForm.btn_update.setEnabled(true);
                             clockDialin = new TimerClock(mainForm, true);
                             clockDialin.start();
@@ -427,7 +428,8 @@ public class Agent implements Runnable{
            // String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
              String colname[] = {"No","Date","Agent","Type","Categories","Content_type","Content","Solution","Result","Assign"};
 //            mainForm.table_report = null;
-             mainForm.table_report.getTableHeader().setReorderingAllowed(false);
+            mainForm.btn_feedback.setEnabled(true);
+            mainForm.table_report.getTableHeader().setReorderingAllowed(false);
             int count = colname.length;
             Vector col = new Vector(count);
             Vector row = new  Vector();

@@ -1,0 +1,297 @@
+<html>
+    <head> 
+		<title>Google Map</title>
+ <style type="text/css">
+   	html, body {
+	  height: 100%;
+	  margin: 0;
+	  padding: 1px;
+	  overflow:auto;
+	}
+	#addressBar{
+		padding:10px;
+		overflow: hidden;
+	}
+	#bounded {
+		border:1px solid;
+		overflow: hidden;
+	}
+	#btnHide{
+		position:absolute;
+		/*opacity:0.1;
+		filter:alpha(opacity=10);*/
+		background-image:url(../images/hideControl.png);
+		border: 2px solid ;
+		width:15px;
+		height:20px;
+	}
+	#btnHide:hover {
+		opacity:1.0;
+		filter:alpha(opacity=100); /* For IE8 and earlier */
+	}
+	#btnShow{
+		margin-left:20px;
+		height:30px;
+	}
+	#btnSearch{
+		width: 70px
+	}
+	#direction{
+		position:relative;
+		height: 100%;
+		float: left;
+		width: 0%;
+		
+		overflow:hidden;
+		
+	}
+	#direct_search_bar{
+		border-bottom:1px solid;
+		height: 100px;
+		width:0px;
+		background:#DDF8FF;
+		overflow:hidden;
+	}
+	
+	#directions_panel {
+		
+		padding-top:20px;
+		width:100%;
+		
+		overflow:scroll;
+	}
+	
+	
+	#FindAddress{
+		width:500px;
+		margin-left:50px;
+		height:30px;
+	}
+	#map_bound{
+		border-left:1px solid;
+		position:relative;
+		width:100%;
+		height:100%;
+	}
+	#map_canvas {
+		
+		width:100%;
+		height: 100%;
+		
+	}
+	.div1,.div2 {position:absolute;}
+	#btnShow_Direction_Bar{
+		
+		background:url(../images/displayControl.PNG);
+		border:2px solid;
+		width: 18px;
+		height:20px;
+		top: 0;
+		left: 0;
+		/*opacity:0.7;
+		filter:alpha(opacity=70); /* For IE8 and earlier */
+		z-index:1;
+	}
+	#btnShow_Direction_Bar:hover {
+		opacity:1.0;
+		filter:alpha(opacity=100); /* For IE8 and earlier */
+	}
+    </style>
+	
+	<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    
+  	<script src="jquery.min.js"> </script>
+ 
+    <script>
+		var firstRun=true;
+		var _REQUEST = {};
+		var geocoder;
+		var map;
+		var directionDisplay;
+		var directionsService = new google.maps.DirectionsService();
+		
+		$(document).ready(function() {
+			$("#bounded").height($("body").height() - $("#addressBar").height() -20);
+			$("#FindAddress").val(_REQUEST['diadiem']);
+			setTimeout(function() {
+				codeAddress();
+			}, 200);
+			document.getElementById("btnShow_Direction_Bar").title="Display Control Panel";
+			document.getElementById("btnHide").title="Hide Control Panel";
+			document.getElementById("start").title="Start Point";
+			document.getElementById("end").title="End Point";
+			
+		});
+
+
+		 
+	  function initialize() {
+			geocoder = new google.maps.Geocoder();
+				
+			directionsDisplay = new google.maps.DirectionsRenderer();
+			var mapOptions = {
+			  zoom: 5,
+			  center: new google.maps.LatLng(16.509833,107.314453),
+			  mapTypeId: google.maps.MapTypeId.ROADMAP,
+			  mapTypeControl: true,
+			  mapTypeControlOptions: {
+				  style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+				  position: google.maps.ControlPosition.TOP_RIGHT
+			  },
+			  panControl: true,
+			  panControlOptions: {
+				  position: google.maps.ControlPosition.LEFT_CENTER
+			  },
+			  zoomControl: true,
+			  zoomControlOptions: {
+				  style: google.maps.ZoomControlStyle.LARGE,
+				  position: google.maps.ControlPosition.LEFT_CENTER
+			  },
+			  scaleControl: true,
+			  scaleControlOptions: {
+				  position: google.maps.ControlPosition.BOTTOM_LEFT
+			  },
+			  streetViewControl: true,
+			  streetViewControlOptions: {
+				  position: google.maps.ControlPosition.LEFT_CENTER
+			  }
+			}
+			map = new google.maps.Map(document.getElementById('map_canvas'),
+										  mapOptions);
+			directionsDisplay.setMap(map);
+			directionsDisplay.setPanel(document.getElementById('directions_panel'));
+	
+      }
+	  /**/
+		function codeAddress() {
+			var address = document.getElementById("FindAddress").value;
+			
+			geocoder.geocode( { 'address': address}, function(results, status) {
+				  if (status == google.maps.GeocoderStatus.OK) {
+					map.setCenter(results[0].geometry.location);
+					map.setZoom(12);
+					var marker = new google.maps.Marker({
+						map: map,
+						position: results[0].geometry.location
+					});
+				  } else {
+					//alert("Geocode was not successful for the following reason: " + status);
+				  }
+			});
+			
+			
+		}
+		function showdirect_bar()
+		{
+			$("#panel").show();
+			show();
+			hide_btnShow_bar();
+			
+		}
+      function calcRoute() {
+        var start = document.getElementById('start').value;
+        var end = document.getElementById('end').value;
+        var request = {
+          origin: start,
+          destination: end,
+          travelMode: google.maps.DirectionsTravelMode.DRIVING
+        };
+        directionsService.route(request, function(response, status) {
+          if (status == google.maps.DirectionsStatus.OK) {
+            directionsDisplay.setDirections(response);
+          }
+        });
+		$("#panel").show();
+		show();	
+      }
+	  function show()
+	  {
+	  		var hide=$("#btnHide");
+			var map=$("#map_canvas");
+			var direct = $("#direction"); 
+			var direct_bar=$("#direct_search_bar");
+			var panel = $("#directions_panel"); 
+			direct.animate({width: "225px"});		
+			direct_bar.animate({width:"100%"});
+			panel.animate({width:"100%"});
+			$("#panel").height($("#bounded").height() - $("#direct_search_bar").height());
+			hide.animate({top: "0px"});
+			hide.animate({right:  "0px"});
+			map.animate({width: ($("#bounded").width()-230)+"px"});
+					
+	  }
+	  function hide()
+	  {
+			var map=$("#map_canvas");
+			var direct = $("#direction"); 
+			var direct_bar=$("#direct_search_bar");
+			var panel = $("#panel"); 
+			var btn=$("#btnShow_Direction_Bar");
+			direct.animate({width:"0%"});		
+			direct_bar.animate({width:"0%"});
+			panel.hide();
+			map.animate({width: ($("#bounded").width()-8)+"px"});
+			
+			btn.animate({width :"18px"});
+	  }
+	  function hide_btnShow_bar()
+	  {
+	  		var btn=$("#btnShow_Direction_Bar");
+			btn.animate({width :"0px"});
+	  }
+
+	function parseQuery() {
+		var url = document.URL;
+		var ind = url.indexOf("?");
+		
+		if (ind >= 0) {
+			var queryString = url.substr(ind+1) + "&";
+			
+			while ((ind = queryString.indexOf("&")) >= 0) {
+				var req = queryString.substr(0, ind);
+				queryString = queryString.substr(ind+1);
+				
+				if ((ind = req.indexOf("=")) >= 0) {
+					var key = req.substr(0,  ind);
+					var value = req.substr(ind+1);
+					
+					_REQUEST[decodeURIComponent(key)] = decodeURIComponent(value).replace(/\+/g, " ");
+				}
+			}
+		}
+}
+
+	
+	parseQuery();
+    </script>
+    </head>   
+     <body onLoad="initialize()">
+		 <div id="addressBar">
+				<strong><font size="+2">Address:</font></strong>
+				<input type="text" id="FindAddress" value="" style="width:70%" height="30px">
+				<input name="button" type="button" id="btnShow" onClick=" codeAddress()" value="GO" >
+				
+		</div>
+		<div id="bounded">
+			<div  id="direction">
+				<div id="direct_search_bar">
+					<div style="margin-top:15px">
+						<strong style="margin-left:10px; width:50px">Start:</strong><input type="text" id="start" value="" ><br>
+						<strong style="margin-left:10px; width:50px">End   :</strong><input type="text" id="end" value=""  ><br>
+					</div>
+					<div  align="right" style="margin-top:10px">
+						<input id="btnSearch" type="button" onClick="calcRoute();" value="search">
+						<div id="btnHide" onClick="hide()"></div>
+					</div>
+				</div>
+				<div id="panel" style="overflow:auto"> 
+					<div id="directions_panel"></div>
+				</div>
+			</div>
+			<div id="map_bound">
+				<div id='btnShow_Direction_Bar' class="div1" onClick=" showdirect_bar()"></div>
+				<div id="map_canvas" class="div2"></div>
+			</div>
+		</div>
+  </body>
+</html>
