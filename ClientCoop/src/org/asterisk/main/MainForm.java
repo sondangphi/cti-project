@@ -3178,11 +3178,11 @@ public class MainForm extends javax.swing.JFrame {
                 
                 if(con.isConnect()){
                     String sql="SELECT customer_id, name, gender, address, birthday, "
-                    + "GROUP_CONCAT(number)as number,status,id_status,detail_id,call_id "
+                    + " GROUP_CONCAT(number)as number,status,id_status,detail_id,call_id,note "
                     + " FROM ( "
                     + " SELECT c.id AS campaign_id,"
                     + " a.agent_id AS agent_id, a.agentname AS agent_name, "
-                    + " k.camp_detail_id AS detail_id,k.id as call_id, "
+                    + " k.camp_detail_id AS detail_id,k.id as call_id,k.note as note, "
                     + " i.id AS customer_id, i.name AS name, i.gender AS gender, i.address AS address, i.birthday AS birthday,"
                     + " p.number AS number,s.desc AS status, s.id AS id_status"
                     + " FROM (((((("
@@ -3204,7 +3204,7 @@ public class MainForm extends javax.swing.JFrame {
                  
                    tblCustom.getTableHeader().setReorderingAllowed(false);
                    String strHeader[]={"Number","Customer id","Name","Gender","Address",
-                       "Birthday","Phone","Status","id_s","detail_id","call id"};
+                       "Birthday","Phone","Status","id_s","detail_id","call id","note"};
                     final DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
                     {
 
@@ -3247,6 +3247,7 @@ public class MainForm extends javax.swing.JFrame {
                         rowdata.add(result.getString("id_status"));
                         rowdata.add(result.getString("detail_id"));                 //9
                         rowdata.add(result.getString("call_id"));
+                        rowdata.add(result.getString("note"));                      //11
                        
                         if(Integer.parseInt((String)rowdata.get(8)) == 6)       //hoan thanh
                         {
@@ -3355,6 +3356,14 @@ public class MainForm extends javax.swing.JFrame {
                             column.setMaxWidth(0);
 
                         }
+                         else if(k==11)
+                        {
+                           
+                            column.setWidth(0);
+                            column.setMinWidth(0);
+                            column.setMaxWidth(0);
+
+                        }
                         else {
                             column.setPreferredWidth(100);
 
@@ -3451,25 +3460,17 @@ public class MainForm extends javax.swing.JFrame {
                     /////
                     
 
-                    String col6=""+this.tblCustom.getValueAt(row,6);
-                  
+                    String col7=""+this.tblCustom.getValueAt(row,7);
+                    String col11=""+this.tblCustom.getValueAt(row,11);
+                    quesF.txtNote.setText(col11); 
+                    
                    
 
 
                     for (int i=0; i<quesF.cbxStatus.getItemCount(); i++) {
-                         if (col6.toLowerCase().equals(quesF.cbxStatus.getItemAt(i).toString().toLowerCase())) {
+                         if (col7.toLowerCase().equals(quesF.cbxStatus.getItemAt(i).toString().toLowerCase())) {
                              quesF.cbxStatus.setSelectedIndex(i); 
-                             int index = quesF.cbxStatus.getItemCount() - 1;
-                             JOptionPane.showMessageDialog(null , "jkasndk");
-                             if(quesF.cbxStatus.getSelectedIndex() == index){
-                             }
-                             else
-                             {
-                                quesF.cbxStatus.setVisible(false);
-                               
-                             }
-
-                             break;
+                            
                          }
                     }
                 }

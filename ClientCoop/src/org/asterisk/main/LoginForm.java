@@ -247,8 +247,8 @@ public class LoginForm extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tx_ifaceKeyPressed(evt);
             }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                tx_ifaceKeyTyped(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tx_ifaceKeyReleased(evt);
             }
         });
 
@@ -640,10 +640,6 @@ public class LoginForm extends javax.swing.JFrame {
         System.out.println("focus");
     }//GEN-LAST:event_lb_optionFocusGained
 
-    private void tx_ifaceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_ifaceKeyTyped
-      tx_iface.setText(tx_agent.getText().replaceAll("[^\\d]", ""));
-    }//GEN-LAST:event_tx_ifaceKeyTyped
-
     private void tx_agentKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_agentKeyReleased
         tx_agent.setText(tx_agent.getText().replaceAll("[^\\w_./\\\\-]", ""));
     }//GEN-LAST:event_tx_agentKeyReleased
@@ -651,6 +647,10 @@ public class LoginForm extends javax.swing.JFrame {
     private void pwdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pwdKeyReleased
        pwd.setText(pwd.getText().replaceAll("[^\\w]", ""));
     }//GEN-LAST:event_pwdKeyReleased
+
+    private void tx_ifaceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_ifaceKeyReleased
+        tx_iface.setText(tx_iface.getText().replaceAll("[^\\d]", ""));
+    }//GEN-LAST:event_tx_ifaceKeyReleased
 
     /**
      * @param args the command line arguments

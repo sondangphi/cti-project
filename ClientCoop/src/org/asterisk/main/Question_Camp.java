@@ -375,7 +375,7 @@ public class Question_Camp extends javax.swing.JDialog {
              if(con.isConnect())
              {
                 ResultSet result=null;
-                String sql1="SELECT * FROM _question_result WHERE call_id='"+ title_call+"' AND ";
+                String sql1="SELECT * FROM _question_result WHERE call_id='"+ title_call+"'";
                 result=con.executeQuery(sql1);
                 
                 if (result.next()) {
@@ -428,16 +428,13 @@ public class Question_Camp extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(null,"Update2 Note successful");
 
                      }
-                    
-                   
-                   
-                    
-                   
                      
                 }
             }
             con.closeConnect();
-        } catch (Exception ex) {}
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
         
         own.showCustomer();
         own.setEnabled(true);
