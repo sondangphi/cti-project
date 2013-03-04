@@ -433,7 +433,7 @@ public class Question_Camp extends javax.swing.JDialog {
             }
             con.closeConnect();
         } catch (Exception ex) {
-            System.out.println(ex);
+            //System.out.println(ex);
         }
         
         own.showCustomer();
