@@ -6,10 +6,14 @@ package org.asterisk.main;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.JDialog;
 import javax.swing.JList;
 import javax.swing.JRootPane;
 import javax.swing.ListSelectionModel;
@@ -65,8 +69,32 @@ public class TransferForm extends javax.swing.JFrame implements AsteriskQueueLis
         }catch(Exception ex){
         }        
     }
-    public TransferForm(Agent agent, AgentObject agentOb, MainForm main) {
+    public TransferForm(Agent agent, AgentObject agentOb, final MainForm main) {
+       final Thread thr = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(main.isVisible()) {
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException ex) { break; }
+                }
+                
+                TransferForm.this.dispose();
+            }
+        });
+        thr.start();
+        
+        this.addWindowListener(new WindowAdapter() {
+
+            @Override
+            public void windowClosed(WindowEvent we) {
+                thr.interrupt();
+                super.windowClosed(we);
+            }
+        });
+        
         initComponents();
+        
         try{
             agentClient = agent;
             agentObject = agentOb;

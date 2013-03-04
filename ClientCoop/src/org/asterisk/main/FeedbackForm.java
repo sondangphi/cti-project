@@ -14,14 +14,25 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.Authenticator;
+import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import org.asterisk.model.AgentObject;
 import org.asterisk.utility.Agent;
 import org.asterisk.utility.ConnectDatabase;
 import org.asterisk.utility.Utility;
+import org.omg.PortableServer.THREAD_POLICY_ID;
 
 /**
  *
@@ -64,14 +75,16 @@ public class FeedbackForm extends javax.swing.JDialog {
             cb_content_type.setEnabled(true);
             
             Image image = Toolkit.getDefaultToolkit().getImage("images/icon_feedback.gif");
-            this.setIconImage(image);            
+            this.setIconImage(image); 
+            showComboBox();
+            System.out.println("message : 2");
         }catch(Exception e){
         }                
     }
     
     public FeedbackForm(final MainForm m, AgentObject agent, Agent agentc) {
         super(m);
-        initComponents();        
+        initComponents();
         
         m.setEnabled(false);
         this.addWindowListener(new WindowAdapter() {
@@ -91,6 +104,7 @@ public class FeedbackForm extends javax.swing.JDialog {
             mainform2 = m;
             lbl_Name.setText(agentclient.customer.getName());
             lb_mobile.setText(agentclient.customer.getPhone());
+            System.out.println("message : 1");
             Mysql_dbname = uti.readInfor(filename, "MySql_database");
             Mysql_server = uti.readInfor(filename, "MySql_server");
             Mysql_user = uti.readInfor(filename, "MySql_user");
@@ -100,7 +114,7 @@ public class FeedbackForm extends javax.swing.JDialog {
             Color white = new Color(255,255,255);
             this.getContentPane().setBackground(LightSkyBlue2);
             jPanel8.setBackground(LightSkyBlue2);
-            
+
             cb_result.setBackground(white);
             cb_feedback_type.setBackground(white);
             cb_catlogies.setBackground(white);
@@ -116,6 +130,7 @@ public class FeedbackForm extends javax.swing.JDialog {
          
              
         }catch(Exception e){
+            System.out.println("message : "+e.getMessage());
         }
         
     }
@@ -238,6 +253,12 @@ public class FeedbackForm extends javax.swing.JDialog {
 
         txtAsTo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         txtAsTo.setText("Assign To :");
+
+        cb_assign.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cb_assignItemStateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -389,7 +410,7 @@ public class FeedbackForm extends javax.swing.JDialog {
             if(con.isConnect()){
                 System.out.println("begin write feedback!");
                 String name = lbl_Name.getText();
-                String mobile = lb_mobile.getText();
+                final String mobile = lb_mobile.getText();
                 String type = (String)cb_feedback_type.getItemAt(cb_feedback_type.getSelectedIndex());
                 String categories= (String)cb_catlogies.getItemAt(cb_catlogies.getSelectedIndex());
                 String content_type= (String)cb_content_type.getItemAt(cb_content_type.getSelectedIndex());
@@ -421,6 +442,32 @@ public class FeedbackForm extends javax.swing.JDialog {
                                      +agentObject.getAgentId()+"','"+type+"','"
                                      +categories+"','"+content_type+"','"+content+"','"+solution+"','"+result+"', '"+assign+"')";
                 con.executeUpdate(sql);
+         
+                
+              
+                final String email=cb_assign.getSelectedItem().toString();
+                
+                final String smtpServer="smtp.gmail.com";
+                final String from="callcenter.testing11@gmail.com";
+              
+                final String to=getEmail(email);
+                
+                System.out.println(to);
+               
+                final String subject="Feedback";
+                final String body="Agent : "+agentObject.getAgentId()+"\n"+
+                        "Name Customer : "+name+"\n"+
+                            "Phone : "+mobile+"\n"+
+                            "Feedback type : "+type+"\n"+
+                            "Catelogies : "+categories+"\n"+
+                            "Content_type : "+content_type+"\n"+
+                            "Content : "+content+"\n"+
+                            "Solution : "+solution+"\n" ;
+              
+           //     final String body="hajsdgajhgda";
+                final String password="callcentertesting";
+//                System.out.println(password);
+                 
                //waiting
                 wait_form=new waitingForm(this);
                 wait_form.setVisible(true);
@@ -431,30 +478,43 @@ public class FeedbackForm extends javax.swing.JDialog {
                     public void run() {
                         try {
                             Thread.sleep(2000);
+                            send(smtpServer, to, from, password, subject, body);
+                            System.out.println("Finish!");
+           
                             wait_form.dispose();
                             
                             FeedbackForm.this.dispose();
                             JOptionPane.showMessageDialog(null, "save successful");
-
-                        } catch (InterruptedException ex) {
+                            //reload table
+                            ConnectDatabase con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+                            String query = "SELECT f.*,a.name as `a_name`,a.email FROM feedback_history f LEFT OUTER JOIN feedback_assign a ON f.assign=a.id"
+                                                + " WHERE mobile = '"+mobile+"'";
+                            ResultSet rs = con.executeQuery(query);
+                            if(rs != null)
+                                 agentclient.displayHistory(rs);  
+              
+                            con.closeConnect();
+                        } catch (Exception ex) {
                             Logger.getLogger(FeedbackForm.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }).start();
                
                 
-                //refload table
-                  String query = "SELECT f.*,a.name as `a_name`,a.email FROM feedback_history f LEFT OUTER JOIN feedback_assign a ON f.assign=a.id"
-                                                + " WHERE mobile = '"+mobile+"'";
-                ResultSet rs = con.executeQuery(query);
-                 if(rs != null)
-                     agentclient.displayHistory(rs); 
+                
             }
             con.closeConnect();
                       
         }catch(Exception e){
         }
     }//GEN-LAST:event_btn_saveActionPerformed
+
+    private void cb_assignItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_assignItemStateChanged
+        String email=cb_assign.getSelectedItem().toString();
+      
+        System.out.println("email: "+getEmail(email));
+                
+    }//GEN-LAST:event_cb_assignItemStateChanged
     
     public String getEmail(String name)
     {
@@ -550,6 +610,44 @@ public class FeedbackForm extends javax.swing.JDialog {
         } catch (Exception ex) {
             Logger.getLogger(FeedbackForm.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+     public static void send(final String smtpServer, final String to,final String from,final String psw,
+                                final String subject,final String body) throws Exception{
+        // java.security.Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+            Properties props = System.getProperties();
+            // –
+            props.put("mail.smtp.host", smtpServer);
+            props.put("mail.smtp.port", "587");
+            props.put("mail.smtp.starttls.enable","true");
+            final String login = from;
+            final String pwd = psw;
+            Authenticator pa = null;
+            if (login != null && pwd != null) {
+                props.put("mail.smtp.auth", "true");
+                pa = new Authenticator (){
+                    public PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(login, pwd);
+                    }
+                };
+            }//else: no authentication
+            Session session = Session.getInstance(props, pa);
+            // — Create a new message –
+            Message msg = new MimeMessage(session);
+            // — Set the FROM and TO fields –
+            msg.setFrom(new InternetAddress(from));
+            
+            msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to, false));           
+           // — Set the subject and body text –
+            msg.setSubject(subject);
+            msg.setText(body);
+            // — Set some other header information –
+            msg.setHeader("X-Mailer", "LOTONtechEmail");
+            msg.setSentDate(new Date());
+            msg.saveChanges();
+            // — Send the message –
+            Transport.send(msg);
+            System.out.println("Message sent OK.");
+
     }
     /**
      * @param args the command line arguments
