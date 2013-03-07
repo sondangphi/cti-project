@@ -399,7 +399,9 @@ public class Agent implements Runnable{
                             
                         case CHAT:
                             System.err.println(command);
-                            mainForm.messageform.receive(cmdList.get(1), cmdList.get(2));
+                            if (MainForm.messageform != null) {
+                                MainForm.messageform.receive(cmdList.get(1), cmdList.get(2));
+                            }
                             
                             break;                                                            
                         default: 
