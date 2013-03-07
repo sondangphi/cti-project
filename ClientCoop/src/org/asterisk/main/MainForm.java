@@ -111,6 +111,7 @@ public class MainForm extends javax.swing.JFrame {
     private  String Mysql_pwd  = "callcenter"; 
     private ConnectDatabase con;
     public static FeedbackForm feedback;
+    public static MessageForm messageform;
     private String CallPhone;
     private JComboBox out;
    
@@ -232,6 +233,7 @@ public class MainForm extends javax.swing.JFrame {
         lb_logintime = new javax.swing.JLabel();
         btn_pause = new javax.swing.JToggleButton();
         btn_transfer = new javax.swing.JButton();
+        btnChat = new javax.swing.JButton();
         main_tab = new javax.swing.JTabbedPane();
         Panel1 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -408,6 +410,14 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
+        btnChat.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        btnChat.setText("CHAT");
+        btnChat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnChatActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -418,7 +428,9 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(49, 49, 49)
                 .addComponent(btn_transfer, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 301, Short.MAX_VALUE)
+                .addGap(42, 42, 42)
+                .addComponent(btnChat, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lb_logintime, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -435,6 +447,7 @@ public class MainForm extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnChat, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(0, 11, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1117,7 +1130,7 @@ public class MainForm extends javax.swing.JFrame {
 
         main_tab.addTab("Co.op Systems", jPanel3);
 
-        btnDial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/btn_dial.png"))); // NOI18N
+        btnDial.setText("Dial");
         btnDial.setEnabled(false);
         btnDial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1195,12 +1208,12 @@ public class MainForm extends javax.swing.JFrame {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnDial, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDial, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
                     .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -2850,7 +2863,13 @@ public class MainForm extends javax.swing.JFrame {
     private void table_reportKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_table_reportKeyReleased
        btnViewFB.setEnabled(true);
     }//GEN-LAST:event_table_reportKeyReleased
-   
+
+
+    private void btnChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChatActionPerformed
+       messageform=new MessageForm(agentObject.getAgentId(), agentClient);
+       messageform.setVisible(true);
+    }//GEN-LAST:event_btnChatActionPerformed
+
     public void setAllEnable(boolean flag){
         Component comNumber [] = panel_number.getComponents();
         for(Component com : comNumber){
@@ -3632,6 +3651,7 @@ public class MainForm extends javax.swing.JFrame {
     public javax.swing.JMenuItem MenuItem_logout;
     private javax.swing.JMenuItem MenuItem_setting;
     private javax.swing.JPanel Panel1;
+    private javax.swing.JButton btnChat;
     private javax.swing.JButton btnChooseEnd;
     private javax.swing.JButton btnChooseStart;
     private javax.swing.JButton btnClearCoop;
