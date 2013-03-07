@@ -4,16 +4,12 @@
  */
 package org.asterisk.main;
 
-import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.IOException;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
@@ -22,16 +18,15 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
-import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import nttnetworks.com.controls.IPanelTabEvent;
 import nttnetworks.com.controls.panelTab;
 import org.asterisk.utility.Agent;
 import org.asterisk.utility.ConnectDatabase;
+import org.asterisk.utility.Utility;
 
 /**
  *
@@ -46,9 +41,10 @@ public class MessageForm extends javax.swing.JFrame {
     private  String Mysql_dbname = "ast_callcenter";
     private  String Mysql_user = "callcenter";
     private  String Mysql_pwd  = "callcenter"; 
+     private static Utility uti;
     private ConnectDatabase con;
     private Agent agentClient;
-   private panelTab tab;
+   
    public static MainForm mainform = null ;
    
    public void receive(String from, String message) {
@@ -59,18 +55,36 @@ public class MessageForm extends javax.swing.JFrame {
    }
    
     public MessageForm() {
-        initComponents();
-        jTabbedPane1.setTabPlacement(3);
-        showAgent();
+        try {
+            initComponents();
+            uti = new Utility();
+            Mysql_dbname = uti.readInfor(filename, "MySql_database");
+            Mysql_server = uti.readInfor(filename, "MySql_server");
+            Mysql_user = uti.readInfor(filename, "MySql_user");
+            Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
+            jTabbedPane1.setTabPlacement(3);
+            showAgent();
+        } catch (Exception ex) {
+            Logger.getLogger(MessageForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
       
         
     }
     public MessageForm(String Agent_loged, Agent agentClient) {
-        initComponents();
-        jTabbedPane1.setTabPlacement(3);
-        showAgent();
-        this.Agent_loged = Agent_loged;
-        this.agentClient = agentClient;
+        try {
+            initComponents();
+            uti = new Utility();
+            Mysql_dbname = uti.readInfor(filename, "MySql_database");
+            Mysql_server = uti.readInfor(filename, "MySql_server");
+            Mysql_user = uti.readInfor(filename, "MySql_user");
+            Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
+            jTabbedPane1.setTabPlacement(3);
+            showAgent();
+            this.Agent_loged = Agent_loged;
+            this.agentClient = agentClient;
+        } catch (Exception ex) {
+            Logger.getLogger(MessageForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -121,6 +135,11 @@ public class MessageForm extends javax.swing.JFrame {
         jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTable1MouseClicked(evt);
+            }
+        });
+        jTable1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                jTable1KeyReleased(evt);
             }
         });
         jScrollPane2.setViewportView(jTable1);
@@ -182,7 +201,8 @@ public class MessageForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jCheckBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBox1MouseClicked
-          if(jCheckBox1.isSelected())
+         
+        if(jCheckBox1.isSelected())
         {
              showAgentOnline();
         }
@@ -205,6 +225,12 @@ public class MessageForm extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
        dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jTable1KeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyReleased
+        if(evt.getKeyCode() == 10){
+          show_chat(); 
+        }
+    }//GEN-LAST:event_jTable1KeyReleased
 /////////////popup
     class PopupListener extends MouseAdapter {
         JPopupMenu popup; 
@@ -254,38 +280,52 @@ public class MessageForm extends javax.swing.JFrame {
     ////////////////////////////
     private void show_chat()
     {
-        int row=jTable1.getSelectedRow();
-        final String col1=""+jTable1.getValueAt(row,1); 
-        for(int i=0;i<jTabbedPane1.getTabCount();i++)
-        {
-            if(jTabbedPane1.getTitleAt(i).equals(col1))
+          try {
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+
+            if(con.isConnect())
             {
-                jTabbedPane1.setSelectedIndex(i);
-                return;
+                int row=jTable1.getSelectedRow();
+                final String col1=""+jTable1.getValueAt(row,1); 
+                for(int i=0;i<jTabbedPane1.getTabCount();i++)
+                {
+                    if(jTabbedPane1.getTitleAt(i).equals(col1))
+                    {
+                        jTabbedPane1.setSelectedIndex(i);
+                        return;
+                    }
+
+                }
+
+
+                final panelTab tab=new panelTab();
+                tab.events = new IPanelTabEvent() {
+                    @Override
+                    public void send() {
+                        try {
+                            if("".equals(tab.getText())){
+                                //send
+                                agentClient.sendtoServer("120@"+Agent_loged+"@"+col1+"@"+tab.getText());
+                                tab.showMessage(Agent_loged, tab.getText());
+                                tab.send();
+                            }
+                        } catch (Exception ex) {}
+                    }
+                };
+
+                jTabbedPane1.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+                jTabbedPane1.addTab(col1, tab);
+                int display=jTabbedPane1.getTabCount()-1;
+                jTabbedPane1.setSelectedIndex(display);
+
+               mapAgent.put(col1, tab);
             }
-         
+            con.closeConnect();
         }
-        
-        
-        final panelTab tab=new panelTab();
-        tab.events = new IPanelTabEvent() {
-            @Override
-            public void send() {
-                try {
-                    //send
-                    agentClient.sendtoServer("120@"+Agent_loged+"@"+col1+"@"+tab.getText());
-                    tab.showMessage(Agent_loged, tab.getText());
-                    tab.send();
-                } catch (Exception ex) {}
-            }
-        };
-        
-        jTabbedPane1.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        jTabbedPane1.addTab(col1, tab);
-        int display=jTabbedPane1.getTabCount()-1;
-        jTabbedPane1.setSelectedIndex(display);
-        
-       mapAgent.put(col1, tab);
+        catch(Exception e)
+        {
+
+        }
     }
     private void showAgent()
     {
@@ -301,7 +341,7 @@ public class MessageForm extends javax.swing.JFrame {
 //                                        + " ON s.`agent_id`=l.`agent_id` WHERE role='2'";
                 result = con.executeQuery(sql);
                 jTable1.getTableHeader().setReorderingAllowed(false);
-                String strHeader[]={"","","","status"};
+                String strHeader[]={"","","",""};
                 DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
                 {
                     @Override
@@ -404,8 +444,8 @@ public class MessageForm extends javax.swing.JFrame {
 //                
                result = con.executeQuery(sql);
                jTable1.getTableHeader().setReorderingAllowed(false);
-//                String strHeader[]={"agent_id","interface","queue"};
-                String strHeader[]={"agent_id","",""};
+
+                String strHeader[]={"","",""};
                 DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
                 {
 
@@ -425,9 +465,7 @@ public class MessageForm extends javax.swing.JFrame {
                     Vector rowdata = new Vector();
                     rowdata.add(Integer.toString(i));
                     rowdata.add(agent);
-                    rowdata.add(showOnline);
-//                    rowdata.add(queue);
-//                    
+                    rowdata.add(showOnline);    
                     dt.addRow(rowdata);
                     
                 }
