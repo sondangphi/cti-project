@@ -52,9 +52,9 @@ public class MessageForm extends javax.swing.JFrame {
    public static MainForm mainform = null ;
    
    public void receive(String from, String message) {
-       panelTab tab = mapAgent.get(from);
-       if (tab != null) {
-            tab.showMessage(from, message);
+       panelTab tabs = mapAgent.get(from);
+       if (tabs != null) {
+            tabs.showMessage(from, message);
        }
    }
    
@@ -69,7 +69,6 @@ public class MessageForm extends javax.swing.JFrame {
         initComponents();
         jTabbedPane1.setTabPlacement(3);
         showAgent();
-        //createPopupMenu();
         this.Agent_loged = Agent_loged;
         this.agentClient = agentClient;
     }
@@ -277,7 +276,7 @@ public class MessageForm extends javax.swing.JFrame {
                     agentClient.sendtoServer("120@"+Agent_loged+"@"+col1+"@"+tab.getText());
                     tab.showMessage(Agent_loged, tab.getText());
                     tab.send();
-                } catch (IOException ex) {}
+                } catch (Exception ex) {}
             }
         };
         

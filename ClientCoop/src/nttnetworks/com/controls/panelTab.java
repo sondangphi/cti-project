@@ -18,11 +18,7 @@ public class panelTab extends javax.swing.JPanel {
     }
 
     public void showMessage(String name, String message) {
-       if( "".equals(jTextField1.getText()))
-        {
-            
-        }
-        else{
+       if(!"".equals(message)){
               jTextArea1.setText(
                 jTextArea1.getText() + "\r\n" + name + ": " + message);
         }
