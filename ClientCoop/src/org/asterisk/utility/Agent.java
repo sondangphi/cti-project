@@ -395,8 +395,14 @@ public class Agent implements Runnable{
                                     } catch (Exception ex) { }  
                                 }
                             });
-                            keep_alive.start();                        
-                        break;                                                            
+                            keep_alive.start();      
+                            break;
+                            
+                        case CHAT:
+                            System.err.println(command);
+                            mainForm.messageform.receive(cmdList.get(1), cmdList.get(2));
+                            
+                            break;                                                            
                         default: 
                             System.out.println("default values from server\t"+command);
                         break;
@@ -589,6 +595,6 @@ public class Agent implements Runnable{
             CHANGEPWD,CHANGEPWDFAIL,
             RINGING,RINGNOANWSER,CONNECTED, COMPLETED,HANGUPABANDON,HANGUPFAIL,
             DIALOUT,CONNECTEDDIALOUT,HANGUPDIALOUT,HANGUPSUCCESS,
-            PING,
+            PING,CHAT
 	}
 }

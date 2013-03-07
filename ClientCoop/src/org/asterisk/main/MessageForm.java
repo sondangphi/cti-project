@@ -11,11 +11,14 @@ import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.JMenuItem;
@@ -27,13 +30,14 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import nttnetworks.com.controls.IPanelTabEvent;
 import nttnetworks.com.controls.panelTab;
+import org.asterisk.utility.Agent;
 import org.asterisk.utility.ConnectDatabase;
 
 /**
  *
  * @author PHUONGTRANG
  */
-public class ChatForm extends javax.swing.JFrame {
+public class MessageForm extends javax.swing.JFrame {
 
     private String Agent_loged = "unknown";
     private HashMap <String,panelTab> mapAgent=new HashMap<>();
@@ -43,21 +47,31 @@ public class ChatForm extends javax.swing.JFrame {
     private  String Mysql_user = "callcenter";
     private  String Mysql_pwd  = "callcenter"; 
     private ConnectDatabase con;
+    private Agent agentClient;
    private panelTab tab;
    public static MainForm mainform = null ;
-    public ChatForm() {
+   
+   public void receive(String from, String message) {
+       panelTab tab = mapAgent.get(from);
+       if (tab != null) {
+            tab.showMessage(from, message);
+       }
+   }
+   
+    public MessageForm() {
         initComponents();
         jTabbedPane1.setTabPlacement(3);
         showAgent();
-        //createPopupMenu();
+      
         
     }
-    public ChatForm(String Agent_loged) {
+    public MessageForm(String Agent_loged, Agent agentClient) {
         initComponents();
         jTabbedPane1.setTabPlacement(3);
         showAgent();
         //createPopupMenu();
         this.Agent_loged = Agent_loged;
+        this.agentClient = agentClient;
     }
 
     /**
@@ -70,24 +84,16 @@ public class ChatForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        btnAddTab = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jCheckBox1 = new javax.swing.JCheckBox();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTabbedPane1MouseClicked(evt);
-            }
-        });
-
-        btnAddTab.setText("Add Tab");
-        btnAddTab.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnAddTabActionPerformed(evt);
             }
         });
 
@@ -134,14 +140,12 @@ public class ChatForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(0, 22, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 109, Short.MAX_VALUE)
                         .addComponent(jCheckBox1)
-                        .addGap(26, 26, 26)
-                        .addComponent(jButton2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAddTab)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton2)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12))
@@ -157,7 +161,6 @@ public class ChatForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton2)
-                            .addComponent(btnAddTab)
                             .addComponent(jCheckBox1))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -165,24 +168,16 @@ public class ChatForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnAddTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTabActionPerformed
-        
-       
-    }//GEN-LAST:event_btnAddTabActionPerformed
-
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         int i=jTable1.getSelectedRow();
-        if(i>0)
+        if(i>=0)
         {
             createPopupMenu();
             if(evt.getClickCount()==2)
             {
                 show_chat(); 
             }
-            else
-            {
-               // 
-            }
+          
         }
 
     }//GEN-LAST:event_jTable1MouseClicked
@@ -277,9 +272,12 @@ public class ChatForm extends javax.swing.JFrame {
         tab.events = new IPanelTabEvent() {
             @Override
             public void send() {
-                //send
-                tab.showMessage(Agent_loged, tab.getText());
-                tab.send();
+                try {
+                    //send
+                    agentClient.sendtoServer("120@"+Agent_loged+"@"+col1+"@"+tab.getText());
+                    tab.showMessage(Agent_loged, tab.getText());
+                    tab.send();
+                } catch (IOException ex) {}
             }
         };
         
@@ -299,7 +297,8 @@ public class ChatForm extends javax.swing.JFrame {
             if(con.isConnect())
             {
                 ResultSet result=null;
-                String sql="SELECT * FROM `agent_status`";
+                String sql="SELECT * FROM `agent_status` AS s LEFT JOIN `agent_login` AS l"
+                                        + " ON s.`agent_id`=l.`agent_id` WHERE role='2'";
                 result = con.executeQuery(sql);
                 jTable1.getTableHeader().setReorderingAllowed(false);
                 String strHeader[]={"","","","status"};
@@ -399,7 +398,9 @@ public class ChatForm extends javax.swing.JFrame {
            
             
            
-                String sql="SELECT * FROM `agent_status` WHERE  `interface`<> '0' AND `queue`<>'0'";
+                String sql="SELECT * FROM `agent_status` AS s LEFT JOIN `agent_login` AS l "
+                        + "ON s.`agent_id`=l.`agent_id` "
+                        + "WHERE  `interface`<> '0' AND `queue`<>'0' AND role='2'";
                 
                result = con.executeQuery(sql);
                jTable1.getTableHeader().setReorderingAllowed(false);
@@ -450,42 +451,8 @@ public class ChatForm extends javax.swing.JFrame {
         }
                 
     }
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ChatForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ChatForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ChatForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ChatForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ChatForm().setVisible(true);
-            }
-        });
-    }
+ 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnAddTab;
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JScrollPane jScrollPane2;
