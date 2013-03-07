@@ -389,9 +389,8 @@ public class Agent implements Runnable{
                                 public void run() {
                                     try {
                                         Thread.sleep(10000);                                   
-                                        if(agentLogout()){
-                                        }else{
-                                        }
+                                        agentLogout();
+                                        keep_alive.stop();
                                     } catch (Exception ex) { }  
                                 }
                             });
@@ -513,9 +512,9 @@ public class Agent implements Runnable{
                         mainForm.dispose();
                         mainForm = null;
                         close = false;
-                        worktime.stop();                            
-                        closeConnect();  
-                        new LoginForm().setVisible(true);                
+                        worktime.stop();                                                      
+                        new LoginForm().setVisible(true);           
+                        closeConnect();
                     }catch(Exception e){
                         System.out.println("agentLogout: "+e);
                         return false;
@@ -554,8 +553,8 @@ public class Agent implements Runnable{
 	public void closeConnect()throws Exception{
             try{
                 System.out.println("start close session");
-                if(clientSocket != null){
-                    running = false;
+                running = false;
+                if(clientSocket != null){                    
                     clientSocket.close(); 
                     System.out.println("close socket");                    
                 }                                       
