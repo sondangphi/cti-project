@@ -4,10 +4,28 @@
  */
 package org.asterisk.main;
 
+import com.sun.org.apache.xalan.internal.xsltc.runtime.Hashtable;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import nttnetworks.com.controls.IPanelTabEvent;
 import nttnetworks.com.controls.panelTab;
 import org.asterisk.utility.ConnectDatabase;
 
@@ -17,17 +35,29 @@ import org.asterisk.utility.ConnectDatabase;
  */
 public class ChatForm extends javax.swing.JFrame {
 
-   private  String filename = "infor.properties";
+    private String Agent_loged = "unknown";
+    private HashMap <String,panelTab> mapAgent=new HashMap<>();
+    private  String filename = "infor.properties";
     private  String Mysql_server = "172.168.10.202";      
     private  String Mysql_dbname = "ast_callcenter";
     private  String Mysql_user = "callcenter";
     private  String Mysql_pwd  = "callcenter"; 
     private ConnectDatabase con;
+   private panelTab tab;
+   public static MainForm mainform = null ;
     public ChatForm() {
         initComponents();
         jTabbedPane1.setTabPlacement(3);
-       
+        showAgent();
+        //createPopupMenu();
         
+    }
+    public ChatForm(String Agent_loged) {
+        initComponents();
+        jTabbedPane1.setTabPlacement(3);
+        showAgent();
+        //createPopupMenu();
+        this.Agent_loged = Agent_loged;
     }
 
     /**
@@ -40,32 +70,33 @@ public class ChatForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
-        panelTab1 = new nttnetworks.com.controls.panelTab();
-        jButton1 = new javax.swing.JButton();
+        btnAddTab = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
+        jCheckBox1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTabbedPane1.addTab("tab1", panelTab1);
+        jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTabbedPane1MouseClicked(evt);
+            }
+        });
 
-        jButton1.setText("Add Tab");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnAddTab.setText("Add Tab");
+        btnAddTab.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnAddTabActionPerformed(evt);
             }
         });
 
         jButton2.setText("Cancel");
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setRows(5);
-        jTextArea1.setWrapStyleWord(true);
-        jScrollPane1.setViewportView(jTextArea1);
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -78,29 +109,42 @@ public class ChatForm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.setShowHorizontalLines(false);
+        jTable1.setShowVerticalLines(false);
+        jTable1.getTableHeader().setResizingAllowed(false);
+        jTable1.getTableHeader().setReorderingAllowed(false);
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(jTable1);
+
+        jCheckBox1.setText("Show online");
+        jCheckBox1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jCheckBox1MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(0, 22, Short.MAX_VALUE)
+                        .addComponent(jCheckBox1)
+                        .addGap(26, 26, 26)
                         .addComponent(jButton2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnAddTab)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(12, 12, 12))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2)
-                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,44 +153,258 @@ public class ChatForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton2)
-                            .addComponent(jButton1))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                            .addComponent(btnAddTab)
+                            .addComponent(jCheckBox1))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-         
-        panelTab1=new panelTab();
-        jTabbedPane1.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        jTabbedPane1.addTab(null, panelTab1);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnAddTabActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddTabActionPerformed
+        
+       
+    }//GEN-LAST:event_btnAddTabActionPerformed
 
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        int i=jTable1.getSelectedRow();
+        if(i>0)
+        {
+            createPopupMenu();
+            if(evt.getClickCount()==2)
+            {
+                show_chat(); 
+            }
+            else
+            {
+               // 
+            }
+        }
+
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jCheckBox1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCheckBox1MouseClicked
+          if(jCheckBox1.isSelected())
+        {
+             showAgentOnline();
+        }
+        else
+        {
+            showAgent();
+        }
+    }//GEN-LAST:event_jCheckBox1MouseClicked
+
+    private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
+        String s="";
+        for(int i=0;i<=jTabbedPane1.getSelectedIndex();i++)
+        {
+            s=jTabbedPane1.getTitleAt(i);
+        }
+        //System.out.println(s);
+        System.err.println("index : "+jTabbedPane1.getSelectedIndex()+ " : "+ s);
+    }//GEN-LAST:event_jTabbedPane1MouseClicked
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       dispose();
+    }//GEN-LAST:event_jButton2ActionPerformed
+/////////////popup
+    class PopupListener extends MouseAdapter {
+        JPopupMenu popup; 
+        PopupListener(JPopupMenu popupMenu) {
+            popup = popupMenu;
+        }
+ 
+        public void mousePressed(MouseEvent e) {
+            maybeShowPopup(e);
+        }
+ 
+        public void mouseReleased(MouseEvent e) {
+            maybeShowPopup(e);
+        }
+ 
+        private void maybeShowPopup(MouseEvent e) {
+            if (e.isPopupTrigger()) {
+                popup.show(e.getComponent(),
+                           e.getX(), e.getY());
+            }
+        }
+    }
+     public void createPopupMenu() {
+        JMenuItem menuItem;
+ 
+        //Create the popup menu.
+        JPopupMenu popup = new JPopupMenu();
+        menuItem = new JMenuItem("A popup menu item");
+        menuItem.addActionListener(new ActionListener() {
+
+             @Override
+             public void actionPerformed(ActionEvent ae) {
+                show_chat();
+               
+             }
+         });
+        popup.add(menuItem);
+        menuItem = new JMenuItem("Another popup menu item");
+        //menuItem.addActionListener(this);
+        popup.add(menuItem);
+ 
+        //Add listener to the text area so the popup menu can come up.
+        MouseListener popupListener = new PopupListener(popup);
+        jTable1.addMouseListener(popupListener);
+    }
+   
+    ////////////////////////////
+    private void show_chat()
+    {
+        int row=jTable1.getSelectedRow();
+        final String col1=""+jTable1.getValueAt(row,1); 
+        for(int i=0;i<jTabbedPane1.getTabCount();i++)
+        {
+            if(jTabbedPane1.getTitleAt(i).equals(col1))
+            {
+                jTabbedPane1.setSelectedIndex(i);
+                return;
+            }
+         
+        }
+        
+        
+        final panelTab tab=new panelTab();
+        tab.events = new IPanelTabEvent() {
+            @Override
+            public void send() {
+                //send
+                tab.showMessage(Agent_loged, tab.getText());
+                tab.send();
+            }
+        };
+        
+        jTabbedPane1.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+        jTabbedPane1.addTab(col1, tab);
+        int display=jTabbedPane1.getTabCount()-1;
+        jTabbedPane1.setSelectedIndex(display);
+        
+       mapAgent.put(col1, tab);
+    }
     private void showAgent()
     {
+      
+       try {
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+
+            if(con.isConnect())
+            {
+                ResultSet result=null;
+                String sql="SELECT * FROM `agent_status`";
+                result = con.executeQuery(sql);
+                jTable1.getTableHeader().setReorderingAllowed(false);
+                String strHeader[]={"","","","status"};
+                DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
+                {
+                    @Override
+                    public boolean isCellEditable(int i, int i1) {
+                        return false;
+                    }
+                };
+                ArrayList<Vector> st_online = new ArrayList<>();
+                ArrayList<Vector> st_offline = new ArrayList<>();
+                int i=0;
+                int m=0;
+                while (result.next()) { 
+                    i++;
+                    String agent=result.getString("agent_id");
+                    String iface=result.getString("interface");
+                    int queue=Integer.parseInt(result.getString("queue"));
+                    
+                    String showOnline="";
+                    Pattern pattern = Pattern.compile("\\d*");//// \\d+ hay \\d* đều được
+                    Matcher matcher = pattern.matcher(iface); 
+
+                    if (matcher.matches())
+                    { 
+                          if(queue==0) 
+                          {
+                              showOnline=" now offline";
+                              m=0;
+                          }
+                    } 
+                    else
+                    { 
+                          showOnline=" now online";
+                          m=1;
+                    } 
+                    Vector rowdata = new Vector();
+                    rowdata.add(Integer.toString(i));
+                    rowdata.add(agent);
+                    rowdata.add(showOnline);
+                    rowdata.add(Integer.toString(m));
+                   
+                    if(Integer.parseInt((String)rowdata.get(3)) == 1)     
+                    {
+                        st_online.add(rowdata);
+
+                    } else       
+                    {
+                         st_offline.add(rowdata);
+                    }
+                   
+                }
+                for (int j=0; j<st_online.size(); j++) {
+                    dt.addRow(st_online.get(j));
+                }
+                for (int j=0; j<st_offline.size(); j++) {
+                    dt.addRow(st_offline.get(j));
+                }
+                jTable1.setModel(dt);
+                
+                TableColumn column = null;
+                for (int k = 0;k < jTable1.getColumnCount(); k++) {
+                    column = jTable1.getColumnModel().getColumn(k);
+
+                    if (k == 0) {
+                        column.setWidth(0);
+                        column.setMinWidth(0);
+                        column.setMaxWidth(0);
+                    }
+                     if (k == 3) {
+                        column.setWidth(0);
+                        column.setMinWidth(0);
+                        column.setMaxWidth(0);
+                    } 
+                }
+                
+               result.close(); 
+            }
+          con.closeConnect();
         
+        }catch(Exception e)
+        {
+            
+        }
     }
-    private void showAgentOffline()
-    {
-        
-    }
+   
     private void showAgentOnline()
     {
         try{
-            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-            
-            if(con.isConnect())
+             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+
+           
+             if(con.isConnect())
             {
-                String sql="SELECT * FROM `agent_status`";
-                ResultSet result=con.executeQuery(sql);
-                String strHeader[]={"agent_id","interface","queue"};
+                ResultSet result=null;
+           
+            
+           
+                String sql="SELECT * FROM `agent_status` WHERE  `interface`<> '0' AND `queue`<>'0'";
+                
+               result = con.executeQuery(sql);
+               jTable1.getTableHeader().setReorderingAllowed(false);
+//                String strHeader[]={"agent_id","interface","queue"};
+                String strHeader[]={"agent_id","",""};
                 DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
                 {
 
@@ -156,24 +414,36 @@ public class ChatForm extends javax.swing.JFrame {
                     }
 
                 };
+                int i=0;
                 while (result.next()) { 
+                    i++;
                     String agent=result.getString("agent_id");
-                    String iface=result.getString("interface");
-                    String queue=result.getString("queue");
-                    
+                  
+                    String showOnline=" now online";
+                  
                     Vector rowdata = new Vector();
+                    rowdata.add(Integer.toString(i));
                     rowdata.add(agent);
-                    rowdata.add(iface);
-                    rowdata.add(queue);
-                    
+                    rowdata.add(showOnline);
+//                    rowdata.add(queue);
+//                    
                     dt.addRow(rowdata);
-                     jTextArea1.setText(agent);   
+                    
                 }
                 jTable1.setModel(dt);
-                
+               TableColumn column = null;
+                for (int k = 0;k < jTable1.getColumnCount(); k++) {
+                    column = jTable1.getColumnModel().getColumn(k);
+
+                    if (k == 0) {
+                        column.setWidth(0);
+                        column.setMinWidth(0);
+                        column.setMaxWidth(0);
+                    } 
+                }
+               result.close(); 
             }
             con.closeConnect();
-        
         }catch(Exception e)
         {
             
@@ -215,13 +485,11 @@ public class ChatForm extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnAddTab;
     private javax.swing.JButton jButton2;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
-    private nttnetworks.com.controls.panelTab panelTab1;
     // End of variables declaration//GEN-END:variables
 }

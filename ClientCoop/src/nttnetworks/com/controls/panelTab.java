@@ -9,7 +9,19 @@ package nttnetworks.com.controls;
  * @author PHUONGTRANG
  */
 public class panelTab extends javax.swing.JPanel {
+    public IPanelTabEvent events;
+    public String getText() {
+        return jTextField1.getText();
+    }
+    public void send() {
+        jTextField1.setText("");
+    }
 
+    public void showMessage(String name, String message) {
+        jTextArea1.setText(
+                jTextArea1.getText() + "\r\n" + name + ": " + message);
+    }
+    
     /**
      * Creates new form penelTab
      */
@@ -33,11 +45,17 @@ public class panelTab extends javax.swing.JPanel {
 
         jTextField1.setText("jTextField1");
 
+        jTextArea1.setEditable(false);
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
         jButton1.setText("Send");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -65,6 +83,11 @@ public class panelTab extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        events.send();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
