@@ -297,8 +297,9 @@ public class MessageForm extends javax.swing.JFrame {
             if(con.isConnect())
             {
                 ResultSet result=null;
-                String sql="SELECT * FROM `agent_status` AS s LEFT JOIN `agent_login` AS l"
-                                        + " ON s.`agent_id`=l.`agent_id` WHERE role='2'";
+                String sql="SELECT * FROM `agent_status`";
+//                String sql="SELECT * FROM `agent_status` AS s LEFT JOIN `agent_login` AS l"
+//                                        + " ON s.`agent_id`=l.`agent_id` WHERE role='2'";
                 result = con.executeQuery(sql);
                 jTable1.getTableHeader().setReorderingAllowed(false);
                 String strHeader[]={"","","","status"};
@@ -396,12 +397,12 @@ public class MessageForm extends javax.swing.JFrame {
             {
                 ResultSet result=null;
            
-            
+            String sql="SELECT * FROM `agent_status` WHERE  `interface`<> '0' AND `queue`<>'0'";
            
-                String sql="SELECT * FROM `agent_status` AS s LEFT JOIN `agent_login` AS l "
-                        + "ON s.`agent_id`=l.`agent_id` "
-                        + "WHERE  `interface`<> '0' AND `queue`<>'0' AND role='2'";
-                
+//                String sql="SELECT * FROM `agent_status` AS s LEFT JOIN `agent_login` AS l "
+//                        + "ON s.`agent_id`=l.`agent_id` "
+//                        + "WHERE  `interface`<> '0' AND `queue`<>'0' AND role='2'";
+//                
                result = con.executeQuery(sql);
                jTable1.getTableHeader().setReorderingAllowed(false);
 //                String strHeader[]={"agent_id","interface","queue"};
