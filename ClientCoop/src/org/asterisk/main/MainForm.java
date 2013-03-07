@@ -111,6 +111,7 @@ public class MainForm extends javax.swing.JFrame {
     private  String Mysql_pwd  = "callcenter"; 
     private ConnectDatabase con;
     public static FeedbackForm feedback;
+    public static ChatForm chatfrm;
     private String CallPhone;
     private JComboBox out;
    
@@ -411,6 +412,11 @@ public class MainForm extends javax.swing.JFrame {
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jButton2.setText("CHAT");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -2857,6 +2863,11 @@ public class MainForm extends javax.swing.JFrame {
     private void table_reportKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_table_reportKeyReleased
        btnViewFB.setEnabled(true);
     }//GEN-LAST:event_table_reportKeyReleased
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+       chatfrm=new ChatForm();
+       chatfrm.setVisible(true);
+    }//GEN-LAST:event_jButton2ActionPerformed
    
     public void setAllEnable(boolean flag){
         Component comNumber [] = panel_number.getComponents();
@@ -3255,7 +3266,7 @@ public class MainForm extends javax.swing.JFrame {
                         rowdata.add(result.getString("status"));                    //7
                         rowdata.add(result.getString("id_status"));
                         rowdata.add(result.getString("detail_id"));                 //9
-                        rowdata.add(result.getString("call_id"));
+                        rowdata.add(result.getString("call_id"));                   //8
                         rowdata.add(result.getString("note"));                      //11
                        
                         if(Integer.parseInt((String)rowdata.get(8)) == 6)       //hoan thanh
