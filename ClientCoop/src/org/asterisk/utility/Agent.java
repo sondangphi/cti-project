@@ -64,11 +64,12 @@ public class Agent implements Runnable{
         private KeepAlive keepAlive;
         private Thread keep_alive; 
         private Object synObject = new Object();        
-        
+        private String command;
         private DataInputStream in;
         private DataOutputStream out;
         
-        public AESControl aes = null;
+        private AESControl aes;
+        private String KEY_STRING;
         
 	public Agent(){
 		
@@ -84,12 +85,11 @@ public class Agent implements Runnable{
                 mainThread.start();                
             }catch(Exception e){
                 System.out.println("Exception agent thread: "+e);
-            }                
+            }
 	}      	
 	@Override
 	public void run() {            
             try{
-                String command = "";
                 CODE code;
                 uti = new Utility();
                 Mysql_dbname = uti.readInfor(filename, "MySql_database");
@@ -100,8 +100,11 @@ public class Agent implements Runnable{
 //                infromServer =  new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));  
                 in = new DataInputStream(clientSocket.getInputStream());
                 out = new DataOutputStream(clientSocket.getOutputStream());  
-                aes = new AESControl(clientSocket.getLocalAddress().toString());
+                KEY_STRING = "~!@#$%^&*()_+`1234567890-=";
+                aes = new AESControl(KEY_STRING);               
                 sendtoServer(com);
+                System.out.println("ip1: "+clientSocket.getLocalAddress().toString().substring(1));
+                System.out.println("ip2: "+clientSocket.getInetAddress().toString().substring(1));                
                 while(running){                    
 //                    command = infromServer.readLine();  
                     command = in.readUTF();
@@ -135,9 +138,7 @@ public class Agent implements Runnable{
                                         loginform.dispose();
                                         worktime = new TimerClock(mainForm, false);
                                         worktime.start();
-
                                         keepAlive = new KeepAlive(Agent.this);   
-
                                     } catch (InterruptedException ex) {
                                         Logger.getLogger(FeedbackForm.class.getName()).log(Level.SEVERE, null, ex);
                                     }
@@ -519,7 +520,7 @@ public class Agent implements Runnable{
         }        
         
         //send request to server - string
-	public void sendtoServer(String t) throws IOException{
+	public void sendtoServer(String data) throws IOException{
 //            try{
 //                if(clientSocket != null){   
 //                    outtoServer.println(t);
@@ -534,12 +535,10 @@ public class Agent implements Runnable{
             
             try{
                 if(clientSocket != null){  
-//                    t = aes.encryptData(t);
-                    out.writeUTF(t);
+//                    data = aes.encryptData(data);
+                    out.writeUTF(data);
                     out.flush();
-//                    System.out.println("ip1: "+clientSocket.getLocalAddress().toString().substring(1));
-//                    System.out.println("ip2: "+clientSocket.getInetAddress().toString().substring(1));
-                    System.out.println("send to server: "+t);
+                    System.out.println("send to server: "+data);
                 }
             }catch(Exception e){
                 System.out.println("Exception(sendtoServer): "+e);
@@ -553,18 +552,18 @@ public class Agent implements Runnable{
                     running = false;
                     clientSocket.close(); 
                     System.out.println("close socket");                    
-                }                      
-                if(mainThread != null){
-                    mainThread.interrupt();
-                    System.out.println("close thread"); 
-                }
-                System.out.println("finish close session"); 
+                }                                       
                 keepAlive.interrupt();
                 if (keep_alive != null) {
                     if (keep_alive.isAlive()) {
-                        keep_alive.interrupt();
+                        keep_alive.stop();
                     }
                 }                 
+                if(mainThread != null){                    
+                    System.out.println("close thread"); 
+                    System.out.println("finish close session");
+                    mainThread.stop();
+                }                
             }catch(Exception e){
                 System.out.println("closeConnect Exception: "+e); 
             }            

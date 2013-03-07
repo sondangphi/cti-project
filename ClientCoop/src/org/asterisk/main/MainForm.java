@@ -111,7 +111,6 @@ public class MainForm extends javax.swing.JFrame {
     private  String Mysql_pwd  = "callcenter"; 
     private ConnectDatabase con;
     public static FeedbackForm feedback;
-    public static ChatForm chatfrm;
     private String CallPhone;
     private JComboBox out;
    
@@ -233,7 +232,6 @@ public class MainForm extends javax.swing.JFrame {
         lb_logintime = new javax.swing.JLabel();
         btn_pause = new javax.swing.JToggleButton();
         btn_transfer = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
         main_tab = new javax.swing.JTabbedPane();
         Panel1 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -410,14 +408,6 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        jButton2.setText("CHAT");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -428,9 +418,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(49, 49, 49)
                 .addComponent(btn_transfer, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 301, Short.MAX_VALUE)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lb_logintime, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -447,7 +435,6 @@ public class MainForm extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(0, 11, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1130,7 +1117,7 @@ public class MainForm extends javax.swing.JFrame {
 
         main_tab.addTab("Co.op Systems", jPanel3);
 
-        btnDial.setText("Dial");
+        btnDial.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/btn_dial.png"))); // NOI18N
         btnDial.setEnabled(false);
         btnDial.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1208,12 +1195,12 @@ public class MainForm extends javax.swing.JFrame {
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnDial, javax.swing.GroupLayout.DEFAULT_SIZE, 34, Short.MAX_VALUE)
+                    .addComponent(btnDial, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -2863,11 +2850,6 @@ public class MainForm extends javax.swing.JFrame {
     private void table_reportKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_table_reportKeyReleased
        btnViewFB.setEnabled(true);
     }//GEN-LAST:event_table_reportKeyReleased
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-       chatfrm=new ChatForm();
-       chatfrm.setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
    
     public void setAllEnable(boolean flag){
         Component comNumber [] = panel_number.getComponents();
@@ -3266,7 +3248,7 @@ public class MainForm extends javax.swing.JFrame {
                         rowdata.add(result.getString("status"));                    //7
                         rowdata.add(result.getString("id_status"));
                         rowdata.add(result.getString("detail_id"));                 //9
-                        rowdata.add(result.getString("call_id"));                   //8
+                        rowdata.add(result.getString("call_id"));
                         rowdata.add(result.getString("note"));                      //11
                        
                         if(Integer.parseInt((String)rowdata.get(8)) == 6)       //hoan thanh
@@ -3687,7 +3669,6 @@ public class MainForm extends javax.swing.JFrame {
     public javax.swing.JComboBox cb_type;
     private javax.swing.JCheckBox chkTime;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
