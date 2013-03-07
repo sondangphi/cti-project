@@ -23,7 +23,7 @@ public class KeepAlive implements Runnable{
     public void interrupt() {
         if (thread != null) {
             if (thread.isAlive()) {
-                thread.interrupt();
+                thread.stop();
             }
         }
     }

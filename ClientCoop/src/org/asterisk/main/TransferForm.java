@@ -6,6 +6,8 @@ package org.asterisk.main;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -102,6 +104,9 @@ public class TransferForm extends javax.swing.JFrame implements AsteriskQueueLis
             list_agent.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
             list_agent.setCellRenderer(new SelectedListCellRenderer());
             setLocationRelativeTo(null);
+            Image image = Toolkit.getDefaultToolkit().getImage("images/icon_transfer.png");
+            this.setIconImage(image);            
+            this.setTitle("Transfer");
 //            Mysql_dbname = uti.readInfor(filename, "MySql_database");
 //            Mysql_server = uti.readInfor(filename, "MySql_server");
 //            Mysql_user = uti.readInfor(filename, "MySql_user");
@@ -202,9 +207,11 @@ public class TransferForm extends javax.swing.JFrame implements AsteriskQueueLis
         btn_close = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setTitle("Transfer");
         setResizable(false);
 
-        btn_transfer.setText("Transfer Call");
+        btn_transfer.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btn_transfer.setText("Transfer");
         btn_transfer.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_transferActionPerformed(evt);
@@ -219,6 +226,7 @@ public class TransferForm extends javax.swing.JFrame implements AsteriskQueueLis
         });
         jScrollPane1.setViewportView(list_agent);
 
+        btn_close.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btn_close.setText("CLose");
         btn_close.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -232,23 +240,24 @@ public class TransferForm extends javax.swing.JFrame implements AsteriskQueueLis
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(btn_transfer, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btn_close, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btn_close)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(4, 4, 4)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btn_transfer)
-                    .addComponent(btn_close))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btn_transfer, javax.swing.GroupLayout.DEFAULT_SIZE, 32, Short.MAX_VALUE)
+                    .addComponent(btn_close, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 383, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 374, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
