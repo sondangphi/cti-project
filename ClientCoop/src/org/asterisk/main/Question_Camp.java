@@ -4,6 +4,7 @@
  */
 package org.asterisk.main;
 
+import az.encoding.html.HtmlCoding;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
@@ -42,6 +43,7 @@ public class Question_Camp extends javax.swing.JDialog {
     private static String Mysql_user = "callcenter";
     private static String Mysql_pwd  = "callcenter";   
     private ConnectDatabase con;
+    private ArrayList<Integer> map_question = new ArrayList<>(); 
    
     ResultSet result;
     DefaultTableModel dt;
@@ -123,7 +125,7 @@ public class Question_Camp extends javax.swing.JDialog {
                     int type=Integer.parseInt(result.getString("question_type_id")) ;
 
                     ques.add(type, content);
-                  
+                    map_question.add(result.getInt("id"));
 
                 }   
             }
@@ -384,50 +386,39 @@ public class Question_Camp extends javax.swing.JDialog {
                 }
                 else
                 {
-                   JOptionPane.showMessageDialog(null, "select index : "+cbxStatus.getSelectedIndex()+"\n"+
-                                                        "item count : "+cbxStatus.getItemCount()+"\n");
                      if(cbxStatus.getSelectedIndex()==(cbxStatus.getItemCount()-1))
                     {
-                        JOptionPane.showMessageDialog(null, (String)cbxStatus.getSelectedItem());
+                       
                         for (int i=0; i < ques.length(); i++) {
                             String[] rs = ques.get(i).getAnswerResult();
-                            JOptionPane.showMessageDialog(null, "1");
+                           
                             if (rs.length > 0) {
-                                System.out.println("cau hoi so : "+i+" - có : "+rs.length);JOptionPane.showMessageDialog(null, "2");
+//                                System.out.println("cau hoi so : "+i+" - có : "+rs.length);
                                 String answerArray = "";
 
                                 for(String t:rs){
-                                    System.out.println("t "+t);JOptionPane.showMessageDialog(null, "3");
+//                                    System.out.println("t "+t);
 
                                     answerArray += ",\""+ injectSql(t) +"\"";
                                 }   
-                                JOptionPane.showMessageDialog(null, "4");
-                                String sql = "INSERT INTO _question_result VALUES("+null+", '"+i+"','"+title_call+"','"
-                                             + "[" + answerArray.substring(1) + "]')";
-                                JOptionPane.showMessageDialog(null, sql);
-                                JOptionPane.showMessageDialog(null, "5");
+                               
+                                String sql = "INSERT INTO _question_result VALUES("+null+", '"+map_question.get(i)+"','"+title_call+"','"
+                                             + "[" + HtmlCoding.encode(answerArray.substring(1)) + "]')";
+                                
                                 con.executeUpdate(sql);
-                                JOptionPane.showMessageDialog(null, "6");
+                              
 
                              }
                             
                         }
-                        
+                    }
                         JOptionPane.showMessageDialog(null,"Insert successful");
                           String query_update =
-                            "UPDATE  `_call` SET  `note` =  '"+injectSql(txtNote.getText()) + "', `status_id`='"+(cbxStatus.getSelectedIndex()+1)+"'"
+                            "UPDATE  `_call` SET  `note` =  '"+HtmlCoding.encode(injectSql(txtNote.getText())) + "', `status_id`='"+(cbxStatus.getSelectedIndex()+1)+"'"
                           + "WHERE  `id` ='"+title_call+"'";
                     con.executeUpdate(query_update);
-                    JOptionPane.showMessageDialog(null,"Update1 Note successful");
-                    }
-                     else{
-                          String query_update =
-                            "UPDATE  `_call` SET  `note` =  '"+injectSql(txtNote.getText()) + "', `status_id`='"+(cbxStatus.getSelectedIndex()+1)+"'"
-                          + "WHERE  `id` ='"+title_call+"'";
-                    con.executeUpdate(query_update);
-                    JOptionPane.showMessageDialog(null,"Update2 Note successful");
-
-                     }
+//                    JOptionPane.showMessageDialog(null,"Update Note successful");
+                   
                      
                 }
             }
@@ -466,7 +457,6 @@ public class Question_Camp extends javax.swing.JDialog {
         }else
         {
             btnfinish.setEnabled(true);
-            
             
         }
     }//GEN-LAST:event_cbxStatusItemStateChanged
