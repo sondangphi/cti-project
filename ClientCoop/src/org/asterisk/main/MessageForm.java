@@ -4,6 +4,8 @@
  */
 package org.asterisk.main;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -17,10 +19,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import nttnetworks.com.controls.IPanelTabEvent;
 import nttnetworks.com.controls.panelTab;
@@ -342,7 +349,7 @@ public class MessageForm extends javax.swing.JFrame {
                 result = con.executeQuery(sql);
                 jTable1.getTableHeader().setReorderingAllowed(false);
                 String strHeader[]={"","","",""};
-                DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
+                final DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
                 {
                     @Override
                     public boolean isCellEditable(int i, int i1) {
@@ -400,6 +407,46 @@ public class MessageForm extends javax.swing.JFrame {
                 }
                 jTable1.setModel(dt);
                 
+                jTable1.setDefaultRenderer(Object.class, new TableCellRenderer() {
+                    final int currentRow = -1;
+                        @Override
+                        public Component getTableCellRendererComponent(JTable table, 
+                                                                        Object value, 
+                                                                        boolean isSelected, 
+                                                                        boolean hasFocus, 
+                                                                        int row, int column) {
+                         
+                            
+                            JLabel out=new JLabel();
+                            
+                            if (column == 0) {
+                                out.setText(Integer.toString(row+1));
+                            } else {
+                                out.setText((String)value);
+                            }
+//                             System.out.println("value : "+Integer.parseInt((String)dt.getValueAt(row, 8)));
+                            if (Integer.parseInt((String)dt.getValueAt(row, 3)) == 1) {
+                                out.setForeground(Color.black);
+                                
+                                
+                            } 
+                            else {
+                                
+                                out.setForeground(new Color(0x88, 0x88, 0x88, 0xff));
+                            }
+                            if (isSelected) {
+                                    out.setBackground(new Color(0x88, 0x88, 0x88, 0x88));
+                                    out.setOpaque(true);
+                                }
+                           
+                            return out;
+                        }
+                    });
+                    
+                   
+                    
+                 
+                
                 TableColumn column = null;
                 for (int k = 0;k < jTable1.getColumnCount(); k++) {
                     column = jTable1.getColumnModel().getColumn(k);
@@ -446,7 +493,7 @@ public class MessageForm extends javax.swing.JFrame {
                jTable1.getTableHeader().setReorderingAllowed(false);
 
                 String strHeader[]={"","",""};
-                DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
+                final DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
                 {
 
                     @Override
@@ -470,6 +517,36 @@ public class MessageForm extends javax.swing.JFrame {
                     
                 }
                 jTable1.setModel(dt);
+                 jTable1.setDefaultRenderer(Object.class, new TableCellRenderer() {
+                        @Override
+                        public Component getTableCellRendererComponent(JTable table, 
+                                                                        Object value, 
+                                                                        boolean isSelected, 
+                                                                        boolean hasFocus, 
+                                                                        int row, int column) {
+                         
+                            
+                            JLabel out=new JLabel();
+                            
+                            if (column == 0) {
+                                out.setText(Integer.toString(row+1));
+                            } else {
+                                out.setText((String)value);
+                            }
+//                         
+                           
+                                out.setForeground(Color.red);
+                                if (isSelected) {
+                                    out.setBackground(new Color(0xff, 0xff, 0x88, 0xff));
+                                    out.setOpaque(true);
+                                }
+                                
+                          
+                            
+                            return out;
+                        }
+                    });
+                     
                TableColumn column = null;
                 for (int k = 0;k < jTable1.getColumnCount(); k++) {
                     column = jTable1.getColumnModel().getColumn(k);
@@ -489,7 +566,38 @@ public class MessageForm extends javax.swing.JFrame {
         }
                 
     }
- 
+   
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Windows".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(MessageForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(MessageForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(MessageForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(MessageForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new MessageForm().setVisible(true);
+            }
+        });
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
