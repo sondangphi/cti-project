@@ -310,7 +310,7 @@ public class MessageForm extends javax.swing.JFrame {
                     @Override
                     public void send() {
                         try {
-                            if("".equals(tab.getText())){
+                            if(!"".equals(tab.getText())){
                                 //send
                                 agentClient.sendtoServer("120@"+Agent_loged+"@"+col1+"@"+tab.getText());
                                 tab.showMessage(Agent_loged, tab.getText());
@@ -426,7 +426,7 @@ public class MessageForm extends javax.swing.JFrame {
                             }
 //                             System.out.println("value : "+Integer.parseInt((String)dt.getValueAt(row, 8)));
                             if (Integer.parseInt((String)dt.getValueAt(row, 3)) == 1) {
-                                out.setForeground(Color.black);
+                                out.setForeground(Color.red);
                                 
                                 
                             } 
