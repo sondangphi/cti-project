@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
@@ -37,10 +38,10 @@ import org.asterisk.utility.Utility;
  */
 public class LoginForm extends javax.swing.JFrame {
     	
-	private String host = "localhost";
+	public String host = "localhost";
         public AgentObject agentObject;
-	private int qport = 33333;
-	private int aport = 22222;
+	public int qport = 33333;
+	public int aport = 22222;
 	private ArrayList <QueueObject>  listQueue;	
         private String role ="1";
         
@@ -123,10 +124,10 @@ public class LoginForm extends javax.swing.JFrame {
         tx_agent.setBackground(khaki1);
         pwd.setBackground(khaki1);
         tx_iface.setBackground(khaki1);                
-        btn_login.setForeground(white);
-        btn_login.setBackground(dodgerBlue3);
-        btn_clear.setForeground(white);
-        btn_clear.setBackground(dodgerBlue3);        
+//        btn_login.setForeground(white);
+//        btn_login.setBackground(dodgerBlue3);
+//        btn_clear.setForeground(white);
+//        btn_clear.setBackground(dodgerBlue3);        
         lb_option.setText("Option");
         lb_option.setForeground(Color.BLUE);
         lb_option.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR)); 
@@ -203,7 +204,6 @@ public class LoginForm extends javax.swing.JFrame {
         });
 
         btn_login.setFont(new java.awt.Font("Tahoma", 1, 13)); // NOI18N
-        btn_login.setForeground(new java.awt.Color(255, 255, 255));
         btn_login.setText("Login");
         btn_login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -524,11 +524,17 @@ public class LoginForm extends javax.swing.JFrame {
                             cmd = "100@"+agentId+"@"+pass+"@SIP/"+iface+"@"+queueId+"@"+role;
                             Socket clientSocket = new Socket(host, aport);
                             clientSocket.setKeepAlive(true);
-//                            clientSocket.setSoTimeout(TIME_OUT);
-//                            System.out.println("socket timeout\t"+clientSocket.getSoTimeout()); 
                             if(clientSocket != null){
                                 System.out.println("connect to server "+clientSocket.getInetAddress().toString());
                                 agent = new Agent(clientSocket, this, agentObject, cmd);
+                                txt_img_wait.setVisible(true);
+                                tx_agent.setEnabled(false);
+                                pwd.setEnabled(false);
+                                tx_iface.setEnabled(false);
+                                cb_queue.setEnabled(false);
+                                btn_login.setEnabled(false);
+                                btn_clear.setEnabled(false);
+                                lb_option.setEnabled(false);                                
                             }
                         }else {                            
                             lb_notify_queue.setText("(*)");    
@@ -545,19 +551,7 @@ public class LoginForm extends javax.swing.JFrame {
             }else {
                 lb_notify_agent.setText("(*)");
                 lb_status.setText("Check AgentID again");
-            }
-            
-            txt_img_wait.setVisible(true);
-            tx_agent.setEnabled(false);
-            pwd.setEnabled(false);
-            tx_iface.setEnabled(false);
-            cb_queue.setEnabled(false);
-            btn_login.setEnabled(false);
-            btn_clear.setEnabled(false);
-            lb_option.setEnabled(false);
-            
-            
-        
+            }                                            
         }catch(Exception e){
             System.out.println("btn_loginActionPerformed\t"+e); 
         }
@@ -690,14 +684,17 @@ public class LoginForm extends javax.swing.JFrame {
     
     public void getListQueue(){
         try{            
+            listQueue = null;
+            cb_queue.removeAllItems();
+            lb_notify_queue.setText("");
             Socket soc = new Socket(host, qport);            
             if(soc != null){                    		
                 InputStream is = soc.getInputStream();
-                ObjectInputStream ois = new ObjectInputStream(is);  
+                ObjectInputStream ois = new ObjectInputStream(is);                  
                 listQueue = (ArrayList<QueueObject>)ois.readObject(); 
                 ois.close();
                 is.close();
-                soc.close();
+                soc.close();                
                 for(QueueObject q : listQueue){
                     if(q != null){
                         String temp = q.getQueueId()+" - "+q.getQueueName();
@@ -705,7 +702,7 @@ public class LoginForm extends javax.swing.JFrame {
                     }                                    
                 }
             }                        
-        }catch(Exception e){
+        }catch(IOException | ClassNotFoundException e){
             System.out.println("getListQueue\t"+e);
             lb_notify_queue.setText("(*)");
         }        

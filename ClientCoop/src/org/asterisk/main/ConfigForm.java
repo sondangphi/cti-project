@@ -64,8 +64,8 @@ public class ConfigForm extends javax.swing.JFrame {
             Color blue1 = new Color(0, 0, 255);
             Color dodgerBlue3 = new Color(24, 116, 205); 
             this.getContentPane().setBackground(white);
-            btn_finish.setBackground(dodgerBlue3);
-            btn_finish.setForeground(white);
+//            btn_finish.setBackground(dodgerBlue3);
+//            btn_finish.setForeground(white);
             
             
             
@@ -235,7 +235,6 @@ public class ConfigForm extends javax.swing.JFrame {
     private void btn_finishActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_finishActionPerformed
         // TODO add your handling code here:
         try{
-//            this.setVisible(false);               
             host = tx_server.getText();
             aport = tx_aport.getText();
             qport = tx_qport.getText();
@@ -244,6 +243,9 @@ public class ConfigForm extends javax.swing.JFrame {
             uti.writeInfor(filename, "qport", qport);
             uti.writeInfor(filename, "MySql_Server", host);
             this.dispose();
+            loginform.host = uti.readInfor(filename, "host");
+            loginform.aport = Integer.parseInt(uti.readInfor(filename, "aport"));
+            loginform.qport = Integer.parseInt(uti.readInfor(filename, "qport"));             
             loginform.getListQueue();
             loginform.setEnabled(true);
             loginform.setVisible(true);

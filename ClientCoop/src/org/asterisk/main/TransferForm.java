@@ -13,6 +13,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
@@ -31,10 +32,12 @@ import org.asteriskjava.live.AsteriskQueueMember;
 import org.asteriskjava.live.AsteriskServer;
 import org.asteriskjava.live.AsteriskServerListener;
 import org.asteriskjava.live.DefaultAsteriskServer;
+import org.asteriskjava.live.ManagerCommunicationException;
 import org.asteriskjava.live.MeetMeUser;
 import org.asteriskjava.live.internal.AsteriskAgentImpl;
 import org.asteriskjava.manager.ManagerConnection;
 import org.asteriskjava.manager.ManagerEventListener;
+import org.asteriskjava.manager.TimeoutException;
 import org.asteriskjava.manager.action.StatusAction;
 import org.asteriskjava.manager.event.ManagerEvent;
 import org.asteriskjava.manager.event.QueueMemberPausedEvent;
@@ -128,12 +131,12 @@ public class TransferForm extends javax.swing.JFrame implements AsteriskQueueLis
             manaConnect = asteriskServer.getManagerConnection();
             manaConnect.addEventListener(this);
             manaConnect.sendAction(new StatusAction());            
-        }catch(Exception ex){}
+        }catch(ManagerCommunicationException | IOException | TimeoutException | IllegalArgumentException | IllegalStateException ex){}
     }
     private void disconnectAsterisk(){ 
         asteriskServer.removeAsteriskServerListener(this);   
         manaConnect.removeEventListener(this);
-        asteriskServer.shutdown();             
+        asteriskServer.shutdown();
     }
     private void queueListener(){
         for (AsteriskQueue asteriskQueue : asteriskServer.getQueues()){
