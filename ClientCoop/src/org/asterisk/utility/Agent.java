@@ -69,6 +69,8 @@ public class Agent implements Runnable{
         private DataInputStream in;
         private DataOutputStream out;
         
+        private String command;
+
         private AESControl aes;
         private SwapCode secure;
         private String KEY_STRING;
@@ -397,7 +399,7 @@ public class Agent implements Runnable{
                             
                         case CHAT:
                             
-                            System.err.println(fromServer);
+                            System.err.println(command);
 
                              if (MainForm.itemchat == null || !MainForm.itemchat.isVisible()) {
                                 MainForm.itemchat=new ListItemChat(agentObject.getAgentId(), this);
@@ -410,7 +412,7 @@ public class Agent implements Runnable{
                             
                             break;                                                            
                         default: 
-                          System.out.println("default values from server\t"+fromServer);
+                          System.out.println("default values from server\t"+command);
                         break;
 
                         }                        

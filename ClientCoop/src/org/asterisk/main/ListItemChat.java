@@ -139,6 +139,7 @@ public class ListItemChat extends javax.swing.JFrame {
     public ListItemChat() {
       try {
             initComponents();
+            setDefaultCloseOperation(DISPOSE_ON_CLOSE);
            
             uti = new Utility();
             Mysql_dbname = uti.readInfor(filename, "MySql_database");
@@ -154,7 +155,7 @@ public class ListItemChat extends javax.swing.JFrame {
     public ListItemChat(String Agent_loged, Agent agentClient) {
           try {
               initComponents();
-              
+               setDefaultCloseOperation(DISPOSE_ON_CLOSE);
             
               uti = new Utility();
               Mysql_dbname = uti.readInfor(filename, "MySql_database");
