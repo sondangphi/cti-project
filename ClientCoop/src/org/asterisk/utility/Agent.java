@@ -70,8 +70,6 @@ public class Agent implements Runnable{
         private DataOutputStream out;
         
         private String command;
-
-        private AESControl aes;
         private SwapCode secure;
         private String KEY_STRING;
         
@@ -107,8 +105,7 @@ public class Agent implements Runnable{
                 sendtoServer(com);
                 while(running){
                     try{
-                        fromServer = in.readUTF();
-                        System.out.println("Receive from server: "+fromServer);
+                        fromServer = in.readUTF();                        
                         if(fromServer == null){
                             System.out.println("null value from server");  
                             if(agentLogout()){
@@ -117,7 +114,8 @@ public class Agent implements Runnable{
                                 System.out.println("null value: logout and exit fail");
                             }
                         }
-//                        fromServer = new String (secure.decode(fromServer.getBytes("UTF-8")), "UTF-8");
+                        fromServer = new String (secure.decode(fromServer.getBytes("UTF-8")), "UTF-8");
+                        System.out.println("Receive from server: "+fromServer);
                         ArrayList<String> cmdList = getList(fromServer);							
                         code = CODE.valueOf(cmdList.get(0).toUpperCase());
                         switch(code){
@@ -541,7 +539,7 @@ public class Agent implements Runnable{
 	public void sendtoServer(String data) throws IOException{            
             try{
                 if(clientSocket != null){  
-//                    data = new String (secure.encode(data.getBytes("UTF-8")),"UTF-8");
+                    data = new String (secure.encode(data.getBytes("UTF-8")),"UTF-8");
                     out.writeUTF(data);
                     out.flush();
                     System.out.println("send to server: "+data);
