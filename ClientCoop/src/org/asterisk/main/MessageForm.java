@@ -265,7 +265,7 @@ public class MessageForm extends javax.swing.JFrame {
  
         //Create the popup menu.
         JPopupMenu popup = new JPopupMenu();
-        menuItem = new JMenuItem("A popup menu item");
+        menuItem = new JMenuItem("Open");
         menuItem.addActionListener(new ActionListener() {
 
              @Override
@@ -275,7 +275,7 @@ public class MessageForm extends javax.swing.JFrame {
              }
          });
         popup.add(menuItem);
-        menuItem = new JMenuItem("Another popup menu item");
+        menuItem = new JMenuItem("...");
         //menuItem.addActionListener(this);
         popup.add(menuItem);
  
