@@ -71,7 +71,7 @@ public class Agent implements Runnable{
         
         private String command;
         private SwapCode secure;
-        private String KEY_STRING;
+        private String KEY_STRING = "123";
         
 	public Agent(){
 		
@@ -83,6 +83,7 @@ public class Agent implements Runnable{
                 loginform = login;
                 agentObject = agentO;
                 com = command;
+                secure = new SwapCode(KEY_STRING.getBytes("UTF-8"));
                 mainThread = new Thread(this);
                 mainThread.start();                
             }catch(Exception e){
@@ -100,10 +101,10 @@ public class Agent implements Runnable{
                 Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
                 in = new DataInputStream(clientSocket.getInputStream());
                 out = new DataOutputStream(clientSocket.getOutputStream());  
-                KEY_STRING = "~!@#$%^&*()_+`1234567890-="; 
-                secure = new SwapCode(KEY_STRING.getBytes("UTF-8"));
+//                KEY_STRING = "~!@#$%^&*()_+`1234567890-=";                 
                 sendtoServer(com);
-                while(running){
+                System.err.println("___START RECEIVE DATA___");
+                while(running){                    
                     try{
                         fromServer = in.readUTF();                        
                         if(fromServer == null){
@@ -114,7 +115,10 @@ public class Agent implements Runnable{
                                 System.out.println("null value: logout and exit fail");
                             }
                         }
-                        fromServer = new String (secure.decode(fromServer.getBytes("UTF-8")), "UTF-8");
+                        
+                        System.out.println("***************************************");
+                        fromServer = new String (secure.decode(fromServer.getBytes("ISO-8859-1")), "UTF-8");
+                        
                         System.out.println("Receive from server: "+fromServer);
                         ArrayList<String> cmdList = getList(fromServer);							
                         code = CODE.valueOf(cmdList.get(0).toUpperCase());
@@ -391,23 +395,17 @@ public class Agent implements Runnable{
                                     }
                                 });
                                 keep_alive.start();      
-                                break;
-
-
-                            
-                        case CHAT:
-                            
-                            System.err.println(command);
-
-                             if (MainForm.itemchat == null || !MainForm.itemchat.isVisible()) {
-                                MainForm.itemchat=new ListItemChat(agentObject.getAgentId(), this);
-                                MainForm.itemchat.popup(cmdList.get(1), cmdList.get(2));
-                                
-                            }
-                             else {
-                                 MainForm.itemchat.receive(cmdList.get(1), cmdList.get(2));
-                             }
-                            
+                                break;                           
+                        case CHAT:                            
+                                System.err.println("chat1");
+                                System.err.println("chat: "+command);
+                                if (MainForm.itemchat == null || !MainForm.itemchat.isVisible()) {
+                                    MainForm.itemchat=new ListItemChat(agentObject.getAgentId(), this);
+                                    MainForm.itemchat.popup(cmdList.get(1), cmdList.get(2));
+                                }
+                                else {
+                                    MainForm.itemchat.receive(cmdList.get(1), cmdList.get(2));
+                                }                            
                             break;                                                            
                         default: 
                           System.out.println("default values from server\t"+command);
@@ -539,10 +537,10 @@ public class Agent implements Runnable{
 	public void sendtoServer(String data) throws IOException{            
             try{
                 if(clientSocket != null){  
-                    data = new String (secure.encode(data.getBytes("UTF-8")),"UTF-8");
-                    out.writeUTF(data);
-                    out.flush();
                     System.out.println("send to server: "+data);
+                    String encryptData = new String (secure.encode(data.getBytes("UTF-8")),"ISO-8859-1");
+                    out.writeUTF(encryptData);
+                    out.flush();                    
                 }
             }catch(Exception e){
                 System.out.println("Exception(sendtoServer): "+e);
