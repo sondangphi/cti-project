@@ -112,17 +112,17 @@ public class MainForm extends javax.swing.JFrame {
     private ConnectDatabase con;
     public static FeedbackForm feedback;
     public static MessageForm messageform;
+   
     private String CallPhone;
     private JComboBox out;
    
-  
+    public static ListItemChat itemchat;
     LocateMap locate = new LocateMap();
     public ChangepwdForm chanpwdform;
     private final String EXIT = "112";
     private final String PAUSE = "104@off";
     private final String UNPAUSE = "104@on";
-   
-   
+
 
     /**
      * Creates new form MainForm2
@@ -2866,8 +2866,11 @@ public class MainForm extends javax.swing.JFrame {
 
 
     private void btnChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChatActionPerformed
-       messageform=new MessageForm(agentObject.getAgentId(), agentClient);
-       messageform.setVisible(true);
+//       messageform=new MessageForm(agentObject.getAgentId(), agentClient);
+//       messageform.setVisible(true);
+        
+        itemchat=new ListItemChat(agentObject.getAgentId(), agentClient);
+       itemchat.setVisible(true);
     }//GEN-LAST:event_btnChatActionPerformed
 
     public void setAllEnable(boolean flag){
