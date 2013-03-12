@@ -393,21 +393,11 @@ public class Agent implements Runnable{
                                 keep_alive.start();      
                                 break;
 
-//                            case CHAT:
-//                                System.err.println(fromServer);
-//                                if (MainForm.messageform != null) {
-//                                    MainForm.messageform.receive(cmdList.get(1), cmdList.get(2));
-//                                }
-//
-//                                break;                                                            
-//                            default: 
-//                                System.out.println("default values from server\t"+fromServer);
-//                            break;
-//<<<<<<< .mine
+
                             
                         case CHAT:
                             
-//                            System.err.println(command);
+                            System.err.println(fromServer);
 
                              if (MainForm.itemchat == null || !MainForm.itemchat.isVisible()) {
                                 MainForm.itemchat=new ListItemChat(agentObject.getAgentId(), this);
@@ -420,12 +410,12 @@ public class Agent implements Runnable{
                             
                             break;                                                            
                         default: 
-//                            System.out.println("default values from server\t"+command);
+                          System.out.println("default values from server\t"+fromServer);
                         break;
-//=======
+
                         }                        
                     }catch(Exception ex){
-//>>>>>>> .r218
+
                     }
                 }
             }  
