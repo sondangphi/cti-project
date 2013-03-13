@@ -1782,26 +1782,24 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         try{
             new Thread(new Runnable() {
-
                 @Override
                 public void run() {                    
                     int option = showDialog("Comfirm", "Do you realy want to EXIT program?");
                     if(option == 0){
-                        try {
+                        try {                            
                             agentClient.sendtoServer(EXIT);
-                        } catch (IOException ex) {
-                            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        agentClient.agentLogout();
-                        System.exit(0);
-                        System.out.println("Exit CTI CLIENT: "+option);                                 
+                            agentClient.agentLogout();
+                            agentClient.closeConnect();
+                            System.exit(0);
+                        } catch (Exception ex) {                           
+                        }                                 
                     }else if(option == 1){
                         System.out.println("CANCEL: "+option);
                     }else{
                         System.out.println("CLOSE: "+option);
                     }                    
                 }
-            }).start();          
+            }).start();
         }catch(Exception e){
         }        
     }//GEN-LAST:event_MenuItem_exitActionPerformed

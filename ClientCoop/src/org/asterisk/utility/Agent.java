@@ -1,42 +1,25 @@
 package org.asterisk.utility;
 
-
-import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.SocketException;
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JOptionPane;
 import javax.swing.table.TableColumn;
-import nano.data.securities.SwapCode;
 
+import nano.data.securities.SwapCode;
 import org.asterisk.main.*;
 import org.asterisk.model.AgentObject;
 import org.asterisk.model.CustomerObject;
 import org.asterisk.model.TableModel;
-//import org.asteriskjava.manager.TimeoutException;
 
 public class Agent implements Runnable{
-
-	/**
-	 * @param args
-	 */
-	private boolean running = true;
+	public boolean running = true;
 	private Thread mainThread;
 	public Socket clientSocket;
         private AgentObject agentObject;
@@ -49,18 +32,14 @@ public class Agent implements Runnable{
 	private String Mysql_user = "callcenter";
 	private String Mysql_pwd  = "callcenter";   
         private ConnectDatabase con;
-        private Utility uti;
-        
-        public CustomerObject customer;
-        
+        private Utility uti;        
+        public CustomerObject customer;        
         private boolean close = true;
         private TimerClock clockDialin;
         private TimerClock clockDialout;
         private TimerClock worktime;
         private boolean campaign = false;
         private boolean dialout = false;
-//        private BufferedReader infromServer;
-//        private PrintWriter outtoServer;        
         private String com;          
         private KeepAlive keepAlive;
         private Thread keep_alive; 
@@ -109,16 +88,11 @@ public class Agent implements Runnable{
                         fromServer = in.readUTF();                        
                         if(fromServer == null){
                             System.out.println("null value from server");  
-                            if(agentLogout()){
-                                System.out.println("null value: logout and exit success");
-                            }else{
-                                System.out.println("null value: logout and exit fail");
-                            }
-                        }
-                        
-                        System.out.println("***************************************");
-                        fromServer = new String (secure.decode(fromServer.getBytes("ISO-8859-1")), "UTF-8");
-                        
+                            agentLogout();
+                            new LoginForm().setVisible(true);
+                            closeConnect();
+                        }                        
+                        fromServer = new String (secure.decode(fromServer.getBytes("ISO-8859-1")), "UTF-8");                        
                         System.out.println("Receive from server: "+fromServer);
                         ArrayList<String> cmdList = getList(fromServer);							
                         code = CODE.valueOf(cmdList.get(0).toUpperCase());
@@ -159,9 +133,10 @@ public class Agent implements Runnable{
                                 loginform.pwd.setEnabled(true);   
                                 closeConnect();
                             break;
-                            case LOGOUTSUCC: //result LOGOUT SUCCESS      
+                            case LOGOUTSUCC: //result LOGOUT SUCCESS
                                 agentLogout();
-                                System.out.println("LOGOUT SUCCESS");                       
+                                new LoginForm().setVisible(true);
+                                closeConnect();                                                       
                             break;
                             case LOGOUTFAIL: //result LOGOUT FAIL
                                 System.out.println("LOGOUT FAIL");
@@ -390,6 +365,8 @@ public class Agent implements Runnable{
                                         try {
                                             Thread.sleep(10000);                                   
                                             agentLogout();
+                                            new LoginForm().setVisible(true);
+                                            closeConnect();
                                             keep_alive.stop();
                                         } catch (Exception ex) { }  
                                     }
@@ -409,40 +386,20 @@ public class Agent implements Runnable{
                             break;                                                            
                         default: 
                           System.out.println("default values from server\t"+command);
-                        break;
-
-                        }                        
-                    }catch(Exception ex){
-
+                            break;
+                        }
+                    }catch(SocketException ex){
+                        System.out.println("Socket exception client: "+ex);
+                        agentLogout();
+                        new LoginForm().setVisible(true);
+                        closeConnect();                        
                     }
                 }
-            }  
-            catch(SocketException e){
-                agentLogout();
-                System.out.println("Socket exception client: "+e);                                                                                                        
+            }catch (Exception e){
             }
-            catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-            } catch (IllegalStateException e) {
-                    e.printStackTrace();
-            }             
-            catch (IOException e){
-
-            }       
-            catch (SQLException e){
-
-            } 
-            catch (Exception e){
-
-            }
-
-	}
-        
-        //xem lai doan nay, bi outofmemmory
+        }        
         public void displayHistory(ResultSet rs)throws Exception{
-           // String colname[] = {"No","Date","Full Name","Phone", "Agent","Type","Content","Result"};
-             String colname[] = {"No","Date","Agent","Type","Categories","Content_type","Content","Solution","Result","Assign"};
-//            mainForm.table_report = null;
+            String colname[] = {"No","Date","Agent","Type","Categories","Content_type","Content","Solution","Result","Assign"};
             mainForm.btn_feedback.setEnabled(true);
             mainForm.table_report.getTableHeader().setReorderingAllowed(false);
             int count = colname.length;
@@ -456,8 +413,6 @@ public class Agent implements Runnable{
                 temp  = new String[count];
                 temp[ j++ ] = String.valueOf(t++);
                 temp[ j++ ] = String.valueOf(rs.getObject("datetime"));//rs.getString("datetime");
-               // temp[ j++ ] = String.valueOf(rs.getObject("name"));//rs.getString("name");
-               // temp[ j++ ] = String.valueOf(rs.getObject("mobile"));//rs.getString("mobile");
                 temp[ j++ ] = String.valueOf(rs.getObject("agentid"));//rs.getString("agentid");
                 temp[ j++ ] = String.valueOf(rs.getObject("type"));//rs.getString("type");
                 temp[ j++ ] = String.valueOf(rs.getObject("categories"));//rs.getString("categories");
@@ -484,59 +439,38 @@ public class Agent implements Runnable{
             for (int i = 0; i <count; i++) 
                 col.addElement(colname[i].toString());
             mainForm.table_report.setModel(new TableModel(col, row));   
-             TableColumn column = null;
-                for (int k = 0;k <  mainForm.table_report.getColumnCount(); k++) 
-                {
-                    column =  mainForm.table_report.getColumnModel().getColumn(k);
-
-                    if (k == 0) {
-                        column.setPreferredWidth(50);
-
-                    } 
-
-                    else {
-                        column.setPreferredWidth(100);
-
-                    }
+            TableColumn column = null;
+            for (int k = 0;k <  mainForm.table_report.getColumnCount(); k++) {
+                column =  mainForm.table_report.getColumnModel().getColumn(k);
+                if (k == 0) {
+                    column.setPreferredWidth(50);
+                }else {
+                    column.setPreferredWidth(100);
                 }
+            }
         }
-        
-        public boolean agentTimeout(){
-            try{
-                mainForm.setVisible(false);
-                mainForm.dispose(); 
-                mainForm = null;
-                close = false;
-                new LoginForm().setVisible(true);
-                closeConnect();                 
-            }catch(Exception e){}
-            return true;
-        }
-        
-        public boolean agentLogout(){
-            synchronized(synObject){     
-                if(close){
-                    try{
+        public void agentLogout(){
+            try{            
+                synchronized(synObject){     
+                    if(close){
+                        running = false;
+                        close = false;
                         mainForm.setVisible(false);
                         mainForm.dispose();
-                        mainForm = null;
-                        close = false;
-                        worktime.stop();                                                      
-                        new LoginForm().setVisible(true);           
-                        closeConnect();
-                    }catch(Exception e){
-                        System.out.println("agentLogout: "+e);
-                        return false;
-                    }            
-                }
-            }  
-            return true;
+                        mainForm = null; 
+                        if(worktime != null)
+                            worktime.stop();
+                    }                   
+                }  
+            }catch(Exception e){
+                System.out.println("agentLogout: "+e);
+            }             
         }        
         
         //send request to server - string
 	public void sendtoServer(String data) throws IOException{            
             try{
-                if(clientSocket != null){  
+                if(clientSocket != null){
                     System.out.println("send to server: "+data);
                     String encryptData = new String (secure.encode(data.getBytes("UTF-8")),"ISO-8859-1");
                     out.writeUTF(encryptData);
@@ -549,13 +483,12 @@ public class Agent implements Runnable{
         //close Socket & Thread for client
 	public void closeConnect()throws Exception{
             try{
-                System.out.println("start close session");
-                running = false;
+                System.out.println("start close session");                
                 if(clientSocket != null){                    
                     clientSocket.close(); 
                     System.out.println("close socket");                    
                 }                                       
-                keepAlive.interrupt();
+                keepAlive.stop();
                 if (keep_alive != null) {
                     if (keep_alive.isAlive()) {
                         keep_alive.stop();

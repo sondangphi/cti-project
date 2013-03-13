@@ -20,7 +20,7 @@ public class KeepAlive implements Runnable{
         thread.start();
     }    
 
-    public void interrupt() {
+    public void stop() {
         if (thread != null) {
             if (thread.isAlive()) {
                 thread.stop();
@@ -31,10 +31,12 @@ public class KeepAlive implements Runnable{
     @Override
     public void run() {
        try{
-           while(agent.clientSocket.isConnected()){
+           while(agent.clientSocket.isConnected() && agent.running){
                Thread.sleep(5000);
                agent.sendtoServer("222");
            }
+           if(thread.isAlive())
+               thread.stop();           
        }catch(Exception e){}
     }
     
