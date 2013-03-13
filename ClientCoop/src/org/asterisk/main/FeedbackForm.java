@@ -11,6 +11,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Level;
@@ -24,6 +25,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import org.asterisk.model.AgentObject;
 import org.asterisk.utility.Agent;
 import org.asterisk.utility.ConnectDatabase;
@@ -68,7 +71,7 @@ public class FeedbackForm extends javax.swing.JDialog {
             cb_feedback_type.setBackground(white);
             cb_catlogies.setBackground(white);
             cb_content_type.setEnabled(true);
-            
+            txtEmail.setVisible(false);
             Image image = Toolkit.getDefaultToolkit().getImage("images/icon_feedback.gif");
             this.setIconImage(image); 
             showComboBox();
@@ -118,6 +121,7 @@ public class FeedbackForm extends javax.swing.JDialog {
             cb_assign.setBackground(white);  
             txtAsTo.setVisible(false);
             cb_assign.setVisible(false);
+            txtEmail.setVisible(false);
 //             buttong
             Image image = Toolkit.getDefaultToolkit().getImage("images/icon_feedback.gif");
             this.setIconImage(image);
@@ -162,6 +166,7 @@ public class FeedbackForm extends javax.swing.JDialog {
         btn_close = new javax.swing.JButton();
         txtAsTo = new javax.swing.JLabel();
         cb_assign = new javax.swing.JComboBox();
+        txtEmail = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("FeedbackForm");
@@ -255,6 +260,9 @@ public class FeedbackForm extends javax.swing.JDialog {
             }
         });
 
+        txtEmail.setEditable(false);
+        txtEmail.setText("nguyenthi@hhh.com");
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -301,10 +309,14 @@ public class FeedbackForm extends javax.swing.JDialog {
                                 .addComponent(txtAsTo)
                                 .addGap(23, 23, 23)))
                         .addComponent(cb_result, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btn_close, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btn_save, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btn_close, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtEmail)))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -345,7 +357,9 @@ public class FeedbackForm extends javax.swing.JDialog {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtAsTo)
-                    .addComponent(cb_assign, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(cb_assign, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -387,15 +401,19 @@ public class FeedbackForm extends javax.swing.JDialog {
     private void cb_resultItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_resultItemStateChanged
         int index = cb_result.getItemCount() - 1;
        
-        if(cb_result.getSelectedIndex() == index){
+        if(cb_result.getSelectedIndex() == index)
+        {
             cb_assign.setVisible(true);
+            String email=cb_assign.getSelectedItem().toString();
+            txtEmail.setVisible(true);
+            txtEmail.setText(getEmail(email));
             txtAsTo.setVisible(true);
             
         }else
         {
             txtAsTo.setVisible(false);
             cb_assign.setVisible(false);
-            
+             txtEmail.setVisible(false);
         }
     }//GEN-LAST:event_cb_resultItemStateChanged
 
@@ -412,8 +430,9 @@ public class FeedbackForm extends javax.swing.JDialog {
                 String content = text_content.getText();
                 String solution = text_solution.getText();
                 String result = (String)cb_result.getItemAt(cb_result.getSelectedIndex());
+                
                 String feedbackid = uti.getFeedbackId();
-                String assign = "";
+                int assign = 0;
                 if(cb_result.getSelectedIndex() == 3)
                 {
                     
@@ -421,21 +440,24 @@ public class FeedbackForm extends javax.swing.JDialog {
                     {
                         if(cb_assign.getSelectedIndex()==i)
                         {
-                            assign = Integer.toString(i+1);
+                            assign = i+1;
+                            
                         }
                         
                     }
                 }
-                else{  assign = "";}
+                else{  assign = 0;}
                 
                 System.out.println("assign: "+assign);
                 System.out.println("content: "+content);
                 System.out.println("solution: "+solution);
+                System.out.println("get item : "+cb_assign.getItemCount());
+                
                 String sql = "INSERT INTO feedback_history "
                         + "(feedbackid, name, mobile, agentid,type,categories,content_type,content,solution,results,assign) "
                         + "VALUES ('"+feedbackid+"','"+name+"','"+mobile+"','"
                                      +agentObject.getAgentId()+"','"+type+"','"
-                                     +categories+"','"+content_type+"','"+content+"','"+solution+"','"+result+"', '"+assign+"')";
+                                     +categories+"','"+content_type+"','"+content+"','"+solution+"','"+result+"', '"+Integer.toString(assign)+"')";
                 con.executeUpdate(sql);
          
                 
@@ -451,7 +473,9 @@ public class FeedbackForm extends javax.swing.JDialog {
                
                 final String subject="Feedback";
                 final String body="Agent : "+agentObject.getAgentId()+"\n"+
-                        "Name Customer : "+name+"\n"+
+                            "From : "+from+"\n"+
+                            "to : "+to+"\n"+
+                            "Name Customer : "+name+"\n"+
                             "Phone : "+mobile+"\n"+
                             "Feedback type : "+type+"\n"+
                             "Catelogies : "+categories+"\n"+
@@ -473,7 +497,10 @@ public class FeedbackForm extends javax.swing.JDialog {
                     public void run() {
                         try {
                             Thread.sleep(2000);
-                            send(smtpServer, to, from, password, subject, body);
+                            if(cb_result.getSelectedIndex() == 3)
+                            {
+                                send(smtpServer, to, from, password, subject, body);
+                            }
                             System.out.println("Finish!");
            
                             wait_form.dispose();
@@ -483,11 +510,16 @@ public class FeedbackForm extends javax.swing.JDialog {
                             //reload table
                             ConnectDatabase con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
                             String query = "SELECT f.*,a.name as `a_name`,a.email FROM feedback_history f LEFT OUTER JOIN feedback_assign a ON f.assign=a.id"
-                                                + " WHERE mobile = '"+mobile+"'";
+                                               + " WHERE mobile = '"+mobile+"' "
+                                                    + " ORDER BY f.datetime DESC "
+                                                    + " LIMIT 0,10 ";
                             ResultSet rs = con.executeQuery(query);
-                            if(rs != null)
-                                 agentclient.displayHistory(rs);  
-              
+                            if(rs != null){
+                                
+                                agentclient.displayHistory(rs); 
+//                                mainform2.table_report.setAutoCreateRowSorter(true);
+//                                mainform2.table_report.getRowSorter().setSortKeys(Arrays.asList(new RowSorter.SortKey(1, SortOrder.DESCENDING)));
+                            }
                             con.closeConnect();
                         } catch (Exception ex) {
                             Logger.getLogger(FeedbackForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -506,8 +538,9 @@ public class FeedbackForm extends javax.swing.JDialog {
 
     private void cb_assignItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cb_assignItemStateChanged
         String email=cb_assign.getSelectedItem().toString();
-      
-        System.out.println("email: "+getEmail(email));
+        txtEmail.setVisible(true);
+        txtEmail.setText(getEmail(email));
+     
                 
     }//GEN-LAST:event_cb_assignItemStateChanged
     
@@ -702,5 +735,6 @@ public class FeedbackForm extends javax.swing.JDialog {
     public javax.swing.JTextArea text_content;
     public javax.swing.JTextArea text_solution;
     public javax.swing.JLabel txtAsTo;
+    public javax.swing.JTextField txtEmail;
     // End of variables declaration//GEN-END:variables
 }

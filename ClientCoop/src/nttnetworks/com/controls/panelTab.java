@@ -32,7 +32,8 @@ public class panelTab extends javax.swing.JPanel {
         }
         
         if(!"".equals(message)){
-            content+="<br/>"+((name.equals(FName))?"<span style=' color: #999'>":"<span style=' color: #000099'>")+name+"</span>: "+message.replace("&#64;", "@");
+            content+="<br />"+((name.equals(FName))?"<span style=' color: #999'>":"<span style=' color: #000099'>")+name+"</span>: "
+                    +message.replace("&#64;", "@");
             showcontent();
         }
       
