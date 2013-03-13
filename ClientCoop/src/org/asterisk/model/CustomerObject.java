@@ -10,7 +10,7 @@ package org.asterisk.model;
  */
 public class CustomerObject {
     
-    String name,phone,address,gender,email,phone1,id,birthday, reg;
+    String name,phone,address,gender,email,phone1,id,birthday, reg, type;;
     
     public CustomerObject(String m){
         phone = m;
@@ -78,5 +78,14 @@ public class CustomerObject {
     }
     public String getReg(){
         return reg;
-    }    
+    } 
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+    
 }

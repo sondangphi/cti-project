@@ -42,6 +42,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.EventObject;
 import java.util.Hashtable;
@@ -73,6 +74,8 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -122,7 +125,6 @@ public class MainForm extends javax.swing.JFrame {
     private final String EXIT = "112";
     private final String PAUSE = "104@off";
     private final String UNPAUSE = "104@on";
-
 
     /**
      * Creates new form MainForm2
@@ -246,21 +248,17 @@ public class MainForm extends javax.swing.JFrame {
         txt_add = new javax.swing.JTextField();
         txt_mobile = new javax.swing.JTextField();
         txt_email = new javax.swing.JTextField();
-        cb_gender = new javax.swing.JComboBox();
-        btn_new = new javax.swing.JButton();
         btn_feedback = new javax.swing.JButton();
         txt_name = new javax.swing.JTextField();
-        btn_update = new javax.swing.JButton();
-        btn_clear2 = new javax.swing.JButton();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        txt_birthday = new javax.swing.JTextField();
         jButton3 = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
-        cb_type = new javax.swing.JComboBox();
         jLabel19 = new javax.swing.JLabel();
         txt_reg = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        txt_gender = new javax.swing.JTextField();
+        txt_type = new javax.swing.JTextField();
+        txt_birthday = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
         table_report = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
@@ -489,32 +487,21 @@ public class MainForm extends javax.swing.JFrame {
         jLabel14.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         txt_makh.setEditable(false);
+        txt_makh.setEnabled(false);
 
+        txt_add.setEditable(false);
         txt_add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_addActionPerformed(evt);
             }
         });
 
-        txt_mobile.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txt_mobileKeyTyped(evt);
-            }
-        });
+        txt_mobile.setEditable(false);
 
+        txt_email.setEditable(false);
         txt_email.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_emailActionPerformed(evt);
-            }
-        });
-
-        cb_gender.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Male", "Female" }));
-
-        btn_new.setText("Submit");
-        btn_new.setEnabled(false);
-        btn_new.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_newActionPerformed(evt);
             }
         });
 
@@ -526,20 +513,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
 
-        btn_update.setText("Update");
-        btn_update.setEnabled(false);
-        btn_update.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_updateActionPerformed(evt);
-            }
-        });
-
-        btn_clear2.setText("Reset");
-        btn_clear2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_clear2ActionPerformed(evt);
-            }
-        });
+        txt_name.setEditable(false);
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel16.setText("Email");
@@ -548,13 +522,6 @@ public class MainForm extends javax.swing.JFrame {
         jLabel17.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel17.setText("Birthday");
         jLabel17.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
-
-        txt_birthday.setEditable(false);
-        txt_birthday.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                txt_birthdayKeyTyped(evt);
-            }
-        });
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/map32x32.png"))); // NOI18N
         jButton3.setText("Map");
@@ -572,12 +539,13 @@ public class MainForm extends javax.swing.JFrame {
         jLabel19.setText("Registration");
         jLabel19.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jButton1.setText("Choose Day");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
+        txt_reg.setEditable(false);
+
+        txt_gender.setEditable(false);
+
+        txt_type.setEditable(false);
+
+        txt_birthday.setEditable(false);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -586,20 +554,6 @@ public class MainForm extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_mobile, javax.swing.GroupLayout.PREFERRED_SIZE, 193, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(110, 110, 110)
-                        .addComponent(txt_email))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addComponent(jLabel18)
-                        .addGap(53, 53, 53)
-                        .addComponent(cb_type, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel19)
-                        .addGap(18, 18, 18)
-                        .addComponent(txt_reg, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addGap(35, 35, 35)
@@ -614,29 +568,36 @@ public class MainForm extends javax.swing.JFrame {
                                     .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txt_makh)
-                                    .addComponent(cb_gender, 0, 193, Short.MAX_VALUE))
+                                    .addComponent(txt_makh, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                                    .addComponent(txt_gender))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel16))
                                 .addGap(26, 26, 26)
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txt_name, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                                        .addComponent(txt_birthday)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jButton1))))
+                                .addComponent(txt_name, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btn_feedback))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel18))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txt_type)
+                            .addComponent(txt_mobile, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel19)
+                                .addGap(18, 18, 18)
+                                .addComponent(txt_reg, javax.swing.GroupLayout.PREFERRED_SIZE, 325, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addComponent(btn_new, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btn_update, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btn_feedback)
-                                .addGap(18, 18, 18)
-                                .addComponent(btn_clear2, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGap(110, 110, 110)
+                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txt_birthday)
+                                    .addComponent(txt_email))))))
                 .addContainerGap())
         );
 
@@ -651,13 +612,13 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cb_gender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txt_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton1))
-                    .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_gender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(txt_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -667,23 +628,19 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(cb_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_reg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txt_type, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txt_add, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
-                    .addComponent(btn_new, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_update, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_feedback, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btn_clear2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(btn_feedback, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel8Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btn_clear2, btn_feedback, btn_new, btn_update, cb_gender, cb_type, jButton3, jLabel10, jLabel11, jLabel14, jLabel18, jLabel19, jLabel4, jLabel9, txt_add, txt_birthday, txt_email, txt_makh, txt_mobile, txt_name, txt_reg});
+        jPanel8Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btn_feedback, jButton3, jLabel10, jLabel11, jLabel14, jLabel18, jLabel19, jLabel4, jLabel9, txt_add, txt_email, txt_makh, txt_mobile, txt_name, txt_reg});
 
         table_report.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -2097,9 +2054,7 @@ public class MainForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_transferActionPerformed
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
-        showCampaign();
-        DefaultTableModel dt=new DefaultTableModel();
-        tblCustom.setModel(dt);
+        showCampaign(); 
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void tblCustomKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCustomKeyReleased
@@ -2612,55 +2567,6 @@ public class MainForm extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void btn_clear2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clear2ActionPerformed
-        // TODO add your handling code here:
-        txt_add.setText("");
-        txt_email.setText("");
-        txt_makh.setText("");
-        txt_mobile.setText("");
-        txt_name.setText("");
-        
-        txt_birthday.setText("");
-        txt_reg.setText("");
-        btn_feedback.setEnabled(false);
-        btn_update.setEnabled(false);
-        btn_new.setEnabled(false);
-    }//GEN-LAST:event_btn_clear2ActionPerformed
-
-    private void btn_updateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_updateActionPerformed
-        // TODO add your handling code here:
-        try{
-            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-            if(con.isConnect()){
-                String name = txt_name.getText();
-                String email = txt_email.getText();
-                String mobile = txt_mobile.getText();
-                String add = txt_add.getText();
-               
-                String birthday = txt_birthday.getText();
-                String gender = "";
-                if(cb_gender.getSelectedIndex() == 0)
-                    gender = "1";
-                else if (cb_gender.getSelectedIndex() == 1)
-                    gender = "0";
-                
-               
-                String sql = "UPDATE customer SET fullname ='"+name +"',email='"+email+"',phone1='"+mobile+"',"
-                                                                    + "address='"+add+"' ,gender='"+gender+"',birthday='"+birthday+"'"
-                                                                    + " WHERE id = '"+agentClient.customer.getId()+"'" ;
-                con.executeUpdate(sql);
-                System.out.println("update information success.");
-                btn_update.setEnabled(false);
-                JOptionPane.showMessageDialog(this, "Update success");
-            }
-            con.closeConnect();
-        }catch(Exception e){
-            System.out.println(""+e.toString());
-            JOptionPane.showMessageDialog(this, "Update fail");
-        }
-
-    }//GEN-LAST:event_btn_updateActionPerformed
-
     private void btn_feedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_feedbackActionPerformed
         // TODO add your handling code here:
         
@@ -2676,37 +2582,6 @@ public class MainForm extends javax.swing.JFrame {
             
     }//GEN-LAST:event_btn_feedbackActionPerformed
 
-    private void btn_newActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_newActionPerformed
-        // TODO add your handling code here:
-        try{
-            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-            if(con.isConnect()){
-                String name = txt_name.getText();
-                String email = txt_email.getText();
-                String mobile =txt_mobile.getText();
-                String add = txt_add.getText();
-              
-                String birthday = txt_birthday.getText();
-                String gender = "";
-                if(cb_gender.getSelectedIndex() == 0)
-                    gender = "1";
-                else if (cb_gender.getSelectedIndex() == 1)
-                    gender = "0";
-                String sql = "INSERT INTO customer (fullname,email,address,phone1,gender,birthday) "
-                + "VALUES ('"+name+"','"+email+"','"+add+"','"+mobile+"','"+gender+"','"+birthday+"')";
-                con.executeUpdate(sql);
-                System.out.println("new customer information success.");
-                btn_new.setEnabled(false);
-                JOptionPane.showMessageDialog(this, "Create Customer successful");
-            }
-            con.closeConnect();
-        }catch(Exception e){
-            System.out.println(""+e);
-            JOptionPane.showMessageDialog(this, "Create Customer fail");
-        }
-
-    }//GEN-LAST:event_btn_newActionPerformed
-
     private void txt_emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_emailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_emailActionPerformed
@@ -2714,48 +2589,6 @@ public class MainForm extends javax.swing.JFrame {
     private void txt_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_addActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_addActionPerformed
-
-    private void txt_birthdayKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_birthdayKeyTyped
-       
-    }//GEN-LAST:event_txt_birthdayKeyTyped
-
-    private void txt_mobileKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_mobileKeyTyped
-         int key=evt.getKeyChar();
-        String st=txt_mobile.getText();
-        String stTest="0123456789";
-        if(key != KeyEvent.VK_BACK_SPACE &&key !=KeyEvent.VK_DELETE &&key !=KeyEvent.VK_ENTER)
-        {
-            int flag=0;
-            if(stTest.indexOf(evt.getKeyChar())==-1)
-            {
-                flag++;
-                JOptionPane.showMessageDialog(this,"Must enter number only");
-            }
-            if (st.length()>10)
-            {
-                flag++;
-                JOptionPane.showMessageDialog(this,"Lenght 10 charater only");
-            }
-            if (flag>0)
-            { 
-                evt.consume();
-            }
-        }
-    }//GEN-LAST:event_txt_mobileKeyTyped
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        JFrame f = new JFrame();
-       
-        String s=new DatePicker(f).setPickedDate();
-         if("".equals(s)) {
-            JOptionPane.showMessageDialog(null,"Please Choose True Day");
-        }
-        else
-        {
-              txt_birthday.setText(s);
-                
-        }
-    }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnViewFBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewFBActionPerformed
         feedback = new FeedbackForm(this,agentObject,agentClient);
@@ -3103,8 +2936,9 @@ public class MainForm extends javax.swing.JFrame {
                                         + "INNER JOIN agent_login a ON k.agent_id = a.id) "
                                         + "AS asd ";
 
-                    sql+=" where agent_id= '"+lb_agentid.getText()+"' and end_day > '"+lb_logintime.getText()+"' "
-                                        + " group by campaign_id,create_day,start_day,end_day,agent_id";
+                    sql+=" WHERE agent_id= '"+lb_agentid.getText()+"' AND end_day > '"+lb_logintime.getText()+"' "
+                                        + " GROUP BY campaign_id,create_day,start_day,end_day,agent_id"
+                                        + " ORDER BY start_day ASC ";
                     ResultSet result = con.executeQuery(sql);
                     tblCamp.getTableHeader().setReorderingAllowed(false);
                     String strHeader[]={"Number","Campaign name","Day Create","Start Day","End Day","Camp_id","Description"};
@@ -3117,7 +2951,7 @@ public class MainForm extends javax.swing.JFrame {
                         }
 
                     };
-
+                   
                     int i=0;
                     while (result.next()) {
                         i++;
@@ -3156,7 +2990,9 @@ public class MainForm extends javax.swing.JFrame {
                         
                         dt.addRow(rowdata);
                     }
+                     
                     tblCamp.setModel(dt);
+                    
                     TableColumn column = null;
                     for (int k = 0;k < tblCamp.getColumnCount(); k++) {
                     column = tblCamp.getColumnModel().getColumn(k);
@@ -3677,19 +3513,13 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btn_9;
     private javax.swing.JButton btn_back;
     private javax.swing.JButton btn_clear;
-    private javax.swing.JButton btn_clear2;
     public javax.swing.JButton btn_dial;
     public javax.swing.JButton btn_feedback;
     public javax.swing.JButton btn_hangup;
     public javax.swing.JButton btn_logout;
-    public javax.swing.JButton btn_new;
     public javax.swing.JToggleButton btn_pause;
     public javax.swing.JButton btn_transfer;
-    public javax.swing.JButton btn_update;
-    public javax.swing.JComboBox cb_gender;
-    public javax.swing.JComboBox cb_type;
     private javax.swing.JCheckBox chkTime;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -3763,11 +3593,13 @@ public class MainForm extends javax.swing.JFrame {
     public javax.swing.JTextField txt_add;
     public javax.swing.JTextField txt_birthday;
     public javax.swing.JTextField txt_email;
+    public javax.swing.JTextField txt_gender;
     public javax.swing.JTextField txt_makh;
     public javax.swing.JTextField txt_mobile;
     public javax.swing.JTextField txt_name;
     private javax.swing.JTextField txt_phonenum;
     public javax.swing.JTextField txt_reg;
+    public javax.swing.JTextField txt_type;
     // End of variables declaration//GEN-END:variables
  //</editor-fold>
 }

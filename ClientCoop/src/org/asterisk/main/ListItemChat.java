@@ -243,7 +243,7 @@ public class ListItemChat extends javax.swing.JFrame {
     private void tblListItemChatKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblListItemChatKeyReleased
         if(evt.getKeyCode() == 10){
               show_chat(); 
-            }   
+        }   
     }//GEN-LAST:event_tblListItemChatKeyReleased
  
    private void show_chat()
