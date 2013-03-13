@@ -89,9 +89,12 @@ public class Agent implements Runnable{
                         fromServer = in.readUTF();                        
                         if(fromServer == null){
                             System.out.println("null value from server");  
-                            agentLogout();
-                            new LoginForm().setVisible(true);
-                            closeConnect();
+                            synchronized(synObject){
+                                agentLogout();
+                                if(!loginform.isVisible())
+                                    new LoginForm().setVisible(true);
+                                closeConnect();                                
+                            }
                         }                        
                         fromServer = new String (secure.decode(fromServer.getBytes("ISO-8859-1")), "UTF-8");                        
                         System.out.println("Receive from server: "+fromServer);
@@ -132,12 +135,16 @@ public class Agent implements Runnable{
                                 loginform.lb_option.setEnabled(true);
                                 loginform.txt_img_wait.setVisible(false);   
                                 loginform.pwd.setEnabled(true);   
-                                closeConnect();
+                                synchronized(synObject){
+                                    closeConnect();
+                                }
                             break;
                             case LOGOUTSUCC: //result LOGOUT SUCCESS
-                                agentLogout();
-                                new LoginForm().setVisible(true);
-                                closeConnect();                                                       
+                                synchronized(synObject){
+                                    agentLogout();
+                                    new LoginForm().setVisible(true);
+                                    closeConnect();                                                                                           
+                                }
                             break;
                             case LOGOUTFAIL: //result LOGOUT FAIL
                                 System.out.println("LOGOUT FAIL");
@@ -376,9 +383,11 @@ public class Agent implements Runnable{
                                     public void run() {
                                         try {
                                             Thread.sleep(10000);                                   
-                                            agentLogout();
-                                            new LoginForm().setVisible(true);
-                                            closeConnect();
+                                            synchronized(synObject){
+                                                agentLogout();
+                                                new LoginForm().setVisible(true);
+                                                closeConnect();                                                
+                                            }                                          
                                             keep_alive.stop();
                                         } catch (Exception ex) { }  
                                     }
@@ -402,9 +411,10 @@ public class Agent implements Runnable{
                         }
                     }catch(SocketException ex){
                         System.out.println("Socket exception client: "+ex);
-                        agentLogout();
-                        new LoginForm().setVisible(true);
-                        closeConnect();                        
+//                        agentLogout();
+//                        if(!loginform.isVisible())
+//                            new LoginForm().setVisible(true);
+//                        closeConnect();                        
                     }
                 }
             }catch (Exception e){
@@ -488,17 +498,15 @@ public class Agent implements Runnable{
         }
         public void agentLogout(){
             try{            
-                synchronized(synObject){     
-                    if(close){
-                        running = false;
-                        close = false;
-                        mainForm.setVisible(false);
-                        mainForm.dispose();
-                        mainForm = null; 
-                        if(worktime != null)
-                            worktime.stop();
-                    }                   
-                }  
+                if(close){
+                    running = false;
+                    close = false;
+                    mainForm.setVisible(false);
+                    mainForm.dispose();
+                    mainForm = null; 
+                    if(worktime != null)
+                        worktime.stop();
+                }                   
             }catch(Exception e){
                 System.out.println("agentLogout: "+e);
             }             
@@ -507,7 +515,7 @@ public class Agent implements Runnable{
         //send request to server - string
 	public void sendtoServer(String data) throws IOException{            
             try{
-                if(clientSocket != null){
+                if(clientSocket != null && out != null){
                     System.out.println("send to server: "+data);
                     String encryptData = new String (secure.encode(data.getBytes("UTF-8")),"ISO-8859-1");
                     out.writeUTF(encryptData);
@@ -521,17 +529,15 @@ public class Agent implements Runnable{
 	public void closeConnect()throws Exception{
             try{
                 System.out.println("start close session");                
-                if(clientSocket != null){                    
+                if(clientSocket != null && clientSocket.isConnected()){
                     clientSocket.close(); 
                     System.out.println("close socket");                    
                 }                                       
                 keepAlive.stop();
-                if (keep_alive != null) {
-                    if (keep_alive.isAlive()) {
-                        keep_alive.stop();
-                    }
+                if (keep_alive != null && keep_alive.isAlive()) {
+                    keep_alive.stop();
                 }                 
-                if(mainThread != null){                    
+                if(mainThread != null && mainThread.isAlive()){                    
                     System.out.println("close thread"); 
                     System.out.println("finish close session");
                     mainThread.stop();
@@ -544,7 +550,7 @@ public class Agent implements Runnable{
         
         
 	public static ArrayList<String> getList(String cmd){
-            ArrayList<String> list =  new ArrayList<String>();
+            ArrayList<String> list =  new ArrayList();
             StringTokenizer st = new StringTokenizer(cmd,"@");
             while(st.hasMoreTokens())
         	list.add(st.nextToken());            
