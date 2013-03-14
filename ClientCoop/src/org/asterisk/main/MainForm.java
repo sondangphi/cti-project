@@ -2093,9 +2093,7 @@ public class MainForm extends javax.swing.JFrame {
         Dial();
         try {
             agentClient.sendtoServer("108@"+CallPhone);
-        } catch (IOException ex) {
-            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        } catch (Exception ex) {}
     }//GEN-LAST:event_btnDialActionPerformed
 
     private void btnShowCoopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowCoopActionPerformed

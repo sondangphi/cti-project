@@ -196,9 +196,7 @@ public class ChangepwdForm extends javax.swing.JFrame {
                             try {
                                 agentclient.sendtoServer("110@"+newpwd1);
                                 System.out.println("change passs");
-                            } catch (IOException ex) {
-                                Logger.getLogger(ChangepwdForm.class.getName()).log(Level.SEVERE, null, ex);
-                            }
+                            } catch (Exception ex) {}
                         }else{
                             JOptionPane.showMessageDialog(this,"New password must difference old password");
                         }                                
