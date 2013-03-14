@@ -21,17 +21,17 @@ public class KeepAlive implements Runnable{
     }    
 
     public void stop() {
-        if (thread != null) {
-            if (thread.isAlive()) {
-                thread.stop();
-            }
-        }
+        if (thread != null && thread.isAlive())
+            thread.stop();        
+    }
+    public boolean isAlive(){
+        return thread.isAlive();
     }
     
     @Override
     public void run() {
        try{
-           while(agent.clientSocket.isConnected() && agent.running){
+           while(!agent.clientSocket.isClosed() && agent.running){
                Thread.sleep(5000);
                agent.sendtoServer("222");
            }
