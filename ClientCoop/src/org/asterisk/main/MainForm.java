@@ -84,6 +84,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.text.StyledEditorKit;
+import javax.swing.text.html.HTML;
 import org.asterisk.model.AgentObject;
 import org.asterisk.utility.Agent;
 import org.asterisk.utility.ConnectDatabase;
@@ -2694,11 +2695,11 @@ public class MainForm extends javax.swing.JFrame {
 
 
     private void btnChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChatActionPerformed
-//       messageform=new MessageForm(agentObject.getAgentId(), agentClient);
-//       messageform.setVisible(true);
+       messageform=new MessageForm(agentObject.getAgentId(), agentClient);
+       messageform.setVisible(true);
         
-        itemchat=new ListItemChat(agentObject.getAgentId(), agentClient);
-       itemchat.setVisible(true);
+//        itemchat=new ListItemChat(agentObject.getAgentId(), agentClient);
+//       itemchat.setVisible(true);
     }//GEN-LAST:event_btnChatActionPerformed
 
     public void setAllEnable(boolean flag){
@@ -3317,7 +3318,8 @@ public class MainForm extends javax.swing.JFrame {
 
                     String col7=""+this.tblCustom.getValueAt(row,7);
                     String col11=""+this.tblCustom.getValueAt(row,11);
-                    quesF.txtNote.setText(col11); 
+                   
+                    quesF.txtNote.setText(HtmlCoding.decode(col11)); 
                     
                    
 
@@ -3415,7 +3417,7 @@ public class MainForm extends javax.swing.JFrame {
         webBrowser.setStatusBarVisible(true);
         try {
             webBrowser.setHTMLContent("<body onload='autoload()'>"
-                    + "<a id='autoload' href='file:///"+new File(".").getCanonicalPath()+"/src/org/asterisk/browser/mycontext.html?diadiem="+ URLEncoder.encode(txt_add.getText()) +"'></a>"
+                    + "<a id='autoload' href='file:///"+new File(".").getCanonicalPath()+"/http/mycontext.html?diadiem="+ URLEncoder.encode(txt_add.getText()) +"'></a>"
                  
                    
                     + "</body>"

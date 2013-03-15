@@ -72,7 +72,7 @@ public class ListItemChat extends javax.swing.JFrame {
        }
    }
    
-   public void popup(String Agent, String message)
+   public void popup1(String Agent, String message)
    {
         try {
             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);

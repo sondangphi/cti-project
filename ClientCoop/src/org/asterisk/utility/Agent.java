@@ -214,20 +214,7 @@ public class Agent implements Runnable{
                                     con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
                                     if(con.isConnect()){
                                         System.out.println("get information of customer"); 
-                                        String query="SELECT * FROM cus_type";
-                                        ResultSet rs2 = con.executeQuery(query);
-                                        
-
-//                                        ArrayList<String> cb_list = new ArrayList<>();
-//                                        while(rs2.next())
-//                                        {
-//                                            cb_list.add(rs2.getString("desc"));
-//
-//                                        }
-
-//                                        mainForm.cb_type.setModel(new DefaultComboBoxModel(cb_list.toArray()));
-
-                                        String sql = "SELECT * FROM customer c LEFT JOIN cus_type t "
+                                        String sql = "SELECT c.*,t.* FROM customer c LEFT JOIN cus_type t "
                                                 + "on c.type=t.id_type  WHERE phone1 ='"+callerNum+"'";
                                         ResultSet rs = con.executeQuery(sql);
                                         if(rs.next()){
@@ -239,6 +226,7 @@ public class Agent implements Runnable{
                                             customer.setAddress(rs.getString("address"));
                                             customer.setEmail(rs.getString("email"));
                                             customer.setGender(rs.getString("gender"));
+                                            
                                             customer.setType(rs.getString("desc"));
                                             customer.setId(String.valueOf(rs.getObject("id")));   
                                             customer.setBirth(String.valueOf(rs.getObject("birthday"))); 
@@ -250,13 +238,18 @@ public class Agent implements Runnable{
                                             mainForm.txt_makh.setText(customer.getId());
                                             mainForm.txt_birthday.setText(customer.getBirth());
                                             mainForm.txt_reg.setText(customer.getReg());
-                                            mainForm.txt_gender.setText(customer.getGender());
+                                            
+                                            String gender="";
+                                            if(Integer.parseInt(customer.getGender())==0)
+                                            {
+                                                gender="nữ";
+                                            }
+                                            else
+                                            {
+                                                gender="nam";
+                                            }
+                                            mainForm.txt_gender.setText(gender);
                                             mainForm.txt_type.setText(customer.getType());
-//                                            if(gender.equalsIgnoreCase("1"))
-////                                                mainForm.cb_gender.setSelectedIndex(0);
-//                                            else
-////                                                mainForm.cb_gender.setSelectedIndex(1);
-//                                            mainForm.btn_new.setEnabled(false);
 
                                             sql = "SELECT f.*,a.name as `a_name`,a.email "
                                                     + "FROM feedback_history f LEFT OUTER JOIN feedback_assign a ON f.assign=a.id"
@@ -267,8 +260,6 @@ public class Agent implements Runnable{
                                             if(rs != null)
                                             {  
                                                 displayHistory(rs);  
-//                                                mainForm.table_report.setAutoCreateRowSorter(true);
-//                                                mainForm.table_report.getRowSorter().setSortKeys(Arrays.asList(new RowSorter.SortKey(1, SortOrder.DESCENDING)));
                                             }
                                         }else{
                                             //new customer information, insert into database
@@ -385,15 +376,25 @@ public class Agent implements Runnable{
                                 keep_alive.start();      
                                 break;                           
                         case CHAT:                            
-                                System.err.println("chat1");
+//                                System.err.println("chat1");
+//                                System.err.println("chat: "+command);
+//                                if (MainForm.itemchat == null || !MainForm.itemchat.isVisible()) {
+//                                    MainForm.itemchat=new ListItemChat(agentObject.getAgentId(), this);
+//                                    MainForm.itemchat.popup(cmdList.get(1), cmdList.get(2));
+//                                }
+//                                else {
+//                                    MainForm.itemchat.receive(cmdList.get(1), cmdList.get(2));
+//                                }     
+                            
+                             System.err.println("chat1");
                                 System.err.println("chat: "+command);
-                                if (MainForm.itemchat == null || !MainForm.itemchat.isVisible()) {
-                                    MainForm.itemchat=new ListItemChat(agentObject.getAgentId(), this);
-                                    MainForm.itemchat.popup(cmdList.get(1), cmdList.get(2));
+                                if (MainForm.messageform == null || !MainForm.messageform.isVisible()) {
+                                    MainForm.messageform=new MessageForm(agentObject.getAgentId(), this);
+                                    MainForm.messageform.popup(cmdList.get(1), cmdList.get(2));
                                 }
                                 else {
-                                    MainForm.itemchat.receive(cmdList.get(1), cmdList.get(2));
-                                }                            
+                                    MainForm.messageform.receive(cmdList.get(1), cmdList.get(2));
+                                }    
                             break;                                                            
                         default: 
                           System.out.println("default values from server\t"+command);

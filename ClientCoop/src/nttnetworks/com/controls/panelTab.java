@@ -4,44 +4,129 @@
  */
 package nttnetworks.com.controls;
 
+import java.awt.FontMetrics;
+import java.io.File;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Date;
+
 /**
  *
  * @author PHUONGTRANG
  */
 public class panelTab extends javax.swing.JPanel {
-   String HTML="<html><body>%s</body></html>";
-   String content="";
-   String FName;
+    private final Object syn_fix = new Object();
+    String HTML="<html><body>%s</body></html>";
+    String content="";
+    String FName;
+//    String Mess;
+     private final String[] colors = new String[] {
+        "#ff0000",
+        "#0000ff"
+    };
     public IPanelTabEvent events;
     public String getText() {
         return jTextField1.getText();
     }
+    
     public void send() {
         jTextField1.setText("");
+        
     }
 
     private void showcontent()
     {
-        jTextArea1.setText(String.format(HTML, content));
+//        jEditorPane1.setContentType("text/html");
+        jEditorPane2.setContentType("text/html");
+        
+//        jEditorPane1.setText(String.format(HTML, content));
+       
+        jEditorPane2.setText(String.format(HTML, content));
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (panelTab.this.isVisible()) {
+                    synchronized (syn_fix) {
+                        panelTab.this.setSize(panelTab.this.getWidth() - 1, panelTab.this.getHeight());
+                        try {
+                            Thread.sleep(200);
+                        } catch (InterruptedException ex) { }
+                        panelTab.this.setSize(panelTab.this.getWidth() + 1, panelTab.this.getHeight());
+                    }
+                }
+            }
+        }).start();
+        
+        
+//        fixHeight();
     }
-    
+//      private void fixHeight() {
+//        int lines = content.length() - content.replace("<br />", "lass='br />").length();
+//        int height = lines * jEditorPane1.getFontMetrics(jEditorPane1.getFont()).getHeight();
+//        
+//        jEditorPane1.setSize(jEditorPane1.getWidth(), height);
+//    }
     public void showMessage(String name, String message) {
-        if(FName==null)
-        {
-            FName=name;
+        String color;
+        if (FName == null) {
+            FName = name;
+            color = colors[0];
+        } else {
+            color = colors[1];
+            if (FName.equals(name)) {
+                color = colors[0];
+            }
+        }
+        if(!"".equals(message)){
+             content += "<span class='row'><span style='color: "+ color +"; font-weight: bold; float: left'>"+ 
+                    name +":</span><span style='float: left'> "+ wrap(name, message.replace("&#64;", "@")) +"</span></span><br />";
+            showcontent();
+         }
+
+    }
+    private String wrap(String agent, String message) {
+        String mess = agent + ": " + message;
+        FontMetrics met = jEditorPane2.getFontMetrics(jEditorPane2.getFont());
+        
+        StringBuilder out = new StringBuilder();
+        int first_line = agent.length() + 2;
+        int preI = agent.length() + 2;
+        int w = 0;
+        int pre_w = 0;
+        
+        for (int i=agent.length() + 2; i<mess.length(); i++) {
+            char c = mess.charAt(i);
+            
+            if (c == ' ') {
+                preI = i;
+            } else {
+                w = met.stringWidth(mess.substring(0, i)) - pre_w;
+                if (w >= jEditorPane2.getWidth()-10) {
+                    if (preI > first_line) {
+                        int end_pos = preI - agent.length() - 2;
+                        int start_pos = first_line - agent.length() - 2;
+                        out.append(message.substring(start_pos, end_pos - start_pos))
+                                .append("<br />");
+                        first_line = preI = preI + 1;
+                        pre_w += w;
+                    } else if (preI == first_line) {
+                        preI = i;
+                        int end_pos = preI - agent.length() - 2;
+                        int start_pos = first_line - agent.length() - 2;
+                        out.append(message.substring(start_pos, end_pos))
+                                .append("<br />");
+                        first_line = preI = preI + 1;
+                        pre_w += w;
+                    }
+                }
+            }
         }
         
-        if(!"".equals(message)){
-            content+="<br />"+((name.equals(FName))?"<span style=' color: #999'>":"<span style=' color: #000099'>")+name+"</span>: "
-                    +message.replace("&#64;", "@");
-            showcontent();
-        }
-      
+        int end_pos = mess.length() - agent.length() - 2;
+        int start_pos = first_line - agent.length() - 2;
+        out.append(message.substring(start_pos, end_pos));
+        return out.toString();
     }
-    
-    /**
-     * Creates new form penelTab
-     */
     public panelTab() {
         initComponents();
 
@@ -58,7 +143,8 @@ public class panelTab extends javax.swing.JPanel {
 
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
-        jTextArea1 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jEditorPane2 = new javax.swing.JEditorPane();
 
         jTextField1.setText("jTextField1");
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -74,10 +160,7 @@ public class panelTab extends javax.swing.JPanel {
             }
         });
 
-        jTextArea1.setBackground(new java.awt.Color(255, 255, 255));
-        jTextArea1.setVerticalAlignment(javax.swing.SwingConstants.TOP);
-        jTextArea1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jTextArea1.setOpaque(true);
+        jScrollPane2.setViewportView(jEditorPane2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -86,23 +169,22 @@ public class panelTab extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextArea1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 246, Short.MAX_VALUE)
+                        .addComponent(jTextField1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1)))
+                        .addComponent(jButton1))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTextArea1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1))
-                .addContainerGap())
+                .addContainerGap(24, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -119,7 +201,8 @@ public class panelTab extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
-    private javax.swing.JLabel jTextArea1;
+    private javax.swing.JEditorPane jEditorPane2;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
     // End of variables declaration//GEN-END:variables
 }

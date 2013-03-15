@@ -64,16 +64,17 @@ public class TabCloseIcon implements Icon
                         try{
                             mTabbedPane.remove( index );
                             e.consume();
-                            if(mTabbedPane.getTabCount()==0)
-                            {
-                                Component com = mTabbedPane;
-                                do{
-                                    com = com.getParent();
-                                }
-                                while(!(com instanceof JFrame));
-                                
-                                ((JFrame)com).dispose();
-                            }
+//                            if(mTabbedPane.getTabCount()==0)
+//                            {
+//                                
+//                                Component com = mTabbedPane;
+//                                do{
+//                                    com = com.getParent();
+//                                }
+//                                while(!(com instanceof JFrame));
+//                                
+//                                ((JFrame)com).dispose();
+//                            }
                         }catch(Exception ex){}
                     }
                  }
