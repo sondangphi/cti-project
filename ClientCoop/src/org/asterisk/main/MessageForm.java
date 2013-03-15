@@ -21,6 +21,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -30,6 +31,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import nttnetworks.com.controls.IPanelTabEvent;
+import nttnetworks.com.controls.TabCloseIcon;
 import nttnetworks.com.controls.panelTab;
 import org.asterisk.utility.Agent;
 import org.asterisk.utility.ConnectDatabase;
@@ -69,7 +71,7 @@ public class MessageForm extends javax.swing.JFrame {
             Mysql_server = uti.readInfor(filename, "MySql_server");
             Mysql_user = uti.readInfor(filename, "MySql_user");
             Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
-            jTabbedPane1.setTabPlacement(3);
+            //jTabbedPane1.setTabPlacement(3);
             showAgent();
         } catch (Exception ex) {
             Logger.getLogger(MessageForm.class.getName()).log(Level.SEVERE, null, ex);
@@ -85,7 +87,7 @@ public class MessageForm extends javax.swing.JFrame {
             Mysql_server = uti.readInfor(filename, "MySql_server");
             Mysql_user = uti.readInfor(filename, "MySql_user");
             Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
-            jTabbedPane1.setTabPlacement(3);
+            //jTabbedPane1.setTabPlacement(3);
             showAgent();
             this.Agent_loged = Agent_loged;
             this.agentClient = agentClient;
@@ -111,6 +113,7 @@ public class MessageForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
+        jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
         jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTabbedPane1MouseClicked(evt);
@@ -164,29 +167,28 @@ public class MessageForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 109, Short.MAX_VALUE)
                         .addComponent(jCheckBox1)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 346, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(12, 12, 12))
+                        .addComponent(jButton2))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(21, 21, 21)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton2)
-                            .addComponent(jCheckBox1))))
+                            .addComponent(jCheckBox1)))
+                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -220,13 +222,13 @@ public class MessageForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jCheckBox1MouseClicked
 
     private void jTabbedPane1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTabbedPane1MouseClicked
-        String s="";
-        for(int i=0;i<=jTabbedPane1.getSelectedIndex();i++)
-        {
-            s=jTabbedPane1.getTitleAt(i);
-        }
-        //System.out.println(s);
-        System.err.println("index : "+jTabbedPane1.getSelectedIndex()+ " : "+ s);
+//        String s="";
+//        for(int i=0;i<=jTabbedPane1.getSelectedIndex();i++)
+//        {
+//            s=jTabbedPane1.getTitleAt(i);
+//        }
+//        //System.out.println(s);
+//        System.err.println("index : "+jTabbedPane1.getSelectedIndex()+ " : "+ s);
     }//GEN-LAST:event_jTabbedPane1MouseClicked
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -292,19 +294,21 @@ public class MessageForm extends javax.swing.JFrame {
 
             if(con.isConnect())
             {
-                int row=jTable1.getSelectedRow();
-                final String col1=""+jTable1.getValueAt(row,1); 
-                for(int i=0;i<jTabbedPane1.getTabCount();i++)
-                {
-                    if(jTabbedPane1.getTitleAt(i).equals(col1))
+                 
+                
+                    int row=jTable1.getSelectedRow();
+                    final String col1=""+jTable1.getValueAt(row,1); 
+                    for(int i=0;i<jTabbedPane1.getTabCount();i++)
                     {
-                        jTabbedPane1.setSelectedIndex(i);
-                        return;
+                        if(jTabbedPane1.getTitleAt(i).equals(col1))
+                        {
+                            jTabbedPane1.setSelectedIndex(i);
+                            return;
+                        }
+
                     }
 
-                }
-
-
+              
                 final panelTab tab=new panelTab();
                 tab.events = new IPanelTabEvent() {
                     @Override
@@ -320,12 +324,19 @@ public class MessageForm extends javax.swing.JFrame {
                     }
                 };
 
-                jTabbedPane1.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-                jTabbedPane1.addTab(col1, tab);
+//                jTabbedPane1.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+                jTabbedPane1.addTab(col1,new TabCloseIcon(), tab);
                 int display=jTabbedPane1.getTabCount()-1;
                 jTabbedPane1.setSelectedIndex(display);
 
                mapAgent.put(col1, tab);
+               
+               String s="";
+                for(int i=0;i< jTabbedPane1.getTabCount();i++)
+                {
+                    s+=(jTabbedPane1.getTitleAt(i).toString()+",");
+                }
+                this.setTitle(s.substring(0,s.length()-1));
             }
             con.closeConnect();
         }
@@ -566,7 +577,71 @@ public class MessageForm extends javax.swing.JFrame {
         }
                 
     }
-   
+   public void popup(String Agent, String message)
+   {
+        try {
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+
+            if(con.isConnect())
+            {
+                
+                
+                 if(this==null || !this.isVisible())
+                {
+                    int row=jTable1.getSelectedRow();
+                    final String col1=""+jTable1.getValueAt(row,1); 
+                    for(int i=0;i<jTabbedPane1.getTabCount();i++)
+                    {
+                        if(jTabbedPane1.getTitleAt(i).equals(col1))
+                        {
+                            jTabbedPane1.setSelectedIndex(i);
+                            return;
+                        }
+
+                    }
+                }
+               
+
+                final String col1=Agent;
+
+ 
+//                JOptionPane.showMessageDialog(null, "6");
+                final panelTab tab=new panelTab();
+                tab.events = new IPanelTabEvent() {
+                    @Override
+                    public void send() {
+                        try {
+                            if(!"".equals(tab.getText())){
+                                //send
+                                agentClient.sendtoServer("120@"+Agent_loged+"@"+col1+"@"+tab.getText().replace("@", "&#64;"));
+                                tab.showMessage(Agent_loged, tab.getText());
+                                tab.send();
+                            }
+                        } catch (Exception ex) {}
+                    }
+                };
+
+               
+                jTabbedPane1.addTab(col1,new TabCloseIcon(), tab);
+                int display= jTabbedPane1.getTabCount()-1;
+                jTabbedPane1.setSelectedIndex(display);
+
+                mapAgent.put(col1, tab);
+                String s="";
+                for(int i=0;i< jTabbedPane1.getTabCount();i++)
+                {
+                    s+=(jTabbedPane1.getTitleAt(i).toString()+",");
+                }
+                this.setTitle(s.substring(0,s.length()-1));
+                tab.showMessage(col1, message);
+            }
+            con.closeConnect();
+        }
+        catch(Exception e)
+        {
+
+        }
+   }
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
