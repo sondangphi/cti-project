@@ -594,8 +594,9 @@ public class Agent implements Runnable{
 	public static ArrayList<String> getList(String cmd){
             ArrayList<String> list =  new ArrayList();
             StringTokenizer st = new StringTokenizer(cmd,"@");
-            while(st.hasMoreTokens())
+            while(st.hasMoreTokens()){
         	list.add(st.nextToken());            
+            }
             return list;
 	}	
         
