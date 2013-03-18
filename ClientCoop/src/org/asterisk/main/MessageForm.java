@@ -33,6 +33,7 @@ import javax.swing.table.TableColumn;
 import nttnetworks.com.controls.IPanelTabEvent;
 import nttnetworks.com.controls.TabCloseIcon;
 import nttnetworks.com.controls.panelTab;
+import nttnetworks.com.controls.panelTab1;
 import org.asterisk.utility.Agent;
 import org.asterisk.utility.ConnectDatabase;
 import org.asterisk.utility.Utility;
@@ -44,7 +45,7 @@ import org.asterisk.utility.Utility;
 public class MessageForm extends javax.swing.JFrame {
 
     private String Agent_loged = "unknown";
-    private HashMap <String,panelTab> mapAgent=new HashMap<>();
+    private HashMap <String,panelTab1> mapAgent=new HashMap<>();
     private  String filename = "infor.properties";
     private  String Mysql_server = "172.168.10.202";      
     private  String Mysql_dbname = "ast_callcenter";
@@ -57,7 +58,7 @@ public class MessageForm extends javax.swing.JFrame {
    public static MainForm mainform = null ;
    
    public void receive(String from, String message) {
-       panelTab tabs = mapAgent.get(from);
+       panelTab1 tabs = mapAgent.get(from);
        if (tabs != null) {
             tabs.showMessage(from, message);
        }
@@ -112,6 +113,7 @@ public class MessageForm extends javax.swing.JFrame {
         jCheckBox1 = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
+        setResizable(false);
 
         jTabbedPane1.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
         jTabbedPane1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -174,22 +176,22 @@ public class MessageForm extends javax.swing.JFrame {
                         .addComponent(jButton2))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(21, 21, 21)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
                         .addGap(10, 10, 10)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jButton2)
                             .addComponent(jCheckBox1)))
-                    .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jTabbedPane1))
+                .addContainerGap())
         );
 
         pack();
@@ -309,7 +311,7 @@ public class MessageForm extends javax.swing.JFrame {
                     }
 
               
-                final panelTab tab=new panelTab();
+                final panelTab1 tab=new panelTab1();
                 tab.events = new IPanelTabEvent() {
                     @Override
                     public void send() {
@@ -329,9 +331,9 @@ public class MessageForm extends javax.swing.JFrame {
                 int display=jTabbedPane1.getTabCount()-1;
                 jTabbedPane1.setSelectedIndex(display);
 
-               mapAgent.put(col1, tab);
+                mapAgent.put(col1, tab);
                
-               String s="";
+                String s="";
                 for(int i=0;i< jTabbedPane1.getTabCount();i++)
                 {
                     s+=(jTabbedPane1.getTitleAt(i).toString()+",");
@@ -586,8 +588,8 @@ public class MessageForm extends javax.swing.JFrame {
             {
                 
                 
-                 if(this==null || !this.isVisible())
-                {
+//                 if(this==null || !this.isVisible())
+//                {
                     int row=jTable1.getSelectedRow();
                     final String col1=""+jTable1.getValueAt(row,1); 
                     for(int i=0;i<jTabbedPane1.getTabCount();i++)
@@ -599,25 +601,27 @@ public class MessageForm extends javax.swing.JFrame {
                         }
 
                     }
-                }
+//                }
                
 
-                final String col1=Agent;
+                final String agent=Agent;
 
  
 //                JOptionPane.showMessageDialog(null, "6");
-                final panelTab tab=new panelTab();
+                final panelTab1 tab=new panelTab1();
                 tab.events = new IPanelTabEvent() {
                     @Override
                     public void send() {
                         try {
                             if(!"".equals(tab.getText())){
                                 //send
-                                agentClient.sendtoServer("120@"+Agent_loged+"@"+col1+"@"+tab.getText().replace("@", "&#64;"));
+                                agentClient.sendtoServer("120@"+Agent_loged+"@"+agent+"@"+tab.getText().replace("@", "&#64;"));
                                 tab.showMessage(Agent_loged, tab.getText());
                                 tab.send();
                             }
-                        } catch (Exception ex) {}
+                        } catch (Exception ex) {
+                            System.out.println("send paneltab "+ex);
+                        }
                     }
                 };
 

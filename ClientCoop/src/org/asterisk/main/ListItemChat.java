@@ -253,8 +253,6 @@ public class ListItemChat extends javax.swing.JFrame {
 
             if(con.isConnect())
             {
-                
-                
                  if(showchat==null || !showchat.isVisible())
                 {
                     jTabbedPane1=new JTabbedPane();

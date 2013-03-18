@@ -93,7 +93,7 @@ public class Agent implements Runnable{
                         break;
                     fromServer = new String (secure.decode(fromServer.getBytes("ISO-8859-1")), "UTF-8");                        
                     System.out.println("Receive from server: "+fromServer);
-                    ArrayList<String> cmdList = getList(fromServer);							
+                    final ArrayList<String> cmdList = getList(fromServer);							
                     code = CODE.valueOf(cmdList.get(0).toUpperCase());
                     switch(code){
                         case LOGINSUCC: //result LOGIN SUCCESS
@@ -247,7 +247,7 @@ public class Agent implements Runnable{
                                         String gender="";
                                         if(Integer.parseInt(customer.getGender())==0)
                                         {
-                                            gender="nữ";
+                                            gender="n?";
                                         }
                                         else
                                         {
@@ -391,20 +391,35 @@ public class Agent implements Runnable{
 //                                    MainForm.itemchat.receive(cmdList.get(1), cmdList.get(2));
 //                                }     
 
-                         System.err.println("chat1");
-                            System.err.println("chat: "+command);
-                            if (MainForm.messageform == null || !MainForm.messageform.isVisible()) {
-                                MainForm.messageform=new MessageForm(agentObject.getAgentId(), this);
-                                MainForm.messageform.popup(cmdList.get(1), cmdList.get(2));
-                            }
-                            else {
-                                MainForm.messageform.receive(cmdList.get(1), cmdList.get(2));
-                            }    
-                        break;                                                            
-                    default: 
-                      System.out.println("default values from server\t"+command);
-                        break;
-                    }
+                        new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    try {
+
+                                        System.err.println("chat1");
+        //                                   System.err.println("chat: "+command);
+                                        if (MainForm.messageform == null || !MainForm.messageform.isVisible()) {
+                                            MainForm.messageform=new MessageForm(agentObject.getAgentId(), Agent.this);
+                                            MainForm.messageform.popup(cmdList.get(1), cmdList.get(2));
+                                        }
+                                        else {
+                                            MainForm.messageform.receive(cmdList.get(1), cmdList.get(2));
+                                        }
+                                    }
+                                    catch(Exception e){
+                                        System.out.println("Exception client  1 : "+e);
+                                    }
+                                }
+                            }).start();
+                            
+                            break;
+                                
+                           default: 
+//                             System.out.println("default values from server\t"+command);
+                               break;
+                              
+                        }
+
                 }
                 catch(Exception ex){
                     System.out.println("Exception client: "+ex);
