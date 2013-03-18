@@ -45,7 +45,7 @@ import org.asterisk.utility.Utility;
 public class MessageForm extends javax.swing.JFrame {
 
     private String Agent_loged = "unknown";
-    private HashMap <String,panelTab1> mapAgent=new HashMap<>();
+    public HashMap <String,panelTab1> mapAgent=new HashMap<>();
     private  String filename = "infor.properties";
     private  String Mysql_server = "172.168.10.202";      
     private  String Mysql_dbname = "ast_callcenter";
@@ -59,9 +59,44 @@ public class MessageForm extends javax.swing.JFrame {
    
    public void receive(String from, String message) {
        panelTab1 tabs = mapAgent.get(from);
-       if (tabs != null) {
-            tabs.showMessage(from, message);
+       if (tabs == null) {
+            
+           final String agent=from;
+
+                final panelTab1 tab=new panelTab1();
+                tab.events = new IPanelTabEvent() {
+                    @Override
+                    public void send() {
+                        try {
+                            if(!"".equals(tab.getText())){
+                                //send
+                                agentClient.sendtoServer("120@"+Agent_loged+"@"+agent+"@"+tab.getText().replace("@", "&#64;"));
+                                tab.showMessage(Agent_loged, tab.getText());
+                                tab.send();
+                            }
+                        } catch (Exception ex) {
+                            System.out.println("send paneltab "+ex);
+                        }
+                    }
+                };
+
+               
+                jTabbedPane1.addTab(agent,new TabCloseIcon(), tab);
+                int display= jTabbedPane1.getTabCount()-1;
+                jTabbedPane1.setSelectedIndex(display);
+
+                mapAgent.put(agent, tab);
+                String s="";
+                for(int i=0;i< jTabbedPane1.getTabCount();i++)
+                {
+                    s+=(jTabbedPane1.getTitleAt(i).toString()+",");
+                }
+                this.setTitle(s.substring(0,s.length()-1));
+                this.setSize(jTabbedPane1.getX()+jTabbedPane1.getWidth()+10,this.getHeight());
+                tabs = tab;
        }
+       
+       tabs.showMessage(from, message);
    }
    
     public MessageForm() {
@@ -82,7 +117,9 @@ public class MessageForm extends javax.swing.JFrame {
     }
     public MessageForm(String Agent_loged, Agent agentClient) {
         try {
+            
             initComponents();
+           this.setLayout(null);
             uti = new Utility();
             Mysql_dbname = uti.readInfor(filename, "MySql_database");
             Mysql_server = uti.readInfor(filename, "MySql_server");
@@ -92,6 +129,7 @@ public class MessageForm extends javax.swing.JFrame {
             showAgent();
             this.Agent_loged = Agent_loged;
             this.agentClient = agentClient;
+            this.setSize(jTabbedPane1.getX(),this.getHeight());
         } catch (Exception ex) {
             Logger.getLogger(MessageForm.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -296,19 +334,19 @@ public class MessageForm extends javax.swing.JFrame {
 
             if(con.isConnect())
             {
-                 
+                setSize(jTabbedPane1.getX()+jTabbedPane1.getWidth()+10,this.getHeight());
                 
-                    int row=jTable1.getSelectedRow();
-                    final String col1=""+jTable1.getValueAt(row,1); 
-                    for(int i=0;i<jTabbedPane1.getTabCount();i++)
+                int row=jTable1.getSelectedRow();
+                final String col1=""+jTable1.getValueAt(row,1); 
+                for(int i=0;i<jTabbedPane1.getTabCount();i++)
+                {
+                    if(jTabbedPane1.getTitleAt(i).equals(col1))
                     {
-                        if(jTabbedPane1.getTitleAt(i).equals(col1))
-                        {
-                            jTabbedPane1.setSelectedIndex(i);
-                            return;
-                        }
-
+                        jTabbedPane1.setSelectedIndex(i);
+                        return;
                     }
+
+                }
 
               
                 final panelTab1 tab=new panelTab1();
@@ -590,18 +628,19 @@ public class MessageForm extends javax.swing.JFrame {
                 
 //                 if(this==null || !this.isVisible())
 //                {
-                    int row=jTable1.getSelectedRow();
-                    final String col1=""+jTable1.getValueAt(row,1); 
-                    for(int i=0;i<jTabbedPane1.getTabCount();i++)
-                    {
-                        if(jTabbedPane1.getTitleAt(i).equals(col1))
-                        {
-                            jTabbedPane1.setSelectedIndex(i);
-                            return;
-                        }
-
-                    }
-//                }
+                
+//                    int row=jTable1.getSelectedRow();
+//                    final String col1=""+jTable1.getValueAt(row,1); 
+//                    for(int i=0;i<jTabbedPane1.getTabCount();i++)
+//                    {
+//                        if(jTabbedPane1.getTitleAt(i).equals(col1))
+//                        {
+//                            jTabbedPane1.setSelectedIndex(i);
+//                            return;
+//                        }
+//
+//                    }
+////                }
                
 
                 final String agent=Agent;
@@ -626,18 +665,20 @@ public class MessageForm extends javax.swing.JFrame {
                 };
 
                
-                jTabbedPane1.addTab(col1,new TabCloseIcon(), tab);
+                jTabbedPane1.addTab(agent,new TabCloseIcon(), tab);
                 int display= jTabbedPane1.getTabCount()-1;
                 jTabbedPane1.setSelectedIndex(display);
 
-                mapAgent.put(col1, tab);
+                mapAgent.put(agent, tab);
                 String s="";
                 for(int i=0;i< jTabbedPane1.getTabCount();i++)
                 {
                     s+=(jTabbedPane1.getTitleAt(i).toString()+",");
                 }
                 this.setTitle(s.substring(0,s.length()-1));
-                tab.showMessage(col1, message);
+                this.setVisible(true);
+                this.setSize(jTabbedPane1.getX()+jTabbedPane1.getWidth()+10,this.getHeight());
+                tab.showMessage(agent, message);
             }
             con.closeConnect();
         }
@@ -681,7 +722,7 @@ public class MessageForm extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    public javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

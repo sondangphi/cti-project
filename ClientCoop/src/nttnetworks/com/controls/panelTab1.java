@@ -6,6 +6,7 @@ package nttnetworks.com.controls;
 
 import java.awt.FontMetrics;
 import javax.swing.JScrollPane;
+import javax.swing.text.StyledEditorKit;
 
 /**
  *
@@ -32,7 +33,7 @@ public class panelTab1 extends javax.swing.JPanel {
     {
 //       jTextArea1.setText(String.format(HTML, content));
 //       jTextArea2.setText(String.format(HTML, content));
-       
+        jEditorPane1.setEditorKit(new StyledEditorKit());
             jEditorPane1.setContentType("text/html");
 
             jEditorPane1.setText(String.format(HTML, content));
@@ -89,12 +90,15 @@ public class panelTab1 extends javax.swing.JPanel {
      */
     public panelTab1() {
         initComponents();
-        jScrollPane3.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        
+     //   jScrollPane3.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         
         
 
     }
   private String wrap(String agent, String message) {
+//      return message;
+      
         String mess = agent + ": " + message;
         FontMetrics met = jEditorPane1.getFontMetrics(jEditorPane1.getFont());
         
@@ -111,7 +115,7 @@ public class panelTab1 extends javax.swing.JPanel {
                 preI = i;
             } else {
                 w = met.stringWidth(mess.substring(0, i)) - pre_w;
-                if (w >= jEditorPane1.getWidth()-10) {
+                if (w >= jEditorPane1.getWidth()-90) {
                     if (preI > first_line) {
                         int end_pos = preI - agent.length() - 2;
                         int start_pos = first_line - agent.length() - 2;
@@ -151,7 +155,11 @@ public class panelTab1 extends javax.swing.JPanel {
         jScrollPane3 = new javax.swing.JScrollPane();
         jEditorPane1 = new javax.swing.JEditorPane();
 
-        jTextField1.setText("jTextField1");
+        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField1ActionPerformed(evt);
+            }
+        });
         jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextField1KeyPressed(evt);
@@ -176,7 +184,7 @@ public class panelTab1 extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE)
+                        .addComponent(jTextField1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jButton1)))
                 .addContainerGap())
@@ -207,6 +215,10 @@ public class panelTab1 extends javax.swing.JPanel {
              events.send();
        }
     }//GEN-LAST:event_jTextField1KeyPressed
+
+    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
