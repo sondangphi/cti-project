@@ -140,9 +140,7 @@ public class MainForm extends javax.swing.JFrame {
     public MainForm(Agent agent, AgentObject aOb) {
 
         initComponents(); 
-         tblCustom.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
-         
-          
+         tblCustom.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);                   
         uti = new Utility();
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );        
         agentClient = agent;
@@ -186,20 +184,17 @@ public class MainForm extends javax.swing.JFrame {
         lb_version.setVerticalAlignment(javax.swing.JLabel.CENTER);
         txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);          
         try{
+            System.out.println("connect database");
             Mysql_dbname = uti.readInfor(filename, "MySql_database");
             Mysql_server = uti.readInfor(filename, "MySql_server");
             Mysql_user = uti.readInfor(filename, "MySql_user");
             Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
         }catch(Exception e){
-        }
-        
+        }        
         this.setTitle("Xorcom Agent Desktop _ "+agentObject.getAgentId()+" _ "+agentObject.getAgentName());
         setLocationRelativeTo(null);
-        this.getContentPane().setBackground(Color.white);
-
-        
-        showCampaign();
-  
+        this.getContentPane().setBackground(Color.white);      
+        showCampaign();  
     }    
 
     public void updateNumber(){
@@ -2153,41 +2148,25 @@ public class MainForm extends javax.swing.JFrame {
                     rowdata.add(result.getString("phone"));
                     rowdata.add(result.getString("fax"));
                     rowdata.add(result.getString("date_establishment"));
-
                     dt.addRow(rowdata);
-
                 }
-
                 tblCoop.setModel(dt);
                 TableColumn column = null;
                 for (int k = 0;k < tblCoop.getColumnCount(); k++) {
                     column = tblCoop.getColumnModel().getColumn(k);
-
-                    if (k == 0) {
-                        column.setPreferredWidth(50);
-
-                    }
-
-                    else {
-                        column.setPreferredWidth(100);
-
-                    }
+                    if (k == 0) 
+                        column.setPreferredWidth(50);                    
+                    else 
+                        column.setPreferredWidth(100);                   
                 }
                 int j=dt.getRowCount();
-
-                if(j==0)
-                {
+                if(j==0){
                     txtResultCoop.setForeground(Color.RED);
                     txtResultCoop.setText("no record found");
-
-                }
-                else
-                {
+                }else{
                     txtResultCoop.setForeground(Color.BLACK);
                     txtResultCoop.setText(Integer.toString(j));
-
                 }
-
                 result.close();
 
             }
@@ -2729,11 +2708,8 @@ public class MainForm extends javax.swing.JFrame {
         MenuItem_changepwd.setEnabled(flag);        
     }
     
-     public void ClickTableCoop()
-    {
-        
-         int row=tblCoop.getSelectedRow();
-        
+     public void ClickTableCoop(){        
+        int row=tblCoop.getSelectedRow();        
         String col2=""+this.tblCoop.getValueAt(row,1);
         String col3=""+this.tblCoop.getValueAt(row,2);
         String col4=""+this.tblCoop.getValueAt(row,3);
@@ -2743,21 +2719,15 @@ public class MainForm extends javax.swing.JFrame {
                          +"Address : "+col3+"\n"
                          +"Phone Number : "+col4+"\n"
                          +"Fax : "+col5+"\n"
-                         +"Day of Establishment : "+col6+"\n"
-                );
-       
-     
+                         +"Day of Establishment : "+col6+"\n");            
     }
     /**/
-    public void ClickTablePro()
-    {
-         int row=tblPromotions.getSelectedRow();
-        
+    public void ClickTablePro(){
+        int row=tblPromotions.getSelectedRow();
         String col1=""+this.tblPromotions.getValueAt(row,1);
         String col2=""+this.tblPromotions.getValueAt(row,2);
         String col3=""+this.tblPromotions.getValueAt(row,3);
-        String col4=""+this.tblPromotions.getValueAt(row,4);
-       
+        String col4=""+this.tblPromotions.getValueAt(row,4);       
         txtContent.setText("Promotions : "+col1+"\n"
                           +"Time Start : "+col2+"\n"
                           +"Time End : "+col3+"\n"
@@ -2765,8 +2735,7 @@ public class MainForm extends javax.swing.JFrame {
      
     }   
     
-    private void ShowProAction()
-      {
+    private void ShowProAction(){
            try {
               con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
             if(con.isConnect())
@@ -2783,16 +2752,13 @@ public class MainForm extends javax.swing.JFrame {
                 ResultSet result=con.executeQuery(sql);
               
                 String strHeader[]={"Number","Name","Time Start","Time End","Content","Location"};
-                DefaultTableModel dt =new DefaultTableModel(strHeader,0)
-                {
-
+                DefaultTableModel dt =new DefaultTableModel(strHeader,0){
                     @Override
                     public boolean isCellEditable(int i, int i1) {
                          return false;
                     }
 
                 };
-
                 int i=0;
                 while (result.next()) {
                     i++;
@@ -2836,10 +2802,8 @@ public class MainForm extends javax.swing.JFrame {
     }
     private void ShowCoopAction()
     {
-        try {
-            
+        try {            
             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-
             if(con.isConnect())
             {
                 txtAutoSearchCoop.setEnabled(true);
@@ -3235,29 +3199,18 @@ public class MainForm extends javax.swing.JFrame {
                   JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
               }
     }
-    private void ShowButtonDial()
-    {
+    private void ShowButtonDial(){
         int row=tblCustom.getSelectedRow();
-        String SStatus_id=""+this.tblCustom.getValueAt(row, 8);
-        
+        String SStatus_id=""+this.tblCustom.getValueAt(row, 8);        
         int status_id=Integer.parseInt(SStatus_id);
-        if(status_id==6)//complete
-        {
-
-            btnDial.setEnabled(false);
-        }
-      
-        else
-        {
-
-              btnDial.setEnabled(true);
-        }
-        
+        if(status_id==6)//complete        
+            btnDial.setEnabled(false);        
+        else        
+            btnDial.setEnabled(true);                
     }
      
      
-  private void Dial()
-   {
+  private void Dial(){
     try {
            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
 
@@ -3408,34 +3361,25 @@ public class MainForm extends javax.swing.JFrame {
     }
     
 
-    public JComponent createContent() {
-      
-  
+    public JComponent createContent() {  
         main_tab.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         JWebBrowser webBrowser = new JWebBrowser();
         webBrowser.setBarsVisible(false);
         webBrowser.setStatusBarVisible(true);
         try {
             webBrowser.setHTMLContent("<body onload='autoload()'>"
-                    + "<a id='autoload' href='file:///"+new File(".").getCanonicalPath()+"/http/mycontext.html?diadiem="+ URLEncoder.encode(txt_add.getText()) +"'></a>"
-                 
-                   
+                    + "<a id='autoload' href='file:///"+new File(".").getCanonicalPath()+"/http/mycontext.html?diadiem="+ URLEncoder.encode(txt_add.getText()) +"'></a>"                                    
                     + "</body>"
                     + "<script>function autoload() {"
                     + " var auto = document.getElementById('autoload');"
                     + " auto.click();"
                     + "}</script>");
         } catch (Exception ex) {
-            Logger.getLogger(MainForm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-         
-     
-        try { 
+        }        
+        try {
             main_tab.removeTabAt(4); 
-        } catch (Exception e) {}
-        
-        if(main_tab.getTabCount()==4)
-        {
+        } catch (Exception e) {}        
+        if(main_tab.getTabCount()==4){
             main_tab.addTab("Google Map", webBrowser);
             main_tab.setSelectedIndex(4);
         }

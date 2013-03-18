@@ -287,11 +287,14 @@ public class TransferForm extends javax.swing.JFrame implements AsteriskQueueLis
     }//GEN-LAST:event_btn_transferActionPerformed
 
     private void btn_closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_closeActionPerformed
-        // TODO add your handling code here:
-        mainForm.btn_transfer.setEnabled(true);
-        disconnectAsterisk();
-        this.setVisible(false);
-        this.dispose();
+        try{
+            mainForm.btn_transfer.setEnabled(true);
+//            agentClient.sendtoServer("106");
+            disconnectAsterisk();
+            this.setVisible(false);
+            this.dispose();            
+        }catch(Exception ex){
+        }
     }//GEN-LAST:event_btn_closeActionPerformed
 
     /**
