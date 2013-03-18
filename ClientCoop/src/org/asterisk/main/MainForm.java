@@ -484,7 +484,6 @@ public class MainForm extends javax.swing.JFrame {
         txt_makh.setEditable(false);
         txt_makh.setEnabled(false);
 
-        txt_add.setEditable(false);
         txt_add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_addActionPerformed(evt);
