@@ -517,6 +517,7 @@ public class Agent implements Runnable{
         public void agentLogout(){
             try{            
                 closed = false;
+                running = false;
                 if(mainForm != null && mainForm.isVisible()){
                     mainForm.setVisible(false);
                     mainForm.dispose();
