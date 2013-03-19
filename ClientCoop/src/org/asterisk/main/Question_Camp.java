@@ -383,7 +383,8 @@ public class Question_Camp extends javax.swing.JDialog {
                 else
                 {
                      if(cbxStatus.getSelectedIndex()==(cbxStatus.getItemCount()-1))
-                    {
+                    { 
+                       
                        
                         for (int i=0; i < ques.length(); i++) {
                             String[] rs = ques.get(i).getAnswerResult();
@@ -408,10 +409,18 @@ public class Question_Camp extends javax.swing.JDialog {
                             
                         }
                     }
-                        JOptionPane.showMessageDialog(null,"Insert successful");
-                          String query_update =
-                            "UPDATE  `_call` SET  `note` =  '"+HtmlCoding.encode(injectSql(txtNote.getText())) + "', `status_id`='"+(cbxStatus.getSelectedIndex()+1)+"'"
-                          + "WHERE  `id` ='"+title_call+"'";
+                    String query_status="SELECT `id` FROM `_call_status` WHERE `desc`='"+cbxStatus.getSelectedItem()+"'" ;
+                    result=con.executeQuery(query_status);
+                    System.out.println("query_status "+query_status);
+                    String status_id="";
+                    while (result.next()) 
+                    {
+                        status_id=result.getString("id");
+                    }
+                    JOptionPane.showMessageDialog(null,"Successful");
+                    String query_update ="UPDATE  `_call` SET  `note` =  '"+HtmlCoding.encode(injectSql(txtNote.getText())) 
+                                            + "', `status_id`='"+status_id+"'"
+                                            + " WHERE  `id` ='"+title_call+"'";
                     con.executeUpdate(query_update);
 //                    JOptionPane.showMessageDialog(null,"Update Note successful");
                    
@@ -443,9 +452,12 @@ public class Question_Camp extends javax.swing.JDialog {
 
     private void cbxStatusItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxStatusItemStateChanged
        int index = cbxStatus.getItemCount() - cbxStatus.getItemCount();
-       System.out.println("count : "+cbxStatus.getItemCount());
+       System.out.println("count-1 : "+(cbxStatus.getItemCount()-1));
        System.out.println("index : "+index);
-       System.out.println("get index : "+cbxStatus.getSelectedIndex());
+       System.out.println("get select index : "+cbxStatus.getSelectedIndex());
+       System.out.println("get select index + 1: "+(cbxStatus.getSelectedIndex()+1));
+       System.out.println("get select item : "+(cbxStatus.getSelectedItem()));
+       
         if(cbxStatus.getSelectedIndex() == index){
             btnfinish.setEnabled(false);
             
@@ -455,6 +467,8 @@ public class Question_Camp extends javax.swing.JDialog {
             btnfinish.setEnabled(true);
             
         }
+        
+        
     }//GEN-LAST:event_cbxStatusItemStateChanged
  
    

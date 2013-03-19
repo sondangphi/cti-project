@@ -1921,7 +1921,12 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
          if(evt.getKeyCode() == 10){
              btn_dialActionPerformed(null);
-         }        
+         }
+//         else if (evt.getKeyChar() < '0' && evt.getKeyChar() > 9 && evt.getKeyCode()==9) {
+//             
+//         }
+//         
+//         
     }//GEN-LAST:event_txt_phonenumKeyPressed
 
     private void btn_1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_1KeyPressed
@@ -2763,7 +2768,7 @@ public class MainForm extends javax.swing.JFrame {
                 txtAutoSearchPro.setEnabled(true);
                 btnClearPro.setEnabled(true);
                 tblPromotions.setEnabled(true);
-                
+               
                 tblPromotions.getTableHeader().setReorderingAllowed(false);//dont't move column
                 tblPromotions.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);//don't auto resize
                 ResultSet result=con.executeQuery(sql);
@@ -2904,7 +2909,6 @@ public class MainForm extends javax.swing.JFrame {
             
                 if(con.isConnect())
                 {
-
                     String sql="SELECT * FROM ("
                                         + "SELECT c.id as campaign_id,c.name as name_camp,c.create_day as create_day,"
                                         + "c.start_day as start_day,c.end_day as end_day,c.desc as descript, "
@@ -2918,6 +2922,9 @@ public class MainForm extends javax.swing.JFrame {
                     sql+=" WHERE agent_id= '"+lb_agentid.getText()+"' AND end_day > '"+lb_logintime.getText()+"' "
                                         + " GROUP BY campaign_id,create_day,start_day,end_day,agent_id"
                                         + " ORDER BY start_day ASC ";
+                    
+                    System.out.println(sql);
+                    
                     ResultSet result = con.executeQuery(sql);
                     tblCamp.getTableHeader().setReorderingAllowed(false);
                     String strHeader[]={"Number","Campaign name","Day Create","Start Day","End Day","Camp_id","Description"};
@@ -3005,17 +3012,22 @@ public class MainForm extends javax.swing.JFrame {
     public void showCustomer()
     {
          try {
+              System.out.println("1");
             try { 
                 tblCustom.getCellEditor().stopCellEditing();
-            } catch(Exception e) {}
+                 System.out.println("2");
+            } catch(Exception e) {
+             System.out.println("3");
+            }
 
-            comboBox();
+            comboBox(); System.out.println("4");
             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
             selPhone.clear();
-                
+                 System.out.println("5");
                 if(con.isConnect()){
                     String sql="SELECT customer_id, name, gender, address, birthday, "
-                    + " GROUP_CONCAT(number)as number,status,id_status,detail_id,call_id,note "
+                    + " GROUP_CONCAT(number)as number,status,id_status,detail_id,call_id,note, "
+                            + "id_status = (SELECT COUNT(*) FROM _call_status) AS `is_success_status`"
                     + " FROM ( "
                     + " SELECT c.id AS campaign_id,"
                     + " a.agent_id AS agent_id, a.agentname AS agent_name, "
@@ -3028,20 +3040,27 @@ public class MainForm extends javax.swing.JFrame {
                     + " LEFT JOIN agent_login a ON k.agent_id = a.id)"
                     + " LEFT JOIN _customer_info i ON d.cus_id = i.id)"
                     + " LEFT JOIN _phone p ON i.id = p.cus_id)"
-                    + " LEFT JOIN _call_status s ON s.id=k.status_id)) AS asd ";
+                    + " LEFT JOIN _call_status s ON s.id=k.status_id)"
+                    + ") AS asd";
                  
-                    
+                     System.out.println("6");
                     int row=tblCamp.getSelectedRow();
-        
+         System.out.println("7");
                     String col5=""+this.tblCamp.getValueAt(row,5);
                    // String col2=""+this.tblCamp.getValueAt(row,2);
                       sql+=" WHERE agent_id = '"+lb_agentid.getText()+"' and campaign_id = '"+col5+"'"
                               + " GROUP BY customer_id, name, gender, address, birthday ";
-                   ResultSet result = con.executeQuery(sql);
-                 
+                      
+                      System.out.println(""+ sql);
+                      
+                       System.out.println("8");
+                      
+                   final ResultSet result = con.executeQuery(sql);
+                  System.out.println("9");
                    tblCustom.getTableHeader().setReorderingAllowed(false);
+                   
                    String strHeader[]={"Number","Customer id","Name","Gender","Address",
-                       "Birthday","Phone","Status","id_s","detail_id","call id","note"};
+                       "Birthday","Phone","Status","id_s","detail_id","call id","note",""};
                     final DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
                     {
 
@@ -3060,7 +3079,8 @@ public class MainForm extends javax.swing.JFrame {
                     int i=0;
                     while (result.next()) {
                         Vector rowdata = new Vector();
-                        
+                         System.out.println("10");
+                         System.out.println("10");
                         rowdata.add("");                                            //0
                         rowdata.add(result.getString("customer_id"));               //1
                         rowdata.add(result.getString("name"));
@@ -3070,7 +3090,7 @@ public class MainForm extends javax.swing.JFrame {
                         if(a==1)
                         {
                             a1="male";
-                            System.out.println(a1);
+                            System.out.println(result.getString("gender"));
                         }
                         else 
                         {
@@ -3085,10 +3105,15 @@ public class MainForm extends javax.swing.JFrame {
                         rowdata.add(result.getString("detail_id"));                 //9
                         rowdata.add(result.getString("call_id"));
                         rowdata.add(result.getString("note"));                      //11
-                       
-                        if(Integer.parseInt((String)rowdata.get(8)) == 6)       //hoan thanh
+                        rowdata.add(result.getString("is_success_status"));                      //11
+//                        System.out.println(result.getString("id_status"));
+                        
+                        
+                        
+                        if(result.getBoolean("is_success_status"))       //hoan thanh
                         {
                             st_com.add(rowdata);
+                             System.out.println("id_stkjjkatus");
                            
                         } else          // khong hoan thanh
                         {
@@ -3136,18 +3161,21 @@ public class MainForm extends javax.swing.JFrame {
                             } else {
                                 out.setText((String)value);
                             }
-                             System.out.println("value : "+Integer.parseInt((String)dt.getValueAt(row, 8)));
-                            if (Integer.parseInt((String)dt.getValueAt(row, 8)) != 6) {
+                             System.out.println("value : "+(String)dt.getValueAt(row, 8));
+                            try{
+                             if (Integer.parseInt((String)dt.getValueAt(row, 12)) == 0) {
                                 out.setForeground(Color.black);
                                 if (isSelected) {
                                     out.setBackground(new Color(0xff, 0xff, 0x88, 0xff));
                                     out.setOpaque(true);
                                 }
                                 
-                            } else {
-                                out.setForeground(new Color(0x88, 0x88, 0x88, 0xff));
-                            }
-                            
+                                } else {
+                                    out.setForeground(new Color(0x88, 0x88, 0x88, 0xff));
+                                }
+
+                           }
+                           catch(Exception e) {}
                             return out;
                         }
                     });
@@ -3218,9 +3246,9 @@ public class MainForm extends javax.swing.JFrame {
     }
     private void ShowButtonDial(){
         int row=tblCustom.getSelectedRow();
-        String SStatus_id=""+this.tblCustom.getValueAt(row, 8);        
+        String SStatus_id=""+this.tblCustom.getValueAt(row, 12);        
         int status_id=Integer.parseInt(SStatus_id);
-        if(status_id==6)//complete        
+        if(status_id==1)//complete        
             btnDial.setEnabled(false);        
         else        
             btnDial.setEnabled(true);                
