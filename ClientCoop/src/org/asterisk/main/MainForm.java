@@ -3229,6 +3229,14 @@ public class MainForm extends javax.swing.JFrame {
                             column.setMaxWidth(0);
 
                         }
+                         else if(k==12)
+                        {
+                           
+                            column.setWidth(0);
+                            column.setMinWidth(0);
+                            column.setMaxWidth(0);
+
+                        }
                         else {
                             column.setPreferredWidth(100);
 
