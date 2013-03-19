@@ -482,8 +482,11 @@ public class MainForm extends javax.swing.JFrame {
         jLabel14.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         txt_makh.setEditable(false);
+        txt_makh.setBackground(new java.awt.Color(255, 255, 255));
         txt_makh.setEnabled(false);
 
+        txt_add.setEditable(false);
+        txt_add.setBackground(new java.awt.Color(255, 255, 255));
         txt_add.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_addActionPerformed(evt);
@@ -491,8 +494,10 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         txt_mobile.setEditable(false);
+        txt_mobile.setBackground(new java.awt.Color(255, 255, 255));
 
         txt_email.setEditable(false);
+        txt_email.setBackground(new java.awt.Color(255, 255, 255));
         txt_email.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_emailActionPerformed(evt);
@@ -508,6 +513,7 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         txt_name.setEditable(false);
+        txt_name.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel16.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel16.setText("Email");
@@ -534,12 +540,16 @@ public class MainForm extends javax.swing.JFrame {
         jLabel19.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
         txt_reg.setEditable(false);
+        txt_reg.setBackground(new java.awt.Color(255, 255, 255));
 
         txt_gender.setEditable(false);
+        txt_gender.setBackground(new java.awt.Color(255, 255, 255));
 
         txt_type.setEditable(false);
+        txt_type.setBackground(new java.awt.Color(255, 255, 255));
 
         txt_birthday.setEditable(false);
+        txt_birthday.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -803,6 +813,7 @@ public class MainForm extends javax.swing.JFrame {
         txtTimeStart.setEditable(false);
         txtTimeStart.setEnabled(false);
 
+        txtAutoSearchPro.setEnabled(false);
         txtAutoSearchPro.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtAutoSearchProKeyTyped(evt);
@@ -1466,6 +1477,9 @@ public class MainForm extends javax.swing.JFrame {
         txt_phonenum.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txt_phonenumKeyPressed(evt);
+            }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txt_phonenumKeyReleased(evt);
             }
         });
 
@@ -2680,6 +2694,10 @@ public class MainForm extends javax.swing.JFrame {
 //       itemchat.setVisible(true);
     }//GEN-LAST:event_btnChatActionPerformed
 
+    private void txt_phonenumKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_phonenumKeyReleased
+         txt_phonenum.setText(txt_phonenum.getText().replaceAll("[^\\d]", ""));
+    }//GEN-LAST:event_txt_phonenumKeyReleased
+
     public void setAllEnable(boolean flag){
         Component comNumber [] = panel_number.getComponents();
         for(Component com : comNumber){
@@ -2745,7 +2763,7 @@ public class MainForm extends javax.swing.JFrame {
                 txtAutoSearchPro.setEnabled(true);
                 btnClearPro.setEnabled(true);
                 tblPromotions.setEnabled(true);
-               
+                
                 tblPromotions.getTableHeader().setReorderingAllowed(false);//dont't move column
                 tblPromotions.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);//don't auto resize
                 ResultSet result=con.executeQuery(sql);
@@ -2795,8 +2813,8 @@ public class MainForm extends javax.swing.JFrame {
             }
             con.closeConnect();
         }
-        catch (IOException | SQLException | ClassNotFoundException ex) {
-            JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
+        catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,"Error: showProAction  "+ex.toString());
         }
     }
     private void ShowCoopAction()
@@ -2866,7 +2884,7 @@ public class MainForm extends javax.swing.JFrame {
         }
         catch (Exception ex)
         {
-            JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
+            JOptionPane.showMessageDialog(null,"Error: showCopAction "+ex.toString());
         }
 
       }
@@ -2978,7 +2996,7 @@ public class MainForm extends javax.swing.JFrame {
             con.closeConnect();
         }
         catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
+            JOptionPane.showMessageDialog(null,"Error: show campain "+ex.toString());
         }
     }
     
@@ -3195,7 +3213,7 @@ public class MainForm extends javax.swing.JFrame {
                 con.closeConnect();
               }
               catch (Exception ex) {
-                  JOptionPane.showMessageDialog(null,"Error:"+ex.toString());
+                  JOptionPane.showMessageDialog(null,"Error: show custom"+ex.toString());
               }
     }
     private void ShowButtonDial(){

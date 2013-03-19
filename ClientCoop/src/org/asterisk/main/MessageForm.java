@@ -51,7 +51,7 @@ public class MessageForm extends javax.swing.JFrame {
     private  String Mysql_dbname = "ast_callcenter";
     private  String Mysql_user = "callcenter";
     private  String Mysql_pwd  = "callcenter"; 
-     private static Utility uti;
+    private static Utility uti;
     private ConnectDatabase con;
     private Agent agentClient;
    
@@ -194,6 +194,7 @@ public class MessageForm extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTable1);
 
+        jCheckBox1.setSelected(true);
         jCheckBox1.setText("Show online");
         jCheckBox1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {

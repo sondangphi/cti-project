@@ -54,11 +54,11 @@ public class LoginForm extends javax.swing.JFrame {
         public String queueName = "";
 //        static int i =0;
         public Agent agent;
-        private String filename = "infor.properties";
-        private String Mysql_server = "172.168.10.208";      
-        private String Mysql_dbname = "cti_database";
-	private String Mysql_user = "cti";
-	private String Mysql_pwd  = "123456";       
+        private  String filename = "infor.properties";
+        private  String Mysql_server = "172.168.10.202";      
+        private  String Mysql_dbname = "ast_callcenter";
+        private  String Mysql_user = "callcenter";
+        private  String Mysql_pwd  = "callcenter"; 
         
 //        private int TIME_OUT = 60000;
     /**
