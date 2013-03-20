@@ -214,7 +214,7 @@ public class Agent implements Runnable{
                                 mainForm.btn_feedback.setEnabled(false);
 //                                    mainForm.btn_update.setEnabled(false);
                                 mainForm.btn_hangup.setEnabled(true);     
-                                mainForm.btn_transfer.setEnabled(false);
+//                                mainForm.btn_transfer.setEnabled(false);
                                 mainForm.btnViewFB.setEnabled(false);
                                 //open connect to database
                                 con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
@@ -296,7 +296,7 @@ public class Agent implements Runnable{
                         case CONNECTED://connected incoming call
                             System.out.println("CONNECTED incoming call");
                             mainForm.lb_status.setText("Busy");
-                            mainForm.btn_transfer.setEnabled(true);
+//                            mainForm.btn_transfer.setEnabled(true);
                              mainForm.btn_feedback.setEnabled(true);
 //                                mainForm.btn_update.setEnabled(true);
                             clockDialin = new TimerClock(mainForm, true);
@@ -307,7 +307,7 @@ public class Agent implements Runnable{
                             mainForm.setAllEnable(true); 
                             mainForm.btn_pause.setEnabled(true);
                             mainForm.btn_hangup.setEnabled(false);   
-                            mainForm.btn_transfer.setEnabled(false);
+//                            mainForm.btn_transfer.setEnabled(false);
                             if(clockDialin != null){
                                 clockDialin.stop(); 
                             }
@@ -317,7 +317,7 @@ public class Agent implements Runnable{
                             mainForm.setAllEnable(true);
                             mainForm.btn_pause.setEnabled(true);
                             mainForm.btn_hangup.setEnabled(false);    
-                            mainForm.btn_transfer.setEnabled(false);
+//                            mainForm.btn_transfer.setEnabled(false);
                         break;                                                
                         case DIALOUT: //result 	//goi ra
                             System.out.println("DIALOUT");                        
@@ -351,12 +351,12 @@ public class Agent implements Runnable{
                             mainForm.setAllEnable(true); 
                             mainForm.btn_pause.setEnabled(true);
                             mainForm.btn_hangup.setEnabled(false);
-                            mainForm.btn_transfer.setEnabled(false);
+//                            mainForm.btn_transfer.setEnabled(false);
                         break;       
                         case HANGUPSUCCESS://
                             System.out.println("HANGUPSUCCESS");
                             mainForm.btn_hangup.setEnabled(false);
-                            mainForm.btn_transfer.setEnabled(false);
+//                            mainForm.btn_transfer.setEnabled(false);
                         break;
                         case HANGUPFAIL: 
                             System.out.println("HANGUPFAIL\t");

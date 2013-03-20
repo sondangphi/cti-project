@@ -246,7 +246,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         jLabel12 = new javax.swing.JLabel();
         lb_logintime = new javax.swing.JLabel();
         btn_pause = new javax.swing.JToggleButton();
-        btn_transfer = new javax.swing.JButton();
         btnChat = new javax.swing.JButton();
         main_tab = new javax.swing.JTabbedPane();
         Panel1 = new javax.swing.JPanel();
@@ -418,15 +417,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             }
         });
 
-        btn_transfer.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btn_transfer.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/btn_transfer.png"))); // NOI18N
-        btn_transfer.setEnabled(false);
-        btn_transfer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_transferActionPerformed(evt);
-            }
-        });
-
         btnChat.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         btnChat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/btn_livechat32x32.png"))); // NOI18N
         btnChat.addActionListener(new java.awt.event.ActionListener() {
@@ -443,9 +433,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                 .addComponent(btn_logout, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50)
                 .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
-                .addComponent(btn_transfer, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
+                .addGap(199, 199, 199)
                 .addComponent(btnChat, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -472,8 +460,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(btnChat, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btn_logout, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addComponent(btn_pause, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addComponent(btn_transfer, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btn_pause, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -2120,21 +2107,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         }
     }    
     
-    private void btn_transferActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_transferActionPerformed
-        try{
-//            String desTransfer = "";
-////            if(cb_transfer.getItemCount()>0)
-////                desTransfer = "SIP/"+(String)cb_transfer.getSelectedItem();
-//            desTransfer = "SIP/"+txt_transfer.getText();
-//            agentClient.sendtoServer("114@"+desTransfer);
-//            System.out.println("transfer");
-            btn_transfer.setEnabled(false);
-            new TransferForm(agentClient, agentObject, this).setVisible(true);
-        }catch(Exception e){
-            System.out.println("btn_transferActionPerformed: "+e);
-        }                
-    }//GEN-LAST:event_btn_transferActionPerformed
-
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         showCampaign(); 
     }//GEN-LAST:event_btnRefreshActionPerformed
@@ -3698,7 +3670,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     public javax.swing.JButton btn_hangup;
     public javax.swing.JButton btn_logout;
     public javax.swing.JToggleButton btn_pause;
-    public javax.swing.JButton btn_transfer;
     private javax.swing.JButton btn_transfercall;
     private javax.swing.JCheckBox chkTime;
     private javax.swing.JTabbedPane function_tab;
