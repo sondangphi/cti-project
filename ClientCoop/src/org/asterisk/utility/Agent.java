@@ -206,6 +206,7 @@ public class Agent implements Runnable{
                             try{
                                 dialout = false;
                                 String callerNum = cmdList.get(1);
+                                mainForm.clearInfo();
                                 mainForm.setAllEnable(false);
                                 mainForm.lb_status.setText("Ringing...");
                                 mainForm.lb_callduration.setText("00:00:00");
