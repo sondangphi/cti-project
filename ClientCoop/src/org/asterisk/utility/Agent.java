@@ -395,16 +395,14 @@ public class Agent implements Runnable{
                         new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    try {
-
-                                        System.err.println("chat1");
-        //                                   System.err.println("chat: "+command);
-                                        if (MainForm.messageform == null || !MainForm.messageform.isVisible()) {
-                                            MainForm.messageform=new MessageForm(agentObject.getAgentId(), Agent.this);
-                                            MainForm.messageform.popup(cmdList.get(1), cmdList.get(2));
+                                    try 
+                                    {
+                                        if (mainForm.tabPChat.getTabCount() ==0||!mainForm.tabPChat.isVisible()) 
+                                        {
+                                            mainForm.popup(cmdList.get(1), cmdList.get(2));
                                         }
                                         else {
-                                            MainForm.messageform.receive(cmdList.get(1), cmdList.get(2));
+                                            mainForm.receive(cmdList.get(1), cmdList.get(2));
                                         }
                                     }
                                     catch(Exception e){

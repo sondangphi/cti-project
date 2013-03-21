@@ -25,7 +25,7 @@ public class autoHLabel extends JPanel {
         textArea.setBackground(new Color(0xf8,0xf8,0xf8));
         textArea.setLocation(0, 0);
         textArea.setSize(this.getWidth(), this.getHeight());
-        textArea.setFont(new Font(textArea.getFont().getName(), Font.BOLD, textArea.getFont().getSize() + 5));
+        textArea.setFont(new Font("Tahoma", Font.BOLD, textArea.getFont().getSize() + 5));
         this.add(textArea);       
         fixHeight();
     }
