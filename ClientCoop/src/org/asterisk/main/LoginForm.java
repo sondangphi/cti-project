@@ -8,6 +8,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.FileInputStream;
@@ -237,8 +238,8 @@ public class LoginForm extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tx_agentKeyPressed(evt);
             }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tx_agentKeyReleased(evt);
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tx_agentKeyTyped(evt);
             }
         });
 
@@ -247,8 +248,8 @@ public class LoginForm extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tx_ifaceKeyPressed(evt);
             }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                tx_ifaceKeyReleased(evt);
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tx_ifaceKeyTyped(evt);
             }
         });
 
@@ -265,8 +266,8 @@ public class LoginForm extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 pwdKeyPressed(evt);
             }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                pwdKeyReleased(evt);
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                pwdKeyTyped(evt);
             }
         });
 
@@ -634,17 +635,83 @@ public class LoginForm extends javax.swing.JFrame {
         System.out.println("focus");
     }//GEN-LAST:event_lb_optionFocusGained
 
-    private void tx_agentKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_agentKeyReleased
+    private void pwdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pwdKeyTyped
+//          pwd.setText(pwd.getText().replaceAll("[^\\w]", ""));
+//      
+        int key=evt.getKeyChar();
+        String st=pwd.getText();
+        String stTest="0123456789abcdefghijklmnopqrstuvwxyz";
+        if(key != KeyEvent.VK_BACK_SPACE &&key !=KeyEvent.VK_DELETE &&key !=KeyEvent.VK_ENTER)
+        {
+            int flag=0;
+            if(stTest.indexOf(evt.getKeyChar())==-1)
+            {
+                flag++;
+                
+            }
+            if (st.length()>9)
+            {
+                flag++;
+//                System.out.println("Lenght 10 charater only");
+                
+            }
+            if (flag>0)
+            { 
+                evt.consume();
+            }
+        }
+    }//GEN-LAST:event_pwdKeyTyped
+
+    private void tx_agentKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_agentKeyTyped
         tx_agent.setText(tx_agent.getText().replaceAll("[^\\w_./\\\\-]", ""));
-    }//GEN-LAST:event_tx_agentKeyReleased
+        
+        int key=evt.getKeyChar();
+        String st=tx_agent.getText();
+        String stTest="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        if(key != KeyEvent.VK_BACK_SPACE &&key !=KeyEvent.VK_DELETE &&key !=KeyEvent.VK_ENTER)
+        {
+            int flag=0;
+            if(stTest.indexOf(evt.getKeyChar())==-1)
+            {
+                flag++;
+                
+            }
+            if (st.length()>9)
+            {
+                flag++;
+//                   System.out.println("Lenght 10 charater only");
+                
+            }
+            if (flag>0)
+            { 
+                evt.consume();
+            }
+        }
+    }//GEN-LAST:event_tx_agentKeyTyped
 
-    private void pwdKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pwdKeyReleased
-       pwd.setText(pwd.getText().replaceAll("[^\\w]", ""));
-    }//GEN-LAST:event_pwdKeyReleased
-
-    private void tx_ifaceKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_ifaceKeyReleased
-        tx_iface.setText(tx_iface.getText().replaceAll("[^\\d]", ""));
-    }//GEN-LAST:event_tx_ifaceKeyReleased
+    private void tx_ifaceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tx_ifaceKeyTyped
+         int key=evt.getKeyChar();
+        String st=tx_iface.getText();
+        String stTest="0123456789";
+        if(key != KeyEvent.VK_BACK_SPACE &&key !=KeyEvent.VK_DELETE &&key !=KeyEvent.VK_ENTER)
+        {
+            int flag=0;
+            if(stTest.indexOf(evt.getKeyChar())==-1)
+            {
+                flag++;
+//                System.out.println("Must enter number only");
+            }
+            if (st.length()>9)
+            {
+                flag++;
+//                System.out.println("Lenght 10 charater only");
+            }
+            if (flag>0)
+            { 
+                evt.consume();
+            }
+        }
+    }//GEN-LAST:event_tx_ifaceKeyTyped
 
     /**
      * @param args the command line arguments
@@ -702,12 +769,12 @@ public class LoginForm extends javax.swing.JFrame {
                     }                                    
                 }
             }                        
-        }catch(IOException | ClassNotFoundException e){
+        }catch(Exception e){
             System.out.println("getListQueue\t"+e);
             lb_notify_queue.setText("(*)");
         }        
     }
-
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton btn_clear;
     public javax.swing.JButton btn_login;

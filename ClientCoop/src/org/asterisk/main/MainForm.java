@@ -4,30 +4,17 @@
  */
 package org.asterisk.main;
 
-//import com.jniwrapper.win32.ie.Browser;
 import az.encoding.html.HtmlCoding;
-import chrriis.common.UIUtils;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserAdapter;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserEvent;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserWindowOpeningEvent;
-import chrriis.dj.nativeswing.swtimpl.components.WebBrowserWindowWillOpenEvent;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Desktop;
-import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.MenuItem;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -35,57 +22,38 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
 import java.net.URLEncoder;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.EventObject;
+import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Vector;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.sound.midi.Transmitter;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
-import javax.swing.CellEditor;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultCellEditor;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
 import javax.swing.event.CellEditorListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
-import javax.swing.text.StyledEditorKit;
-import javax.swing.text.html.HTML;
+import nttnetworks.com.controls.IPanelTabEvent;
+import nttnetworks.com.controls.TabCloseIcon;
+import nttnetworks.com.controls.panelTab1;
 import org.asterisk.model.AgentObject;
 import org.asterisk.utility.Agent;
 import org.asterisk.utility.ConnectDatabase;
@@ -99,12 +67,8 @@ import org.asteriskjava.live.AsteriskQueueMember;
 import org.asteriskjava.live.AsteriskServer;
 import org.asteriskjava.live.AsteriskServerListener;
 import org.asteriskjava.live.DefaultAsteriskServer;
-import org.asteriskjava.live.ManagerCommunicationException;
 import org.asteriskjava.live.MeetMeUser;
 import org.asteriskjava.live.internal.AsteriskAgentImpl;
-import org.asteriskjava.manager.TimeoutException;
-import org.asteriskjava.manager.action.StatusAction;
-import org.w3c.dom.html.HTMLCollection;
 
 
 /**
@@ -130,33 +94,26 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     private ConnectDatabase con;
     public static FeedbackForm feedback;
     public static MessageForm messageform;
-   
     private String CallPhone;
     private JComboBox out;
-   
     public static ListItemChat itemchat;
     LocateMap locate = new LocateMap();
     public ChangepwdForm chanpwdform;
     private final String EXIT = "112";
     private final String PAUSE = "104@off";
     private final String UNPAUSE = "104@on";
-    
     private AsteriskServer asteriskServer;
-
-    /**
-     * Creates new form MainForm2
-     */
+    public HashMap <String,panelTab1> mapAgent=new HashMap<>();
+    private String Agent_loged;
+    
     public MainForm() {
         initComponents();
         txt_phonenum.setHorizontalAlignment(javax.swing.JLabel.RIGHT);   
-        
-        
     }
     
     public MainForm(Agent agent, AgentObject aOb) {
-
         initComponents(); 
-         tblCustom.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);                   
+        tblCustom.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);                   
         uti = new Utility();
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );        
         agentClient = agent;
@@ -211,6 +168,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         setLocationRelativeTo(null);
         this.getContentPane().setBackground(Color.white);      
         showCampaign();  
+        showAgent();
     }    
 
     public void updateNumber(){
@@ -246,7 +204,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         jLabel12 = new javax.swing.JLabel();
         lb_logintime = new javax.swing.JLabel();
         btn_pause = new javax.swing.JToggleButton();
-        btnChat = new javax.swing.JButton();
         main_tab = new javax.swing.JTabbedPane();
         Panel1 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
@@ -263,7 +220,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         txt_name = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
-        jButton3 = new javax.swing.JButton();
+        btnMap = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
         jLabel19 = new javax.swing.JLabel();
         txt_reg = new javax.swing.JTextField();
@@ -353,6 +310,9 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         list_transfer = new javax.swing.JList();
         btn_transfercall = new javax.swing.JButton();
         jPanel12 = new javax.swing.JPanel();
+        jScrollPane10 = new javax.swing.JScrollPane();
+        tblShowAgent = new javax.swing.JTable();
+        tabPChat = new javax.swing.JTabbedPane();
         jPanel14 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -417,14 +377,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             }
         });
 
-        btnChat.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
-        btnChat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/btn_livechat32x32.png"))); // NOI18N
-        btnChat.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnChatActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -433,8 +385,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                 .addComponent(btn_logout, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(50, 50, 50)
                 .addComponent(btn_pause, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(199, 199, 199)
-                .addComponent(btnChat, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -458,8 +408,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                         .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(lb_workTime))
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(btnChat, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btn_logout, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(btn_logout, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 41, Short.MAX_VALUE)
                         .addComponent(btn_pause, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -497,22 +446,12 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
 
         txt_add.setEditable(false);
         txt_add.setBackground(new java.awt.Color(255, 255, 255));
-        txt_add.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_addActionPerformed(evt);
-            }
-        });
 
         txt_mobile.setEditable(false);
         txt_mobile.setBackground(new java.awt.Color(255, 255, 255));
 
         txt_email.setEditable(false);
         txt_email.setBackground(new java.awt.Color(255, 255, 255));
-        txt_email.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_emailActionPerformed(evt);
-            }
-        });
 
         btn_feedback.setText("Feedback");
         btn_feedback.setEnabled(false);
@@ -533,11 +472,11 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         jLabel17.setText("Birthday");
         jLabel17.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/map32x32.png"))); // NOI18N
-        jButton3.setText("Map");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/org/asterisk/image/map32x32.png"))); // NOI18N
+        btnMap.setText("Map");
+        btnMap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnMapActionPerformed(evt);
             }
         });
 
@@ -588,7 +527,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                         .addGap(35, 35, 35)
                         .addComponent(txt_add, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel8Layout.createSequentialGroup()
@@ -645,12 +584,12 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txt_add, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGap(25, 25, 25)
                 .addComponent(btn_feedback, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel8Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btn_feedback, jButton3, jLabel10, jLabel11, jLabel14, jLabel18, jLabel19, jLabel4, jLabel9, txt_add, txt_birthday, txt_email, txt_gender, txt_makh, txt_mobile, txt_name, txt_reg, txt_type});
+        jPanel8Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnMap, btn_feedback, jLabel10, jLabel11, jLabel14, jLabel18, jLabel19, jLabel4, jLabel9, txt_add, txt_birthday, txt_email, txt_gender, txt_makh, txt_mobile, txt_name, txt_reg, txt_type});
 
         table_report.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -1476,8 +1415,8 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txt_phonenumKeyPressed(evt);
             }
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txt_phonenumKeyReleased(evt);
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txt_phonenumKeyTyped(evt);
             }
         });
 
@@ -1553,7 +1492,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                             .addGroup(panel_numberLayout.createSequentialGroup()
                                 .addComponent(btn_back, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_clear, javax.swing.GroupLayout.PREFERRED_SIZE, 43, Short.MAX_VALUE)))
+                                .addComponent(btn_clear, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)))
                         .addGap(10, 10, 10))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_numberLayout.createSequentialGroup()
                         .addComponent(btn_hangup, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -1644,7 +1583,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addGap(100, 100, 100)
                 .addComponent(btn_transfercall)
-                .addContainerGap(100, Short.MAX_VALUE))
+                .addContainerGap(151, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1657,15 +1596,48 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
 
         function_tab.addTab("Transfer", jPanel11);
 
+        tblShowAgent.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tblShowAgent.setShowHorizontalLines(false);
+        tblShowAgent.setShowVerticalLines(false);
+        tblShowAgent.getTableHeader().setResizingAllowed(false);
+        tblShowAgent.getTableHeader().setReorderingAllowed(false);
+        tblShowAgent.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblShowAgentMouseClicked(evt);
+            }
+        });
+        tblShowAgent.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                tblShowAgentKeyReleased(evt);
+            }
+        });
+        jScrollPane10.setViewportView(tblShowAgent);
+
+        tabPChat.setTabPlacement(javax.swing.JTabbedPane.BOTTOM);
+
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
         jPanel12Layout.setHorizontalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 273, Short.MAX_VALUE)
+            .addComponent(jScrollPane10, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 324, Short.MAX_VALUE)
+            .addComponent(tabPChat)
         );
         jPanel12Layout.setVerticalGroup(
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 312, Short.MAX_VALUE)
+            .addGroup(jPanel12Layout.createSequentialGroup()
+                .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(tabPChat, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))
         );
 
         function_tab.addTab("Live Chat", jPanel12);
@@ -1674,7 +1646,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         jPanel14.setLayout(jPanel14Layout);
         jPanel14Layout.setHorizontalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 273, Short.MAX_VALUE)
+            .addGap(0, 324, Short.MAX_VALUE)
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1775,7 +1747,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_logoutActionPerformed
-        // TODO add your handling code here:
         try{
             String cmd  = "102";
             agentClient.sendtoServer(cmd);
@@ -1787,7 +1758,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btn_logoutActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
         try{
             setDefaultCloseOperation(DO_NOTHING_ON_CLOSE );
             stray.add(trayIcon); 
@@ -1800,7 +1770,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_formWindowClosing
 
     private void MenuItem_exitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_exitActionPerformed
-        // TODO add your handling code here:
         try{
             new Thread(new Runnable() {
                 @Override
@@ -1826,7 +1795,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_MenuItem_exitActionPerformed
 
     private void MenuItem_logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_logoutActionPerformed
-        // TODO add your handling code here:
         try{
             btn_logoutActionPerformed(null);           
         }catch(Exception e){
@@ -1834,7 +1802,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_MenuItem_logoutActionPerformed
 
     private void btn_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_1ActionPerformed
-        // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "1";
         updateNumber();
@@ -1842,7 +1809,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btn_1ActionPerformed
 
     private void btn_2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_2ActionPerformed
-        // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "2";
         updateNumber();  
@@ -1850,7 +1816,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btn_2ActionPerformed
 
     private void btn_3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_3ActionPerformed
-        // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "3";
         updateNumber();  
@@ -1858,7 +1823,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btn_3ActionPerformed
 
     private void btn_4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_4ActionPerformed
-        // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "4";
         updateNumber();  
@@ -1866,7 +1830,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btn_4ActionPerformed
 
     private void btn_5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_5ActionPerformed
-        // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "5";
         updateNumber();  
@@ -1874,7 +1837,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btn_5ActionPerformed
 
     private void btn_6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_6ActionPerformed
-        // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "6";
         updateNumber();  
@@ -1882,7 +1844,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btn_6ActionPerformed
 
     private void btn_7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_7ActionPerformed
-        // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "7";
         updateNumber();  
@@ -1890,7 +1851,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btn_7ActionPerformed
 
     private void btn_8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_8ActionPerformed
-        // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "8";
         updateNumber();  
@@ -1898,7 +1858,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btn_8ActionPerformed
 
     private void btn_9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_9ActionPerformed
-        // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += "9";
         updateNumber();  
@@ -1906,8 +1865,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btn_9ActionPerformed
 
     private void btn_0ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_0ActionPerformed
-        // TODO add your handling code here:
-        System.out.println("press");
         dialNumber = txt_phonenum.getText();
         dialNumber += "0";
         updateNumber();  
@@ -1915,7 +1872,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btn_0ActionPerformed
 
     private void btn_11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_11ActionPerformed
-        // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += btn_11.getText();
         updateNumber(); 
@@ -1923,7 +1879,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btn_11ActionPerformed
 
     private void btn_12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_12ActionPerformed
-        // TODO add your handling code here:
         dialNumber = txt_phonenum.getText();
         dialNumber += btn_12.getText();
         updateNumber();        
@@ -1931,19 +1886,16 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btn_12ActionPerformed
 
     private void btn_backActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_backActionPerformed
-        // TODO add your handling code here:
         deleteNumber();
 //        uti.playSounds();
     }//GEN-LAST:event_btn_backActionPerformed
 
     private void btn_clearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_clearActionPerformed
-        // TODO add your handling code here:
         dialNumber = "";
         txt_phonenum.setText(dialNumber);
     }//GEN-LAST:event_btn_clearActionPerformed
 
     private void btn_dialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_dialActionPerformed
-        // TODO add your handling code here:
         try{
             dialNumber = txt_phonenum.getText();
             if(dialNumber != "" && uti.checkNumber(dialNumber)){
@@ -1974,105 +1926,86 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }    
     
     private void txt_phonenumKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_phonenumKeyPressed
-        // TODO add your handling code here:
-         if(evt.getKeyCode() == 10){
-             btn_dialActionPerformed(null);
-         }
-//         else if (evt.getKeyChar() < '0' && evt.getKeyChar() > 9 && evt.getKeyCode()==9) {
-//             
-//         }
-//         
-//         
+        if(evt.getKeyCode() == 10){
+            btn_dialActionPerformed(null);
+        }  
     }//GEN-LAST:event_txt_phonenumKeyPressed
 
     private void btn_1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_1KeyPressed
-        // TODO add your handling code here:
-         if(evt.getKeyCode() == 8){
+        if(evt.getKeyCode() == 8){
              deleteNumber();
-         }
+        }
     }//GEN-LAST:event_btn_1KeyPressed
 
     private void btn_2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_2KeyPressed
-        // TODO add your handling code here:
          if(evt.getKeyCode() == 8){
              deleteNumber();
          }        
     }//GEN-LAST:event_btn_2KeyPressed
 
     private void btn_3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_3KeyPressed
-        // TODO add your handling code here:
          if(evt.getKeyCode() == 8){
              deleteNumber();
          }        
     }//GEN-LAST:event_btn_3KeyPressed
 
     private void btn_4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_4KeyPressed
-        // TODO add your handling code here:
          if(evt.getKeyCode() == 8){
              deleteNumber();
          }        
     }//GEN-LAST:event_btn_4KeyPressed
 
     private void btn_5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_5KeyPressed
-        // TODO add your handling code here:
          if(evt.getKeyCode() == 8){
              deleteNumber();
          }        
     }//GEN-LAST:event_btn_5KeyPressed
 
     private void btn_6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_6KeyPressed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btn_6KeyPressed
 
     private void btn_7KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_7KeyPressed
-        // TODO add your handling code here:
          if(evt.getKeyCode() == 8){
              deleteNumber();
          }        
     }//GEN-LAST:event_btn_7KeyPressed
 
     private void btn_8KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_8KeyPressed
-        // TODO add your handling code here:
          if(evt.getKeyCode() == 8){
              deleteNumber();
          }        
     }//GEN-LAST:event_btn_8KeyPressed
 
     private void btn_9KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_9KeyPressed
-        // TODO add your handling code here:
          if(evt.getKeyCode() == 8){
              deleteNumber();
          }        
     }//GEN-LAST:event_btn_9KeyPressed
 
     private void btn_0KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btn_0KeyPressed
-        // TODO add your handling code here:
          if(evt.getKeyCode() == 8){
              deleteNumber();
          }        
     }//GEN-LAST:event_btn_0KeyPressed
 
     private void panel_numberKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_panel_numberKeyPressed
-        // TODO add your handling code here:
          if(evt.getKeyCode() == 8){
              deleteNumber();
          }        
     }//GEN-LAST:event_panel_numberKeyPressed
 
     private void MenuItem_changepwdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_changepwdActionPerformed
-        // TODO add your handling code here:        
         chanpwdform = new ChangepwdForm(agentClient, agentObject);
         chanpwdform.setVisible(true);
     }//GEN-LAST:event_MenuItem_changepwdActionPerformed
 
     private void MenuItem_aboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuItem_aboutActionPerformed
-        // TODO add your handling code here:
         AboutForm about = new AboutForm();
         about.setVisible(true);
     }//GEN-LAST:event_MenuItem_aboutActionPerformed
 
     private void btn_hangupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hangupActionPerformed
-        // TODO add your handling code here:
         try{
             String command = "106";
             agentClient.sendtoServer(command);
@@ -2083,7 +2016,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btn_hangupActionPerformed
 
     private void btn_pauseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_pauseActionPerformed
-        // TODO add your handling code here:
         try{
             if(btn_pause.isSelected() && btn_pause.isEnabled()){                            
                 agentClient.sendtoServer(PAUSE);
@@ -2119,14 +2051,12 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         try{ 
             int row=tblCustom.getSelectedRow();
             String phone=(String)this.tblCustom.getValueAt(row, 6);
-            System.out.println(phone);
             if(phone==null)
             {
-                System.out.println("null 1");
                  btnDial.setEnabled(false);
-                 
             }
-            else{
+            else
+            {
                 ShowButtonDial();
             }
         }catch(Exception e){}
@@ -2151,22 +2081,18 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btnDialActionPerformed
 
     private void btnShowCoopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowCoopActionPerformed
-        // TODO add your handling code here:
         ShowCoopAction();
     }//GEN-LAST:event_btnShowCoopActionPerformed
 
     private void tblCoopKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblCoopKeyReleased
-        // TODO add your handling code here:
         ClickTableCoop();
     }//GEN-LAST:event_tblCoopKeyReleased
 
     private void tblCoopMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCoopMouseClicked
-        // TODO add your handling code here:
         ClickTableCoop();
     }//GEN-LAST:event_tblCoopMouseClicked
 
     private void btnClearCoopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearCoopActionPerformed
-        // TODO add your handling code here:
         txtAutoSearchCoop.setText("");
         txtResultCoop.setText("");
         txtDetail.setText("");
@@ -2174,34 +2100,25 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btnClearCoopActionPerformed
 
     private void txtAutoSearchCoopKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAutoSearchCoopKeyTyped
-        // TODO add your handling code here:
         try{
-
             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
             if(con.isConnect()){
-
                 String sql="SELECT * FROM coopmart_name WHERE name LIKE '%"+txtAutoSearchCoop.getText()+"%'";
                 ResultSet result=con.executeQuery(sql);
-
                 tblCoop.getTableHeader().setReorderingAllowed(false);
                 String strHeader[]={"Number","Name","Address","Phone","Fax","Date of Establishment"};
                 DefaultTableModel dt=new DefaultTableModel(strHeader,0)
                 {
-
                     @Override
                     public boolean isCellEditable(int i, int i1) {
                         return false;
                     }
-
                 };
-
                 int i=0;
                 while (result.next()) {
                     i++;
                     Vector rowdata = new Vector();
-
                     rowdata.add(Integer.toString(i));
-
                     rowdata.add(result.getString("name"));
                     rowdata.add(result.getString("address"));
                     rowdata.add(result.getString("phone"));
@@ -2227,57 +2144,43 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                     txtResultCoop.setText(Integer.toString(j));
                 }
                 result.close();
-
             }
             con.closeConnect();
-
         }
-        catch(IOException | SQLException | ClassNotFoundException e)
+        catch(Exception e)
         {
-            JOptionPane.showMessageDialog(null,"Error:"+ e.toString());
+            System.out.println("Error txtAutoSearchCoop :"+ e.toString());
         }
     }//GEN-LAST:event_txtAutoSearchCoopKeyTyped
 
     private void btnClearProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearProActionPerformed
-        // TODO add your handling code here:
         txtContent.setText("");
         txtAutoSearchPro.setText("");
         txtTimeStart.setText("");
         txtTimeEnd.setText("");
         ShowProAction();
-
     }//GEN-LAST:event_btnClearProActionPerformed
 
     private void ChkNameMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ChkNameMouseClicked
-        // TODO add your handling code here:
-
         if(ChkName.isSelected())
         {
-
             btnClearPro.setEnabled(true);
             txtAutoSearchPro.setEnabled(true);
-
         }
         else
         {
             txtAutoSearchPro.setEnabled(false);
             if(chkTime.isSelected())
             {
-
             }
             else
             {
-
                 btnClearPro.setEnabled(false);
             }
-
         }
-
     }//GEN-LAST:event_ChkNameMouseClicked
 
     private void chkTimeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkTimeMouseClicked
-        // TODO add your handling code here:
-
         if(chkTime.isSelected())
         {
             txtTimeStart.setEnabled(true);
@@ -2287,8 +2190,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             btnSearch.setEnabled(true);
             if(ChkName.isSelected())
             {
-
-                //btnClearPro.setEnabled(true);
             }
             else
             {
@@ -2297,7 +2198,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         }
         else
         {
-
             txtTimeStart.setEnabled(false);
             txtTimeEnd.setEnabled(false);
             btnChooseStart.setEnabled(false);
@@ -2309,38 +2209,28 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             }
             else
             {
-
                 btnClearPro.setEnabled(false);
             }
-
         }
-
     }//GEN-LAST:event_chkTimeMouseClicked
 
     private void txtAutoSearchProKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAutoSearchProKeyTyped
-        // TODO add your handling code here:
         try{
             tblPromotions.getTableHeader().setReorderingAllowed(false);
             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-            System.out.println("Mysql_server: "+Mysql_server);
             if(con.isConnect()){
                 if(ChkName.isSelected())
                 {
                     String sql="SELECT * FROM promotions WHERE name LIKE'%"+txtAutoSearchPro.getText()+"%'";
-
                     ResultSet result=con.executeQuery(sql);
-                    //loadDataPro();
                     String strHeader[]={"Number","Name","Time Start","Time End","Content","Location"};
                     DefaultTableModel dt =new DefaultTableModel(strHeader,0)
                     {
-
                         @Override
                         public boolean isCellEditable(int i, int i1) {
                             return false;
                         }
-
                     };
-
                     int i=0;
                     while (result.next()) {
                         i++;
@@ -2351,64 +2241,50 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                         rowdata.add(result.getString("time_end"));
                         rowdata.add(result.getString("content"));
                         rowdata.add(result.getString("location"));
-
                         dt.addRow(rowdata);
                     }
                     tblPromotions.setModel(dt);
                     TableColumn column = null;
                     for (int k = 0;k < tblPromotions.getColumnCount(); k++) {
                         column = tblPromotions.getColumnModel().getColumn(k);
-
                         if (k == 0) {
                             column.setPreferredWidth(50);
-
                         }
-
-                        else {
+                        else 
+                        {
                             column.setPreferredWidth(100);
-
                         }
                     }
-
                     int j=dt.getRowCount();
-
                     if(j==0)
                     {
                         txtResultPro.setForeground(Color.RED);
                         txtResultPro.setText("no record found");
-
                     }
                     else
                     {
                         txtResultPro.setForeground(Color.BLACK);
                         txtResultPro.setText(Integer.toString(j));
-
                     }
-
                     result.close();
                 }
             }
             con.closeConnect();
-
         }
-        catch(IOException | SQLException | ClassNotFoundException e)
+        catch(Exception e)
         {
-            JOptionPane.showMessageDialog(null,"Error:"+ e.toString());
+            System.out.println("Error txtAutoSearchPro :"+ e);
         }
     }//GEN-LAST:event_txtAutoSearchProKeyTyped
 
     private void btnChooseEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseEndActionPerformed
-        // TODO add your handling code here:
-
         String s=txtTimeStart.getText();
-
         if(s.length()==0)
         {
             JOptionPane.showMessageDialog(null,"No Start Day");
         }
-
-        else{
-
+        else
+        {
             JFrame f = new JFrame();
             String e=new DatePicker(f).setPickedDate();
             if("".equals(e)) {
@@ -2418,10 +2294,8 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             {
                 String sStr[]=s.split("-");
                 String eStr[]=e.split("-");
-
                 String s1=sStr[0]+sStr[1]+sStr[2];
                 String e1=eStr[0]+eStr[1]+eStr[2];
-
                 int s2=Integer.parseInt(s1);
                 int e2=Integer.parseInt(e1);
                 if(s2>=e2)
@@ -2429,274 +2303,197 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                     JOptionPane.showMessageDialog(null,"End Day must be larger Start Day");
                     txtTimeEnd.setText("");
                 }
-                else{
+                else
+                {
                     txtTimeEnd.setText(e);
                 }
             }
         }
-
     }//GEN-LAST:event_btnChooseEndActionPerformed
 
     private void btnChooseStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChooseStartActionPerformed
-        // TODO add your handling code here:
         Image image = Toolkit.getDefaultToolkit().getImage("images/icon_main.png");
         JFrame f = new JFrame();
         f.setDefaultLookAndFeelDecorated(true);
-       DatePicker d=new DatePicker(f);
-       
-       f.setIconImage(new ImageIcon(image).getImage());
-//        String s=new DatePicker(f).setPickedDate();
-//         f.setIconImage(image);
-//        if("".equals(s)) {
-//            JOptionPane.showMessageDialog(null,"Please Choose True Day");
-//        }
-//        else
-//        {
-//            txtTimeStart.setText(s);
-//
-//        }
+        DatePicker d=new DatePicker(f);
+        f.setIconImage(new ImageIcon(image).getImage());
     }//GEN-LAST:event_btnChooseStartActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
-        // TODO add your handling code here:
         try{
             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
             if(con.isConnect()){
                 String sql="SELECT * FROM promotions ";
                 String kt="";
-
-                try{
-                    if(ChkName.isSelected()&&chkTime.isSelected())
+                if(ChkName.isSelected()&&chkTime.isSelected())
+                {
+                    if(txtAutoSearchPro.getText().equals(kt)||txtTimeStart.getText().equals(kt)
+                                                            ||txtTimeStart.getText().equals(kt)
+                                                            ||txtTimeEnd.getText().equals(kt)
+                                                            ||txtTimeEnd.getText().equals("Time End Field"))
                     {
-                        if(txtAutoSearchPro.getText().equals(kt)||txtTimeStart.getText().equals(kt)
-                            ||txtTimeStart.getText().equals(kt)
-                            ||txtTimeEnd.getText().equals(kt)
-                            ||txtTimeEnd.getText().equals("Time End Field"))
-                        {
-                            JOptionPane.showMessageDialog(null, "Please insert full data");
-
-                        }
-                        else
-                        {
-                            sql+="WHERE name LIKE '%"+txtAutoSearchPro.getText()
-                            +"%' AND time_start >= '"+txtTimeStart.getText()
-                            +"' AND time_start <= '"+txtTimeEnd.getText()
-                            +"' AND time_end >= '"+txtTimeStart.getText()
-                            +"' AND time_end <= '"+txtTimeEnd.getText()+"'";
-                        }
-                    }
-                    else if(chkTime.isSelected())
-                    {
-                        if(txtTimeStart.getText().equals(kt)||txtTimeEnd.getText().equals(kt))
-                        {
-                            JOptionPane.showMessageDialog(null, "Please insert full data");
-
-                        }
-                        else
-                        {
-                            sql+="WHERE time_start >= '"+txtTimeStart.getText()
-                            +"' AND time_start <= '"+txtTimeEnd.getText()
-                            +"' AND time_end >= '"+txtTimeStart.getText()
-                            +"' AND time_end <= '"+txtTimeEnd.getText()+"'";
-                        }
-                    }
-                    ResultSet result=con.executeQuery(sql);
-
-                    tblPromotions.getTableHeader().setReorderingAllowed(false);
-                    String strHeader[]={"Number","Name","Time Start","Time End","Content","Location"};
-                    DefaultTableModel dt =new DefaultTableModel(strHeader,0)
-                    {
-
-                        @Override
-                        public boolean isCellEditable(int i, int i1) {
-                            return false;
-                        }
-
-                    };
-
-                    int i=0;
-                    while (result.next()) {
-                        i++;
-                        Vector rowdata = new Vector();
-                        rowdata.add(Integer.toString(i));
-                        rowdata.add(result.getString("name"));
-                        rowdata.add(result.getString("time_start"));
-                        rowdata.add(result.getString("time_end"));
-                        rowdata.add(result.getString("content"));
-                        rowdata.add(result.getString("location"));
-
-                        dt.addRow(rowdata);
-                    }
-
-                    tblPromotions.setModel(dt);
-
-                    TableColumn column = null;
-                    for (int k = 0;k < tblPromotions.getColumnCount(); k++) {
-                        column = tblPromotions.getColumnModel().getColumn(k);
-
-                        if (k == 0) {
-                            column.setPreferredWidth(50);
-
-                        }
-
-                        else {
-                            column.setPreferredWidth(100);
-
-                        }
-                    }
-
-                    int j=dt.getRowCount();
-
-                    if(j==0)
-                    {
-                        txtResultPro.setForeground(Color.RED);
-                        txtResultPro.setText("no record found");
+                        JOptionPane.showMessageDialog(null, "Please insert full data");
                     }
                     else
                     {
-                        txtResultPro.setForeground(Color.BLACK);
-                        txtResultPro.setText(Integer.toString(j));
+                        sql+="WHERE name LIKE '%"+txtAutoSearchPro.getText()
+                                            +"%' AND time_start >= '"+txtTimeStart.getText()
+                                            +"' AND time_start <= '"+txtTimeEnd.getText()
+                                            +"' AND time_end >= '"+txtTimeStart.getText()
+                                            +"' AND time_end <= '"+txtTimeEnd.getText()+"'";
                     }
-                    result.close();
-
                 }
-                catch(Exception ex)
+                else if(chkTime.isSelected())
                 {
-                    JOptionPane.showMessageDialog(null,"Error:"+ ex.toString());
+                    if(txtTimeStart.getText().equals(kt)||txtTimeEnd.getText().equals(kt))
+                    {
+                        JOptionPane.showMessageDialog(null, "Please insert full data");
+                    }
+                    else
+                    {
+                        sql+="WHERE time_start >= '"+txtTimeStart.getText()
+                            +"' AND time_start <= '"+txtTimeEnd.getText()
+                            +"' AND time_end >= '"+txtTimeStart.getText()
+                            +"' AND time_end <= '"+txtTimeEnd.getText()+"'";
+                    }
                 }
-
+                ResultSet result=con.executeQuery(sql);
+                tblPromotions.getTableHeader().setReorderingAllowed(false);
+                String strHeader[]={"Number","Name","Time Start","Time End","Content","Location"};
+                DefaultTableModel dt =new DefaultTableModel(strHeader,0)
+                {
+                    @Override
+                    public boolean isCellEditable(int i, int i1) {
+                        return false;
+                    }
+                };
+                int i=0;
+                while (result.next()) {
+                    i++;
+                    Vector rowdata = new Vector();
+                    rowdata.add(Integer.toString(i));
+                    rowdata.add(result.getString("name"));
+                    rowdata.add(result.getString("time_start"));
+                    rowdata.add(result.getString("time_end"));
+                    rowdata.add(result.getString("content"));
+                    rowdata.add(result.getString("location"));
+                    dt.addRow(rowdata);
+                }
+                tblPromotions.setModel(dt);
+                TableColumn column = null;
+                for (int k = 0;k < tblPromotions.getColumnCount(); k++) {
+                    column = tblPromotions.getColumnModel().getColumn(k);
+                    if (k == 0) {
+                        column.setPreferredWidth(50);
+                    }
+                    else 
+                    {
+                        column.setPreferredWidth(100);
+                    }
+                }
+                int j=dt.getRowCount();
+                if(j==0)
+                {
+                    txtResultPro.setForeground(Color.RED);
+                    txtResultPro.setText("no record found");
+                }
+                else
+                {
+                    txtResultPro.setForeground(Color.BLACK);
+                    txtResultPro.setText(Integer.toString(j));
+                }
+                result.close();
             }
             con.closeConnect();
-
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,"Error:"+ ex.toString());
+            System.out.println("Error btnSearch :"+ ex);
         }
-
     }//GEN-LAST:event_btnSearchActionPerformed
 
     private void tblPromotionsKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblPromotionsKeyReleased
-        // TODO add your handling code here:
         ClickTablePro();
     }//GEN-LAST:event_tblPromotionsKeyReleased
 
     private void tblPromotionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPromotionsMouseClicked
-        // TODO add your handling code here:
         ClickTablePro();
     }//GEN-LAST:event_tblPromotionsMouseClicked
 
     private void btnShowProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnShowProActionPerformed
-        // TODO add your handling code here:
         ShowProAction();
-
     }//GEN-LAST:event_btnShowProActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnMapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMapActionPerformed
         NativeInterface.open();
         if("".equals(txt_add.getText()))
         {
             JOptionPane.showMessageDialog(null,"No Address Input");
-
         }
         else{
             createContent();
         }
-
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnMapActionPerformed
 
     private void btn_feedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_feedbackActionPerformed
-        // TODO add your handling code here:
-        
-                System.out.println("txt_name: "+this.txt_name.getText());
-                System.out.println("txt_add: "+this.txt_add.getText());
-                System.out.println("txt_mobile: "+this.txt_mobile.getText());
-
-                System.out.println("txt_email: "+this.txt_email.getText());
-                System.out.println("txt_add: "+this.txt_add.getText());
-                feedback = new FeedbackForm(this, agentObject,agentClient);
-                feedback.setVisible(true);
-                
-            
+        feedback = new FeedbackForm(this, agentObject,agentClient);
+        feedback.setVisible(true);           
     }//GEN-LAST:event_btn_feedbackActionPerformed
-
-    private void txt_emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_emailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_emailActionPerformed
-
-    private void txt_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_addActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_addActionPerformed
 
     private void btnViewFBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewFBActionPerformed
         feedback = new FeedbackForm(this,agentObject,agentClient);
         feedback.setVisible(true);
         int row=table_report.getSelectedRow();
-        
         String col3=""+this.table_report.getValueAt(row,3);
         String col4=""+this.table_report.getValueAt(row,4);
         String col5=""+this.table_report.getValueAt(row,5);
         String col6=""+this.table_report.getValueAt(row,6);
         String col7=""+this.table_report.getValueAt(row,7);
         String col8=""+this.table_report.getValueAt(row,8);
-       
-       
         for (int i=0; i<feedback.cb_feedback_type.getItemCount(); i++) {
              if (col3.toLowerCase().equals(feedback.cb_feedback_type.getItemAt(i).toString().toLowerCase())) {
                  feedback.cb_feedback_type.setSelectedIndex(i); 
                  int index = feedback.cb_feedback_type.getItemCount() - 1;
-       
-                 if(feedback.cb_feedback_type.getSelectedIndex() == index){
+                 if(feedback.cb_feedback_type.getSelectedIndex() == index)
+                 {
                  }
                  else
                  {
                     feedback.cb_content_type.setVisible(false);
                     feedback.jLabel17.setVisible(false);
                  }
-                 
                  break;
              }
         }
-         for (int j=0; j<feedback.cb_catlogies.getItemCount(); j++) {
+        for (int j=0; j<feedback.cb_catlogies.getItemCount(); j++) {
              if (col4.toLowerCase().equals(feedback.cb_catlogies.getItemAt(j).toString().toLowerCase())) {
                  feedback.cb_catlogies.setSelectedIndex(j);
-                
                  break;
              }
         }
-      
-        
         for (int j=0; j<feedback.cb_content_type.getItemCount(); j++) {
-          if (col5.toLowerCase().equals(feedback.cb_content_type.getItemAt(j).toString().toLowerCase())) {
-              feedback.cb_content_type.setSelectedIndex(j);
-
-              break;
-          }
-       }
+            if (col5.toLowerCase().equals(feedback.cb_content_type.getItemAt(j).toString().toLowerCase())) {
+                feedback.cb_content_type.setSelectedIndex(j);
+                break;
+            }
+        }
         feedback.text_content.setText(col6);  
         feedback.text_solution.setText(col7);  
-           for (int i=0; i<feedback.cb_result.getItemCount(); i++) {
-             if (col8.toLowerCase().equals(feedback.cb_result.getItemAt(i).toString().toLowerCase())) {
-                System.out.println(feedback.cb_result.getItemAt(i).toString().toLowerCase());
-                feedback.cb_result.setSelectedIndex(i);
-                int index = feedback.cb_result.getItemCount() - 1;
-       
-                if(feedback.cb_result.getSelectedIndex() == index)
-                {
-                    feedback.txtAsTo.setVisible(true);
-                    feedback.cb_assign.setEditable(false);
-                }
-                else
-                {
-                    feedback.txtAsTo.setVisible(false);
-                    feedback.cb_assign.setVisible(false);
-                }
-                
-                 break;
-             }
+        for (int i=0; i<feedback.cb_result.getItemCount(); i++) {
+            if (col8.toLowerCase().equals(feedback.cb_result.getItemAt(i).toString().toLowerCase())) {
+               feedback.cb_result.setSelectedIndex(i);
+               int index = feedback.cb_result.getItemCount() - 1;
+               if(feedback.cb_result.getSelectedIndex() == index)
+               {
+                   feedback.txtAsTo.setVisible(true);
+                   feedback.cb_assign.setEditable(false);
+               }
+               else
+               {
+                   feedback.txtAsTo.setVisible(false);
+                   feedback.cb_assign.setVisible(false);
+               }
+                break;
+            }
         }    
-     
-        
-        
-        //setEnable
        feedback.cb_catlogies.setEnabled(false);
        feedback.cb_content_type.setEnabled(false);
        feedback.cb_feedback_type.setEnabled(false);
@@ -2704,23 +2501,13 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
        feedback.cb_assign.setEnabled(false);
        feedback.text_content.setEnabled(false);
        feedback.text_solution.setEnabled(false);
-      // feedback.txt_email.setVisible(true);
-       
-       //set visible
-     
        feedback.btn_save.setVisible(false);
-       //setbackground
        feedback.cb_catlogies.setBackground(Color.white);
        feedback.cb_content_type.setBackground(Color.white);
        feedback.cb_feedback_type.setBackground(Color.white);
        feedback.cb_result.setBackground(Color.white);
        feedback.text_content.setBackground(Color.white);
        feedback.text_solution.setBackground(Color.white);
-      
-//       if(!feedback.cb_assign.isVisible()) {
-//           feedback.setSize(feedback.getWidth(), feedback.jPanel2.getY()+feedback.jPanel2.getHeight()+10);
-//       }
-//       
     }//GEN-LAST:event_btnViewFBActionPerformed
 
     private void table_reportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_reportMouseClicked
@@ -2731,18 +2518,29 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
        btnViewFB.setEnabled(true);
     }//GEN-LAST:event_table_reportKeyReleased
 
-
-    private void btnChatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChatActionPerformed
-       messageform=new MessageForm(agentObject.getAgentId(), agentClient);
-       messageform.setVisible(true);
-        
-//        itemchat=new ListItemChat(agentObject.getAgentId(), agentClient);
-//       itemchat.setVisible(true);
-    }//GEN-LAST:event_btnChatActionPerformed
-
-    private void txt_phonenumKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_phonenumKeyReleased
-         txt_phonenum.setText(txt_phonenum.getText().replaceAll("[^\\d]", ""));
-    }//GEN-LAST:event_txt_phonenumKeyReleased
+    private void txt_phonenumKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_phonenumKeyTyped
+       int key=evt.getKeyChar();
+        String st=txt_phonenum.getText();
+        String stTest="0123456789";
+        if(key != KeyEvent.VK_BACK_SPACE &&key !=KeyEvent.VK_DELETE &&key !=KeyEvent.VK_ENTER)
+        {
+            int flag=0;
+            if(stTest.indexOf(evt.getKeyChar())==-1)
+            {
+                flag++;
+//                System.out.println("Must enter number only");
+            }
+            if (st.length()>10)
+            {
+                flag++;
+//                System.out.println("Lenght 10 charater only");
+            }
+            if (flag>0)
+            { 
+                evt.consume();
+            }
+        }
+    }//GEN-LAST:event_txt_phonenumKeyTyped
 
     private void function_tabStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_function_tabStateChanged
         int index = function_tab.getSelectedIndex();
@@ -2774,6 +2572,24 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         }catch(Exception ex){
         }        
     }//GEN-LAST:event_btn_transfercallActionPerformed
+
+    private void tblShowAgentMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblShowAgentMouseClicked
+        int i=tblShowAgent.getSelectedRow();
+        if(i>=0)
+        {
+            createPopupMenu();
+            if(evt.getClickCount()==2)
+            {
+                show_chat();
+            }
+        }
+    }//GEN-LAST:event_tblShowAgentMouseClicked
+
+    private void tblShowAgentKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tblShowAgentKeyReleased
+        if(evt.getKeyCode() == 10){
+            show_chat();
+        }
+    }//GEN-LAST:event_tblShowAgentKeyReleased
 
     public void setAllEnable(boolean flag){
         Component comNumber [] = panel_number.getComponents();
@@ -2830,8 +2646,8 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }   
     
     private void ShowProAction(){
-           try {
-              con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+        try {
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
             if(con.isConnect())
             {
                 String sql="SELECT * FROM promotions";
@@ -2840,18 +2656,15 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                 txtAutoSearchPro.setEnabled(true);
                 btnClearPro.setEnabled(true);
                 tblPromotions.setEnabled(true);
-               
                 tblPromotions.getTableHeader().setReorderingAllowed(false);//dont't move column
                 tblPromotions.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);//don't auto resize
                 ResultSet result=con.executeQuery(sql);
-              
                 String strHeader[]={"Number","Name","Time Start","Time End","Content","Location"};
                 DefaultTableModel dt =new DefaultTableModel(strHeader,0){
                     @Override
                     public boolean isCellEditable(int i, int i1) {
                          return false;
                     }
-
                 };
                 int i=0;
                 while (result.next()) {
@@ -2863,7 +2676,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                     rowdata.add(result.getString("time_end"));
                     rowdata.add(result.getString("content"));
                     rowdata.add(result.getString("location"));
-
                     dt.addRow(rowdata);
                 }
                 tblPromotions.setModel(dt);
@@ -2871,27 +2683,21 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                 for (int k = 0;k < tblPromotions.getColumnCount(); k++) 
                 {
                     column = tblPromotions.getColumnModel().getColumn(k);
-
                     if (k == 0) {
                         column.setPreferredWidth(50);
-
                     } 
-
                     else {
                         column.setPreferredWidth(100);
-
                     }
                 }
-                
                 int j=dt.getRowCount();
-
                 txtResultPro.setText(Integer.toString(j));
                 result.close();
             }
             con.closeConnect();
         }
         catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,"Error: showProAction  "+ex.toString());
+            System.out.println("Error: showProAction  "+ex);
         }
     }
     private void ShowCoopAction()
@@ -2910,7 +2716,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                 String strHeader[]={"Number","Name","Address","Phone","Fax","Date of Establishment"};
                 DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
                 {
-
                     @Override
                     public boolean isCellEditable(int i, int i1) {
                         return false;
@@ -2921,67 +2726,52 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                 {
                     i++;
                     Vector rowdata = new Vector();
-
                     rowdata.add(Integer.toString(i));
-
                     rowdata.add(result.getString("name"));
                     rowdata.add(result.getString("address"));
                     rowdata.add(result.getString("phone"));
                     rowdata.add(result.getString("fax"));
                     rowdata.add(result.getString("date_establishment"));
-
                     dt.addRow(rowdata);
                 }
                 tblCoop.setModel(dt);
-
-
                 TableColumn column = null;
                 for (int k = 0;k < tblCoop.getColumnCount(); k++)
                 {
                     column = tblCoop.getColumnModel().getColumn(k);
-
                     if (k == 0)
                     {
                         column.setPreferredWidth(50);
-
                     } 
-
                     else 
                     {
                         column.setPreferredWidth(100);
-
                     }
                 }
                 int j=dt.getRowCount();
-
                 txtResultCoop.setText(Integer.toString(j));
-
             }
             con.closeConnect();
         }
         catch (Exception ex)
         {
-            JOptionPane.showMessageDialog(null,"Error: showCopAction "+ex.toString());
+            System.out.println("Error: showCopAction ");
         }
-
       }
-    
     private static byte[] stringToBytes(String str) {
         byte[] output = new byte[str.length()];
         for (int i=0; i<output.length; i++) {
             output[i] = (byte)((int)str.charAt(i) & 0xFF);
         }
-        
         return output;
     }
     private void showCampaign()
     {
         try {
-                con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-            
-                if(con.isConnect())
-                {
-                    String sql="SELECT * FROM ("
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+            if(con.isConnect())
+            {
+                String sql="SELECT * FROM ("
                                         + "SELECT c.id as campaign_id,c.name as name_camp,c.create_day as create_day,"
                                         + "c.start_day as start_day,c.end_day as end_day,c.desc as descript, "
                                         + "k.id as call_id, "
@@ -2990,74 +2780,54 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                                         + "INNER JOIN _call k ON k.camp_detail_id = d.id) "
                                         + "INNER JOIN agent_login a ON k.agent_id = a.id) "
                                         + "AS asd ";
-
-                    sql+=" WHERE agent_id= '"+lb_agentid.getText()+"' AND end_day > '"+lb_logintime.getText()+"' "
+                sql+=" WHERE agent_id= '"+lb_agentid.getText()+"' AND end_day > '"+lb_logintime.getText()+"' "
                                         + " GROUP BY campaign_id,create_day,start_day,end_day,agent_id"
                                         + " ORDER BY start_day ASC ";
-                    
-                    System.out.println(sql);
-                    
-                    ResultSet result = con.executeQuery(sql);
-                    tblCamp.getTableHeader().setReorderingAllowed(false);
-                    String strHeader[]={"Number","Campaign name","Day Create","Start Day","End Day","Camp_id","Description"};
-                    DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
-                    {
-
-                        @Override
-                        public boolean isCellEditable(int i, int i1) {
-                            return false;
-                        }
-
-                    };
-                   
-                    int i=0;
-                    while (result.next()) {
-                        i++;
-                        String name_camp= HtmlCoding.decode(result.getString("name_camp"));
-                        String create_day=result.getString("create_day");
-                        String startday=result.getString("start_day");
-                        String end_day=result.getString("end_day");
-                        String camp_id=result.getString("campaign_id");
-                        String desc=HtmlCoding.decode(result.getString("descript"));
-                        
-                        SimpleDateFormat spdt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                        Date c_day = spdt.parse(create_day);
-                        Date s_day=spdt.parse(startday);
-                        Date e_day=spdt.parse(end_day);
-                        // *** same for the format String below
-                        SimpleDateFormat spdt1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                        String cr_day=spdt1.format(c_day);
-                        SimpleDateFormat spdt2 = new SimpleDateFormat("yyyy-MM-dd");
-                        String st_day=spdt2.format(s_day);
-                        String en_day=spdt2.format(e_day);
-                        
-                        
-                       
-                        Vector rowdata = new Vector();
-
-                        
-                        rowdata.add(Integer.toString(i));
-
-
-                        rowdata.add(name_camp);
-                        rowdata.add(cr_day);
-                        rowdata.add(st_day);
-                        rowdata.add(en_day);
-                        rowdata.add(camp_id);
-                        rowdata.add(desc);
-                        
-                        dt.addRow(rowdata);
+                ResultSet result = con.executeQuery(sql);
+                tblCamp.getTableHeader().setReorderingAllowed(false);
+                String strHeader[]={"Number","Campaign name","Day Create","Start Day","End Day","Camp_id","Description"};
+                DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
+                {
+                    @Override
+                    public boolean isCellEditable(int i, int i1) {
+                        return false;
                     }
-                     
-                    tblCamp.setModel(dt);
-                    
-                    TableColumn column = null;
-                    for (int k = 0;k < tblCamp.getColumnCount(); k++) {
+                };
+                int i=0;
+                while (result.next()) {
+                    i++;
+                    String name_camp= HtmlCoding.decode(result.getString("name_camp"));
+                    String create_day=result.getString("create_day");
+                    String startday=result.getString("start_day");
+                    String end_day=result.getString("end_day");
+                    String camp_id=result.getString("campaign_id");
+                    String desc=HtmlCoding.decode(result.getString("descript"));
+                    SimpleDateFormat spdt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    Date c_day = spdt.parse(create_day);
+                    Date s_day=spdt.parse(startday);
+                    Date e_day=spdt.parse(end_day);
+                    SimpleDateFormat spdt1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                    String cr_day=spdt1.format(c_day);
+                    SimpleDateFormat spdt2 = new SimpleDateFormat("yyyy-MM-dd");
+                    String st_day=spdt2.format(s_day);
+                    String en_day=spdt2.format(e_day);
+                    Vector rowdata = new Vector();
+                    rowdata.add(Integer.toString(i));
+                    rowdata.add(name_camp);
+                    rowdata.add(cr_day);
+                    rowdata.add(st_day);
+                    rowdata.add(en_day);
+                    rowdata.add(camp_id);
+                    rowdata.add(desc);
+                    dt.addRow(rowdata);
+                }
+                tblCamp.setModel(dt);
+                TableColumn column = null;
+                for (int k = 0;k < tblCamp.getColumnCount(); k++) 
+                {
                     column = tblCamp.getColumnModel().getColumn(k);
-
                     if (k == 0) {
                         column.setPreferredWidth(50);
-
                     } 
                     else if(k==5)
                     {
@@ -3065,17 +2835,16 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                         column.setMinWidth(0);
                         column.setMaxWidth(0);
                     }
-                   
-                    else {
+                    else 
+                    {
                         column.setPreferredWidth(100);
-
                     }
                }
             }
             con.closeConnect();
         }
         catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,"Error: show campain "+ex.toString());
+            System.out.println("Error: show campain "+ex);
         }
     }
     
@@ -3084,244 +2853,212 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     public void showCustomer()
     {
          try {
-              System.out.println("1");
-            try { 
+              try { 
                 tblCustom.getCellEditor().stopCellEditing();
-                 System.out.println("2");
             } catch(Exception e) {
-             System.out.println("3");
+             
             }
-
-            comboBox(); System.out.println("4");
+            comboBox();
             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
             selPhone.clear();
-                 System.out.println("5");
-                if(con.isConnect()){
-                    String sql="SELECT customer_id, name, gender, address, birthday, "
-                    + " GROUP_CONCAT(number)as number,status,id_status,detail_id,call_id,note, "
-                            + "id_status = (SELECT COUNT(*) FROM _call_status) AS `is_success_status`"
-                    + " FROM ( "
-                    + " SELECT c.id AS campaign_id,"
-                    + " a.agent_id AS agent_id, a.agentname AS agent_name, "
-                    + " k.camp_detail_id AS detail_id,k.id as call_id,k.note as note, "
-                    + " i.id AS customer_id, i.name AS name, i.gender AS gender, i.address AS address, i.birthday AS birthday,"
-                    + " p.number AS number,s.desc AS status, s.id AS id_status"
-                    + " FROM (((((("
-                    + " _campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
-                    + " LEFT JOIN _call k ON k.camp_detail_id = d.id) "
-                    + " LEFT JOIN agent_login a ON k.agent_id = a.id)"
-                    + " LEFT JOIN _customer_info i ON d.cus_id = i.id)"
-                    + " LEFT JOIN _phone p ON i.id = p.cus_id)"
-                    + " LEFT JOIN _call_status s ON s.id=k.status_id)"
-                    + ") AS asd";
-                 
-                     System.out.println("6");
-                    int row=tblCamp.getSelectedRow();
-         System.out.println("7");
-                    String col5=""+this.tblCamp.getValueAt(row,5);
-                   // String col2=""+this.tblCamp.getValueAt(row,2);
-                      sql+=" WHERE agent_id = '"+lb_agentid.getText()+"' and campaign_id = '"+col5+"'"
+            if(con.isConnect()){
+                String sql="SELECT customer_id, name, gender, address, birthday, "
+                + " GROUP_CONCAT(number)as number,status,id_status,detail_id,call_id,note, "
+                        + "id_status = (SELECT COUNT(*) FROM _call_status) AS `is_success_status`"
+                + " FROM ( "
+                + " SELECT c.id AS campaign_id,"
+                + " a.agent_id AS agent_id, a.agentname AS agent_name, "
+                + " k.camp_detail_id AS detail_id,k.id as call_id,k.note as note, "
+                + " i.id AS customer_id, i.name AS name, i.gender AS gender, i.address AS address, i.birthday AS birthday,"
+                + " p.number AS number,s.desc AS status, s.id AS id_status"
+                + " FROM (((((("
+                + " _campaign_detail d INNER JOIN _campaign c ON d.camp_id = c.id)"
+                + " LEFT JOIN _call k ON k.camp_detail_id = d.id) "
+                + " LEFT JOIN agent_login a ON k.agent_id = a.id)"
+                + " LEFT JOIN _customer_info i ON d.cus_id = i.id)"
+                + " LEFT JOIN _phone p ON i.id = p.cus_id)"
+                + " LEFT JOIN _call_status s ON s.id=k.status_id)"
+                + ") AS asd";
+
+                int row=tblCamp.getSelectedRow();
+                String col5=""+this.tblCamp.getValueAt(row,5);
+                sql+=" WHERE agent_id = '"+lb_agentid.getText()+"' and campaign_id = '"+col5+"'"
                               + " GROUP BY customer_id, name, gender, address, birthday ";
-                      
-                      System.out.println(""+ sql);
-                      
-                       System.out.println("8");
-                      
-                   final ResultSet result = con.executeQuery(sql);
-                  System.out.println("9");
-                   tblCustom.getTableHeader().setReorderingAllowed(false);
-                   
-                   String strHeader[]={"Number","Customer id","Name","Gender","Address",
+                final ResultSet result = con.executeQuery(sql);
+                tblCustom.getTableHeader().setReorderingAllowed(false);
+                String strHeader[]={"Number","Customer id","Name","Gender","Address",
                        "Birthday","Phone","Status","id_s","detail_id","call id","note",""};
-                    final DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
+                final DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
+                {
+                    @Override
+                    public boolean isCellEditable(int row, int col) {
+                        if (col==6) {
+                            return true;
+                        }
+                        return false;
+                    }
+                };
+                ArrayList<Vector> st_init = new ArrayList<>();
+                ArrayList<Vector> st_com = new ArrayList<>();
+                int i=0;
+                while (result.next()) {
+                    Vector rowdata = new Vector();
+                    rowdata.add("");                                            //0
+                    rowdata.add(result.getString("customer_id"));               //1
+                    rowdata.add(result.getString("name"));
+                    int a=Integer.parseInt(result.getString("gender"));         //3
+                    String a1="";
+                    if(a==1)
+                    {
+                        a1="male";
+                    }
+                    else 
+                    {
+                        a1="female";
+                    }
+                    rowdata.add(a1);
+                    rowdata.add(result.getString("address"));
+                    rowdata.add(result.getString("birthday"));                  //5
+                    rowdata.add(result.getString("number"));                              
+                    rowdata.add(result.getString("status"));                    //7
+                    rowdata.add(result.getString("id_status"));
+                    rowdata.add(result.getString("detail_id"));                 //9
+                    rowdata.add(result.getString("call_id"));
+                    rowdata.add(result.getString("note"));                      //11
+                    rowdata.add(result.getString("is_success_status"));                      //11
+                    if(result.getBoolean("is_success_status"))       //hoan thanh
+                    {
+                        st_com.add(rowdata);
+                    } else          // khong hoan thanh
+                    {
+                         st_init.add(rowdata);
+                    }
+                }
+                for (int j=0; j<st_init.size(); j++) {
+                    dt.addRow(st_init.get(j));
+                }
+                for (int j=0; j<st_com.size(); j++) {
+                    dt.addRow(st_com.get(j));
+                }
+                tblCustom.setModel(dt);
+                // <editor-fold defaultstate="collapsed" desc="older code">
+
+
+
+                /**/
+                 tblCustom.setDefaultRenderer(Object.class, new TableCellRenderer() {
+                    @Override
+                    public Component getTableCellRendererComponent(JTable table, 
+                                                                    Object value, 
+                                                                    boolean isSelected, 
+                                                                    boolean hasFocus, 
+                                                                    int row, int column) {
+
+                        if (column == 6) {
+                           if(value!=null){
+                                String[] phones = value.toString().split(",");
+                                out = new JComboBox();
+                                out.setModel(new DefaultComboBoxModel(phones));
+                                out.setBackground(new Color(0xFFFFFFFF));
+
+                                return out;
+                           }
+                        }
+
+                        JLabel out=new JLabel();
+
+                        if (column == 0) {
+                            out.setText(Integer.toString(row+1));
+                        } else {
+                            out.setText((String)value);
+                        }
+                         System.out.println("value : "+(String)dt.getValueAt(row, 8));
+                        try{
+                         if (Integer.parseInt((String)dt.getValueAt(row, 12)) == 0) {
+                            out.setForeground(Color.black);
+                            if (isSelected) {
+                                out.setBackground(new Color(0xff, 0xff, 0x88, 0xff));
+                                out.setOpaque(true);
+                            }
+
+                            } else {
+                                out.setForeground(new Color(0x88, 0x88, 0x88, 0xff));
+                            }
+
+                       }
+                       catch(Exception e) {}
+                        return out;
+                    }
+                });
+
+
+                TableColumn column = null;
+                 for (int k = 0;k < tblCustom.getColumnCount(); k++) {
+                    column = tblCustom.getColumnModel().getColumn(k);
+
+                    if (k == 0) {
+                        column.setPreferredWidth(50);
+
+                    } 
+                     else if(k==1)
                     {
 
-                        @Override
-                        public boolean isCellEditable(int row, int col) {
-                            if (col==6) {
-                                return true;
-                            }
-                            return false;
-                        }
-                    };
+                        column.setWidth(0);
+                        column.setMinWidth(0);
+                        column.setMaxWidth(0);
 
-                    ArrayList<Vector> st_init = new ArrayList<>();
-                    ArrayList<Vector> st_com = new ArrayList<>();
-                    
-                    int i=0;
-                    while (result.next()) {
-                        Vector rowdata = new Vector();
-                         System.out.println("10");
-                         System.out.println("10");
-                        rowdata.add("");                                            //0
-                        rowdata.add(result.getString("customer_id"));               //1
-                        rowdata.add(result.getString("name"));
-                        int a=Integer.parseInt(result.getString("gender"));         //3
-
-                        String a1="";
-                        if(a==1)
-                        {
-                            a1="male";
-                            System.out.println(result.getString("gender"));
-                        }
-                        else 
-                        {
-                            a1="female";
-                        }
-                        rowdata.add(a1);
-                        rowdata.add(result.getString("address"));
-                        rowdata.add(result.getString("birthday"));                  //5
-                        rowdata.add(result.getString("number"));                              
-                        rowdata.add(result.getString("status"));                    //7
-                        rowdata.add(result.getString("id_status"));
-                        rowdata.add(result.getString("detail_id"));                 //9
-                        rowdata.add(result.getString("call_id"));
-                        rowdata.add(result.getString("note"));                      //11
-                        rowdata.add(result.getString("is_success_status"));                      //11
-//                        System.out.println(result.getString("id_status"));
-                        
-                        
-                        
-                        if(result.getBoolean("is_success_status"))       //hoan thanh
-                        {
-                            st_com.add(rowdata);
-                             System.out.println("id_stkjjkatus");
-                           
-                        } else          // khong hoan thanh
-                        {
-                             st_init.add(rowdata);
-                        }
                     }
-                    
-                    for (int j=0; j<st_init.size(); j++) {
-                        dt.addRow(st_init.get(j));
+                    else if(k==8)
+                    {
+
+                        column.setWidth(0);
+                        column.setMinWidth(0);
+                        column.setMaxWidth(0);
+
                     }
-                    for (int j=0; j<st_com.size(); j++) {
-                        dt.addRow(st_com.get(j));
+                    else if(k==9)
+                    {
+
+                        column.setWidth(0);
+                        column.setMinWidth(0);
+                        column.setMaxWidth(0);
+
                     }
-                    
-                    tblCustom.setModel(dt);
+                    else if(k==10)
+                    {
 
-                    // <editor-fold defaultstate="collapsed" desc="older code">
+                        column.setWidth(0);
+                        column.setMinWidth(0);
+                        column.setMaxWidth(0);
 
-
-
-                    /**/
-                     tblCustom.setDefaultRenderer(Object.class, new TableCellRenderer() {
-                        @Override
-                        public Component getTableCellRendererComponent(JTable table, 
-                                                                        Object value, 
-                                                                        boolean isSelected, 
-                                                                        boolean hasFocus, 
-                                                                        int row, int column) {
-                            
-                            if (column == 6) {
-                               if(value!=null){
-                                    String[] phones = value.toString().split(",");
-                                    out = new JComboBox();
-                                    out.setModel(new DefaultComboBoxModel(phones));
-                                    out.setBackground(new Color(0xFFFFFFFF));
-
-                                    return out;
-                               }
-                            }
-                            
-                            JLabel out=new JLabel();
-                            
-                            if (column == 0) {
-                                out.setText(Integer.toString(row+1));
-                            } else {
-                                out.setText((String)value);
-                            }
-                             System.out.println("value : "+(String)dt.getValueAt(row, 8));
-                            try{
-                             if (Integer.parseInt((String)dt.getValueAt(row, 12)) == 0) {
-                                out.setForeground(Color.black);
-                                if (isSelected) {
-                                    out.setBackground(new Color(0xff, 0xff, 0x88, 0xff));
-                                    out.setOpaque(true);
-                                }
-                                
-                                } else {
-                                    out.setForeground(new Color(0x88, 0x88, 0x88, 0xff));
-                                }
-
-                           }
-                           catch(Exception e) {}
-                            return out;
-                        }
-                    });
-                     
-
-                    TableColumn column = null;
-                     for (int k = 0;k < tblCustom.getColumnCount(); k++) {
-                        column = tblCustom.getColumnModel().getColumn(k);
-
-                        if (k == 0) {
-                            column.setPreferredWidth(50);
-
-                        } 
-                         else if(k==1)
-                        {
-                           
-                            column.setWidth(0);
-                            column.setMinWidth(0);
-                            column.setMaxWidth(0);
-
-                        }
-                        else if(k==8)
-                        {
-                            
-                            column.setWidth(0);
-                            column.setMinWidth(0);
-                            column.setMaxWidth(0);
-
-                        }
-                        else if(k==9)
-                        {
-                            
-                            column.setWidth(0);
-                            column.setMinWidth(0);
-                            column.setMaxWidth(0);
-
-                        }
-                        else if(k==10)
-                        {
-                           
-                            column.setWidth(0);
-                            column.setMinWidth(0);
-                            column.setMaxWidth(0);
-
-                        }
-                         else if(k==11)
-                        {
-                           
-                            column.setWidth(0);
-                            column.setMinWidth(0);
-                            column.setMaxWidth(0);
-
-                        }
-                         else if(k==12)
-                        {
-                           
-                            column.setWidth(0);
-                            column.setMinWidth(0);
-                            column.setMaxWidth(0);
-
-                        }
-                        else {
-                            column.setPreferredWidth(100);
-
-                        }
                     }
-                     // </editor-fold>
+                     else if(k==11)
+                    {
 
+                        column.setWidth(0);
+                        column.setMinWidth(0);
+                        column.setMaxWidth(0);
+
+                    }
+                     else if(k==12)
+                    {
+
+                        column.setWidth(0);
+                        column.setMinWidth(0);
+                        column.setMaxWidth(0);
+
+                    }
+                    else {
+                        column.setPreferredWidth(100);
+
+                    }
                 }
-                
+                 // </editor-fold>
+                }
                 con.closeConnect();
               }
               catch (Exception ex) {
-                  JOptionPane.showMessageDialog(null,"Error: show custom"+ex.toString());
+                  System.out.println("Error: show custom"+ex);
               }
     }
     private void ShowButtonDial(){
@@ -3393,38 +3130,24 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
 
                     Question_Camp quesF = new Question_Camp(camp_id,this,lb_agentid.getText(),SCall_id,Scam_name);
                     quesF.getTextCamp_Desc().setText(Sdesc);
-                   // quesF.getTextCamp_Desc().setText(quesF.injectSql(Sdesc));
                     quesF.getlblGender().setText(SGender); 
                     quesF.getlblCus_id().setText(Scus_name);
                     quesF.getlblAddr().setText(SAddr);
                     quesF.getlblBirth().setText(SBirth);
-
-
                     quesF.setVisible(true);
-                    
-                    /////
-                    
-
                     String col7=""+this.tblCustom.getValueAt(row,7);
                     String col11=""+this.tblCustom.getValueAt(row,11);
-                   
                     quesF.txtNote.setText(HtmlCoding.decode(col11)); 
-                    
-                   
-
-
                     for (int i=0; i<quesF.cbxStatus.getItemCount(); i++) {
                          if (col7.toLowerCase().equals(quesF.cbxStatus.getItemAt(i).toString().toLowerCase())) {
                              quesF.cbxStatus.setSelectedIndex(i); 
-                            
                          }
                     }
                 }
-                  
            }
            con.closeConnect();
-    }catch(Exception e){}
-   }
+        }catch(Exception e){}
+    }
     public String GetStatus(String t)
     {
         return t;
@@ -3443,11 +3166,8 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
 
                     cus_id = Integer.parseInt((String)tblCustom.getValueAt(row, 1));
                     String d=(String)tblCustom.getValueAt(row, col);
-                    System.out.println("null 4 :"+ d);
                     if(d!=null)
                     {
-                        System.out.println("null 5 :"+ d);
-                        
                         String[] phones = tblCustom.getValueAt(row, col).toString().split(",");
                         jcom.setModel(new DefaultComboBoxModel(phones));
                         jcom.addItemListener(new ItemListener() {
@@ -3522,6 +3242,305 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         
         return main_tab;
   }
+    private void show_chat()
+    {
+          try {
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+
+            if(con.isConnect())
+            {
+                Agent_loged=lb_agentid.getText();
+                int row=tblShowAgent.getSelectedRow();
+                final String col1=""+tblShowAgent.getValueAt(row,1); 
+                for(int i=0;i<tabPChat.getTabCount();i++)
+                {
+                    if(tabPChat.getTitleAt(i).equals(col1))
+                    {
+                        tabPChat.setSelectedIndex(i);
+                        return;
+                    }
+
+                }
+                final panelTab1 tab=new panelTab1();
+                tab.events = new IPanelTabEvent() {
+                    @Override
+                    public void send() {
+                        try {
+                            if(!"".equals(tab.getText())){
+                                //send
+                                agentClient.sendtoServer("120@"+Agent_loged+"@"+col1+"@"+tab.getText());
+                                tab.showMessage(Agent_loged, tab.getText());
+                                tab.send();
+                            }
+                        } catch (Exception ex) {}
+                    }
+                };
+                if(tabPChat.getTabCount()<5)
+                {
+                     tabPChat.addTab(col1,new TabCloseIcon(), tab);
+                }    
+                int display=tabPChat.getTabCount()-1;
+                tabPChat.setSelectedIndex(display);
+                mapAgent.put(col1, tab);
+            }
+            con.closeConnect();
+        }
+        catch(Exception e)
+        {
+
+        }
+    }
+    public void receive(String from, String message) {
+        Agent_loged=lb_agentid.getText();
+       panelTab1 tabs = mapAgent.get(from);
+       if (tabs == null) {
+            
+           final String agent=from;
+
+                final panelTab1 tab=new panelTab1();
+                tab.events = new IPanelTabEvent() {
+                    @Override
+                    public void send() {
+                        try {
+                            if(!"".equals(tab.getText())){
+                                //send
+                                agentClient.sendtoServer("120@"+Agent_loged+"@"+agent+"@"+tab.getText().replace("@", "&#64;"));
+                                tab.showMessage(Agent_loged, tab.getText());
+                                tab.send();
+                            }
+                        } catch (Exception ex) {
+                            System.out.println("send paneltab "+ex);
+                        }
+                    }
+                };
+
+               
+                tabPChat.addTab(agent,new TabCloseIcon(), tab);
+                int display= tabPChat.getTabCount()-1;
+                tabPChat.setSelectedIndex(display);
+
+                mapAgent.put(agent, tab);
+                tabs = tab;
+       }
+       
+       tabs.showMessage(from, message);
+   }
+    class PopupListener extends MouseAdapter {
+        JPopupMenu popup; 
+        PopupListener(JPopupMenu popupMenu) {
+            popup = popupMenu;
+        }
+ 
+        public void mousePressed(MouseEvent e) {
+            maybeShowPopup(e);
+        }
+ 
+        public void mouseReleased(MouseEvent e) {
+            maybeShowPopup(e);
+        }
+ 
+        private void maybeShowPopup(MouseEvent e) {
+            if (e.isPopupTrigger()) {
+                popup.show(e.getComponent(),
+                           e.getX(), e.getY());
+            }
+        }
+    }
+     public void createPopupMenu() {
+        JMenuItem menuItem;
+        JPopupMenu popup = new JPopupMenu();
+        menuItem = new JMenuItem("Open");
+        menuItem.addActionListener(new ActionListener() {
+
+             @Override
+             public void actionPerformed(ActionEvent ae) {
+                show_chat();
+               
+             }
+         });
+        popup.add(menuItem);
+        menuItem = new JMenuItem("...");
+        popup.add(menuItem);
+        MouseListener popupListener = new PopupListener(popup);
+        tblShowAgent.addMouseListener(popupListener);
+    }
+   private void showAgent()
+    {
+      
+       try {
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+
+            if(con.isConnect())
+            {
+                ResultSet result=null;
+                String sql="SELECT * FROM `agent_status`";
+//                String sql="SELECT * FROM `agent_status` AS s LEFT JOIN `agent_login` AS l"
+//                                        + " ON s.`agent_id`=l.`agent_id` WHERE role='2'";
+                result = con.executeQuery(sql);
+                tblShowAgent.getTableHeader().setReorderingAllowed(false);
+                String strHeader[]={"","","",""};
+                final DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
+                {
+                    @Override
+                    public boolean isCellEditable(int i, int i1) {
+                        return false;
+                    }
+                };
+                ArrayList<Vector> st_online = new ArrayList<>();
+                ArrayList<Vector> st_offline = new ArrayList<>();
+                int i=0;
+                int m=0;
+                while (result.next()) { 
+                    i++;
+                    String agent=result.getString("agent_id");
+                    String iface=result.getString("interface");
+                    int queue=Integer.parseInt(result.getString("queue"));
+                    
+                    String showOnline="";
+                    Pattern pattern = Pattern.compile("\\d*");
+                    Matcher matcher = pattern.matcher(iface); 
+
+                    if (matcher.matches())
+                    { 
+                          if(queue==0) 
+                          {
+                              showOnline=" now offline";
+                              m=0;
+                          }
+                    } 
+                    else
+                    { 
+                          showOnline=" now online";
+                          m=1;
+                    } 
+                    Vector rowdata = new Vector();
+                    rowdata.add(Integer.toString(i));
+                    rowdata.add(agent);
+                    rowdata.add(showOnline);
+                    rowdata.add(Integer.toString(m));
+                   
+                    if(Integer.parseInt((String)rowdata.get(3)) == 1)     
+                    {
+                        st_online.add(rowdata);
+
+                    } else       
+                    {
+                         st_offline.add(rowdata);
+                    }
+                   
+                }
+                for (int j=0; j<st_online.size(); j++) 
+                {
+                    dt.addRow(st_online.get(j));
+                }
+                for (int j=0; j<st_offline.size(); j++) 
+                {
+                    dt.addRow(st_offline.get(j));
+                }
+                tblShowAgent.setModel(dt);
+                
+                tblShowAgent.setDefaultRenderer(Object.class, new TableCellRenderer()
+                {
+                    final int currentRow = -1;
+                    @Override
+                    public Component getTableCellRendererComponent(JTable table, 
+                                                                        Object value, 
+                                                                        boolean isSelected, 
+                                                                        boolean hasFocus, 
+                                                                        int row, int column) 
+                    {
+                        JLabel out=new JLabel();
+                        if (column == 0) 
+                        {
+                            out.setText(Integer.toString(row+1));
+                        } 
+                        else 
+                        {
+                            out.setText((String)value);
+                        }
+                        if (Integer.parseInt((String)dt.getValueAt(row, 3)) == 1)
+                        {
+                            out.setForeground(Color.red);
+                        } 
+                        else
+                        {
+                            out.setForeground(new Color(0x88, 0x88, 0x88, 0xff));
+                        }
+                        if (isSelected) 
+                        {
+                            out.setBackground(new Color(0x88, 0x88, 0x88, 0x88));
+                            out.setOpaque(true);
+                        }
+                        return out;
+                    }
+                });
+                TableColumn column = null;
+                for (int k = 0;k < tblShowAgent.getColumnCount(); k++) 
+                {
+                    column = tblShowAgent.getColumnModel().getColumn(k);
+                    if (k == 0) 
+                    {
+                        column.setWidth(0);
+                        column.setMinWidth(0);
+                        column.setMaxWidth(0);
+                    }
+                    if (k == 3) 
+                    {
+                        column.setWidth(0);
+                        column.setMinWidth(0);
+                        column.setMaxWidth(0);
+                    } 
+                }
+                
+               result.close(); 
+            }
+          con.closeConnect();
+        
+        }catch(Exception e)
+        {
+            
+        }
+    }
+   public void popup(String Agent, String message)
+   {
+        try {
+            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+            if(con.isConnect())
+            {
+                Agent_loged=lb_agentid.getText();
+                final String agent=Agent;
+                final panelTab1 tab=new panelTab1();
+                tab.events = new IPanelTabEvent() {
+                    @Override
+                    public void send() {
+                        try {
+                            if(!"".equals(tab.getText())){
+                                //send
+                                agentClient.sendtoServer("120@"+Agent_loged+"@"+agent+"@"+tab.getText().replace("@", "&#64;"));
+                                tab.showMessage(Agent_loged, tab.getText());
+                                tab.send();
+                            }
+                        } catch (Exception ex) { }
+                    }
+                };
+                if(tabPChat.getTabCount()<5)
+                {
+                    tabPChat.addTab(agent,new TabCloseIcon(), tab);
+                }
+                int display= tabPChat.getTabCount()-1;
+                tabPChat.setSelectedIndex(display);
+                function_tab.setSelectedIndex(2);
+                mapAgent.put(agent, tab);
+                tab.showMessage(agent, message);
+            }
+            con.closeConnect();
+        }
+        catch(Exception e)
+        {
+
+        }
+   }
+   
     private void connectAsterisk(){
         try{
             System.out.println("connect asterisk");
@@ -3640,12 +3659,12 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     public javax.swing.JMenuItem MenuItem_logout;
     private javax.swing.JMenuItem MenuItem_setting;
     private javax.swing.JPanel Panel1;
-    private javax.swing.JButton btnChat;
     private javax.swing.JButton btnChooseEnd;
     private javax.swing.JButton btnChooseStart;
     private javax.swing.JButton btnClearCoop;
     private javax.swing.JButton btnClearPro;
     private javax.swing.JButton btnDial;
+    private javax.swing.JButton btnMap;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnShowCoop;
@@ -3673,7 +3692,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     private javax.swing.JButton btn_transfercall;
     private javax.swing.JCheckBox chkTime;
     private javax.swing.JTabbedPane function_tab;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -3714,6 +3732,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane10;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
@@ -3735,11 +3754,13 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     private javax.swing.JList list_transfer;
     private javax.swing.JTabbedPane main_tab;
     private javax.swing.JPanel panel_number;
+    public javax.swing.JTabbedPane tabPChat;
     public javax.swing.JTable table_report;
     private javax.swing.JTable tblCamp;
     private javax.swing.JTable tblCoop;
     private javax.swing.JTable tblCustom;
     private javax.swing.JTable tblPromotions;
+    private javax.swing.JTable tblShowAgent;
     private javax.swing.JTextField txtAutoSearchCoop;
     private javax.swing.JTextField txtAutoSearchPro;
     private javax.swing.JTextArea txtContent;
