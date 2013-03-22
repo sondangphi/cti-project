@@ -471,6 +471,8 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         txt_makh.setBackground(new java.awt.Color(255, 255, 255));
         txt_makh.setEnabled(false);
 
+        txt_add.setEditable(false);
+
         txt_mobile.setEditable(false);
         txt_mobile.setBackground(new java.awt.Color(255, 255, 255));
 
