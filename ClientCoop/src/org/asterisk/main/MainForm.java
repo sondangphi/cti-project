@@ -7,6 +7,7 @@ package org.asterisk.main;
 import az.encoding.html.HtmlCoding;
 import chrriis.dj.nativeswing.swtimpl.NativeInterface;
 import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Image;
@@ -43,9 +44,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.event.CellEditorListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
@@ -93,10 +96,8 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     private  String Mysql_pwd  = "callcenter"; 
     private ConnectDatabase con;
     public static FeedbackForm feedback;
-    public static MessageForm messageform;
     private String CallPhone;
     private JComboBox out;
-    public static ListItemChat itemchat;
     LocateMap locate = new LocateMap();
     public ChangepwdForm chanpwdform;
     private final String EXIT = "112";
@@ -169,6 +170,24 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         this.getContentPane().setBackground(Color.white);      
         showCampaign();  
         showAgent();
+        for(int i=1;i<3;i++){
+            main_tab.remove(1);
+        }
+         main_tab.setEnabledAt(main_tab.getTabCount()-1, false);
+         NativeInterface.open();
+         
+         SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JComponent c=createBrowserUnknowTab();
+                c.setSize(jPanel18.getWidth() ,jPanel18.getHeight());
+                jPanel18.add(c);
+            }
+          });
+
+        
+//     
+      
+       
     }    
 
     public void updateNumber(){
@@ -271,6 +290,8 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         jScrollPane8 = new javax.swing.JScrollPane();
         tblCustom = new javax.swing.JTable();
         btnRefresh = new javax.swing.JButton();
+        jPanel18 = new javax.swing.JPanel();
+        jPanel19 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -415,6 +436,12 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
 
         jPanel2Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {jLabel13, lb_workTime});
 
+        main_tab.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                main_tabStateChanged(evt);
+            }
+        });
+
         Panel1.setOpaque(false);
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Customer", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, java.awt.Color.black));
@@ -443,9 +470,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         txt_makh.setEditable(false);
         txt_makh.setBackground(new java.awt.Color(255, 255, 255));
         txt_makh.setEnabled(false);
-
-        txt_add.setEditable(false);
-        txt_add.setBackground(new java.awt.Color(255, 255, 255));
 
         txt_mobile.setEditable(false);
         txt_mobile.setBackground(new java.awt.Color(255, 255, 255));
@@ -523,30 +547,32 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                             .addComponent(txt_birthday)
                             .addComponent(txt_email)))
                     .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txt_makh, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
+                            .addComponent(txt_gender))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel16)
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txt_name, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
                         .addComponent(jLabel10)
                         .addGap(35, 35, 35)
-                        .addComponent(txt_add, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                        .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel8Layout.createSequentialGroup()
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel8Layout.createSequentialGroup()
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txt_makh, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
-                                    .addComponent(txt_gender))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel16))
-                                .addGap(26, 26, 26)
-                                .addComponent(txt_name, javax.swing.GroupLayout.PREFERRED_SIZE, 323, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btn_feedback))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addComponent(btn_feedback)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel8Layout.createSequentialGroup()
+                                .addComponent(txt_add, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
 
@@ -555,18 +581,20 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
-                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_makh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txt_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txt_name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txt_makh, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_gender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jLabel17, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txt_gender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel17)))
                     .addComponent(txt_birthday, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -585,8 +613,9 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txt_add, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnMap, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(25, 25, 25)
-                .addComponent(btn_feedback, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
+                .addComponent(btn_feedback, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jPanel8Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {btnMap, btn_feedback, jLabel10, jLabel11, jLabel14, jLabel18, jLabel19, jLabel4, jLabel9, txt_add, txt_birthday, txt_email, txt_gender, txt_makh, txt_mobile, txt_name, txt_reg, txt_type});
@@ -631,14 +660,17 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(Panel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
+                .addGroup(Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, Panel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnViewFB)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(Panel1Layout.createSequentialGroup()
+                        .addGroup(Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, Panel1Layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnViewFB)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         Panel1Layout.setVerticalGroup(
             Panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -876,7 +908,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jPanel17, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
 
         main_tab.addTab("Promotions", jPanel1);
@@ -968,7 +1000,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 233, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 247, Short.MAX_VALUE)
         );
 
         jPanel16.setBorder(javax.swing.BorderFactory.createTitledBorder("Detail"));
@@ -985,7 +1017,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         jPanel16.setLayout(jPanel16Layout);
         jPanel16Layout.setHorizontalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 485, Short.MAX_VALUE)
+            .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
         );
         jPanel16Layout.setVerticalGroup(
             jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1112,7 +1144,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane8, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1123,6 +1155,32 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         );
 
         main_tab.addTab("Campaigns", jPanel5);
+
+        javax.swing.GroupLayout jPanel18Layout = new javax.swing.GroupLayout(jPanel18);
+        jPanel18.setLayout(jPanel18Layout);
+        jPanel18Layout.setHorizontalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 758, Short.MAX_VALUE)
+        );
+        jPanel18Layout.setVerticalGroup(
+            jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 483, Short.MAX_VALUE)
+        );
+
+        main_tab.addTab("Knowledge Base", jPanel18);
+
+        javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
+        jPanel19.setLayout(jPanel19Layout);
+        jPanel19Layout.setHorizontalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 758, Short.MAX_VALUE)
+        );
+        jPanel19Layout.setVerticalGroup(
+            jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 483, Short.MAX_VALUE)
+        );
+
+        main_tab.addTab("Google Map", jPanel19);
 
         jPanel4.setOpaque(false);
 
@@ -1550,7 +1608,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panel_number, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(100, Short.MAX_VALUE))
+                .addContainerGap(114, Short.MAX_VALUE))
         );
 
         function_tab.addTab("Keypad", jPanel10);
@@ -1585,7 +1643,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
-                .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 266, Short.MAX_VALUE)
+                .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_transfercall, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(4, 4, 4))
@@ -1634,7 +1692,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addComponent(jScrollPane10, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabPChat, javax.swing.GroupLayout.DEFAULT_SIZE, 198, Short.MAX_VALUE))
+                .addComponent(tabPChat, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE))
         );
 
         function_tab.addTab("Live Chat", jPanel12);
@@ -1647,7 +1705,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         );
         jPanel14Layout.setVerticalGroup(
             jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 312, Short.MAX_VALUE)
+            .addGap(0, 326, Short.MAX_VALUE)
         );
 
         function_tab.addTab("abc", jPanel14);
@@ -1786,7 +1844,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                         System.out.println("CLOSE: "+option);
                     }                    
                 }
-            }).start();
+            },"MenuItem_exit").start();
         }catch(Exception e){
         }        
     }//GEN-LAST:event_MenuItem_exitActionPerformed
@@ -1907,7 +1965,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                     public void run() {   
                         showDialog("Just use number.");
                     }
-                }).start();                
+                },"btn_dial").start();                
             }
         }catch(Exception e){
         }                       
@@ -2430,7 +2488,8 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             JOptionPane.showMessageDialog(null,"No Address Input");
         }
         else{
-            createContent();
+            main_tab.setEnabledAt(main_tab.getTabCount()-1, true);
+            createContentGoogle();
         }
     }//GEN-LAST:event_btnMapActionPerformed
 
@@ -2591,6 +2650,10 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             show_chat();
         }
     }//GEN-LAST:event_tblShowAgentKeyReleased
+
+    private void main_tabStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_main_tabStateChanged
+      
+    }//GEN-LAST:event_main_tabStateChanged
 
     public void setAllEnable(boolean flag){
         Component comNumber [] = panel_number.getComponents();
@@ -3217,12 +3280,20 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         {}
     }
     
-
-    public JComponent createContent() {  
+    public static JComponent createBrowserUnknowTab() {  
+        JPanel p=new JPanel(new BorderLayout());
+        final JWebBrowser webBrowser = new JWebBrowser();
+         webBrowser.setBarsVisible(false);
+        webBrowser.setStatusBarVisible(false);
+        webBrowser.navigate("http://support.microsoft.com/kb/307759/en-us");
+        p.add(webBrowser, BorderLayout.CENTER);
+        return p;
+  }
+    public JComponent createContentGoogle() {  
         main_tab.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         JWebBrowser webBrowser = new JWebBrowser();
         webBrowser.setBarsVisible(false);
-        webBrowser.setStatusBarVisible(true);
+        webBrowser.setStatusBarVisible(false);
         try {
             webBrowser.setHTMLContent("<body onload='autoload()'>"
                     + "<a id='autoload' href='file:///"+new File(".").getCanonicalPath()+"/http/mycontext.html?diadiem="+ URLEncoder.encode(txt_add.getText()) +"'></a>"                                    
@@ -3234,12 +3305,11 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         } catch (Exception ex) {
         }        
         try {
-            main_tab.removeTabAt(4); 
+            main_tab.removeTabAt(main_tab.getTabCount()-1); 
+            
         } catch (Exception e) {}        
-        if(main_tab.getTabCount()==4){
-            main_tab.addTab("Google Map", webBrowser);
-            main_tab.setSelectedIndex(4);
-        }
+        main_tab.addTab("Google Map", webBrowser);
+        main_tab.setSelectedIndex(main_tab.getTabCount()-1);
         
         return main_tab;
   }
@@ -3267,9 +3337,15 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                     @Override
                     public void send() {
                         try {
-                            if(!"".equals(tab.getText())){
+                            String txt = tab.getText().trim();
+                            while(txt.indexOf("  ")>=0) {
+                                txt=txt.replace("  ", " ");
+                            }
+                            
+                            if(!"".equals(txt)){
                                 //send
-                                agentClient.sendtoServer("120@"+Agent_loged+"@"+col1+"@"+tab.getText());
+                                
+                                agentClient.sendtoServer("120@"+Agent_loged+"@"+col1+"@"+txt);
                                 tab.showMessage(Agent_loged, tab.getText());
                                 tab.send();
                             }
@@ -3293,8 +3369,8 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }
     public void receive(String from, String message) {
         Agent_loged=lb_agentid.getText();
-       panelTab1 tabs = mapAgent.get(from);
-       if (tabs == null) {
+        panelTab1 tabs = mapAgent.get(from);
+        if (tabs == null) {
             
            final String agent=from;
 
@@ -3724,6 +3800,8 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
+    private javax.swing.JPanel jPanel18;
+    private javax.swing.JPanel jPanel19;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

@@ -36,7 +36,7 @@ public class waitingForm extends javax.swing.JFrame {
                 
                 waitingForm.this.dispose();
             }
-        });
+        },"waitingForm");
         thr.start();
         
         f.setEnabled(false);

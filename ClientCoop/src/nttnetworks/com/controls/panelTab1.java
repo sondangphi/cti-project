@@ -5,6 +5,7 @@
 package nttnetworks.com.controls;
 
 import java.awt.FontMetrics;
+import java.awt.event.KeyEvent;
 import javax.swing.JScrollPane;
 import javax.swing.text.StyledEditorKit;
 
@@ -23,37 +24,40 @@ public class panelTab1 extends javax.swing.JPanel {
     };
     public IPanelTabEvent events;
     public String getText() {
+      
         return jTextField1.getText();
     }
     public void send() {
+        
         jTextField1.setText("");
+        
     }
 
     private void showMessage()
     {
-//       jTextArea1.setText(String.format(HTML, content));
-//       jTextArea2.setText(String.format(HTML, content));
         jEditorPane1.setEditorKit(new StyledEditorKit());
-            jEditorPane1.setContentType("text/html");
-
-            jEditorPane1.setText(String.format(HTML, content));
-             new Thread(new Runnable() {
-                 @Override
-                 public void run() {
-                     while (panelTab1.this.isVisible()) {
-                         synchronized (syn_fix) {
-                             panelTab1.this.setSize(panelTab1.this.getWidth() - 1, panelTab1.this.getHeight());
-                             try {
-                                 Thread.sleep(200);
-                             } catch (InterruptedException ex) { }
-                             panelTab1.this.setSize(panelTab1.this.getWidth() + 1, panelTab1.this.getHeight());
-                         }
-                     }
+        jEditorPane1.setContentType("text/html");
+        
+        jEditorPane1.setText(String.format(HTML, content));
+         new Thread(new Runnable() {
+             @Override
+             public void run() {
+                 if(panelTab1.this != null) {
+                    while (panelTab1.this.isVisible()) {
+                        synchronized (syn_fix) {
+                            panelTab1.this.setSize(panelTab1.this.getWidth() - 1, panelTab1.this.getHeight());
+                            try {
+                                Thread.sleep(500);
+                            } catch (InterruptedException ex) { }
+                            panelTab1.this.setSize(panelTab1.this.getWidth() + 1, panelTab1.this.getHeight());
+                        }
+                    }
                  }
-             }).start();
+             }
+         }, "showmessage").start();
 
 
-             fixHeight();
+         fixHeight();
       
     }
     private void fixHeight() {
@@ -74,11 +78,15 @@ public class panelTab1 extends javax.swing.JPanel {
                 color = colors[0];
             }
         }
+        message =message.trim();
+        while(message.indexOf("  ")>=0) {
+            message=message.replace("  ", " ");
+        }
         if(!"".equals(message)){
              content += "<span class='row'><span style='color: "+ color +"; font-weight: bold; float: left'>"+ 
                     name +":</span><span style='float: left'> "+ wrap(name, message) +"</span></span><br />";
             showMessage();
-              System.out.println(Integer.toString(message.length()));
+             // System.out.println(Integer.toString(message.length()));
          }
         
         jEditorPane1.setSelectionStart(jEditorPane1.getText().length());
@@ -90,15 +98,11 @@ public class panelTab1 extends javax.swing.JPanel {
      */
     public panelTab1() {
         initComponents();
-        
-     //   jScrollPane3.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        
-        
-
+       
     }
   private String wrap(String agent, String message) {
 //      return message;
-      
+      try{
         String mess = agent + ": " + message;
         FontMetrics met = jEditorPane1.getFontMetrics(jEditorPane1.getFont());
         
@@ -141,6 +145,12 @@ public class panelTab1 extends javax.swing.JPanel {
         out.append(message.substring(start_pos, end_pos));
         return out.toString();
     }
+      catch(Exception e){
+          
+      }
+      return message;
+  }
+  
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -159,6 +169,9 @@ public class panelTab1 extends javax.swing.JPanel {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTextField1KeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField1KeyTyped(evt);
+            }
         });
 
         jButton1.setText("Send");
@@ -168,6 +181,7 @@ public class panelTab1 extends javax.swing.JPanel {
             }
         });
 
+        jEditorPane1.setEditable(false);
         jScrollPane3.setViewportView(jEditorPane1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -198,18 +212,34 @@ public class panelTab1 extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String s=jTextField1.getText();
+        System.out.println("lenth: "+s.length());
+        if (s.length() > 500) {
+            jTextField1.setText(s.substring(0, 500));
+        }
         events.send();
+          
 //         System.out.println(Integer.toString(jEditorPane1.getWidth()));
 //          System.out.println(Integer.toString(jEditorPane1.getHeight()));
          
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
-       if(evt.getKeyCode()==10)
-       {
-             events.send();
-       }
+       if(evt.getKeyCode()==KeyEvent.VK_ENTER)
+        {
+            events.send();
+            System.out.println("length - : "+jTextField1.getText().length());
+        }
+       
     }//GEN-LAST:event_jTextField1KeyPressed
+
+    private void jTextField1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyTyped
+        String s=jTextField1.getText();
+        System.out.println("lenth: "+s.length());
+        if (s.length() > 500) {
+            jTextField1.setText(s.substring(0, 500));
+        }
+    }//GEN-LAST:event_jTextField1KeyTyped
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;

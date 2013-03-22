@@ -16,7 +16,7 @@ public class KeepAlive implements Runnable{
 
     public KeepAlive(Agent a) {
         agent = a;
-        thread = new Thread(this);
+        thread = new Thread(this,"keep alive");
         thread.start();
     }    
 
