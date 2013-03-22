@@ -14,7 +14,8 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
-import org.asterisk.main.MessageForm;
+import org.asterisk.main.MainForm;
+
 
 /**
  *
@@ -62,11 +63,11 @@ public class TabCloseIcon implements Icon
                     if ( !e.isConsumed()  &&   mPosition.contains( e.getX(), e.getY() ) )
                     {
                         
-                        final int index = mTabbedPane.getSelectedIndex();
-                        final String agent=mTabbedPane.getTitleAt(index);
-                        
+                       
                         try{
-                            
+                            final int index = mTabbedPane.getSelectedIndex();
+                            final String agent=mTabbedPane.getTitleAt(index);
+                        
                             mTabbedPane.remove( index );
                             e.consume();
                             
@@ -87,15 +88,18 @@ public class TabCloseIcon implements Icon
                         while (!(com instanceof JFrame)) {
                             com = com.getParent(); 
                         }
-
-                        MessageForm frm = (MessageForm) com;
-                        frm.mapAgent.remove(agent);
-                        
-                        if(mTabbedPane.getTabCount()==0)
-                        {
-                            frm.setSize(frm.jTabbedPane1.getX(), frm.getHeight());
-                        }
-                        
+//
+//                        MainForm main= (MainForm)com;
+//                        main.mapAgent.remove(agent);
+//                        
+//                        MessageForm frm = (MessageForm) com;
+//                        frm.mapAgent.remove(agent);
+//                        
+//                        if(mTabbedPane.getTabCount()==0)
+//                        {
+//                            frm.setSize(frm.jTabbedPane1.getX(), frm.getHeight());
+//                        }
+//                        
                     }
                  }
              });

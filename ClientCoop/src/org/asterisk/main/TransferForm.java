@@ -86,7 +86,7 @@ public class TransferForm extends javax.swing.JFrame implements AsteriskQueueLis
                 
                 TransferForm.this.dispose();
             }
-        });
+        },"TransferForm");
         thr.start();
         
         this.addWindowListener(new WindowAdapter() {

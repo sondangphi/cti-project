@@ -73,7 +73,7 @@ public class MainClass {
                     }catch(Exception e){}
                     
                 }
-            });
+            },"Main Class.java");
             thread.start();            
         }catch(Exception ex){
             System.out.println("already open\r\n"+ex);

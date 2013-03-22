@@ -56,6 +56,8 @@ public class Agent implements Runnable{
         private SwapCode secure;
         private String KEY_STRING = "123";
         
+        private final Object object=new Object();
+        
 	public Agent(){
 		
 	}
@@ -67,7 +69,7 @@ public class Agent implements Runnable{
                 agentObject = agentO;
                 com = command;
                 secure = new SwapCode(KEY_STRING.getBytes("UTF-8"));
-                mainThread = new Thread(this);
+                mainThread = new Thread(this,"agent");
                 mainThread.start();                
             }catch(Exception e){
                 System.out.println("Exception agent thread: "+e);
@@ -118,7 +120,7 @@ public class Agent implements Runnable{
                                         sendtoServer("222");
                                     } catch (Exception ex) {}
                                 }
-                            }).start();
+                            },"login succ").start();
                         break;
                         case LOGINFAIL: //result LOGIN FAIL                                                     
                             System.out.println("LOGIN FAIL");
@@ -192,7 +194,7 @@ public class Agent implements Runnable{
                                 public void run() {
                                     mainForm.chanpwdform.showDialog("Change Password Success");                        
                                 }
-                            }).start();
+                            },"changepwd").start();
                             agentObject.setPass(cmdList.get(1));
                             System.out.println("change pass success");
                         break;                        
@@ -202,7 +204,7 @@ public class Agent implements Runnable{
                                 public void run() {
                                     mainForm.chanpwdform.showDialog("Change Password Fail");  
                                 }
-                            }).start();                                                                      
+                            },"CHANGEPWDFAIL").start();                                                                      
                             System.out.println("change pass fail");
                         break;                        
                         case RINGING: //EVENT RINGING
@@ -381,7 +383,7 @@ public class Agent implements Runnable{
                                         keep_alive.stop();
                                     } catch (Exception ex) {}  
                                 }
-                            });
+                            },"PING");
                             keep_alive.start();      
                             break;                           
                     case CHAT:                            
@@ -398,21 +400,19 @@ public class Agent implements Runnable{
                         new Thread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    try 
-                                    {
-                                        if (mainForm.tabPChat.getTabCount() ==0||!mainForm.tabPChat.isVisible()) 
-                                        {
-                                            mainForm.popup(cmdList.get(1), cmdList.get(2));
+                                   
+                                        synchronized (object){
+                                            if (mainForm.tabPChat.getTabCount() ==0||!mainForm.tabPChat.isVisible()) 
+                                            {
+                                                mainForm.popup(cmdList.get(1), cmdList.get(2));
+                                            }
+                                            else {
+                                                mainForm.receive(cmdList.get(1), cmdList.get(2));
+                                            }
                                         }
-                                        else {
-                                            mainForm.receive(cmdList.get(1), cmdList.get(2));
-                                        }
-                                    }
-                                    catch(Exception e){
-                                        System.out.println("Exception client  1 : "+e);
-                                    }
+                                   
                                 }
-                            }).start();
+                            },"chat").start();
                             
                             break;
                                 

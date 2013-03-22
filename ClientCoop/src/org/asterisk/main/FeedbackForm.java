@@ -526,7 +526,7 @@ public class FeedbackForm extends javax.swing.JDialog {
                             Logger.getLogger(FeedbackForm.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
-                }).start();
+                },"btnSave feedback").start();
                
                 
                 
