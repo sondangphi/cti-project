@@ -1,5 +1,6 @@
 package org.asterisk.utility;
 
+import java.awt.Color;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -152,7 +153,8 @@ public class Agent implements Runnable{
                             mainForm.setAllEnable(false);      
                             mainForm.lb_status.setText("Not Ready");
                             mainForm.setPauseIcon(true);
-                            mainForm.btn_pause.setSelected(true);                        
+                            mainForm.btn_pause.setSelected(true);  
+                            mainForm.lb_status.setForeground(Color.red);
                             worktime.pause();
                             System.out.println("PAUSESUCC");
                         break;
@@ -167,6 +169,7 @@ public class Agent implements Runnable{
                             mainForm.lb_status.setText("Ready");
                             mainForm.btn_pause.setSelected(false);
                             mainForm.btn_hangup.setEnabled(false);
+                            mainForm.lb_status.setForeground(Color.green);
                             System.out.println("UNPAUSESUCC");
                         break;
                         case UNPAUSEFAIL: //result UNPAUSE

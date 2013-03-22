@@ -126,6 +126,7 @@ public class FeedbackForm extends javax.swing.JDialog {
             Image image = Toolkit.getDefaultToolkit().getImage("images/icon_feedback.gif");
             this.setIconImage(image);
             showComboBox();
+            this.setTitle("Feedback");
          
              
         }catch(Exception e){
