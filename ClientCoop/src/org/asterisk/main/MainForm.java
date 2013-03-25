@@ -2150,11 +2150,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_tblCoopMouseClicked
 
     private void btnClearCoopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearCoopActionPerformed
-//<<<<<<< .mine
-       
-//=======
-//>>>>>>> .r241
-        txtAutoSearchCoop.setText("");
+       txtAutoSearchCoop.setText("");
         txtResultCoop.setText("");
         txtDetail.setText("");
         ShowCoopAction();
@@ -2496,8 +2492,11 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }//GEN-LAST:event_btnMapActionPerformed
 
     private void btn_feedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_feedbackActionPerformed
-        feedback = new FeedbackForm(this, agentObject,agentClient);
-        feedback.setVisible(true);           
+     
+            System.out.println("txt_name.getText() : "+txt_name.getText());
+            feedback = new FeedbackForm(this, agentObject,agentClient);
+            feedback.setVisible(true); 
+        
     }//GEN-LAST:event_btn_feedbackActionPerformed
 
     private void btnViewFBActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewFBActionPerformed

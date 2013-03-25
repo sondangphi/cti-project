@@ -47,7 +47,7 @@ public class FeedbackForm extends javax.swing.JDialog {
         private static Utility uti;
         public static MainForm mainform2 = null ;
         private Agent agentclient;
-        public static waitingForm wait_form;
+        public static WaitingForm wait_form;
         
         private static AgentObject agentObject = null;
     /**
@@ -79,7 +79,7 @@ public class FeedbackForm extends javax.swing.JDialog {
         }catch(Exception e){
         }                
     }
-    
+  
     public FeedbackForm(final MainForm m, AgentObject agent, Agent agentc) {
         super(m);
         initComponents();
@@ -100,9 +100,19 @@ public class FeedbackForm extends javax.swing.JDialog {
             agentObject = agent;
             agentclient = agentc;
             mainform2 = m;
-            lbl_Name.setText(agentclient.customer.getName());
-            lb_mobile.setText(agentclient.customer.getPhone());
-            System.out.println("message : 1");
+            if("".equals(m.txt_name.getText()))
+            {
+                lbl_Name.setText("Unknown");
+                lb_mobile.setText(m.txt_mobile.getText());
+            }
+            else
+            {
+                lbl_Name.setText(agentclient.customer.getName());
+                lb_mobile.setText(agentclient.customer.getPhone());
+            }
+            
+            
+           
             Mysql_dbname = uti.readInfor(filename, "MySql_database");
             Mysql_server = uti.readInfor(filename, "MySql_server");
             Mysql_user = uti.readInfor(filename, "MySql_user");
@@ -421,7 +431,7 @@ public class FeedbackForm extends javax.swing.JDialog {
     private void btn_saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveActionPerformed
         try{
             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-            if(con.isConnect()){
+           if(con.isConnect()){
                 System.out.println("begin write feedback!");
                 String name = lbl_Name.getText();
                 final String mobile = lb_mobile.getText();
@@ -489,7 +499,7 @@ public class FeedbackForm extends javax.swing.JDialog {
 //                System.out.println(password);
                  
                //waiting
-                wait_form=new waitingForm(this);
+                wait_form=new WaitingForm(this);
                 wait_form.setVisible(true);
                 
                 new Thread(new Runnable() {
@@ -549,6 +559,7 @@ public class FeedbackForm extends javax.swing.JDialog {
     {
         try {
            con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+          
             if(con.isConnect()){
                String query="SELECT * FROM feedback_assign where name='"+name+"'";
                ResultSet rs2 = con.executeQuery(query);
@@ -573,9 +584,10 @@ public class FeedbackForm extends javax.swing.JDialog {
     {
         try {
             con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
+           
              if(con.isConnect()){
                  //////////
-                 String query1="SELECT * FROM feedback_assign";
+                 String query1="SELECT * FROM feedback_assign WHERE id<>'1'";
                  ResultSet rs1 = con.executeQuery(query1);
 
                  ArrayList<String> cb_assin = new ArrayList<>();
