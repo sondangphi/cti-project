@@ -387,40 +387,28 @@ public class Agent implements Runnable{
                             keep_alive.start();      
                             break;                           
                     case CHAT:                            
-//                                System.err.println("chat1");
-//                                System.err.println("chat: "+command);
-//                                if (MainForm.itemchat == null || !MainForm.itemchat.isVisible()) {
-//                                    MainForm.itemchat=new ListItemChat(agentObject.getAgentId(), this);
-//                                    MainForm.itemchat.popup(cmdList.get(1), cmdList.get(2));
-//                                }
-//                                else {
-//                                    MainForm.itemchat.receive(cmdList.get(1), cmdList.get(2));
-//                                }     
-
                         new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                   
-                                        synchronized (object){
-                                            if (mainForm.tabPChat.getTabCount() ==0||!mainForm.tabPChat.isVisible()) 
-                                            {
-                                                mainForm.popup(cmdList.get(1), cmdList.get(2));
-                                            }
-                                            else {
-                                                mainForm.receive(cmdList.get(1), cmdList.get(2));
-                                            }
-                                        }
-                                   
+                            @Override
+                            public void run() {                                   
+                                synchronized (object){
+                                    if (mainForm.tabPChat.getTabCount() ==0||!mainForm.tabPChat.isVisible()){
+                                        mainForm.popup(cmdList.get(1), cmdList.get(2));
+                                    }else {
+                                        mainForm.receive(cmdList.get(1), cmdList.get(2));
+                                    }
                                 }
-                            },"chat").start();
-                            
-                            break;
-                                
-                           default: 
+
+                            }
+                        },"chat").start();                            
+                            break;      
+                    case ONLINE:
+                        
+                        break;
+                       default: 
 //                             System.out.println("default values from server\t"+command);
-                               break;
+                           break;
                               
-                        }
+                    }
 
                 }
                 catch(Exception ex){
@@ -613,6 +601,6 @@ public class Agent implements Runnable{
             CHANGEPWD,CHANGEPWDFAIL,
             RINGING,RINGNOANWSER,CONNECTED, COMPLETED,HANGUPABANDON,HANGUPFAIL,
             DIALOUT,CONNECTEDDIALOUT,HANGUPDIALOUT,HANGUPSUCCESS,
-            PING,CHAT
+            PING,CHAT,ONLINE,
 	}
 }
