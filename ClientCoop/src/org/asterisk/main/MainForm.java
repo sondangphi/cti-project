@@ -334,7 +334,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         jScrollPane10 = new javax.swing.JScrollPane();
         tblShowAgent = new javax.swing.JTable();
         tabPChat = new javax.swing.JTabbedPane();
-        jPanel14 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         MenuItem_logout = new javax.swing.JMenuItem();
@@ -1698,19 +1697,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         );
 
         function_tab.addTab("Live Chat", jPanel12);
-
-        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
-        jPanel14.setLayout(jPanel14Layout);
-        jPanel14Layout.setHorizontalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 269, Short.MAX_VALUE)
-        );
-        jPanel14Layout.setVerticalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 326, Short.MAX_VALUE)
-        );
-
-        function_tab.addTab("abc", jPanel14);
 
         jMenuBar1.setOpaque(false);
 
@@ -3797,7 +3783,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
-    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
