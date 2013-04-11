@@ -470,6 +470,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         txt_makh.setEnabled(false);
 
         txt_add.setEditable(false);
+        txt_add.setBackground(new java.awt.Color(255, 255, 255));
 
         txt_mobile.setEditable(false);
         txt_mobile.setBackground(new java.awt.Color(255, 255, 255));
@@ -2470,10 +2471,20 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         {
             JOptionPane.showMessageDialog(null,"No Address Input");
         }
-        else{
+        else
+        {
             main_tab.setEnabledAt(main_tab.getTabCount()-1, true);
-            createContentGoogle();
+            main_tab.setSelectedIndex(main_tab.getTabCount()-1);
+            SwingUtilities.invokeLater(new Runnable() {
+            public void run() {
+                JComponent c=createContentGoogle();
+                c.setSize(jPanel19.getWidth() ,jPanel19.getHeight());
+                jPanel19.add(c);
+            }
+          });
         }
+         
+        
     }//GEN-LAST:event_btnMapActionPerformed
 
     private void btn_feedbackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_feedbackActionPerformed
@@ -2808,13 +2819,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             System.out.println("Error: showCopAction ");
         }
       }
-    private static byte[] stringToBytes(String str) {
-        byte[] output = new byte[str.length()];
-        for (int i=0; i<output.length; i++) {
-            output[i] = (byte)((int)str.charAt(i) & 0xFF);
-        }
-        return output;
-    }
+ 
     private void showCampaign()
     {
         try {
@@ -3269,15 +3274,15 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     public static JComponent createBrowserUnknowTab() {  
         JPanel p=new JPanel(new BorderLayout());
         final JWebBrowser webBrowser = new JWebBrowser();
-         webBrowser.setBarsVisible(false);
+        webBrowser.setBarsVisible(false);
         webBrowser.setStatusBarVisible(false);
         webBrowser.navigate("http://support.microsoft.com/kb/307759/en-us");
         p.add(webBrowser, BorderLayout.CENTER);
         return p;
   }
-    public JComponent createContentGoogle() {  
-        main_tab.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        JWebBrowser webBrowser = new JWebBrowser();
+     public JComponent createContentGoogle() {  
+        JPanel p=new JPanel(new BorderLayout());
+        final JWebBrowser webBrowser = new JWebBrowser();
         webBrowser.setBarsVisible(false);
         webBrowser.setStatusBarVisible(false);
         try {
@@ -3290,15 +3295,10 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                     + "}</script>");
         } catch (Exception ex) {
         }        
-        try {
-            main_tab.removeTabAt(main_tab.getTabCount()-1); 
-            
-        } catch (Exception e) {}        
-        main_tab.addTab("Google Map", webBrowser);
-        main_tab.setSelectedIndex(main_tab.getTabCount()-1);
-        
-        return main_tab;
+        p.add( webBrowser, BorderLayout.CENTER);
+        return p;
   }
+   
     private void show_chat()
     {
           try {

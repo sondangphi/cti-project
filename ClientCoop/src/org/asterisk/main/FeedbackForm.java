@@ -47,7 +47,7 @@ public class FeedbackForm extends javax.swing.JDialog {
         private static Utility uti;
         public static MainForm mainform2 = null ;
         private Agent agentclient;
-        public static waitingForm wait_form;
+        public static WaitingForm wait_form;
         
         private static AgentObject agentObject = null;
     /**
@@ -458,26 +458,29 @@ public class FeedbackForm extends javax.swing.JDialog {
                     }
                 }
                 else{  assign = 0;}
-                
-                System.out.println("assign: "+assign);
-                System.out.println("content: "+content);
-                System.out.println("solution: "+solution);
-                System.out.println("get item : "+cb_assign.getItemCount());
-                
+               
                 String sql = "INSERT INTO feedback_history "
                         + "(feedbackid, name, mobile, agentid,type,categories,content_type,content,solution,results,assign) "
                         + "VALUES ('"+feedbackid+"','"+name+"','"+mobile+"','"
                                      +agentObject.getAgentId()+"','"+type+"','"
-                                     +categories+"','"+content_type+"','"+content+"','"+solution+"','"+result+"', '"+Integer.toString(assign)+"')";
+                                     +categories+"','"+content_type+"','"+content+"','"+solution+"','"+result+"', '"+Integer.toString(assign+1)+"')";
                 con.executeUpdate(sql);
          
-                
-              
+                String qry="SELECT * FROM feedback_assign where id = 1 ";
+                ResultSet rsult=con.executeQuery(qry);
+                 String from1="";
+                 String password1="";
+                while(rsult.next()){
+                   from1= rsult.getString("email");
+                    password1=rsult.getString("pass");
+                    
+                }
+                final String from=from1;
+                final String password=password1;
                 final String email=cb_assign.getSelectedItem().toString();
                 
                 final String smtpServer="smtp.gmail.com";
-                final String from="callcenter.testing11@gmail.com";
-              
+                
                 final String to=getEmail(email);
                 
                 System.out.println(to);
@@ -495,11 +498,9 @@ public class FeedbackForm extends javax.swing.JDialog {
                             "Solution : "+solution+"\n" ;
               
            //     final String body="hajsdgajhgda";
-                final String password="callcentertesting";
-//                System.out.println(password);
-                 
+                
                //waiting
-                wait_form=new waitingForm(this);
+                wait_form=new WaitingForm(this);
                 wait_form.setVisible(true);
                 
                 new Thread(new Runnable() {
@@ -521,7 +522,7 @@ public class FeedbackForm extends javax.swing.JDialog {
                             //reload table
                             ConnectDatabase con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
                             String query = "SELECT f.*,a.name as `a_name`,a.email FROM feedback_history f LEFT OUTER JOIN feedback_assign a ON f.assign=a.id"
-                                               + " WHERE mobile = '"+mobile+"' "
+                                               + " WHERE mobile = '"+mobile+"' and a.id<>'1'"
                                                     + " ORDER BY f.datetime DESC "
                                                     + " LIMIT 0,10 ";
                             ResultSet rs = con.executeQuery(query);

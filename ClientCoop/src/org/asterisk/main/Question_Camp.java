@@ -463,24 +463,13 @@ public class Question_Camp extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void cbxStatusItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbxStatusItemStateChanged
-       int index = cbxStatus.getItemCount() - cbxStatus.getItemCount();
-       System.out.println("count-1 : "+(cbxStatus.getItemCount()-1));
-       System.out.println("index : "+index);
-       System.out.println("get select index : "+cbxStatus.getSelectedIndex());
-       System.out.println("get select index + 1: "+(cbxStatus.getSelectedIndex()+1));
-       System.out.println("get select item : "+(cbxStatus.getSelectedItem()));
-       
+        int index = cbxStatus.getItemCount() - cbxStatus.getItemCount();
         if(cbxStatus.getSelectedIndex() == index){
             btnfinish.setEnabled(false);
-            
-            
         }else
         {
             btnfinish.setEnabled(true);
-            
         }
-        
-        
     }//GEN-LAST:event_cbxStatusItemStateChanged
  
    
