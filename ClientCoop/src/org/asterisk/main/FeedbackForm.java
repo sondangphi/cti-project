@@ -47,7 +47,7 @@ public class FeedbackForm extends javax.swing.JDialog {
         private static Utility uti;
         public static MainForm mainform2 = null ;
         private Agent agentclient;
-        public static WaitingForm wait_form;
+        public static waitingForm wait_form;
         
         private static AgentObject agentObject = null;
     /**
@@ -499,7 +499,7 @@ public class FeedbackForm extends javax.swing.JDialog {
 //                System.out.println(password);
                  
                //waiting
-                wait_form=new WaitingForm(this);
+                wait_form=new waitingForm(this);
                 wait_form.setVisible(true);
                 
                 new Thread(new Runnable() {
