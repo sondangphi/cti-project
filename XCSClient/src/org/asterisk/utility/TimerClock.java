@@ -60,10 +60,10 @@ public class TimerClock implements ActionListener{
         }
         time = dFormat.format(hrs) + ":" + dFormat.format(mins) + ":" + dFormat.format(secs);
         if(flag){
-            mainform.lb_callduration.setText(time);
+           // mainform.lb_callduration.setText(time);
         }else
         {
-            mainform.lb_workTime.setText(time);
+           // mainform.lb_workTime.setText(time);
         }
         
 //        System.out.println(time);        
