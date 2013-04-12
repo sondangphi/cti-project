@@ -208,101 +208,13 @@ public class Agent implements Runnable{
                             System.out.println("change pass fail");
                         break;                        
                         case RINGING: //EVENT RINGING
-                            try{
-                                dialout = false;
-                                String callerNum = cmdList.get(1);
-                                mainForm.clearInfo();
-                                mainForm.setAllEnable(false);
-                                mainForm.lb_status.setText("Ringing...");
-                                mainForm.lb_callduration.setText("00:00:00");
-                                mainForm.btn_pause.setEnabled(false);       
-                                mainForm.btn_feedback.setEnabled(false);
-//                                    mainForm.btn_update.setEnabled(false);
-                                mainForm.btn_hangup.setEnabled(true);     
-//                                mainForm.btn_transfer.setEnabled(false);
-                                mainForm.btnViewFB.setEnabled(false);
-                                //open connect to database
-                                con = new ConnectDatabase(Mysql_dbname, Mysql_user, Mysql_pwd, Mysql_server);
-                                if(con.isConnect()){
-                                    System.out.println("get information of customer"); 
-                                    String sql = "SELECT c.*,t.* FROM customer c LEFT JOIN cus_type t "
-                                            + "on c.type=t.id_type  WHERE phone1 ='"+callerNum+"'";
-                                    ResultSet rs = con.executeQuery(sql);
-                                    if(rs.next()){
-                                        //get information of already custom and fill in data   
-                                        System.out.println("callerNum: "+callerNum);
-                                        System.out.println("already information");
-                                        customer = new CustomerObject(callerNum);
-                                        customer.setName(rs.getString("fullname"));                                    
-                                        customer.setAddress(rs.getString("address"));
-                                        customer.setEmail(rs.getString("email"));
-                                        customer.setGender(rs.getString("gender"));
-
-                                        customer.setType(rs.getString("desc"));
-                                        customer.setId(String.valueOf(rs.getObject("id")));   
-                                        customer.setBirth(String.valueOf(rs.getObject("birthday"))); 
-                                        customer.setReg(String.valueOf(rs.getObject("registration"))); 
-                                        mainForm.txt_add.setText(customer.getAddress());
-                                        mainForm.txt_name.setText(customer.getName());
-                                        mainForm.txt_email.setText(customer.getEmail());
-                                        mainForm.txt_mobile.setText(customer.getPhone());
-                                        mainForm.txt_makh.setText(customer.getId());
-                                        mainForm.txt_birthday.setText(customer.getBirth());
-                                        mainForm.txt_reg.setText(customer.getReg());
-
-                                        String gender="";
-                                        if(Integer.parseInt(customer.getGender())==0)
-                                        {
-                                            gender="n?";
-                                        }
-                                        else
-                                        {
-                                            gender="nam";
-                                        }
-                                        mainForm.txt_gender.setText(gender);
-                                        mainForm.txt_type.setText(customer.getType());
-
-                                        sql = "SELECT f.*,a.name as `a_name`,a.email "
-                                                + "FROM feedback_history f LEFT OUTER JOIN feedback_assign a ON f.assign=a.id"
-                                                + " WHERE mobile = '"+callerNum+"' "
-                                                + " ORDER BY f.datetime DESC "
-                                                + " LIMIT 0,10 ";
-                                        rs = con.executeQuery(sql);
-                                        if(rs != null)
-                                        {  
-                                            displayHistory(rs);  
-                                        }
-                                    }else{
-                                        //new customer information, insert into database
-                                        System.out.println("callerNum: "+callerNum);
-                                        System.out.println("not ready information");  
-                                        mainForm.txt_mobile.setText(callerNum);
-                                        mainForm.btn_feedback.setEnabled(false);
-//                                            mainForm.btn_new.setEnabled(true);
-                                        mainForm.txt_add.setText("");                                    
-                                        mainForm.txt_name.setText("");
-                                        mainForm.txt_email.setText("");                                    
-//                                            mainForm.txt_birthday.setText("");
-                                        String colname[] = {"No","Date", "Agent","Type","Content","Result","Assign "};
-                                        int count = colname.length;
-                                        Vector col = new Vector(count);
-                                        Vector row = new  Vector();
-                                        for (int i = 0; i <count; i++) 
-                                            col.addElement(colname[i].toString());
-                                        mainForm.table_report.setModel(new TableModel(col, row));
-                                    }
-                                }
-                                //close connect database
-                                con.closeConnect();                                                       
-                            }catch(Exception e){
-                                con.closeConnect();  
-                            }
+                            
                         break;
                         case CONNECTED://connected incoming call
                             System.out.println("CONNECTED incoming call");
                             mainForm.lb_status.setText("Busy");
 //                            mainForm.btn_transfer.setEnabled(true);
-                             mainForm.btn_feedback.setEnabled(true);
+                           
 //                                mainForm.btn_update.setEnabled(true);
                             clockDialin = new TimerClock(mainForm, true);
                             clockDialin.start();
@@ -327,7 +239,7 @@ public class Agent implements Runnable{
                         case DIALOUT: //result 	//goi ra
                             System.out.println("DIALOUT");                        
                             mainForm.lb_status.setText("Dialing...");
-                            mainForm.lb_callduration.setText("00:00:00");
+                           
                             mainForm.setAllEnable(false);  
                             mainForm.btn_pause.setEnabled(false);    
                             mainForm.btn_hangup.setEnabled(true);                                                      
@@ -337,7 +249,7 @@ public class Agent implements Runnable{
                             clockDialout = new TimerClock(mainForm, true);
                             clockDialout.start();                        
                             mainForm.lb_status.setText("Busy");
-                            mainForm.btn_feedback.setEnabled(true);
+
                             System.out.println("Connected dialout");
                         break;
                         case HANGUPDIALOUT:         //kt                
@@ -345,7 +257,7 @@ public class Agent implements Runnable{
                             mainForm.setAllEnable(true); 
                             mainForm.btn_pause.setEnabled(true);
                             mainForm.btn_hangup.setEnabled(false);   
-                            mainForm.btn_feedback.setEnabled(false);
+                          
                             if(clockDialout != null){
                                 clockDialout.stop();
                             }
@@ -431,79 +343,6 @@ public class Agent implements Runnable{
                 }
             }
         }        
-        public void displayHistory(ResultSet rs){
-            try{
-            String colname[] = {"No","Date","Agent","Type","Categories","Content_type","Content","Solution","Result","Assign"};
-          //  mainForm.btn_feedback.setEnabled(true);
-            mainForm.table_report.getTableHeader().setReorderingAllowed(false);
-            int count = colname.length;
-            Vector col = new Vector(count);
-            Vector row = new  Vector();
-            String [] temp = null;
-            ArrayList<String[]> data = new ArrayList<String[]>();
-            int t = 1;
-            while(rs.next()){
-                int j = 0;                                                                                    
-                temp  = new String[count];
-                temp[ j++ ] = String.valueOf(t++);
-                
-                SimpleDateFormat spdt = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                Date c_day = spdt.parse(rs.getObject("datetime").toString());
-
-                // *** same for the format String below
-                SimpleDateFormat spdt1 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-                String cr_day=spdt1.format(c_day);
-                temp[ j++ ] =cr_day;
-//                temp[ j++ ] = String.valueOf(rs.getObject("datetime"));//rs.getString("datetime");
-                temp[ j++ ] = String.valueOf(rs.getObject("agentid"));//rs.getString("agentid");
-                temp[ j++ ] = String.valueOf(rs.getObject("type"));//rs.getString("type");
-                temp[ j++ ] = String.valueOf(rs.getObject("categories"));//rs.getString("categories");
-                temp[ j++ ] = String.valueOf(rs.getObject("content_type"));//rs.getString("content_type");
-                temp[ j++ ] = String.valueOf(rs.getObject("content"));//rs.getString("content");
-                temp[ j++ ] = String.valueOf(rs.getObject("solution"));//rs.getString("solution");
-                temp[ j++ ] = String.valueOf(rs.getObject("results"));//rs.getString("results");
-                temp[ j++ ] = String.valueOf(rs.getString("a_name"));//rs.getString("assign");                                                                                
-                data.add(temp);
-            }
-            for(int i = 0;i<data.size();i++){                
-                Vector dataRow = new Vector(count);
-                temp = new String[count];
-                for(int j=0;j<count;j++){
-                    temp = data.get(i);
-                    if(temp[j] != null)
-                        dataRow.addElement(temp[j]);
-                    else
-                        dataRow.addElement("");
-                }
-                row.addElement(dataRow);
-            }
-            
-            for (int i = 0; i <count; i++) 
-                col.addElement(colname[i].toString());
-          
-            mainForm.table_report.setModel(new TableModel(col, row));   
-
-            TableColumn column = null;
-                for (int k = 0;k <  mainForm.table_report.getColumnCount(); k++) 
-                {
-                    column =  mainForm.table_report.getColumnModel().getColumn(k);
-
-                    if (k == 0) 
-                    {
-                        column.setPreferredWidth(50);
-                    } 
-
-                    else if (k==1)
-                    {
-                        column.setPreferredWidth(150);
-                    }
-                    else
-                    {
-                        column.setPreferredWidth(100);
-                    }
-                }                
-            }catch(Exception ex){}
-        }
         public void agentLogout(){
             try{            
                 closed = false;
