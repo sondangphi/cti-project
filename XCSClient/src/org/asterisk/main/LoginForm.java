@@ -53,14 +53,13 @@ public class LoginForm extends javax.swing.JFrame {
         private String queueId = "";
         public String cmd;
         public String queueName = "";
-//        static int i =0;
         public Agent agent;
-        private  String filename = "infor.properties";
-        private  String Mysql_server = "172.168.10.202";      
-        private  String Mysql_dbname = "ast_callcenter";
-        private  String Mysql_user = "callcenter";
-        private  String Mysql_pwd  = "callcenter"; 
-        private String imagesFolder  = "data/images/";
+        private  String fileName = "infor.properties";
+        private  String mysqlserver = "172.168.10.202";      
+        private  String mysqldb = "ast_callcenter";
+        private  String mysqluser = "callcenter";
+        private  String mysqlpwd  = "callcenter"; 
+        private  String imagesFolder  = "data/images/";
         
 //        private int TIME_OUT = 60000;
     /**
@@ -74,30 +73,29 @@ public class LoginForm extends javax.swing.JFrame {
         Image image = Toolkit.getDefaultToolkit().getImage(imagesFolder+"icon_login.png");
         try{            
             uti = new Utility();		
-            File f = new File(filename);
+            File f = new File(fileName);
             if(!f.exists())
                 f.createNewFile();            
             FileInputStream fis = new FileInputStream(f);  
             if(fis.available() == 0 ){
-                System.out.println("file is empty"); 
-                uti.writeInfor(filename, "host", host);
-                uti.writeInfor(filename, "aport", Integer.toString(aport));
-                uti.writeInfor(filename, "qport", Integer.toString(qport));
-                
-                uti.writeInfor(filename, "MySql_database", Mysql_dbname);
-                uti.writeInfor(filename, "MySql_server", Mysql_server);
-                uti.writeInfor(filename, "MySql_user", Mysql_user);
-                uti.writeInfor(filename, "MySql_pwd", Mysql_pwd);
+                System.out.println("file is empty");
+                uti.writeInfor(fileName, "host", host);
+                uti.writeInfor(fileName, "aport", Integer.toString(aport));
+                uti.writeInfor(fileName, "qport", Integer.toString(qport));                
+                uti.writeInfor(fileName, "MySql_database", mysqldb);
+                uti.writeInfor(fileName, "MySql_server", mysqlserver);
+                uti.writeInfor(fileName, "MySql_user", mysqluser);
+                uti.writeInfor(fileName, "MySql_pwd", mysqlpwd);
                 System.out.println("write file"); 
             }            
             System.out.println("read file configuration"); 
-            host = uti.readInfor(filename, "host");
-            aport = Integer.parseInt(uti.readInfor(filename, "aport"));
-            qport = Integer.parseInt(uti.readInfor(filename, "qport"));  
-            Mysql_dbname = uti.readInfor(filename, "MySql_database");
-            Mysql_server = uti.readInfor(filename, "MySql_server");
-            Mysql_user = uti.readInfor(filename, "MySql_user");
-            Mysql_pwd = uti.readInfor(filename, "MySql_pwd");
+            host = uti.readInfor(fileName, "host");
+            aport = Integer.parseInt(uti.readInfor(fileName, "aport"));
+            qport = Integer.parseInt(uti.readInfor(fileName, "qport"));  
+            mysqldb = uti.readInfor(fileName, "MySql_database");
+            mysqlserver = uti.readInfor(fileName, "MySql_server");
+            mysqluser = uti.readInfor(fileName, "MySql_user");
+            mysqlpwd = uti.readInfor(fileName, "MySql_pwd");
             listQueue = new ArrayList<QueueObject>();
             getListQueue();      
             queueId = listQueue.get(cb_queue.getSelectedIndex()).getQueueId();

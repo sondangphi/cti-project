@@ -21,12 +21,15 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Utility {    
         Properties prop = new Properties();    
-        String filename = "infor.properties"; 
+        String fileName = "infor.properties"; 
         String logFolder = "log";  
         String logFile = "client.log"; 
+        String soundFolder = "data/sounds/";
         
 	public String getDatetimeNow(){		
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -108,6 +111,42 @@ public class Utility {
             value = prop.getProperty(key);
             return value;
         }
+        public boolean writeConfig(String fname,String key, String value){
+            try{
+                File file = new File(fname);
+                if(file.exists()){
+                    FileInputStream input = new FileInputStream(file);
+                    byte [] readbyte = new byte[input.available()];                
+                    input.read(readbyte);                                                                            
+                    String jsonString = new String(readbyte,"UTF-8");
+                    JSONObject jsonObject = new JSONObject(jsonString);
+                    jsonObject.remove(key);
+                    jsonObject.put(key, value);                    
+                    String out = jsonObject.toString();                                        
+                    FileOutputStream output = new FileOutputStream(file);
+                    output.write(out.getBytes("UTF-8"));  
+                    return true;
+                }
+            }catch(IOException | JSONException ex){
+            }
+            return false;
+        }
+        public String readConfig(String fname, String key)throws Exception{
+            try{
+                File file = new File(fname);
+                if(file.exists()){
+                    FileInputStream input = new FileInputStream(file);
+                    byte [] readbyte = new byte[input.available()];                
+                    input.read(readbyte);                                                                            
+                    String jsonString = new String(readbyte,"UTF-8");
+                    JSONObject jsonObject = new JSONObject(jsonString);
+                    String value = jsonObject.getString(key);
+                    return value;  
+                }                                                                              
+            }catch(IOException | JSONException ex){
+            }
+            return null;
+        }
         
         public boolean checkAgent(String t){
             return t.matches("([a-zA-Z0-9_./\\-]+)");
@@ -120,59 +159,11 @@ public class Utility {
         }
         public boolean checkNumber(String t){
             return t.matches("([0-9]+)");
-        }
-        
-        
-//        public static String getTime(long ses){
-//            long hour ;
-//            long minute;
-//            long second;         
-//            hour = ses/3600;
-//            ses = ses%3600;
-//            minute = ses/60;
-//            second = ses%60;
-//            String time = String.valueOf(hour)+":"+String.valueOf(minute)+":"+String.valueOf(second);      
-//            return time;
-//        }
-    
-//        public static long sumTime(String begin, String end){
-//            ArrayList<String> list1 = new ArrayList<String>();
-//            ArrayList<String> list2 = new ArrayList<String>();
-//            StringTokenizer st;
-//            st = new StringTokenizer(begin,":");
-//            while(st.hasMoreTokens())
-//                list1.add(st.nextToken());
-//            st = new StringTokenizer(end,":");
-//            while(st.hasMoreTokens())
-//                list2.add(st.nextToken());  
-//            long t1 = mili(Long.parseLong(list1.get(0)),Long.parseLong(list1.get(1)),Long.parseLong(list1.get(2)));
-//            long t2 = mili(Long.parseLong(list2.get(0)),Long.parseLong(list2.get(1)),Long.parseLong(list2.get(2)));        
-//            return t1+t2;
-//        }     
-//        public static long divtime(String time2, String time1) throws ParseException{
-//            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-//            Date date1 = format.parse(time1);
-//            Date date2 = format.parse(time2);
-//            long difference = date2.getTime() - date1.getTime(); 
-//            return difference/1000;
-//        }
-
-//        static long mili(long h, long m, long s){        
-//            return s+m*60+h*3600;
-//        }  
-    
-//        public static long sumTime2(String begin, String end) throws ParseException{
-//            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-//            Date date1 = format.parse(begin);
-//            Date date2 = format.parse(end);
-//            long difference = date2.getTime() + date1.getTime(); 
-//            System.out.println(difference/1000);
-//            return difference/1000;    
-//        }        
+        }        
         
         public void playSounds(){
             try{
-                File soundFile = new File("Sounds/snd_keypress.wav");
+                File soundFile = new File(soundFolder+"snd_keypress.wav");
                 if(soundFile != null && soundFile.canRead()){
                     AudioInputStream audio = AudioSystem.getAudioInputStream(soundFile);
                     Clip clip = AudioSystem.getClip();
