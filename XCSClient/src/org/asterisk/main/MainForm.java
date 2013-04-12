@@ -9,6 +9,7 @@ import chrriis.dj.nativeswing.swtimpl.components.JWebBrowser;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
@@ -1620,13 +1621,45 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                         return false;
                     }
                 };
-                while (result.next()) { 
+                int i=0;
+                while (result.next()) {
+                    i++;
                     String agent=result.getString("agent_id");
                     Vector rowdata = new Vector();
+                    rowdata.add(Integer.toString(i));
                     rowdata.add(agent);
                     dt.addRow(rowdata);
                 }
                 tblShowAgent.setModel(dt);
+                tblShowAgent.setDefaultRenderer(Object.class, new TableCellRenderer()
+                {
+                    final int currentRow = -1;
+                    @Override
+                    public Component getTableCellRendererComponent(JTable table, 
+                                                                        Object value, 
+                                                                        boolean isSelected, 
+                                                                        boolean hasFocus, 
+                                                                        int row, int column) 
+                    {
+                        JLabel out=new JLabel();
+                        out.setFont(new Font("Tahoma", Font.BOLD, 12));
+                        out.setForeground(Color.BLACK);
+                         if (column == 0) 
+                        {
+                            out.setText(Integer.toString(row+1));
+                        } 
+                        else 
+                        {
+                            out.setText((String)value);
+                        }
+                        if (isSelected) 
+                        {
+                            out.setBackground(new Color(0x88, 0x88, 0x88, 0x88));
+                            out.setOpaque(true);
+                        }
+                        return out;
+                    }
+                });
                 TableColumn column = null;
                 for (int k = 0;k < tblShowAgent.getColumnCount(); k++) 
                 {
@@ -1637,8 +1670,8 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                         column.setMinWidth(0);
                         column.setMaxWidth(0);
                     }
+                   
                 }
-                
                result.close(); 
             }
           con.closeConnect();
