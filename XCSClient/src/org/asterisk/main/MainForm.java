@@ -15,6 +15,8 @@ import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -24,6 +26,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Vector;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.DefaultListModel;
@@ -162,15 +166,25 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
          
          SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                JComponent c=createBrowserUnknowTab();
+                final JComponent c=createBrowserUnknowTab();
                 c.setSize(jPanel18.getWidth() ,jPanel18.getHeight());
                 jPanel18.add(c);
+                
+                jPanel18.addComponentListener(new ComponentAdapter() {
+                    @Override public void componentResized(ComponentEvent ce) {
+                        c.setSize(jPanel18.getWidth() ,jPanel18.getHeight());
+                    }
+                });
             }
           });
 
         
 //     
-      
+      addComponentListener(new ComponentAdapter() {
+            @Override public void componentResized(ComponentEvent ce) {
+                jPanel18.setSize(main_tab.getWidth(), main_tab.getHeight());
+            }
+      });
        
     }    
 
@@ -295,7 +309,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 809, Short.MAX_VALUE)
+            .addGap(0, 823, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -321,7 +335,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 805, Short.MAX_VALUE)
+            .addGap(0, 819, Short.MAX_VALUE)
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -365,7 +379,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         jPanel18.setLayout(jPanel18Layout);
         jPanel18Layout.setHorizontalGroup(
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 809, Short.MAX_VALUE)
+            .addGap(0, 823, Short.MAX_VALUE)
         );
         jPanel18Layout.setVerticalGroup(
             jPanel18Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -374,6 +388,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
 
         main_tab.addTab("Knowledge Base", jPanel18);
 
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Agent Information"));
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -525,6 +540,8 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         lb_version.setFont(new java.awt.Font("Tahoma", 2, 9)); // NOI18N
         lb_version.setText("Version 1.0.0 Build 10012013");
         lb_version.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
         function_tab.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
@@ -826,10 +843,12 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(panel_number, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(panel_number, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         function_tab.addTab("Keypad", jPanel10);
+
+        jPanel11.setBackground(new java.awt.Color(255, 255, 255));
 
         list_transfer.setModel(new javax.swing.AbstractListModel() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -868,6 +887,8 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         );
 
         function_tab.addTab("Transfer", jPanel11);
+
+        jPanel12.setBackground(new java.awt.Color(255, 255, 255));
 
         tblShowAgent.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -919,7 +940,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(function_tab, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(function_tab)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -996,11 +1017,11 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(lb_version, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, 266, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(main_tab)
                 .addContainerGap())
         );
@@ -1424,21 +1445,29 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
     }
     
   
-    private Hashtable<Integer, String> selPhone = new Hashtable<>();
+  
     
     public String GetStatus(String t)
     {
         return t;
     }
     
-    int cus_id;
+    
     public static JComponent createBrowserUnknowTab() {  
-        JPanel p=new JPanel(new BorderLayout());
+        final JPanel p=new JPanel(new BorderLayout());
         final JWebBrowser webBrowser = new JWebBrowser();
-         webBrowser.setBarsVisible(false);
+        webBrowser.setBarsVisible(false);
         webBrowser.setStatusBarVisible(false);
         webBrowser.navigate("http://support.microsoft.com/kb/307759/en-us");
         p.add(webBrowser, BorderLayout.CENTER);
+        p.addComponentListener(new ComponentAdapter() {
+            @Override public void componentResized(ComponentEvent ce) {
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException ex) {}
+                webBrowser.setSize(p.getWidth(), p.getHeight());
+            }
+        });
         return p;
   }
   
