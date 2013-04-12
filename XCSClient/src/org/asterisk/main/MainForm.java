@@ -1608,12 +1608,10 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             if(con.isConnect())
             {
                 ResultSet result=null;
-                String sql="SELECT * FROM `agent_status`";
-//                String sql="SELECT * FROM `agent_status` AS s LEFT JOIN `agent_login` AS l"
-//                                        + " ON s.`agent_id`=l.`agent_id` WHERE role='2'";
+                String sql="SELECT * FROM `agent_login` WHERE `role`='2'";
                 result = con.executeQuery(sql);
                 tblShowAgent.getTableHeader().setReorderingAllowed(false);
-                String strHeader[]={"","","",""};
+                String strHeader[]={"",""};
                 final DefaultTableModel  dt=new DefaultTableModel(strHeader,0)
                 {
                     @Override
@@ -1621,94 +1619,13 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                         return false;
                     }
                 };
-                ArrayList<Vector> st_online = new ArrayList<>();
-                ArrayList<Vector> st_offline = new ArrayList<>();
-                int i=0;
-                int m=0;
                 while (result.next()) { 
-                    i++;
                     String agent=result.getString("agent_id");
-                    String iface=result.getString("interface");
-                    int queue=Integer.parseInt(result.getString("queue"));
-                    
-                    String showOnline="";
-                    Pattern pattern = Pattern.compile("\\d*");
-                    Matcher matcher = pattern.matcher(iface); 
-
-                    if (matcher.matches())
-                    { 
-                          if(queue==0) 
-                          {
-                              showOnline=" now offline";
-                              m=0;
-                          }
-                    } 
-                    else
-                    { 
-                          showOnline=" now online";
-                          m=1;
-                    } 
                     Vector rowdata = new Vector();
-                    rowdata.add(Integer.toString(i));
                     rowdata.add(agent);
-                    rowdata.add(showOnline);
-                    rowdata.add(Integer.toString(m));
-                   
-                    if(Integer.parseInt((String)rowdata.get(3)) == 1)     
-                    {
-                        st_online.add(rowdata);
-
-                    } else       
-                    {
-                         st_offline.add(rowdata);
-                    }
-                   
-                }
-                for (int j=0; j<st_online.size(); j++) 
-                {
-                    dt.addRow(st_online.get(j));
-                }
-                for (int j=0; j<st_offline.size(); j++) 
-                {
-                    dt.addRow(st_offline.get(j));
+                    dt.addRow(rowdata);
                 }
                 tblShowAgent.setModel(dt);
-                
-                tblShowAgent.setDefaultRenderer(Object.class, new TableCellRenderer()
-                {
-                    final int currentRow = -1;
-                    @Override
-                    public Component getTableCellRendererComponent(JTable table, 
-                                                                        Object value, 
-                                                                        boolean isSelected, 
-                                                                        boolean hasFocus, 
-                                                                        int row, int column) 
-                    {
-                        JLabel out=new JLabel();
-                        if (column == 0) 
-                        {
-                            out.setText(Integer.toString(row+1));
-                        } 
-                        else 
-                        {
-                            out.setText((String)value);
-                        }
-                        if (Integer.parseInt((String)dt.getValueAt(row, 3)) == 1)
-                        {
-                            out.setForeground(Color.red);
-                        } 
-                        else
-                        {
-                            out.setForeground(new Color(0x88, 0x88, 0x88, 0xff));
-                        }
-                        if (isSelected) 
-                        {
-                            out.setBackground(new Color(0x88, 0x88, 0x88, 0x88));
-                            out.setOpaque(true);
-                        }
-                        return out;
-                    }
-                });
                 TableColumn column = null;
                 for (int k = 0;k < tblShowAgent.getColumnCount(); k++) 
                 {
@@ -1719,12 +1636,6 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
                         column.setMinWidth(0);
                         column.setMaxWidth(0);
                     }
-                    if (k == 3) 
-                    {
-                        column.setWidth(0);
-                        column.setMinWidth(0);
-                        column.setMaxWidth(0);
-                    } 
                 }
                 
                result.close(); 
@@ -1736,6 +1647,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
             
         }
     }
+  
    public void popup(String Agent, String message)
    {
         try {
