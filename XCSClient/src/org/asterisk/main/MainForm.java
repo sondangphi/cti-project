@@ -390,6 +390,7 @@ public class MainForm extends javax.swing.JFrame implements AsteriskServerListen
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Agent Information"));
+        jPanel6.setOpaque(false);
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel3.setText("AgentID");
